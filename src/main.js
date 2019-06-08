@@ -29,11 +29,14 @@ router.beforeEach((to,from,next)=>{
             return;
         }
         http.post(url.checkToken,{token:store.state.login.token}).then(response=>{
-            response.data.code===code.SUCCESS ? next({path:'/admin',redirect:to.path}) : next();
+            if (response.data.code === 200) {
+                next({path:'/admin',redirect:to.path})
+            }
+            next();
         });
     } else {
         http.post(url.checkToken,{token:store.state.login.token}).then(response=>{
-            if (response.data.code === code.FORBIDDEN){
+            if (response.data.code !== 200){
                 ElementUI.Message.warning(response.data.msg);
                 localStorage.clear();
                 next({path:'/login',redirect:to.path});
