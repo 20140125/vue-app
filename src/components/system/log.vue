@@ -3,7 +3,7 @@
         <el-table :data="logLists" border>
             <el-table-column label="#" prop="id"></el-table-column>
             <el-table-column label="执行人" prop="username"></el-table-column>
-            <el-table-column label="日志信息" prop="info"></el-table-column>
+            <el-table-column label="日志信息" prop="log" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column label="地址" prop="ip_address"></el-table-column>
             <el-table-column label="创建时间" sortable>
                 <template slot-scope="scope">
@@ -52,7 +52,7 @@
                 loadingText:'玩命加载中。。。',
 
                 cgi:{
-                    remove:$url.remove,
+                    remove:$url.logDelete,
                 },
                 rules:{},
             }
@@ -63,10 +63,10 @@
              * @param timestamp
              */
             setTimes:function(timestamp){
-                return func.set_time(timestamp*1000);
+                return func.set_time(timestamp);
             },
             /**
-             * todo：获取角色列表
+             * todo：获取日志列表
              * @param page
              * @param limit
              */

@@ -87,7 +87,6 @@
              */
             getMenu:function(token){
                 apiLists.AuthTree({token:token}).then(response=>{
-                    console.log(response);
                     if (response.data.code === 200){
                         this.menuLists = response.data.item;
                     }

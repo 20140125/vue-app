@@ -125,8 +125,8 @@
                 cgi:{
                     insert:$url.authSave,
                     update:$url.authUpdate,
-                    remove:$url.remove,
-                    status:$url.status,
+                    remove:$url.authDelete,
+                    status:$url.authUpdate,
                 },
 
                 //表单验证规则

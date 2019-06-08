@@ -27,21 +27,21 @@
              * @param item
              */
             setStatus:function (item) {
-                let params = {tableName:'sys_'+this.table,status:item.status,id:item.id};
-                if (this.$store.state.login.auth_url.indexOf(this.url.replace('-','/').replace('api','admin'))===-1){
-                    let info ='你没有访问权限，请联系管理员【'+this.$code.QQ+'】检验数据的正确性', data = { info:JSON.stringify({url:this.url, info:info}) };
+                let params = {status:item.status,id:item.id,token:this.$store.state.login.token,'act':'status'};
+                if (this.$store.state.login.auth_url.indexOf(this.url.replace('v1','admin'))===-1){
+                    let info ='你没有访问权限，请联系管理员【'+this.code.QQ+'】检验数据的正确性', data = { info:JSON.stringify({url:this.url, info:info}) };
                     this.saveSystemLog(data);
                     this.$alert(info,{callback:action=>{
-                            location.href='tencent://message/?uin='+this.$code.QQ+'&Site=后台权限认证&Menu=yes';
+                            location.href='tencent://message/?uin='+this.code.QQ+'&Site=后台权限认证&Menu=yes';
                         }
                     });
                     item.status = params.status===1?2:1;
                     return ;
                 }
                 this.$http.post(this.url,params).then(response=>{
-                    let data = { info:JSON.stringify({url:this.url, info:'修改数据成功',result:response.data.result}) };
+                    let data = { info:JSON.stringify({url:this.url, info:'修改数据成功',result:response.data.result}),token:this.$store.state.login.token };
                     this.saveSystemLog(data);
-                    this.$message({type:'success',message:'修改成功'});
+                    this.$message({type:'success',message:'修改数据成功'});
                     console.log(response);
                 },error=>{
                     item.status = params.status===1?2:1;

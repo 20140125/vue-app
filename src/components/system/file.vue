@@ -212,7 +212,8 @@
              * @val content tabs 标签下的内容
              */
             getFileContent:function (item) {
-                if (!item.file){
+                console.log(item);
+                if (item.fileType!=='file'){
                     this.$notify({type:'success',title:'通知',message:'不是一个文件'});
                     return false;
                 }
@@ -220,10 +221,10 @@
                 this.activeFileTabName = item.size.toString();
                 let params = {path:item.path},tabs = {};
                 this.url = this.cgi.update;
-                tabs.label = item.name;tabs.name = item.size.toString();tabs.path = item.path;
+                tabs.label = item.label;tabs.name = item.size.toString();tabs.path = item.path;
                 apiLists.FileRead(params).then(response=>{
                     if (response.data.code === 200){
-                        this.fileModel.content = response.data.result.content;
+                        this.fileModel.content = response.data.item.content;
                         this.fileModel.path = item.path;
                         tabs.content = this.fileModel.content;
                         this.addCurrFileObj(tabs);

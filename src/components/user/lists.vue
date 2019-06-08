@@ -124,8 +124,8 @@
                 cgi:{
                     insert:$url.userSave,
                     update:$url.userUpdate,
-                    remove:$url.remove,
-                    status:$url.status
+                    remove:$url.userDelete,
+                    status:$url.userUpdate
                 },
                 rules:{
                     username:[{required:true,message:'管理员名称不得为空',trigger:'blur'}],

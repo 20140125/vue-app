@@ -106,8 +106,8 @@
 
                 roleModel:{
                     role_name:'',
-                    ids:[],
-                    urls:[],
+                    auth_ids:[],
+                    auth_url:[],
                     status:'0',
                     created_at:func.get_timestamp(),
                     updated_at:func.get_timestamp()
@@ -119,8 +119,8 @@
                 cgi:{
                     insert:$url.roleSave,
                     update:$url.roleUpdate,
-                    remove:$url.remove,
-                    status:$url.status
+                    remove:$url.roleDelete,
+                    status:$url.roleUpdate
                 },
                 rules:{
                     role_name:[{ required:true,message:'角色名称不得为空',trigger:'blur' }],
@@ -152,9 +152,8 @@
                 let params = { offset:limit*(page-1), limit:limit,level:4 };
                 apiLists.RoleLists(params).then(response=>{
                     if (response.data.code===200){
-                        this.roleLists = response.data.item;
-                       //this.total = response.data.result.total;
-                        // this.auth = func.set_tree(response.data.result.auth);
+                        this.roleLists = response.data.item.role;
+                        this.auth = func.set_tree(response.data.item.auth);
                         this.loading = false;
                     }
                 })
@@ -218,9 +217,9 @@
                 this.syncVisible = true;
                 this.title = '修改角色';
                 this.url = this.cgi.update;
-                this.ids = JSON.parse(item.ids);
-                this.urls = JSON.parse(item.urls);
-                this.defaultChecked = JSON.parse(item.ids);
+                this.ids = JSON.parse(item.auth_ids);
+                this.urls = JSON.parse(item.auth_url);
+                this.defaultChecked = JSON.parse(item.auth_ids);
                 this.roleModel = item;
                 this.roleModel.updated_at = func.get_timestamp();
             }

@@ -34,7 +34,7 @@ export default new Router({
                 { path: 'music/index', name:'MusicLists',component:MusicLists,meta:{ mode:'music',title:'音乐列表' } },
                 { path: 'database/index', name:'databaseLists',component:databaseLists,meta:{ mode:'',title:'数据表列表' } },
                 { path: 'local/index', name:'localLists',component:localLists,meta:{ mode:'',title:'地区列表' } },
-                { path: 'local/tools', name:'localTools',component:localTools,meta:{ mode:'',title:'地区联动' } },
+                { path: 'tools/index', name:'localTools',component:localTools,meta:{ mode:'',title:'地区联动' } },
             ]
         },
     ]

@@ -49,7 +49,6 @@ instance.interceptors.request.use(config=>{
 },error=>{
     return Promise.reject(error);
 });
-console.log(instance.defaults);
 // http response 拦截器
 instance.interceptors.response.use(response=>{
     if (response.data.code!==200){

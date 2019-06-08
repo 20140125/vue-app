@@ -29,29 +29,39 @@
             <div class="layui-colla-content layui-show">
                 <div class="layui-form-data.item">
                     <div class="layui-input-inline">
-                        <select name="province" class="layui-select layui-input" lay-search placeholder="" v-model="province_2v" @change="province_two_change()">
-                            <option v-for="(prov,index) in province_two" :value="prov.code_id">{{ prov.position_name }}</option>
-                        </select>
+                        <label>
+                            <select name="province" class="layui-select layui-input" lay-search placeholder="" v-model="province_2v" @change="province_two_change()">
+                                <option v-for="(prov,index) in province_two" :value="prov.code_id">{{ prov.position_name }}</option>
+                            </select>
+                        </label>
                     </div>
                     <div class="layui-input-inline">
-                        <select name="province" class="layui-select layui-input" lay-search placeholder="" v-model="city_2v" @change="city_two_change()">
-                            <option v-for="(city,index) in city_two" :value="city.code_id">{{ city.position_name }}</option>
-                        </select>
+                        <label>
+                            <select name="province" class="layui-select layui-input" lay-search placeholder="" v-model="city_2v" @change="city_two_change()">
+                                <option v-for="(city,index) in city_two" :value="city.code_id">{{ city.position_name }}</option>
+                            </select>
+                        </label>
                     </div>
                     <div class="layui-input-inline">
-                        <select name="province" class="layui-select layui-input" lay-search placeholder="" v-model="county_2v" @change="county_two_change()">
-                            <option v-for="(county,index) in county_two" :value="county.code_id">{{ county.position_name }}</option>
-                        </select>
+                        <label>
+                            <select name="province" class="layui-select layui-input" lay-search placeholder="" v-model="county_2v" @change="county_two_change()">
+                                <option v-for="(county,index) in county_two" :value="county.code_id">{{ county.position_name }}</option>
+                            </select>
+                        </label>
                     </div>
                     <div class="layui-input-inline">
-                        <select name="province" class="layui-select layui-input" lay-search placeholder="" v-model="town_2v" @change="town_two_change()">
-                            <option v-for="(town,index) in town_two" :value="town.code_id">{{ town.position_name }}</option>
-                        </select>
+                        <label>
+                            <select name="province" class="layui-select layui-input" lay-search placeholder="" v-model="town_2v" @change="town_two_change()">
+                                <option v-for="(town,index) in town_two" :value="town.code_id">{{ town.position_name }}</option>
+                            </select>
+                        </label>
                     </div>
                     <div class="layui-input-inline">
-                        <select name="province" class="layui-select layui-input" lay-search placeholder="">
-                            <option v-for="(village,index) in village_two" :value="village.code_id">{{ village.position_name }}</option>
-                        </select>
+                        <label>
+                            <select name="province" class="layui-select layui-input" lay-search placeholder="">
+                                <option v-for="(village,index) in village_two" :value="village.code_id">{{ village.position_name }}</option>
+                            </select>
+                        </label>
                     </div>
                 </div>
             </div>
@@ -62,29 +72,39 @@
             <div class="layui-colla-content layui-show">
                 <div class="layui-form-data.item">
                     <div class="layui-input-inline">
-                        <select name="province" class="layui-select layui-input" placeholder="" lay-search v-model="province_3v" @change="province_three_change()">
-                            <option v-for="(prov,index) in province_three" :value="prov.province_id">{{ prov.province_name }}</option>
-                        </select>
+                        <label>
+                            <select name="province" class="layui-select layui-input" placeholder="" lay-search v-model="province_3v" @change="province_three_change()">
+                                <option v-for="(prov,index) in province_three" :value="prov.province_id">{{ prov.province_name }}</option>
+                            </select>
+                        </label>
                     </div>
                     <div class="layui-input-inline">
-                        <select name="province" lay-search class="layui-select layui-input" placeholder="" v-model="city_3v" @change="city_three_change()">
-                            <option v-for="(city,index) in city_three" :value="city.city_id">{{ city.city_name }}</option>
-                        </select>
+                        <label>
+                            <select name="province" lay-search class="layui-select layui-input" placeholder="" v-model="city_3v" @change="city_three_change()">
+                                <option v-for="(city,index) in city_three" :value="city.city_id">{{ city.city_name }}</option>
+                            </select>
+                        </label>
                     </div>
                     <div class="layui-input-inline">
-                        <select name="province" class="layui-select layui-input" lay-search placeholder="" v-model="county_3v" @change="county_three_change()">
-                            <option v-for="(county,index) in county_three" :value="county.county_id">{{ county.county_name }}</option>
-                        </select>
+                        <label>
+                            <select name="province" class="layui-select layui-input" lay-search placeholder="" v-model="county_3v" @change="county_three_change()">
+                                <option v-for="(county,index) in county_three" :value="county.county_id">{{ county.county_name }}</option>
+                            </select>
+                        </label>
                     </div>
                     <div class="layui-input-inline">
-                        <select name="province" lay-search class="layui-select layui-input" placeholder="" v-model="town_3v" @change="town_three_change()">
-                            <option v-for="(town,index) in town_three" :value="town.town_id">{{ town.town_name }}</option>
-                        </select>
+                        <label>
+                            <select name="province" lay-search class="layui-select layui-input" placeholder="" v-model="town_3v" @change="town_three_change()">
+                                <option v-for="(town,index) in town_three" :value="town.town_id">{{ town.town_name }}</option>
+                            </select>
+                        </label>
                     </div>
                     <div class="layui-input-inline">
-                        <select name="province" lay-search class="layui-select layui-input" placeholder="">
-                            <option v-for="(village,index) in village_three" :value="village.village_id">{{ village.village_name }}</option>
-                        </select>
+                        <label>
+                            <select name="province" lay-search class="layui-select layui-input" placeholder="">
+                                <option v-for="(village,index) in village_three" :value="village.village_id">{{ village.village_name }}</option>
+                            </select>
+                        </label>
                     </div>
                 </div>
             </div>

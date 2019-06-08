@@ -18,7 +18,7 @@
                     <el-form :label-width="labelWidth" :model="apiModel" :ref="reFrom" :rules="rules">
                         <el-form-item label="接口名称" prop="type">
                             <el-select v-model="apiModel.type"  auto-complete="true" style="width: 100%" placeholder="接口名称">
-                                <el-option v-for="(category,index) in apiCategory"  :key="index" :label="setName(category)" :value="category.id"></el-option>
+                                <el-option v-for="(category,index) in apiCategory"  :key="index" :label="setName(category)" :value="category.value"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="接口描述" prop="desc">
@@ -79,7 +79,7 @@
                 </el-form-item>
                 <el-form-item label="接口上级" prop="pid">
                     <el-select placeholder="接口上级" v-model="categoryModel.pid" style="width: 100%">
-                        <el-option v-for="(category,index) in apiCategory"  :key="index" :label="setName(category)" :value="category.id"></el-option>
+                        <el-option v-for="(category,index) in apiCategory"  :key="index" :label="setName(category)" :value="category.value"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="接口状态" prop="status">
@@ -100,7 +100,6 @@
 <script>
     import apiLists from '../../api/api';
     import $url from '../../api/url';
-    import func from '../../api/func'
     import Radio from "../common/Radio";
     import Delete from "../common/Delete";
     import Submit from "../common/Submit";
@@ -167,8 +166,8 @@
                     Timestamp:'Timestamp'
                 },
                 cgi:{
-                    remove:$url.remove,
-                    status:$url.status,
+                    remove:$url.apiDelete,
+                    status:$url.apiUpdate,
                     insert:$url.apiSave,
                     update:$url.apiUpdate,
                     categoryInsert:$url.categorySave,
@@ -201,13 +200,13 @@
              * @return {String}
              */
             setName:function(item){
-                return Array(item.level).join('　　')+item.name;
+                return Array(item.level+1).join('　　')+item.label;
             },
             /**
              * todo：获取API分类列表
              */
             getCategoryLists:function () {
-                apiLists.ApiLists({}).then(response=>{
+                apiLists.CategoryLists({}).then(response=>{
                     if (response.data.code === 200){
                         this.apiCategory = response.data.item.category;
                         this.categoryLists = response.data.item.category_tree;
@@ -247,7 +246,7 @@
                 this.url = this.cgi.categoryInsert;
                 this.categoryModel = {
                     name:'',
-                    pid:this.categoryModel.id,
+                    pid:this.categoryModel.value,
                     status:'1',
                     path:'',
                     level:1
@@ -267,7 +266,8 @@
              * @param data
              */
             getApiDetail:function(data){
-                if (data.level<3 || data.id === 14 || data.status === '0'){
+                console.log(data);
+                if (data.level===0){
                     this.$notify({title: '通知', message: '该接口暂时不允许访问', type: 'success'});
                     return;
                 }
@@ -275,15 +275,15 @@
                 //设置
                 this.addApiVisible(obj);
                 this.apiName = this.interfaceName;
-                apiLists.ApiLists( {type:data.id} ).then(response=>{
+                apiLists.ApiLists( {type:data.value} ).then(response=>{
                     if (response.data.code===200){
-                        this.addApiModel(response.data.result[0]);
+                        this.addApiModel(response.data.item);
                         this.apiModel.request = JSON.parse(this.apiModel.request);
                         this.apiModel.response = JSON.parse(this.apiModel.response);
                         this.url = this.cgi.update
                     } else {
                         this.url = this.cgi.insert;
-                        let apiModel = {desc:'', type:data.id, href:'', method:'', request:[{"name":"access_token","desc":"用户token","required":"1","type":"String","val":""}],
+                        let apiModel = {desc:'', type:data.value, href:'', method:'', request:[{"name":"access_token","desc":"用户token","required":"1","type":"String","val":""}],
                             response:[{"name":"code","desc":"200 成功","type":"number"},{"name":"msg","desc":"Success","type":"string"}],
                             response_string:'', remark:''};
                         this.addApiModel(apiModel);

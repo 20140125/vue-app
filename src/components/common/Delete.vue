@@ -25,8 +25,8 @@
              * @param index
              */
             remove:function (item,index) {
-                if (this.$store.state.login.auth_url.indexOf(this.url.replace('-','/').replace('api','admin'))===-1){
-                    let info ='你没有访问权限，请联系管理员【'+this.$code.QQ+'】检验数据的正确性', data = { info:JSON.stringify({url:this.url, info:info}) };
+                if (this.$store.state.login.auth_url.indexOf(this.url.replace('v1','admin'))===-1){
+                    let info ='你没有访问权限，请联系管理员【'+this.code.QQ+'】检验数据的正确性', data = { info:JSON.stringify({url:this.url, info:info}) };
                     this.saveSystemLog(data);
                     this.$alert(info,{callback:action=>{
                             location.href='tencent://message/?uin='+this.$code.QQ+'&Site=后台权限认证&Menu=yes';
@@ -39,11 +39,11 @@
                     cancelButtonText:'取消',
                     type:'warning'
                 }).then(()=>{
-                    let params = {tableName:'sys_'+this.table,id:item.id};
+                    let params = {id:item.id};
                     this.$http.post(this.url,params).then(response=>{
                         console.log(response);
                         this.Lists.splice(index,1);
-                        let data = { info:JSON.stringify({url:this.url, info:'删除记录成功',result:response.data.result}) };
+                        let data = { info:JSON.stringify({url:this.url, info:'删除记录成功',result:response.data.result}),token:this.$store.state.login.token };
                         this.saveSystemLog(data);
                         this.$message({type:'success',message:'删除记录成功！'});
                     },error=>{

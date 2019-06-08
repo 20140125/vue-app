@@ -11,7 +11,7 @@ const state={
 const getters={
     token:state=>state.token,
     username:state=>state.username,
-    auth_url: state=>state.auth_url
+    auth_url:state=>state.auth_url
 };
 const mutations={
     setToken:function (state,token) {
@@ -32,11 +32,10 @@ const actions={
      */
     loginSystem:function ({state,commit},users) {
         http.post(url.login,users).then(response=>{
-            console.log(response);
             if (response.data.code === code.SUCCESS){
                 Message.success(response.data.msg);
-                commit('setToken',response.data.result[0].access_token);
-                commit('setUserName',response.data.result[0].username);
+                commit('setToken',response.data.item.token);
+                commit('setUserName',response.data.item.username);
                 router.push({path:'/admin/index'});
                 return ;
             }
