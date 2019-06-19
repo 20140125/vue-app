@@ -1,7 +1,7 @@
 import {Message} from "element-ui";
 import http from '../../api/request'
-import url from '../../../src/api/url'
-import code from '../../../src/api/code'
+import url from '../../api/url'
+import code from '../../api/code'
 import router from '../../router';
 const state={
     token:localStorage.getItem('token'),
@@ -32,6 +32,7 @@ const actions={
      */
     loginSystem:function ({state,commit},users) {
         http.post(url.login,users).then(response=>{
+            console.log(response);
             if (response.data.code === code.SUCCESS){
                 Message.success(response.data.msg);
                 commit('setToken',response.data.item.token);

@@ -2,13 +2,6 @@
     <div v-loading="loading" :element-loading-text="loadingText">
         <el-row>
             <el-col :span="4">
-                <el-form :inline="true" style="margin-top: 10px">
-                   <el-form-item>
-                       <el-select v-model="path" @change="getFileLists">
-                           <el-option v-for="(path,index) in pathLists" :key="index" :label="path" :value="path"></el-option>
-                       </el-select>
-                   </el-form-item>
-                </el-form>
                 <el-tree :data="fileLists" @node-contextmenu="rightClick" :highlight-current="highlight"  :props="props" @node-click="getFileContent" style="width: 200px;background-color: #393d49"></el-tree>
             </el-col>
 

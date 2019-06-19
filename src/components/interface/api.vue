@@ -266,12 +266,11 @@
              * @param data
              */
             getApiDetail:function(data){
-                console.log(data);
                 if (data.level===0){
                     this.$notify({title: '通知', message: '该接口暂时不允许访问', type: 'success'});
                     return;
                 }
-                const obj = { 'apiVisible':true,'interfaceName':data.name };
+                const obj = { 'apiVisible':true,'interfaceName':data.label };
                 //设置
                 this.addApiVisible(obj);
                 this.apiName = this.interfaceName;
@@ -283,7 +282,7 @@
                         this.url = this.cgi.update
                     } else {
                         this.url = this.cgi.insert;
-                        let apiModel = {desc:'', type:data.value, href:'', method:'', request:[{"name":"access_token","desc":"用户token","required":"1","type":"String","val":""}],
+                        let apiModel = {desc:'', type:data.value, href:'', method:'', request:[{"name":"token","desc":"用户token","required":"1","type":"String","val":""}],
                             response:[{"name":"code","desc":"200 成功","type":"number"},{"name":"msg","desc":"Success","type":"string"}],
                             response_string:'', remark:''};
                         this.addApiModel(apiModel);

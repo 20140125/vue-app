@@ -1,24 +1,22 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Index from '@/components/index'
-import Welcome from '@/components/common/index'
-import Login from '@/components/login'
-import AuthLists from '@/components/auth/lists'
-import RoleLists from '@/components/role/lists'
-import UserLists from '@/components/user/lists'
-import SystemLog from '@/components/system/log'
-import SystemFile from '@/components/system/file'
-import ApiLists from '@/components/interface/api'
-import MusicLists from '@/components/interface/music'
-import databaseLists from '@/components/database/lists'
-import localLists from '@/components/local/lists'
-import localTools from '@/components/local/tools'
-
+import Index from '../components/index'
+import Welcome from '../components/common/index'
+import Login from '../components/login'
+import AuthLists from '../components/auth/lists'
+import RoleLists from '../components/role/lists'
+import UserLists from '../components/user/lists'
+import SystemLog from '../components/system/log'
+import SystemFile from '../components/system/file'
+import ApiLists from '../components/interface/api'
+import MusicLists from '../components/interface/music'
+import databaseLists from '../components/database/lists'
+import localLists from '../components/local/lists'
+import localTools from '../components/local/tools'
 
 Vue.use(Router);
 
 export default new Router({
-    // mode:'history',
     routes: [
         { path: '/login', name: 'Login', component: Login,meta:{ mode:'',title:'登录' } },
         { path: '/admin', name: 'Index', component: Index,meta:{ mode:'',title:'首页' } },

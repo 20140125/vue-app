@@ -23,24 +23,17 @@
         methods:{
             ...mapActions(['saveSystemLog']),
             submitForm:function(ref){
-                if (this.$store.state.login.auth_url.indexOf(this.url.replace('v1','admin'))===-1){
-                    let info ='你没有访问权限，请联系管理员【'+this.code.QQ+'】检验数据的正确性', data = { info:JSON.stringify({url:this.url, info:info}) };
-                    this.saveSystemLog(data);
-                    this.$alert(info,{callback:action=>{
-                            location.href='tencent://message/?uin='+this.code.QQ+'&Site=后台权限认证&Menu=yes';
-                        }
-                    });
-                    return ;
-                } 
                 this.refs[ref].validate((valid)=>{
                     if (valid){
                         this.model.token = this.$store.state.login.token;
                         this.$http.post(this.url,this.model).then(response=>{
                             let data = { info:JSON.stringify({url:this.url, info:'保存数据成功',result:response.data.result}),token:this.$store.state.login.token };
-                            this.saveSystemLog(data);
-                            this.$message({type:'success',message:'保存成功'});
-                            this.$emit('success');
-                            console.log(response);
+                            if (response.data.code === 200) {
+                                this.saveSystemLog(data);
+                                this.$message({type:'success',message:'数据修改成功'});
+                                this.$emit('success');
+                                return false;
+                            }
                         },error=>{
                             console.log(error);
                         });

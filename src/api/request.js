@@ -57,6 +57,6 @@ instance.interceptors.response.use(response=>{
     return response
 },error=>{
     console.log(error.response);
-    //errorHandle(error.response.status,error.response);
+    errorHandle(error.response.status,error.response);
 });
 export default instance;

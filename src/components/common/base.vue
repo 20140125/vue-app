@@ -65,7 +65,6 @@
 
 <script>
     import apiLists from '../../api/api'
-    import func from '../../api/func'
     import { mapGetters,mapActions } from 'vuex';
     export default {
         name: "baseModule",

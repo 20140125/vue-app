@@ -1,3 +1,3 @@
 export default {
-    baseUrl:process.env.API_ROOT
+    baseUrl:'http://' + window.location.hostname+'/api/'
 };

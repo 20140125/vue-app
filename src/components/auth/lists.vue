@@ -63,8 +63,9 @@
                 </el-form-item>
                 <el-form-item label="权限上级" prop="pid">
                    <el-select placeholder="权限上级" style="width: 100%" v-model="authModel.pid">
+                       <el-option label="默认权限" value="0"></el-option>
                        <el-option v-for="(item,index) in authLevel" :key="index" :label="setAuthName(item)" :value="item.id"></el-option>
-                   </el-select>
+                   </el-select> 
                 </el-form-item>
                 <el-form-item label="权限状态" prop="status">
                     <el-radio-group v-model="authModel.status" size="small">
@@ -115,8 +116,8 @@
                 authModel:{
                     name:'',
                     url:'',
-                    status:'0',
-                    pid:1,
+                    status:'1',
+                    pid:'0',
                     level:0,
                     path:''
                 },
@@ -151,7 +152,7 @@
              * @param limit
              */
             getAuthLists:function (page,limit) {
-                let params = { pid:this.pid,auth:this.auth,page:page, limit:limit,status:this.status };
+                let params = { pid:this.pid,auth:this.auth,page:page, limit:limit};
                 apiLists.AuthLists(params).then(response=>{
                     if (response.data.code===200){
                         this.authLists = response.data.item.data;
