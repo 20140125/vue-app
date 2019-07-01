@@ -11,8 +11,6 @@ import SystemFile from '../components/system/file'
 import ApiLists from '../components/interface/api'
 import MusicLists from '../components/interface/music'
 import databaseLists from '../components/database/lists'
-import localLists from '../components/local/lists'
-import localTools from '../components/local/tools'
 
 Vue.use(Router);
 
@@ -25,14 +23,12 @@ export default new Router({
                 { path: 'index', name:'Welcome',component:Welcome,meta:{ mode:'',title:'欢迎页' } },
                 { path: 'auth/index', name:'AuthLists',component:AuthLists,meta:{ mode:'auth_role',title:'权限列表' } },
                 { path: 'role/index', name:'RoleLists',component:RoleLists,meta:{ mode:'role',title:'角色列表' } },
-                { path: 'adminuser/index', name:'UserLists',component:UserLists,meta:{ mode:'user',title:'管理员列表' } },
+                { path: 'user/index', name:'UserLists',component:UserLists,meta:{ mode:'user',title:'管理员列表' } },
                 { path: 'log/index',  name:'SystemLog',component:SystemLog,meta:{ mode:'log',title:'日志列表' } },
                 { path: 'file/index',  name:'SystemFile',component:SystemFile,meta:{ mode:'file',title:'文件列表' } },
                 { path: 'api/index', name:'ApiLists',component:ApiLists,meta:{ mode:'api_lists',title:'接口详情' } },
                 { path: 'music/index', name:'MusicLists',component:MusicLists,meta:{ mode:'music',title:'音乐列表' } },
                 { path: 'database/index', name:'databaseLists',component:databaseLists,meta:{ mode:'',title:'数据表列表' } },
-                { path: 'local/index', name:'localLists',component:localLists,meta:{ mode:'',title:'地区列表' } },
-                { path: 'tools/index', name:'localTools',component:localTools,meta:{ mode:'',title:'地区联动' } },
             ]
         },
     ]
