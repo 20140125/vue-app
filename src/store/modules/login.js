@@ -1,17 +1,19 @@
 import {Message} from "element-ui";
-import http from '../../api/request'
-import url from '../../api/url'
+import apiLists from '../../api/api'
 import code from '../../api/code'
 import router from '../../router';
+import func from '../../api/func'
 const state={
     token:localStorage.getItem('token'),
     username:localStorage.getItem('username'),
     auth_url:localStorage.getItem('urls'),
+    menuLists:[],
 };
 const getters={
     token:state=>state.token,
     username:state=>state.username,
-    auth_url:state=>state.auth_url
+    auth_url:state=>state.auth_url,
+    menuLists:state=>state.menuLists
 };
 const mutations={
     setToken:function (state,token) {
@@ -22,6 +24,9 @@ const mutations={
         state.username = username;
         localStorage.setItem('username',username);
     },
+    setMenuLists:function (state,menuLists) {
+        state.menuLists = menuLists;
+    }
 };
 const actions={
     /**
@@ -31,17 +36,31 @@ const actions={
      * @param users
      */
     loginSystem:function ({state,commit},users) {
-        http.post(url.login,users).then(response=>{
-            console.log(response);
+        apiLists.LoginSys(users).then(response=>{
             if (response.data.code === code.SUCCESS){
                 Message.success(response.data.msg);
                 commit('setToken',response.data.item.token);
                 commit('setUserName',response.data.item.username);
                 router.push({path:'/admin/index'});
-                return ;
             }
-            Message.warning(response.data.msg);
         });
+    },
+    /**
+     * todo：获取权限菜单
+     * @param state
+     * @param commit
+     * @param username
+     */
+    getAuthMenu:function({state,commit},username){
+        if (state.menuLists.length>0){
+            commit('setMenuLists',state.menuLists);
+            return ;
+        }
+        apiLists.AuthTree({username:username}).then(response=>{
+            if (response.data.code === code.SUCCESS){
+                commit('setMenuLists',func.set_tree(response.data.item));
+            }
+        })
     },
     /**
      * todo：系统登出
@@ -50,7 +69,7 @@ const actions={
      * @param token
      */
     logoutSystem:function ({state,commit},token) {
-        http.post(url.logout,token).then(response=>{
+        apiLists.LogoutSys(token).then(response=>{
             Message.success(response.data.msg);
             commit('setToken','');
             commit('setUserName','');
@@ -65,7 +84,9 @@ const actions={
      */
     saveSystemLog:function ({state,commit},params) {
         params.username = state.username;
-        http.post(url.logSave,params);
+        apiLists.LogSave(params).then(response=>{
+            Message.success(response.data.msg);
+        });
     }
 };
 export default {

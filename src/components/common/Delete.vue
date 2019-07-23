@@ -30,14 +30,14 @@
                     cancelButtonText:'取消',
                     type:'warning'
                 }).then(()=>{
-                    let params = {id:item.id};
+                    let params = {id:item.id,token : this.$store.state.login.token};
                     this.$http.post(this.url,params).then(response=>{
-                        console.log(response);
-                        this.Lists.splice(index,1);
-                        let data = { info:JSON.stringify({url:this.url, info:'删除记录成功',result:response.data.result}),token:this.$store.state.login.token };
                         if (response.data.code === 200) {
+                            this.Lists.splice(index,1);
+                            let data = { msg:JSON.stringify({url:this.url, info:response.data.msg,result:response.data.result}),token:this.$store.state.login.token };
                             this.saveSystemLog(data);
-                            this.$message({type:'success',message:'删除记录成功！'});
+                            this.$message({type:'success',message:response.data.msg});
+                            this.$emit('success');
                             return false;
                         }
                     },error=>{

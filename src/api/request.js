@@ -2,7 +2,6 @@ import axios from 'axios/index'
 import store from '../store'
 import router from '../router'
 import func from './func'
-import config from './config'
 import {Message} from "element-ui";
 
 /**
@@ -39,7 +38,7 @@ const errorHandle = (status,other) => {
     }
 };
 const instance = axios.create({ timeout:5000 });
-instance.defaults.baseURL = config.baseUrl;
+instance.defaults.baseURL = process.env.API_ROOT;
 // http request 拦截器
 instance.interceptors.request.use(config=>{
     if (store.state.login.token){

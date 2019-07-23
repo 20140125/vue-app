@@ -63,11 +63,11 @@
                 </el-form-item>
                 <el-form-item label="权限上级" prop="pid">
                    <el-select placeholder="权限上级" style="width: 100%" v-model="authModel.pid">
-                       <el-option label="默认权限" value="0"></el-option>
-                       <el-option v-for="(item,index) in authLevel" :key="index" :label="setAuthName(item)" :value="item.id"></el-option>
-                   </el-select> 
+                       <el-option label="默认权限" value="0" v-if="authModel.pid === '0'" selected></el-option>
+                       <el-option v-for="(item,index) in authLevel" :key="index" :label="setAuthName(item)" :value="item.id.toString()"></el-option>
+                   </el-select>
                 </el-form-item>
-                <el-form-item label="权限状态" prop="status">
+                <el-form-item label="权限状态" prop="status" v-if="act === 'add'">
                     <el-radio-group v-model="authModel.status" size="small">
                         <el-radio-button label="2">关闭</el-radio-button>
                         <el-radio-button label="1">开启</el-radio-button>
@@ -102,7 +102,7 @@
                 title:'',
                 status:'',
                 syncVisible:false, //是否显示弹框
-                modal:false, //遮盖层是否需要
+                modal:true, //遮盖层是否需要
                 labelWidth:'80px',
                 authLevel:[],
                 loading:true,
@@ -111,16 +111,10 @@
                 url:'',
                 refs:this.$refs,
                 reFrom:'auth',
+                act:'',
 
                 //权限默认数据
-                authModel:{
-                    name:'',
-                    url:'',
-                    status:'1',
-                    pid:'0',
-                    level:0,
-                    path:''
-                },
+                authModel:{},
 
                 //URL
                 cgi:{
@@ -144,6 +138,7 @@
              * todo：关闭弹框
              */
             success:function(){
+                this.getAuthLists(this.page,this.limit)
                 this.syncVisible = false;
             },
             /**
@@ -152,12 +147,12 @@
              * @param limit
              */
             getAuthLists:function (page,limit) {
-                let params = { pid:this.pid,auth:this.auth,page:page, limit:limit};
+                let params = { pid:this.pid,auth:this.auth,page:page,limit:limit};
                 apiLists.AuthLists(params).then(response=>{
                     if (response.data.code===200){
-                        this.authLists = response.data.item.data;
+                        this.authLists = response.data.item.authLists.data;
                         this.authLevel = response.data.item.selectAuth;
-                        this.total = response.data.item.total;
+                        this.total = response.data.item.authLists.total;
                         this.loading = false;
                     }
                 });
@@ -207,6 +202,15 @@
                 this.syncVisible = true;
                 this.title = '添加权限';
                 this.url = this.cgi.insert;
+                this.act = 'add';
+                this.authModel = {
+                    name:'',
+                    url:'',
+                    status:'1',
+                    pid:'0',
+                    level:0,
+                    path:''
+                };
             },
             /**
              * todo：权限保存
@@ -217,6 +221,8 @@
                 this.title = '修改权限';
                 this.url = this.cgi.update;
                 this.authModel = item;
+                this.act = 'update';
+                this.authModel.pid = this.authModel.pid.toString();
             }
         },
         mounted() {

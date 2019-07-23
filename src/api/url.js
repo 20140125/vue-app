@@ -22,11 +22,11 @@ let url={
     apiLists:'/v1/api/index',
     apiSave:'/v1/api/save',
     apiUpdate:'/v1/api/update',
-    apiDelete:'/v1/api/delete',
     //接口分类
     categoryLists:'/v1/category/index',
     categorySave:'/v1/category/save',
     categoryUpdate:'/v1/category/update',
+    categoryDelete:'/v1/category/delete',
     //数据表列表
     databaseLists:'/v1/database/index',
     databaseBackUp:'/v1/database/backup',
@@ -37,9 +37,12 @@ let url={
     fileLists:'/v1/file/index',
     fileRead:'/v1/file/read',
     fileRename:'/v1/file/rename',
+    fileChmod:'/v1/file/chmod',
     fileSave:'/v1/file/save',
     fileDelete:'/v1/file/delete',
     fileUpdate:'/v1/file/update',
+    fileCompression:'/v1/file/compression',
+    fileDecompression:'/v1/file/Decompression',
     //地区列表
     localLists:'/v1/local/index',
     localTools:'/v1/tools/index',

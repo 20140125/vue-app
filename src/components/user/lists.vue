@@ -15,16 +15,8 @@
                     <Radio :item="scope.row" :url="cgi.status"></Radio>
                 </template>
             </el-table-column>
-            <el-table-column label="创建时间" sortable>
-                <template slot-scope="scope">
-                    {{setTimes(scope.row.created_at)}}
-                </template>
-            </el-table-column>
-            <el-table-column label="修改时间" sortable>
-                <template slot-scope="scope">
-                    {{setTimes(scope.row.updated_at)}}
-                </template>
-            </el-table-column>
+            <el-table-column label="创建时间" prop="created_at"> </el-table-column>
+            <el-table-column label="修改时间" prop="updated_at"></el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
                     <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updateUser(scope.row)">修 改</el-button>
@@ -57,7 +49,7 @@
                 <el-form-item label="邮箱" prop="email">
                     <el-input v-model="userModel.email" type="email" placeholder="邮箱"></el-input>
                 </el-form-item>
-                <el-form-item label="手机号" prop="phone_number" v-if="userModel.id">
+                <el-form-item label="手机号" prop="phone_number" v-if="act === 'update'">
                     <el-input v-model="userModel.phone_number" type="email" placeholder="手机号"></el-input>
                 </el-form-item>
                 <el-form-item label="角色" prop="role_id">
@@ -65,7 +57,7 @@
                         <el-option v-for="(role,index) in roleLists" :key="index" :label="role.role_name" :value="role.id"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="显示状态" prop="status">
+                <el-form-item label="显示状态" prop="status" v-if="act === 'add'">
                     <el-radio-group  v-model="userModel.status" size="small">
                         <el-radio-button label="2">关闭</el-radio-button>
                         <el-radio-button label="1">开启</el-radio-button>
@@ -100,7 +92,7 @@
 
                 title:'',
                 syncVisible:false, //是否显示弹框
-                modal:false, //遮盖层是否需要
+                modal:true, //遮盖层是否需要
                 labelWidth:'80px',
                 loading:true,
                 loadingText:'玩命加载中。。。',
@@ -108,19 +100,8 @@
                 url:'',
                 refs:this.$refs,
                 reFrom:'user',
-
-                userModel:{
-                    username:'',
-                    email:'',
-                    password:'',
-                    salt:func.set_random(),
-                    status:'0',
-                    role_id:'',
-                    phone_number:'',
-                    created_at:func.get_timestamp(),
-                    updated_at:func.get_timestamp(),
-                    access_token:''
-                },
+                act:'',
+                userModel:{},
                 cgi:{
                     insert:$url.userSave,
                     update:$url.userUpdate,
@@ -141,14 +122,8 @@
              * todo：关闭弹框
              */
             success:function(){
+                this.getUserLists(this.page,this.limit);
                 this.syncVisible = false;
-            },
-            /**
-             * todo：设置时间
-             * @param timestamp
-             */
-            setTimes:function(timestamp){
-                return func.set_time(timestamp);
             },
             /**
              * todo：获取角色列表
@@ -188,6 +163,19 @@
             addUser:function () {
                 this.title='添加管理员';
                 this.syncVisible = true;
+                this.act = 'add';
+                this.userModel = {
+                    username:'',
+                    email:'',
+                    password:'',
+                    salt:func.set_random(),
+                    status:'1',
+                    role_id:1,
+                    phone_number:'',
+                    created_at:func.get_timestamp(),
+                    updated_at:func.get_timestamp(),
+                    access_token:''
+                };
                 this.url = this.cgi.insert;
             },
             /**
@@ -199,7 +187,7 @@
                 this.syncVisible = true;
                 this.userModel = item;
                 this.url = this.cgi.update;
-                this.userModel.updated_at = func.get_timestamp();
+                this.act = 'update';
             }
         },
         mounted() {

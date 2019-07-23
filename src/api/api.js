@@ -5,6 +5,18 @@ import store from '../store'
 const token = {
     token:store.state.login.token
 };
+const loginSys = function (params) {
+    return request.post(url.login,qs.stringify(Object.assign(token,params)))
+};
+const logoutSys = function (params) {
+    return request.post(url.logout,qs.stringify(Object.assign(token,params)))
+};
+const logSave = function (params) {
+    return request.post(url.logSave,qs.stringify(Object.assign(token,params)))
+};
+const checkToken = function (params) {
+    return request.post(url.checkToken,qs.stringify(Object.assign(token,params)))
+};
 const authLists = function (params) {
     return request.post(url.authLists,qs.stringify(Object.assign(token,params)))
 };
@@ -26,8 +38,10 @@ const apiLists = function (params) {
 const categoryLists = function (params) {
     return request.post(url.categoryLists,qs.stringify(Object.assign(token,params)))
 };
+const categoryDelete = function (params) {
+    return request.post(url.categoryDelete,qs.stringify(Object.assign(token,params)))
+}
 const fileLists = function (params) {
-   
     return request.post(url.fileLists,qs.stringify(Object.assign(token,params)))
 };
 const fileRead = function (params) {
@@ -58,6 +72,10 @@ const localTools = function (params) {
     return request.post(url.localTools,qs.stringify(Object.assign(token,params)))
 };
 const interfaceLists = {
+    LoginSys:loginSys,
+    LogoutSys:logoutSys,
+    LogSave:logSave,
+    CheckToken:checkToken,
     AuthLists:authLists,
     RoleLists:roleLists,
     AuthTree:authTree,
@@ -74,6 +92,7 @@ const interfaceLists = {
     MusicLists:musicLists,
     MusicPlay:musicPlay,
     LocalLists:localLists,
-    LocalTools:localTools
+    LocalTools:localTools,
+    CategoryDelete:categoryDelete
 };
 export default interfaceLists;

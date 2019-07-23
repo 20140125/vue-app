@@ -5,14 +5,10 @@
             <el-table-column label="执行人" prop="username"></el-table-column>
             <el-table-column label="日志信息" prop="log" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column label="地址" prop="ip_address"></el-table-column>
-            <el-table-column label="创建时间" sortable>
-                <template slot-scope="scope">
-                    {{setTimes(scope.row.created_at)}}
-                </template>
-            </el-table-column>
+            <el-table-column label="创建时间" sortable prop="created_at"></el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
-                    <Delete :url="cgi.remove" :func="functions" :item="scope.row" :index="scope.$index" :Lists="logLists"></Delete>
+                    <Delete :url="cgi.remove" :func="functions" :item="scope.row" :index="scope.$index" :Lists="logLists" v-on:success="success"></Delete>
                 </template>
             </el-table-column>
         </el-table>
@@ -59,11 +55,10 @@
         },
         methods:{
             /**
-             * todo：设置时间
-             * @param timestamp
+             * todo：关闭弹框
              */
-            setTimes:function(timestamp){
-                return func.set_time(timestamp);
+            success:function(){
+                this.getLogLists(this.page,this.limit);
             },
             /**
              * todo：获取日志列表

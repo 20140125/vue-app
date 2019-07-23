@@ -2,7 +2,7 @@
     <div style="text-align: center;margin-top: 200px">
         <img src="../assets/logo.png" alt="vue-laravel">
         <div>
-            <i class="layui-icon layui-icon-404" style="font-size: 300px"></i>
+            <i class="el-icon-warning-outline" style="font-size: 300px"></i>
         </div>
     </div>
 </template>

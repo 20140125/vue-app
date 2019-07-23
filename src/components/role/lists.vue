@@ -2,7 +2,7 @@
     <div v-loading="loading" :element-loading-text="loadingText">
         <el-form :inline="true" style="margin-top: 10px">
             <el-form-item style="float:right;">
-                <el-button icon="el-icon-plus" type="primary" size="mini" plain @click="addRole">添 加</el-button>
+                <el-button icon="el-icon-plus" type="primary" size="medium" plain @click="addRole">添 加</el-button>
             </el-form-item>
         </el-form>
         <!--table 表格-->
@@ -14,16 +14,8 @@
                     <Radio :item="scope.row" :url="cgi.status"></Radio>
                 </template>
             </el-table-column>
-            <el-table-column label="创建时间" sortable>
-                <template slot-scope="scope">
-                    {{setTimes(scope.row.created_at)}}
-                </template>
-            </el-table-column>
-            <el-table-column label="修改时间" sortable>
-                <template slot-scope="scope">
-                    {{setTimes(scope.row.updated_at)}}
-                </template>
-            </el-table-column>
+            <el-table-column label="创建时间" sortable prop="created_at"></el-table-column>
+            <el-table-column label="修改时间" sortable prop="updated_at"></el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
                     <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updateRole(scope.row)">修 改</el-button>
@@ -48,7 +40,7 @@
                         @change="handleChange">
                     </el-transfer>
                 </el-form-item>
-                <el-form-item label="状态" prop="status">
+                <el-form-item label="状态" prop="status" v-if="act === 'add'">
                     <el-radio-group v-model="roleModel.status" size="small">
                         <el-radio-button label="0">关闭</el-radio-button>
                         <el-radio-button label="1">开启</el-radio-button>
@@ -83,21 +75,14 @@
 
                 title:'',
                 syncVisible:false, //是否显示弹框
-                modal:false, //遮盖层是否需要
+                modal:true, //遮盖层是否需要
                 labelWidth:'80px',
 
                 url:'',
                 refs:this.$refs,
                 reFrom:'role',
-
-                roleModel:{
-                    role_name:'',
-                    auth_ids:[],
-                    auth_url:[],
-                    status:'0',
-                    created_at:func.get_timestamp(),
-                    updated_at:func.get_timestamp()
-                },
+                act:'',
+                roleModel:{},
 
                 ids:[],
                 urls:[],
@@ -120,14 +105,8 @@
              * todo：关闭弹框
              */
             success:function(){
+                this.getRoleLists(this.page,this.limit)
                 this.syncVisible = false;
-            },
-            /**
-             * todo：设置时间
-             * @param timestamp
-             */
-            setTimes:function(timestamp){
-                return func.set_time(timestamp);
             },
             /**
              * todo：获取角色列表
@@ -167,6 +146,16 @@
                 this.title='添加角色';
                 this.syncVisible = true;
                 this.url = this.cgi.insert;
+                this.act = 'add';
+                this.defaultChecked = [];
+                this.roleModel={
+                    role_name:'',
+                    auth_ids:[],
+                    auth_url:[],
+                    status:'1',
+                    created_at:func.get_timestamp(),
+                    updated_at:func.get_timestamp()
+                }
             },
              /**
              * @param value      当前值
@@ -196,12 +185,13 @@
              * @param item
              */
             updateRole:function (item) {
-                this.syncVisible = true;    
+                this.syncVisible = true;
                 this.title = '修改角色';
                 this.url = this.cgi.update;
                 this.ids = JSON.parse(item.auth_ids);
                 this.urls = JSON.parse(item.auth_url);
                 this.defaultChecked = []; //需要重置角色拥有的权限
+                this.act = 'update';
                 for (let i in this.ids){
                     this.defaultChecked.push(parseInt(this.ids[i]));
                 }

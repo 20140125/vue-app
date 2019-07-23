@@ -4,12 +4,12 @@
         <el-form :label-width="formWidth" :model="users" :ref="reFrom" :rules="rules">
             <el-form-item prop="username">
                 <el-input v-model="users.username" placeholder="username" autocomplete="off">
-                    <template slot="prepend"><i class="layui-icon layui-icon-username"></i></template>
+                    <template slot="prepend"><i class="el-icon-s-custom"></i></template>
                 </el-input>
             </el-form-item>
             <el-form-item prop="password">
                 <el-input v-model="users.password" type="password" placeholder="password" autocomplete="off">
-                    <template slot="prepend"><i class="layui-icon layui-icon-password"></i></template>
+                    <template slot="prepend"><i class="el-icon-user-solid"></i></template>
                 </el-input>
             </el-form-item>
         </el-form>

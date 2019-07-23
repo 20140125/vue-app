@@ -1,31 +1,71 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText">
         <el-row>
-            <el-col :span="4">
-                <el-tree :data="fileLists" @node-contextmenu="rightClick" :highlight-current="highlight"  :props="props" @node-click="getFileContent" style="width: 200px;background-color: #393d49"></el-tree>
+            <!--文件列表-->
+            <el-col :span="5">
+                <el-tree :data="fileLists" @node-contextmenu="rightClick" :highlight-current="highlight" :props="props" :node-key="props.id" @node-click="getFileContent" style="width: 300px;background-color: #393d49"></el-tree>
             </el-col>
+            <!--文件列表-->
 
+            <!--鼠标右键-->
             <div v-show="menuVisible">
                 <ul id="menu" class="menu">
-                    <li class="menu__item" @click="renameFile">重命名</li>
-                    <li class="menu__item" @click="deleteFile">删除</li>
-                    <li class="menu__item" @click="addFile">添加</li>
+                    <li class="menu__item" @click="addFile" v-show="showRightBtn.add"><i class="el-icon-circle-plus-outline"></i> 添 加</li>
+                    <li class="menu__item" @click="renameFile" v-show="showRightBtn.rename"><i class="el-icon-edit-outline"></i> 修 改</li>
+                    <li class="menu__item" @click="authFile" v-show="showRightBtn.auth"><i class="el-icon-user-solid"></i> 权 限</li>
+                    <li class="menu__item" @click="compressionFile" v-show="showRightBtn.compression"><i class="el-icon-collection"></i> 压 缩</li>
+                    <li class="menu__item" @click="deleteFile" v-show="showRightBtn.DeCompression"><i class="el-icon-receiving"></i> 解 压</li>
+                    <li class="menu__item" @click="deleteFile" v-show="showRightBtn.download"><i class="el-icon-download"></i> 下 载</li>
+                    <li class="menu__item" @click="deleteFile" v-show="showRightBtn.upload"><i class="el-icon-upload"></i> 上 传</li>
+                    <li class="menu__item" @click="deleteFile" v-show="showRightBtn.remove"><i class="el-icon-delete-solid"></i> 删 除</li>
                 </ul>
             </div>
+            <!--鼠标右键-->
 
-            <el-col :span="20" v-show="showIdea">
-                <el-form :label-width="labelWidth" :model="fileModel" :ref="reFrom" :rules="rules">
+            <!--文件内容-->
+            <el-col :span="19" v-show="showIdea">
+                <el-form :label-width="labelWidth" :model="fileModel" :ref="reFrom">
                     <el-form-item style="margin-left: -30px !important;">
                         <el-tabs type="border-card" closable v-model="activeFileTabName"  @tab-click="goto" @tab-remove="removeTabName" style="text-align: left!important;">
                             <el-tab-pane v-for="item in fileTabs" :label="item.label" :key="item.name" :name="item.name"></el-tab-pane>
-                            <codemirror @change="updateContent" ref="edit" v-model="fileModel.content" :options="options" style="line-height: 20px"></codemirror>
+                            <el-card shadow="hover">
+                                <codemirror @change="updateContent" ref="edit" :value="fileModel.content" :options="options" style="line-height: 20px"></codemirror>
+                            </el-card>
                         </el-tabs>
                     </el-form-item>
                 </el-form>
                 <Submit style="text-align: center !important;" :reFrom="reFrom" :model="fileModel" :url="url" :refs="refs" v-on:success="success"></Submit>
             </el-col>
         </el-row>
+        <!--文件内容-->
 
+        <!--权限框-->
+        <el-dialog :visible.sync="syncVisible" :modal="modal" :title="title" center>
+            <el-form :label-width="labelWidth" :model="chmodModel" :rules="rules" :ref="reFrom">
+                <el-form-item label="权限" prop="auth">
+                    <el-input placeholder="请输入内容" @change="setChmodAuth" v-model="chmodModel.auth"></el-input>
+                </el-form-item>
+                <el-form-item label="所有者">
+                    <el-checkbox-group v-model="all"  @change="allChange">
+                        <el-checkbox border size="small" v-for="checkBox in checkBoxArr" :label="checkBox.value" :key="checkBox.id"></el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
+                <el-form-item label="用户组">
+                    <el-checkbox-group v-model="user"  @change="userChange">
+                        <el-checkbox border size="small" v-for="checkBox in checkBoxArr" :label="checkBox.value" :key="checkBox.id"></el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
+                <el-form-item label="公共">
+                    <el-checkbox-group v-model="common" @change="commonChange">
+                        <el-checkbox border size="small" v-for="checkBox in checkBoxArr" :label="checkBox.value" :key="checkBox.id"></el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <Submit :reFrom="reFrom" :model="chmodModel" :url="url" :refs="refs"  v-on:success="success"></Submit>
+            </div>
+        </el-dialog>
+        <!--权限框-->
     </div>
 </template>
 
@@ -58,7 +98,24 @@
                     label:'label',
                     children:'children',
                 },
-
+                //文件授权
+                checkBoxArr:[{'id':4,'value':'读取'},{'id':2,'value':'写入'},{'id':1,'value':'执行'}],
+                all:[],
+                user:[],
+                common:[],
+                all_id:0,
+                user_id:0,
+                common_id:0,
+                chmodModel:{
+                    auth:parseInt(this.all_id +''+ this.user_id +''+ this.common_id),
+                    path:''
+                },
+                //文件压缩
+                compressionModel:{
+                    docLists:[],
+                    type:'',
+                    path:''
+                },
                 //代码编辑器配置
                 options:{
                     mode: 'text/javascript',
@@ -66,7 +123,13 @@
                     lineNumbers: true, //行数
                     lineWrapping: false, //自动换行
                     extraKeys: {'Ctrl-Space': 'autocomplete'},
-                    hint:true
+                    hint:true,
+                    indentWithTabs: true,
+                    smartIndent: true,
+                    matchBrackets: true,
+                    styleActiveLine: true,
+                    cursorHeight:1, // 光标高度
+                    autoRefresh: true
                 },
                 //展示自定义右键菜单
                 menuVisible:false,
@@ -78,12 +141,10 @@
                 path:'base_path',
                 //默认显示tabs
                 activeFileTabName:null,
-                //目录列表 （可以配置到数据库）
-                pathLists:{'base_path':'项目目录','public_path':'资源目录','storage_path':'缓存目录'},
 
                 title:'default',
                 syncVisible:false, //是否显示弹框
-                modal:false, //遮盖层是否需要
+                modal:true, //遮盖层是否需要
                 labelWidth:'80px',
                 loading:true,
                 loadingText:'玩命加载中。。。',
@@ -93,6 +154,17 @@
                 reFrom:'file',
                 //文件对象
                 fileObject:{},
+                //是否显示按钮
+                showRightBtn:{
+                    add:true,
+                    rename:true,
+                    remove:true,
+                    compression:true,
+                    DeCompression:false,
+                    auth:true,
+                    download:true,
+                    upload:true,
+                },
                 //文件
                 fileModel:{
                     content:'',
@@ -101,11 +173,15 @@
                 //编辑器显示与否
                 showIdea:true,
                 cgi:{
-                    remove:$url.remove,
                     update:$url.fileUpdate,
-                    rename:$url.fileRename
+                    chmod:$url.fileChmod
                 },
-                rules:{},
+                rules:{
+                    auth:[
+                        { required: true, message: '权限不得为空',trigger:'blur'},
+                        { type: 'number', message: '权限必须为数字值',trigger:'blur'}
+                    ]
+                },
             }
         },
         computed:{
@@ -117,6 +193,7 @@
              * todo：关闭弹框
              */
             success:function(){
+                this.getFileLists(this.path);
                 this.syncVisible = false;
             },
             /**
@@ -139,19 +216,34 @@
              * @param Node 节点对应的 Node、
              * @param element 节点组件本身。
              */
-            rightClick(MouseEvent, object, Node, element) {
+            rightClick:function(MouseEvent, object, Node, element) {
                 this.menuVisible = false; // 关闭模态框
                 this.menuVisible = true;  // 显示模态窗口，跳出自定义菜单栏
                 const menu = document.querySelector('#menu');
                 document.addEventListener('click', this.foo); // 给整个document添加监听鼠标事件，点击任何位置执行foo方法
-                menu.style.left = '210px';
-                menu.style.top = MouseEvent.screenY - 195 + 'px';
-                this.fileObject = object
+                menu.style.left = '310px';
+                menu.style.top = MouseEvent.clientY - 195 + 'px';
+                this.fileObject = object;
+                switch (this.fileObject.fileType) {
+                    case 'file':
+                        this.showRightBtn.DeCompression = false;
+                        this.showRightBtn.upload = false;
+                        let ext = this.fileObject.label.split(".")[1];
+                        let compressionExt = ['tar','zip','7z','TAR','ZIP','7Z'];
+                        if (compressionExt.includes(ext)){
+                            this.showRightBtn.DeCompression = true;
+                        }
+                        break;
+                    case 'dir':
+                        this.showRightBtn.download = false;
+                        this.showRightBtn.DeCompression = false;
+                        break;
+                }
             },
             /**
              * todo：取消鼠标监听事件菜单栏
              */
-            foo() {
+            foo:function() {
                 this.menuVisible = false;
                 document.removeEventListener('click', this.foo) // 关掉监听
             },
@@ -205,7 +297,6 @@
              * @val content tabs 标签下的内容
              */
             getFileContent:function (item) {
-                console.log(item);
                 if (item.fileType!=='file'){
                     this.$notify({type:'success',title:'通知',message:'不是一个文件'});
                     return false;
@@ -229,15 +320,16 @@
              * todo：文件重新命名
              */
             renameFile:function(){
-                let params = {old:this.fileObject.path};
+                let params = {oldFile:this.fileObject.path};
                 this.$prompt('请输入文件名', '重命名', { confirmButtonText: '确定', cancelButtonText: '取消',}).then(({ value }) => {
-                    params.curr = params.old.replace(this.fileObject.name,value);
+                    params.newFile = params.oldFile.replace(this.fileObject.label,value);
                     apiLists.FileRename(params).then(response=>{
                         if (response.data.code === 200){
                             this.fileObject.name = value;
                             this.$message({type: 'success', message: '你的新文件名: ' + value});
-                            let data = { info:JSON.stringify({url:$url.fileSave, info:'你的新文件名: ' + value,result:response.data.result}) };
+                            let data = { msg:JSON.stringify({url:$url.fileSave, info:'你的新文件名: ' + value,result:response.data.result}) };
                             this.saveSystemLog(data);
+                            this.getFileLists(this.path);
                         }
                     });
                 }).catch(() => {
@@ -256,8 +348,9 @@
                     let params = {path:this.fileObject.path};
                     apiLists.FileDelete(params).then(response=>{
                        if (response.data.code === 200){
-                           let data = { info:JSON.stringify({url:$url.fileDelete, info:'删除文件成功：'+params.path,result:response.data.result}) };
+                           let data = { msg:JSON.stringify({url:$url.fileDelete, info:'删除文件成功：'+params.path,result:response.data.result}) };
                            this.saveSystemLog(data);
+                           this.getFileLists(this.path);
                            this.$message({type:'success',message:'删除记录成功！：'+params.path});
                        }
                     })
@@ -272,24 +365,120 @@
                 let params = {};
                 this.$prompt('请输入文件名', '新建文件', { confirmButtonText: '确定', cancelButtonText: '取消',}).then(({ value }) => {
                     //这是一个文件
-                    if(this.fileObject.path.substring(this.fileObject.path.lastIndexOf('/')).indexOf('.')>=0){
-                        params.path = this.fileObject.path.replace(this.fileObject.name,value);
-                    } else {
+                    if(this.fileObject.fileType === 'file'){
+                        params.path = this.fileObject.path.replace(this.fileObject.label,value);
+                    } else if (this.fileObject.fileType === 'dir') {
                         params.path = this.fileObject.path+'/'+value;
                     }
                     apiLists.FileSave(params).then(response=>{
-                        console.log(response);
                         if (response.data.code === 200){
                             let data = { info:JSON.stringify({url:$url.fileSave, info:'你的新文件名: ' + params.path,result:response.data.result}) };
                             this.saveSystemLog(data);
+                            this.getFileLists(this.path);
                             this.$message({type: 'success', message: '你的新文件名: ' + params.path});
                         }
                     });
-                }).catch((err) => {
-                    console.log(err);
+                }).catch(() => {
                     this.$message({type: 'info', message: '取消输入'});
                 });
             },
+            /**
+             * todo：文件权限设置
+             */
+            authFile:function(){
+                this.syncVisible = true;
+                this.title = '设置权限【'+(this.fileObject.path)+'】';
+                this.chmodModel.auth = parseInt(this.fileObject.auth);
+                this.chmodModel.path = this.fileObject.path;
+                this.all_id = this.fileObject.auth.substr(0,1);
+                this.user_id = this.fileObject.auth.substr(1,1);
+                this.common_id = this.fileObject.auth.substr(2,1);
+                this.all = this.setChmod(this.all_id);
+                this.user = this.setChmod(this.user_id);
+                this.common = this.setChmod(this.common_id);
+                this.url = this.cgi.chmod;
+            },
+            /**
+             * todo：设置权限
+             * @param chmod
+             */
+            setChmod:function(chmod){
+                let auth = [];
+                switch (chmod) {
+                    case '7': auth = ['读取','写入','执行']; break;
+                    case '6': auth = ['读取','写入']; break;
+                    case '5': auth = ['读取','执行']; break;
+                    case '4': auth = ['读取']; break;
+                    case '3': auth = ['写入','执行']; break;
+                    case '2': auth = ['写入']; break;
+                    case '1': auth = ['执行']; break;
+                }
+                return auth;
+            },
+            /**
+             * todo：根据用户输入设置权限
+             */
+            setChmodAuth:function(){
+                this.chmodModel.auth = parseInt(this.chmodModel.auth);
+                if (this.chmodModel.auth>777){
+                    this.$message({type:'warning',message:'权限设置失败'});
+                    this.chmodModel.auth = parseInt(this.fileObject.auth);
+                }
+                this.all_id = this.chmodModel.auth.toString().substr(0,1);
+                this.user_id = this.chmodModel.auth.toString().substr(1,1);
+                this.common_id = this.chmodModel.auth.toString().substr(2,1);
+                this.all = this.setChmod(this.all_id);
+                this.user = this.setChmod(this.user_id);
+                this.common = this.setChmod(this.common_id);
+                this.url = this.cgi.chmod;
+            },
+            /**
+             * todo：获取权限
+             * @param chmod
+             */
+            getChmod:function(chmod){
+                let auth = 0;
+                for (let i in chmod){
+                    if (chmod[i] === '读取'){
+                        auth+=4;
+                    }
+                    if (chmod[i] === '写入'){
+                        auth+=2;
+                    }
+                    if (chmod[i] === '执行'){
+                        auth+=1;
+                    }
+                }
+                return auth;
+            },
+            /**
+             * todo：所有者权限
+             * @param val
+             */
+            allChange:function(val){
+                this.all_id = this.getChmod(val);
+                this.chmodModel.auth = parseInt(this.all_id +''+ this.user_id +''+ this.common_id);
+            },
+            /**
+             * todo：用户组权限
+             * @param val
+             */
+            userChange:function(val){
+                this.user_id = this.getChmod(val);
+                this.chmodModel.auth = parseInt(this.all_id +''+ this.user_id +''+ this.common_id);
+            },
+            /**
+             * todo：公共权限
+             * @param val
+             */
+            commonChange:function(val){
+                this.common_id = this.getChmod(val);
+                this.chmodModel.auth = parseInt(this.all_id +''+ this.user_id +''+ this.common_id);
+            },
+            compressionFile:function(){
+                this.compressionModel.docLists.push(this.fileObject.path);
+            },
+
             /**
              * todo：修改编辑器内容
              * @param content

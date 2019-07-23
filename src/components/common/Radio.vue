@@ -29,10 +29,10 @@
             setStatus:function (item) {
                 let params = {status:item.status,id:item.id,token:this.$store.state.login.token,'act':'status'};
                 this.$http.post(this.url,params).then(response=>{
-                    let data = { info:JSON.stringify({url:this.url, info:'修改数据成功',result:response.data.result}),token:this.$store.state.login.token };
                     if (response.data.code === 200){
+                        let data = { msg:JSON.stringify({url:this.url, info:response.data.msg,result:response.data.result}),token:this.$store.state.login.token };
                         this.saveSystemLog(data);
-                        this.$message({type:'success',message:'修改数据成功'});
+                        this.$message({type:'success',message:response.data.msg});
                         return ;
                     }
                     item.status = params.status===1?2:1;

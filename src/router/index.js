@@ -16,6 +16,7 @@ Vue.use(Router);
 
 export default new Router({
     routes: [
+        { path: '/', name: '/', component: Login,meta:{ mode:'',title:'登录' } },
         { path: '/login', name: 'Login', component: Login,meta:{ mode:'',title:'登录' } },
         { path: '/admin', name: 'Index', component: Index,meta:{ mode:'',title:'首页' } },
         { path:'/admin',component: Index,
