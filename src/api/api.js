@@ -65,10 +65,10 @@ const musicLists = function (params) {
 const musicPlay = function (params) {
     return request.post(url.musicPlay,qs.stringify(Object.assign(token,params)))
 };
-const compression = function (params) {
+const compressionFile = function (params) {
     return request.post(url.fileCompression,qs.stringify(Object.assign(token,params)))
 }
-const decompression = function (params) {
+const decompressionFile = function (params) {
     return request.post(url.fileDecompression,qs.stringify(Object.assign(token,params)))
 }
 const interfaceLists = {
@@ -92,7 +92,7 @@ const interfaceLists = {
     MusicLists:musicLists,
     MusicPlay:musicPlay,
     CategoryDelete:categoryDelete,
-    Compression:compression,
-    Decompression:decompression,
+    Compression:compressionFile,
+    Decompression:decompressionFile
 };
 export default interfaceLists;

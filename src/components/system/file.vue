@@ -14,9 +14,9 @@
                     <li class="menu__item" @click="renameFile" v-show="showRightBtn.rename"><i class="el-icon-edit-outline"></i> 修 改</li>
                     <li class="menu__item" @click="authFile" v-show="showRightBtn.auth"><i class="el-icon-user-solid"></i> 权 限</li>
                     <li class="menu__item" @click="compressionFile" v-show="showRightBtn.compression"><i class="el-icon-collection"></i> 压 缩</li>
-                    <li class="menu__item" @click="deleteFile" v-show="showRightBtn.DeCompression"><i class="el-icon-receiving"></i> 解 压</li>
-                    <li class="menu__item" @click="deleteFile" v-show="showRightBtn.download"><i class="el-icon-download"></i> 下 载</li>
-                    <li class="menu__item" @click="deleteFile" v-show="showRightBtn.upload"><i class="el-icon-upload"></i> 上 传</li>
+                    <li class="menu__item" @click="DecompressionFile" v-show="showRightBtn.DeCompression"><i class="el-icon-receiving"></i> 解 压</li>
+                    <li class="menu__item" @click="downloadFile" v-show="showRightBtn.download"><i class="el-icon-download"></i> 下 载</li>
+                    <li class="menu__item" @click="uploadFile" v-show="showRightBtn.upload"><i class="el-icon-upload"></i> 上 传</li>
                     <li class="menu__item" @click="deleteFile" v-show="showRightBtn.remove"><i class="el-icon-delete-solid"></i> 删 除</li>
                 </ul>
             </div>
@@ -66,6 +66,22 @@
             </div>
         </el-dialog>
         <!--权限框-->
+
+        <el-dialog :visible.sync="fileSyncVisible" :modal="modal" title="文件上传" center>
+            <el-upload
+                    class="upload-demo"
+                    ref="upload"
+                    :data="fileData"
+                    :action="cgi.uploadUrl"
+                    :on-preview="handlePreview"
+                    :on-remove="handleRemove"
+                    :file-list="fileList"
+                    :auto-upload="false">
+                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            </el-upload>
+        </el-dialog>
     </div>
 </template>
 
@@ -170,11 +186,16 @@
                     content:'',
                     path:''
                 },
+                fileList:[],
+                fileSyncVisible:false,
+                fileData:{},
+
                 //编辑器显示与否
                 showIdea:true,
                 cgi:{
                     update:$url.fileUpdate,
-                    chmod:$url.fileChmod
+                    chmod:$url.fileChmod,
+                    uploadUrl:process.env.API_ROOT+$url.fileUpload
                 },
                 rules:{
                     auth:[
@@ -185,7 +206,7 @@
             }
         },
         computed:{
-            ...mapGetters(['fileTabs','currFileObj']),
+            ...mapGetters(['fileTabs','currFileObj','token']),
         },
         methods:{
             ...mapActions(['addFileTabs','deleteFileTabs','addCurrFileObj','saveSystemLog']),
@@ -228,6 +249,7 @@
                     case 'file':
                         this.showRightBtn.DeCompression = false;
                         this.showRightBtn.upload = false;
+                        this.showRightBtn.download = true;
                         let ext = this.fileObject.label.split(".")[1];
                         let compressionExt = ['tar','zip','7z','TAR','ZIP','7Z'];
                         if (compressionExt.includes(ext)){
@@ -236,6 +258,7 @@
                         break;
                     case 'dir':
                         this.showRightBtn.download = false;
+                        this.showRightBtn.upload = true;
                         this.showRightBtn.DeCompression = false;
                         break;
                 }
@@ -327,7 +350,7 @@
              */
             renameFile:function(){
                 let params = {oldFile:this.fileObject.path};
-                this.$prompt('请输入文件名', '重命名', { confirmButtonText: '确定', cancelButtonText: '取消',}).then(({ value }) => {
+                this.$prompt('请输入文件名', '重命名', { confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
                     params.newFile = params.oldFile.replace(this.fileObject.label,value);
                     apiLists.FileRename(params).then(response=>{
                         if (response.data.code === 200){
@@ -369,7 +392,7 @@
              */
             addFile:function () {
                 let params = {};
-                this.$prompt('请输入文件名', '新建文件', { confirmButtonText: '确定', cancelButtonText: '取消',}).then(({ value }) => {
+                this.$prompt('请输入文件名', '新建文件', { confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
                     //这是一个文件
                     if(this.fileObject.fileType === 'file'){
                         params.path = this.fileObject.path.replace(this.fileObject.label,value);
@@ -485,7 +508,7 @@
              * todo：文件压缩
              */
             compressionFile:function(){
-                this.$prompt('请输入文件名', '压缩包名称', { confirmButtonText: '确定', cancelButtonText: '取消',}).then(({ value }) => {
+                this.$prompt('请输入文件名', '压缩包名称', { confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
                     this.compressionModel.resource = value;
                     this.compressionModel.docLists.push(this.fileObject.path);
                     this.compressionModel.path = this.fileObject.path.replace(this.fileObject.label,'');
@@ -500,6 +523,53 @@
                 }).catch(() => {
                     this.$message({type: 'info', message: '取消输入'});
                 });
+            },
+            /**
+             * todo：文件解压
+             */
+            DecompressionFile:function(){
+                this.$prompt('请输入文件名', '解压包名称', { confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
+                    let params = {
+                        path : this.fileObject.path,
+                        resource:value
+                    };
+                    apiLists.Decompression(params).then(response=>{
+                        if (response.data.code === 200){
+                            this.$message({type:'success',message:response.data.msg});
+                            let data = { msg:'文件解压成功',result:response.data.result };
+                            this.saveSystemLog(data);
+                            this.getFileLists(this.path);
+                        }
+                    });
+                }).catch(() => {
+                    this.$message({type: 'info', message: '取消输入'});
+                });
+            },
+            /**
+             * todo：文件下载
+             */
+            downloadFile:function(){
+                this.$alert('确定下载文件：'+this.fileObject.path,'文件下载').then(()=>{
+                    window.open(process.env.API_ROOT+$url.fileDownload+"?token="+this.token+"&path="+this.fileObject.path,'__target');
+                    let data = { msg:'文件下载成功：'+this.fileObject.path };
+                    this.saveSystemLog(data);
+                    this.$message({type:'success',message:'download file successfully'});
+                }).catch(() => {
+                    this.$message({type: 'info', message: '取消下载'});
+                });
+            },
+            uploadFile:function(){
+                this.fileSyncVisible = true;
+                this.fileData.token = this.token;
+            },
+            submitUpload() {
+                this.$refs.upload.submit();
+            },
+            handleRemove(file, fileList) {
+                console.log(file, fileList);
+            },
+            handlePreview(file) {
+                console.log(file);
             },
 
             /**

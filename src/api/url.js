@@ -41,6 +41,8 @@ let url={
     fileSave:'/v1/file/save',
     fileDelete:'/v1/file/delete',
     fileUpdate:'/v1/file/update',
+    fileUpload:'v1/file/upload',
+    fileDownload:'v1/file/download',
     fileCompression:'/v1/file/zip',
     fileDecompression:'/v1/file/unzip',
     //地区列表
