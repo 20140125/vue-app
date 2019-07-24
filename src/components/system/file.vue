@@ -113,7 +113,7 @@
                 //文件压缩
                 compressionModel:{
                     docLists:[],
-                    type:'',
+                    resource:'',
                     path:''
                 },
                 //代码编辑器配置
@@ -301,6 +301,12 @@
                     this.$notify({type:'success',title:'通知',message:'不是一个文件'});
                     return false;
                 }
+                let ext = item.label.split(".")[1];
+                let compressionExt = ['tar','zip','7z','TAR','ZIP','7Z'];
+                if (compressionExt.includes(ext)){
+                    this.$notify({type:'success',title:'通知',message:'该文件不支持直接查看'});
+                    return false;
+                }
                 this.showIdea = true;
                 this.activeFileTabName = item.size.toString();
                 let params = {path:item.path},tabs = {};
@@ -348,7 +354,7 @@
                     let params = {path:this.fileObject.path};
                     apiLists.FileDelete(params).then(response=>{
                        if (response.data.code === 200){
-                           let data = { msg:JSON.stringify({url:$url.fileDelete, info:'删除文件成功：'+params.path,result:response.data.result}) };
+                           let data = { msg:'删除文件成功：'+params.path,result:response.data.result };
                            this.saveSystemLog(data);
                            this.getFileLists(this.path);
                            this.$message({type:'success',message:'删除记录成功！：'+params.path});
@@ -372,7 +378,7 @@
                     }
                     apiLists.FileSave(params).then(response=>{
                         if (response.data.code === 200){
-                            let data = { info:JSON.stringify({url:$url.fileSave, info:'你的新文件名: ' + params.path,result:response.data.result}) };
+                            let data = { msg:'你的新文件名: ' + params.path,result:response.data.result };
                             this.saveSystemLog(data);
                             this.getFileLists(this.path);
                             this.$message({type: 'success', message: '你的新文件名: ' + params.path});
@@ -420,7 +426,7 @@
              */
             setChmodAuth:function(){
                 this.chmodModel.auth = parseInt(this.chmodModel.auth);
-                if (this.chmodModel.auth>777){
+                if (this.chmodModel.auth>666){
                     this.$message({type:'warning',message:'权限设置失败'});
                     this.chmodModel.auth = parseInt(this.fileObject.auth);
                 }
@@ -475,8 +481,25 @@
                 this.common_id = this.getChmod(val);
                 this.chmodModel.auth = parseInt(this.all_id +''+ this.user_id +''+ this.common_id);
             },
+            /**
+             * todo：文件压缩
+             */
             compressionFile:function(){
-                this.compressionModel.docLists.push(this.fileObject.path);
+                this.$prompt('请输入文件名', '压缩包名称', { confirmButtonText: '确定', cancelButtonText: '取消',}).then(({ value }) => {
+                    this.compressionModel.resource = value;
+                    this.compressionModel.docLists.push(this.fileObject.path);
+                    this.compressionModel.path = this.fileObject.path.replace(this.fileObject.label,'');
+                    apiLists.Compression(this.compressionModel).then(response=>{
+                        if (response.data.code === 200){
+                            this.$message({type:'success',message:response.data.msg});
+                            let data = { msg:'你的压缩包名: ' + this.compressionModel.type,result:response.data.result };
+                            this.saveSystemLog(data);
+                            this.getFileLists(this.path);
+                        }
+                    });
+                }).catch(() => {
+                    this.$message({type: 'info', message: '取消输入'});
+                });
             },
 
             /**

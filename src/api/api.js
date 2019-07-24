@@ -65,12 +65,12 @@ const musicLists = function (params) {
 const musicPlay = function (params) {
     return request.post(url.musicPlay,qs.stringify(Object.assign(token,params)))
 };
-const localLists = function (params) {
-    return request.post(url.localLists,qs.stringify(Object.assign(token,params)))
-};
-const localTools = function (params) {
-    return request.post(url.localTools,qs.stringify(Object.assign(token,params)))
-};
+const compression = function (params) {
+    return request.post(url.fileCompression,qs.stringify(Object.assign(token,params)))
+}
+const decompression = function (params) {
+    return request.post(url.fileDecompression,qs.stringify(Object.assign(token,params)))
+}
 const interfaceLists = {
     LoginSys:loginSys,
     LogoutSys:logoutSys,
@@ -91,8 +91,8 @@ const interfaceLists = {
     DatabaseLists:databaseLists,
     MusicLists:musicLists,
     MusicPlay:musicPlay,
-    LocalLists:localLists,
-    LocalTools:localTools,
-    CategoryDelete:categoryDelete
+    CategoryDelete:categoryDelete,
+    Compression:compression,
+    Decompression:decompression,
 };
 export default interfaceLists;

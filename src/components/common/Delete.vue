@@ -34,7 +34,7 @@
                     this.$http.post(this.url,params).then(response=>{
                         if (response.data.code === 200) {
                             this.Lists.splice(index,1);
-                            let data = { msg:JSON.stringify({url:this.url, info:response.data.msg,result:response.data.result}),token:this.$store.state.login.token };
+                            let data = { msg:JSON.stringify({info:response.data.msg,result:response.data.result}),token:this.$store.state.login.token };
                             this.saveSystemLog(data);
                             this.$message({type:'success',message:response.data.msg});
                             this.$emit('success');
