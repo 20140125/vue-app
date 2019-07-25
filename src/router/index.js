@@ -9,7 +9,6 @@ import UserLists from '../components/user/lists'
 import SystemLog from '../components/system/log'
 import SystemFile from '../components/system/file'
 import ApiLists from '../components/interface/api'
-import MusicLists from '../components/interface/music'
 import databaseLists from '../components/database/lists'
 
 Vue.use(Router);
@@ -28,7 +27,6 @@ export default new Router({
                 { path: 'log/index',  name:'SystemLog',component:SystemLog,meta:{ mode:'log',title:'日志列表' } },
                 { path: 'file/index',  name:'SystemFile',component:SystemFile,meta:{ mode:'file',title:'文件列表' } },
                 { path: 'api/index', name:'ApiLists',component:ApiLists,meta:{ mode:'api_lists',title:'接口详情' } },
-                { path: 'music/index', name:'MusicLists',component:MusicLists,meta:{ mode:'music',title:'音乐列表' } },
                 { path: 'database/index', name:'databaseLists',component:databaseLists,meta:{ mode:'',title:'数据表列表' } },
             ]
         },

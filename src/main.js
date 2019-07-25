@@ -30,7 +30,7 @@ router.beforeEach((to,from,next)=>{
         }
         apiLists.CheckToken({token:store.state.login.token}).then(response=>{
             if (response.data.code === 200) {
-                next({path:'/admin',redirect:to.path})
+                next({path:'/admin/index',redirect:to.path})
             }
             next();
         });
@@ -44,7 +44,7 @@ router.beforeEach((to,from,next)=>{
             }
             localStorage.setItem('urls',response.data.item.auth);
             let auth = store.state.login.auth_url === null ? localStorage.getItem('urls') : store.state.login.auth_url;
-            //用户权限验证
+            //用户权限验证 (admin  最高权限不做权限验证)
             if (auth.indexOf(to.path)===-1 && to.name !=='Welcome' && store.state.login.username!=='admin'){
                 let params={},info = '你没有访问权限，请联系管理员【'+code.QQ+'】检验数据的正确性';
                 params.username = store.state.login.username;
@@ -52,9 +52,9 @@ router.beforeEach((to,from,next)=>{
                 params.info = JSON.stringify({url:to.path, info:info});
                 apiLists.LogSave(params).then(response=>{
                     if (response.data.code === code.SUCCESS){
-                        ElementUI.MessageBox.alert(info,{callback:action=>{
-                                location.href='tencent://message/?uin='+code.QQ+'&Site=后台权限认证&Menu=yes';
-                            }});
+                        ElementUI.MessageBox.alert(info).then(()=>{
+                            location.href='tencent://message/?uin='+code.QQ+'&Site=后台权限认证&Menu=yes';
+                        });
                         next({path:'/login',redirect:to.path});
                     }
                 });

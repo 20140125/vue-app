@@ -51,7 +51,7 @@
                                 </div>
                             </el-form-item>
                             <el-form-item label="返回参数" prop="response_string">
-                                <codemirror ref="edit"  :value="apiModel.response_string" :options="options" style="line-height: 20px"></codemirror>
+                                <codemirror ref="edit" @change="updateContent"  :value="apiModel.response_string" :options="options" style="line-height: 20px"></codemirror>
                             </el-form-item>
                             <el-form-item label="返回字段" prop="response">
                                 <el-button type="primary"  plain icon="el-icon-plus" @click="responseAdd()" size="medium"></el-button>
@@ -103,10 +103,24 @@
     import { codemirror } from 'vue-codemirror-lite'
     require('codemirror/lib/codemirror.css');
     require('codemirror/lib/codemirror.js');
-    require('codemirror/addon/hint/show-hint.js');
-    require('codemirror/addon/hint/show-hint.css');
+
     require('codemirror/addon/hint/javascript-hint.js');
     require('codemirror/mode/javascript/javascript.js');
+    //自动补全
+    require('codemirror/addon/hint/show-hint.js');
+    require('codemirror/addon/hint/show-hint.css');
+    require('codemirror/addon/hint/anyword-hint.js');
+    //编辑器主题
+    require('codemirror/theme/monokai.css');
+    //代码折叠
+    require('codemirror/addon/fold/foldgutter.css');
+    require('codemirror/addon/fold/foldcode.js');
+    require('codemirror/addon/fold/foldgutter.js');
+    require('codemirror/addon/fold/brace-fold.js');
+    require('codemirror/addon/fold/brace-fold.js');
+    require('codemirror/addon/fold/comment-fold.js');
+    //括号匹配
+    require('codemirror/addon/edit/matchbrackets.js');
     import {mapGetters,mapActions} from 'vuex'
     export default {
         name: "lists",
@@ -142,17 +156,27 @@
                 //代码编辑器配置
                 options:{
                     mode: 'application/ld+json',
-                    tabSize: 4, //缩进
-                    lineNumbers: true, //行数
-                    lineWrapping: false, //自动换行
-                    extraKeys: {'Ctrl-Space': 'autocomplete'},
-                    highlight:true,
-                    hint:true,
+                    //缩进
+                    tabSize: 4,
+                    //显示行号
+                    lineNumbers: true,
+                    //theme
+                    theme:'monokai',
+                    //智能提示
+                    extraKeys:{"Ctrl-Space":"autocomplete"},//ctrl-space唤起智能提示
+                    //代码折叠
+                    lineWrapping:true,
+                    foldGutter: true,
+                    gutters:["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+                    //在缩进时，是否需要把 n*tab宽度个空格替换成n个tab字符，默认为false
                     indentWithTabs: true,
+                    //自动缩进，设置是否根据上下文自动缩进（和上一行相同的缩进量）。默认为true。
                     smartIndent: true,
-                    matchBrackets: true,
-                    styleActiveLine: true,
-                    cursorHeight:1, // 光标高度
+                    //括号匹配
+                    matchBrackets:true,
+                    // 光标高度
+                    cursorHeight:1,
+                    //自动刷新
                     autoRefresh: true
                 },
                 //是否展示编辑器
@@ -345,7 +369,14 @@
              */
             responseAdd:function(){
                 this.apiModel.response.push({name:'', desc:'',  type:'' });
-            }
+            },
+            /**
+             * todo：修改编辑器内容
+             * @param content
+             */
+            updateContent:function(content){
+                this.apiModel.response_string = content;
+            },
         },
         created(){
             this.apiName = this.interfaceName;

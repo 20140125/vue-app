@@ -66,22 +66,20 @@
             </div>
         </el-dialog>
         <!--权限框-->
-
+        <!--文件上传-->
         <el-dialog :visible.sync="fileSyncVisible" :modal="modal" title="文件上传" center>
-            <el-upload
-                    class="upload-demo"
-                    ref="upload"
-                    :data="fileData"
-                    :action="cgi.uploadUrl"
-                    :on-preview="handlePreview"
-                    :on-remove="handleRemove"
-                    :file-list="fileList"
-                    :auto-upload="false">
+            <el-upload ref="upload"
+                       :data="fileData"
+                       :action="cgi.uploadUrl"
+                       :on-remove="handleRemove"
+                       :on-success="handelSuccess"
+                       :file-list="fileList"
+                       :auto-upload="false">
                 <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
                 <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
             </el-upload>
         </el-dialog>
+        <!--文件上传-->
     </div>
 </template>
 
@@ -91,19 +89,23 @@
     import Submit from "../common/Submit";
     import { mapGetters,mapActions } from 'vuex';
     import { codemirror } from 'vue-codemirror-lite'
-    require('codemirror/mode/javascript/javascript');
-    require('codemirror/mode/vue/vue');
-    require('codemirror/addon/hint/show-hint.js');
-    require('codemirror/addon/hint/show-hint.css');
-    require('codemirror/addon/hint/javascript-hint.js');
     require('codemirror/lib/codemirror.css');
     require('codemirror/lib/codemirror.js');
-    require('codemirror/theme/3024-night.css');
+    //编辑器代码 php
+    require('codemirror/mode/php/php.js');
+    require('codemirror/addon/selection/active-line');
+    //编辑器主题
+    require('codemirror/theme/monokai.css');
+    //代码折叠
     require('codemirror/addon/fold/foldgutter.css');
     require('codemirror/addon/fold/foldcode.js');
     require('codemirror/addon/fold/foldgutter.js');
     require('codemirror/addon/fold/brace-fold.js');
     require('codemirror/addon/fold/brace-fold.js');
+    require('codemirror/addon/fold/comment-fold.js');
+    //括号匹配
+    require('codemirror/addon/edit/matchbrackets.js');
+
     export default {
         name: "lists",
         components: {Submit,codemirror},
@@ -134,18 +136,31 @@
                 },
                 //代码编辑器配置
                 options:{
-                    mode: 'text/javascript',
-                    tabSize: 4, //缩进
-                    lineNumbers: true, //行数
-                    lineWrapping: false, //自动换行
-                    extraKeys: {'Ctrl-Space': 'autocomplete'},
-                    hint:true,
+                    mode: "text/x-php",
+                    //缩进
+                    tabSize: 4,
+                    //显示行号
+                    lineNumbers: true,
+                    //theme
+                    theme:'monokai',
+                    //智能提示
+                    extraKeys:{"Ctrl-Space":"autocomplete"},//ctrl-space唤起智能提示
+                    //代码折叠
+                    lineWrapping:true,
+                    foldGutter: true,
+                    gutters:["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+                    //在缩进时，是否需要把 n*tab宽度个空格替换成n个tab字符，默认为false
                     indentWithTabs: true,
+                    //自动缩进，设置是否根据上下文自动缩进（和上一行相同的缩进量）。默认为true。
                     smartIndent: true,
-                    matchBrackets: true,
-                    styleActiveLine: true,
-                    cursorHeight:1, // 光标高度
-                    autoRefresh: true
+                    //括号匹配
+                    matchBrackets:true,
+                    // 光标高度
+                    cursorHeight:1,
+                    //自动刷新
+                    autoRefresh: true,
+                    //设置光标所在行高亮
+                    styleActiveLine:true,
                 },
                 //展示自定义右键菜单
                 menuVisible:false,
@@ -164,7 +179,7 @@
                 labelWidth:'80px',
                 loading:true,
                 loadingText:'玩命加载中。。。',
-
+                //自定义组件
                 url:'',
                 refs:this.$refs,
                 reFrom:'file',
@@ -186,17 +201,19 @@
                     content:'',
                     path:''
                 },
+                //文件上传
                 fileList:[],
                 fileSyncVisible:false,
                 fileData:{},
-
                 //编辑器显示与否
                 showIdea:true,
+                //地址
                 cgi:{
                     update:$url.fileUpdate,
                     chmod:$url.fileChmod,
                     uploadUrl:process.env.API_ROOT+$url.fileUpload
                 },
+                //规则
                 rules:{
                     auth:[
                         { required: true, message: '权限不得为空',trigger:'blur'},
@@ -558,20 +575,40 @@
                     this.$message({type: 'info', message: '取消下载'});
                 });
             },
+            /**
+             * todo：文件上传弹出框
+             */
             uploadFile:function(){
                 this.fileSyncVisible = true;
                 this.fileData.token = this.token;
+                this.fileData.path = this.fileObject.path;
             },
+            /**
+             * todo：确定文件上传
+             */
             submitUpload() {
                 this.$refs.upload.submit();
             },
-            handleRemove(file, fileList) {
-                console.log(file, fileList);
+            /**
+             * todo：文件上传成功回调
+             */
+            handelSuccess:function(response){
+                if (response.code === 200){
+                    this.$message({type:'success',message:response.msg});
+                    let data = { msg:response.msg,result:response };
+                    this.saveSystemLog(data);
+                    this.getFileLists(this.path);
+                    this.fileSyncVisible = false;
+                }
             },
-            handlePreview(file) {
+            /**
+             * todo：取消文件上传
+             * @param file
+             */
+            handleRemove(file) {
                 console.log(file);
+                this.$message({type:'warning',message:'取消文件上传：'+file.name});
             },
-
             /**
              * todo：修改编辑器内容
              * @param content
