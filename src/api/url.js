@@ -45,6 +45,7 @@ let url={
     fileDownload:'v1/file/download',
     fileCompression:'/v1/file/zip',
     fileDecompression:'/v1/file/unzip',
+    imagePreview:'/v1/image/preview',
     //地区列表
     localLists:'/v1/local/index',
     localTools:'/v1/tools/index',

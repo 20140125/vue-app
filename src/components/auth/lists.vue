@@ -59,7 +59,7 @@
                     <el-input v-model="authModel.name" placeholder="权限名称"></el-input>
                 </el-form-item>
                 <el-form-item label="权限链接" prop="href">
-                    <el-input v-model="authModel.href" placeholder="/api/auth/lists"></el-input>
+                    <el-input v-model="authModel.href" placeholder="/admin/auth/lists"></el-input>
                 </el-form-item>
                 <el-form-item label="权限上级" prop="pid">
                    <el-select placeholder="权限上级" style="width: 100%" v-model="authModel.pid">
@@ -147,7 +147,7 @@
              * @param limit
              */
             getAuthLists:function (page,limit) {
-                let params = { pid:this.pid,auth:this.auth,page:page,limit:limit};
+                let params = { pid:this.pid,name:this.auth,page:page,limit:limit};
                 apiLists.AuthLists(params).then(response=>{
                     if (response.data.code===200){
                         this.authLists = response.data.item.authLists.data;
@@ -205,11 +205,11 @@
                 this.act = 'add';
                 this.authModel = {
                     name:'',
-                    url:'',
+                    href:'',
                     status:'1',
                     pid:'0',
                     level:0,
-                    path:''
+                    path:'1'
                 };
             },
             /**

@@ -82,7 +82,7 @@
                 </el-form-item>
                 <el-form-item label="接口上级" prop="pid">
                     <el-select placeholder="接口上级" v-model="categoryModel.pid" style="width: 100%">
-                        <el-option v-for="(category,index) in apiCategory"  :key="index" :label="setName(category)" :value="category.value"></el-option>
+                        <el-option v-for="(category,index) in apiCategory"  :key="index" :label="setName(category)" :value="category.id"></el-option>
                     </el-select>
                 </el-form-item>
             </el-form>
@@ -103,9 +103,10 @@
     import { codemirror } from 'vue-codemirror-lite'
     require('codemirror/lib/codemirror.css');
     require('codemirror/lib/codemirror.js');
-
+    //编辑器
     require('codemirror/addon/hint/javascript-hint.js');
     require('codemirror/mode/javascript/javascript.js');
+    require('codemirror/addon/selection/active-line');
     //自动补全
     require('codemirror/addon/hint/show-hint.js');
     require('codemirror/addon/hint/show-hint.css');
@@ -177,7 +178,9 @@
                     // 光标高度
                     cursorHeight:1,
                     //自动刷新
-                    autoRefresh: true
+                    autoRefresh: true,
+                    //设置光标所在行高亮
+                    styleActiveLine:true,
                 },
                 //是否展示编辑器
                 apiStatus:false,

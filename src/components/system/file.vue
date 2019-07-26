@@ -3,10 +3,12 @@
         <el-row>
             <!--文件列表-->
             <el-col :span="5">
-                <el-tree :data="fileLists" @node-contextmenu="rightClick" :highlight-current="highlight" :props="props" :node-key="props.id" @node-click="getFileContent" style="width: 300px;background-color: #393d49"></el-tree>
+                <el-tree :data="fileLists"  @node-contextmenu="rightClick"
+                         :highlight-current="highlight"
+                         :props="props"
+                         :node-key="props.id" @node-click="getFileContent" style="width: 300px;background-color: #393d49"></el-tree>
             </el-col>
             <!--文件列表-->
-
             <!--鼠标右键-->
             <div v-show="menuVisible">
                 <ul id="menu" class="menu">
@@ -21,7 +23,6 @@
                 </ul>
             </div>
             <!--鼠标右键-->
-
             <!--文件内容-->
             <el-col :span="19" v-show="showIdea">
                 <el-form :label-width="labelWidth" :model="fileModel" :ref="reFrom">
@@ -36,9 +37,8 @@
                 </el-form>
                 <Submit style="text-align: center !important;" :reFrom="reFrom" :model="fileModel" :url="url" :refs="refs" v-on:success="success"></Submit>
             </el-col>
+            <!--文件内容-->
         </el-row>
-        <!--文件内容-->
-
         <!--权限框-->
         <el-dialog :visible.sync="syncVisible" :modal="modal" :title="title" center>
             <el-form :label-width="labelWidth" :model="chmodModel" :rules="rules" :ref="reFrom">
@@ -80,6 +80,11 @@
             </el-upload>
         </el-dialog>
         <!--文件上传-->
+        <!--图片预览-->
+        <el-dialog :visible.sync="imgVisible">
+            <img width="100%" :src="dialogImageUrl" alt="">
+        </el-dialog>
+        <!--图片预览-->
     </div>
 </template>
 
@@ -115,6 +120,7 @@
                 props:{
                     label:'label',
                     children:'children',
+                    isLeaf:false
                 },
                 //文件授权
                 checkBoxArr:[{'id':4,'value':'读取'},{'id':2,'value':'写入'},{'id':1,'value':'执行'}],
@@ -213,6 +219,9 @@
                     chmod:$url.fileChmod,
                     uploadUrl:process.env.API_ROOT+$url.fileUpload
                 },
+                //图片弹框
+                imgVisible:false,
+                dialogImageUrl:'',
                 //规则
                 rules:{
                     auth:[
@@ -265,7 +274,6 @@
                 switch (this.fileObject.fileType) {
                     case 'file':
                         this.showRightBtn.DeCompression = false;
-                        this.showRightBtn.upload = false;
                         this.showRightBtn.download = true;
                         let ext = this.fileObject.label.split(".")[1];
                         let compressionExt = ['tar','zip','7z','TAR','ZIP','7Z'];
@@ -275,7 +283,6 @@
                         break;
                     case 'dir':
                         this.showRightBtn.download = false;
-                        this.showRightBtn.upload = true;
                         this.showRightBtn.DeCompression = false;
                         break;
                 }
@@ -580,8 +587,13 @@
              */
             uploadFile:function(){
                 this.fileSyncVisible = true;
+                this.fileList = [];
                 this.fileData.token = this.token;
-                this.fileData.path = this.fileObject.path;
+                if (this.fileObject.fileType === 'file'){
+                    this.fileData.path = this.fileObject.path.replace(this.fileObject.label,'');
+                } else if (this.fileObject.fileType === 'dir'){
+                    this.fileData.path = this.fileObject.path;
+                }
             },
             /**
              * todo：确定文件上传
@@ -594,6 +606,18 @@
              */
             handelSuccess:function(response){
                 if (response.code === 200){
+                    let ext = response.item.name.split(".")[1];
+                    let imgArr = ['png','jpeg','gif'];
+                    if (imgArr.includes(ext.toLowerCase())){
+                        this.$alert('是否预览图片?','图片预览').then(()=>{
+                            this.imgVisible = true;
+                            apiLists.ImagePreview({name:response.item.name}).then(response=>{
+                                if (response.data.code === 200){
+                                    this.dialogImageUrl = response.data.item.src;
+                                }
+                            })
+                        })
+                    }
                     this.$message({type:'success',message:response.msg});
                     let data = { msg:response.msg,result:response };
                     this.saveSystemLog(data);
