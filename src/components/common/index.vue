@@ -4,6 +4,7 @@
 
 <script>
     import charts from './Charts'
+    import { mapMutations } from 'vuex'
     export default {
         name: "index",
         data(){
@@ -41,13 +42,29 @@
                     }
                 ],
                 legendData:['日志管理','接口管理','权限管理','角色管理','管理员管理'],
-                legendSelected:{ '日志管理':true,'接口管理':false,'权限管理':false,'角色管理':false,'管理员管理':false},
+                legendSelected:{ 'Log':true,'Api':false,'Auth':false,'Role':false,'User':false},
                 xAxisData:['周一','周二','周三','周四','周五','周六','周日'],
-                chartsTitle:'数据分析'
+                chartsTitle:'数据分析',
+                access_token:''
             }
         },
         components:{
-            charts:charts
+            charts:charts,
+        },
+        methods:{
+            ...mapMutations(['setToken'])
+        },
+        created(){
+            if (this.$route.params.access_token){
+                this.access_token = this.$route.params.access_token;
+            }
+        },
+        mounted() {
+            this.$nextTick(function () {
+                if (this.access_token){
+                    this.setToken(this.access_token);
+                }
+            })
         }
     }
 </script>

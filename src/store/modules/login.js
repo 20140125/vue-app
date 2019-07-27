@@ -69,11 +69,13 @@ const actions={
      * @param token
      */
     logoutSystem:function ({state,commit},token) {
-        apiLists.LogoutSys(token).then(response=>{
-            Message.success(response.data.msg);
-            commit('setToken','');
-            commit('setUserName','');
-            router.push({path:'/login'});
+        apiLists.LogoutSys({token:token}).then(response=>{
+            if (response.data.code === code.SUCCESS){
+                Message.success(response.data.msg);
+                commit('setToken','');
+                commit('setUserName','');
+                router.push({path:'/login'});
+            }
         })
     },
     /**
@@ -85,7 +87,9 @@ const actions={
     saveSystemLog:function ({state,commit},params) {
         params.username = state.username;
         apiLists.LogSave(params).then(response=>{
-            Message.success(response.data.msg);
+            if (response.data.code === code.SUCCESS){
+                Message.success(response.data.msg);
+            }
         });
     }
 };
