@@ -1,8 +1,8 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText">
-        <el-row>
-            <el-col :span="4">
-                <el-tree :props="props" @node-contextmenu="rightClick"  :highlight-current="highlight" :data="categoryLists" @node-click="getApiDetail" default-expand-all :node-key="props.id" style="width: 200px;background-color: #393d49"></el-tree>
+        <el-row :gutter="24">
+            <el-col :xl="{'span':4}" :lg="{'span':4}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" style="margin-bottom: 20px">
+                <el-tree :props="props" @node-contextmenu="rightClick"  :highlight-current="highlight" :data="categoryLists" @node-click="getApiDetail" default-expand-all :node-key="props.id" style="background-color: #393d49"></el-tree>
             </el-col>
 
             <div v-show="menuVisible">
@@ -13,11 +13,11 @@
                 </ul>
             </div>
 
-            <el-col :span="20" v-show="apiVisible">
+            <el-col :xl="{'span':19,'push':1}" :lg="{'span':19,'push':1}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" v-show="apiVisible">
                 <el-tabs type="border-card" v-model="apiName">
                     <el-tab-pane :label="apiName" :key="apiName" :name="apiName"></el-tab-pane>
                     <el-card shadow="hover">
-                        <el-form :label-width="labelWidth" :model="apiModel" :ref="reFrom" :rules="rules">
+                        <el-form :model="apiModel" :ref="reFrom" :rules="rules">
                             <el-form-item label="接口名称" prop="type">
                                 <el-select v-model="apiModel.type"  auto-complete="true" style="width: 100%" placeholder="接口名称">
                                     <el-option v-for="(category,index) in apiCategory"  :key="index" :label="setName(category)" :value="category.value"></el-option>
@@ -226,7 +226,7 @@
              * todo：关闭弹框
              */
             success:function(){
-                this.getCategoryLists()
+                this.getCategoryLists();
                 this.syncVisible = false;
             },
             /**
@@ -261,7 +261,7 @@
                 this.menuVisible = true;  // 显示模态窗口，跳出自定义菜单栏
                 const menu = document.querySelector('#menu');
                 document.addEventListener('click', this.foo); // 给整个document添加监听鼠标事件，点击任何位置执行foo方法
-                menu.style.left = '210px';
+                menu.style.left = '275px';
                 menu.style.top = MouseEvent.screenY - 185 + 'px';
                 this.categoryModel = object;
             },
@@ -386,7 +386,7 @@
         },
         mounted() {
             this.$nextTick(function () {
-                this.getCategoryLists()
+                this.getCategoryLists();
             });
         }
     }

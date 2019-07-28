@@ -128,7 +128,7 @@
             hideMenu:function(){
                 this.isCollapse =  !this.isCollapse;
                 if (!this.isCollapse){
-                    this.menuClass ='el-icon-s-unfold'
+                    this.menuClass ='el-icon-s-unfold';
                     this.asideWidth = "200px";
                     this.headerStyle = {'margin-left':'200px'};
                 } else {

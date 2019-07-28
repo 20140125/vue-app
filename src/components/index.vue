@@ -1,9 +1,7 @@
 <template>
-    <div>
-        <el-col>
-            <baseModule></baseModule>
-        </el-col>
-    </div>
+    <el-row :gutter="24">
+        <baseModule></baseModule>
+    </el-row>
 </template>
 <script>
     import baseModule from '../components/common/Base'

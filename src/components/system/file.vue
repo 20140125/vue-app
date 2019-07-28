@@ -1,12 +1,12 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText">
-        <el-row>
+        <el-row :gutter="24">
             <!--文件列表-->
-            <el-col :span="5">
+            <el-col :xl="{'span':5}" :lg="{'span':5}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" style="margin-bottom: 20px">
                 <el-tree :data="fileLists"  @node-contextmenu="rightClick"
                          :highlight-current="highlight"
                          :props="props"
-                         :node-key="props.id" @node-click="getFileContent" style="width: 300px;background-color: #393d49"></el-tree>
+                         :node-key="props.id" @node-click="getFileContent" style="background-color: #393d49"></el-tree>
             </el-col>
             <!--文件列表-->
             <!--鼠标右键-->
@@ -24,8 +24,8 @@
             </div>
             <!--鼠标右键-->
             <!--文件内容-->
-            <el-col :span="19" v-show="showIdea">
-                <el-form :label-width="labelWidth" :model="fileModel" :ref="reFrom">
+            <el-col :xl="{'span':18,'push':1}" :lg="{'span':18,'push':1}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" v-show="showIdea">
+                <el-form :model="fileModel" :ref="reFrom">
                     <el-form-item style="margin-left: -30px !important;">
                         <el-tabs type="border-card" closable v-model="activeFileTabName"  @tab-click="goto" @tab-remove="removeTabName" style="text-align: left!important;">
                             <el-tab-pane v-for="item in fileTabs" :label="item.label" :key="item.name" :name="item.name"></el-tab-pane>
@@ -268,7 +268,7 @@
                 this.menuVisible = true;  // 显示模态窗口，跳出自定义菜单栏
                 const menu = document.querySelector('#menu');
                 document.addEventListener('click', this.foo); // 给整个document添加监听鼠标事件，点击任何位置执行foo方法
-                menu.style.left = '310px';
+                menu.style.left = '340px';
                 menu.style.top = MouseEvent.clientY - 195 + 'px';
                 this.fileObject = object;
                 switch (this.fileObject.fileType) {

@@ -1,23 +1,29 @@
 <template>
-    <el-dialog title="Login System" :visible.sync="syncVisible" :modal="modal"  center :show-close="modal" :close-on-click-modal="modal"
-               :close-on-press-escape="modal">
-        <el-form :label-width="formWidth" :model="users" :ref="reFrom" :rules="rules">
-            <el-form-item prop="username">
-                <el-input v-model="users.username" placeholder="username" autocomplete="off">
-                    <template slot="prepend"><i class="el-icon-s-custom"></i></template>
-                </el-input>
-            </el-form-item>
-            <el-form-item prop="password">
-                <el-input v-model="users.password" type="password" placeholder="password" autocomplete="off">
-                    <template slot="prepend"><i class="el-icon-user-solid"></i></template>
-                </el-input>
-            </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
+    <div :style="bgStyle">
+        <el-row :gutter="24" style="padding-top: 8%">
+            <el-col :xl="{'span':8,'offset':8}" :lg="{'span':12,'offset':6}" :md="{'span':16,'offset':4}" :sm="{'span':20,'offset':'2'}" :xs="{'span':24}">
+                <el-header style="text-align: center;font-size: 20px">登录系统</el-header>
+                <el-main>
+                    <el-form :model="users" :ref="reFrom" :rules="rules">
+                        <el-form-item prop="username">
+                            <el-input v-model="users.username" placeholder="username" autocomplete="off">
+                                <template slot="prepend"><i class="el-icon-s-custom"></i></template>
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item prop="password">
+                            <el-input v-model="users.password" type="password" placeholder="password" autocomplete="off">
+                                <template slot="prepend"><i class="el-icon-user-solid"></i></template>
+                            </el-input>
+                        </el-form-item>
+                    </el-form>
+                </el-main>
+            </el-col>
+        </el-row>
+        <el-footer style="text-align: center">
             <el-button @click="resetForm(reFrom)" plain>取 消</el-button>
             <el-button type="primary" @click="onSubmit(reFrom)" plain>确 定</el-button>
-        </div>
-    </el-dialog>
+        </el-footer>
+    </div>
 </template>
 
 <script>
@@ -30,15 +36,16 @@
                     username:'',
                     password:'',
                 },
-                syncVisible:true,
                 rules:{
                     username:[{required:true,message:'用户名必须',trigger:'blur'},],
                     password:[{required:true,message:'用户密码必须',trigger:'blur'},],
                 },
-                formWidth:'80px',
-                loginState:'1',
-                modal:false,
-                reFrom:'login'
+                reFrom:'login',
+                bgStyle:{
+                    'background':'url('+require('../assets/u0.jpg')+')',
+                    'background-repeat':'no-repeat',
+                    'height':(window.innerHeight-16)+'px',
+                }
             }
         },
         methods:{
@@ -63,7 +70,9 @@
             },
         },
         mounted() {
-
+            this.$nextTick(function () {
+                console.log(window);
+            })
         }
     }
 </script>
