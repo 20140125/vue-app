@@ -1,12 +1,12 @@
-import {Message} from "element-ui";
+import ElementUI, {Message} from "element-ui"
 import apiLists from '../../api/api'
 import code from '../../api/code'
-import router from '../../router';
+import router from '../../router'
 import func from '../../api/func'
 const state={
     token:localStorage.getItem('token'),
-    username:localStorage.getItem('username'),
-    auth_url:localStorage.getItem('urls'),
+    username:'',
+    auth_url:'',
     menuLists:[],
 };
 const getters={
@@ -22,10 +22,12 @@ const mutations={
     },
     setUserName:function (state,username) {
         state.username = username;
-        localStorage.setItem('username',username);
     },
     setMenuLists:function (state,menuLists) {
         state.menuLists = menuLists;
+    },
+    setAuthUrl:function (state,auth_url) {
+        state.auth_url = auth_url;
     }
 };
 const actions={
@@ -91,6 +93,27 @@ const actions={
                 Message.success(response.data.msg);
             }
         });
+    },
+    /**
+     * todo：权限校验
+     * @param state
+     * @param commit
+     * @param params
+     */
+    checkAuth:function ({state,commit},params) {
+        if (state.auth_url.indexOf(params.url)===-1 && params.url !=='/admin/index' && state.username!=='admin'){
+            params.username = state.username;
+            params.token = state.token;
+            params.info = '你没有访问权限，请联系管理员【'+code.QQ+'】检验数据的正确性';
+            params.msg = JSON.stringify(params);
+            apiLists.LogSave(params).then(response=>{
+                if (response.data.code === code.SUCCESS){
+                    ElementUI.MessageBox.alert(params.info).then(()=>{
+                        location.href='tencent://message/?uin='+code.QQ+'&Site=后台权限认证&Menu=yes';
+                    });
+                }
+            });
+        }
     }
 };
 export default {

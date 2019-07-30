@@ -21,16 +21,17 @@
             }
         },
         methods:{
-            ...mapActions(['saveSystemLog']),
+            ...mapActions(['saveSystemLog','checkAuth']),
             /**
              * todo：修改状态
              * @param item
              */
             setStatus:function (item) {
+                this.checkAuth({url:this.url});
                 let params = {status:item.status,id:item.id,token:this.$store.state.login.token,'act':'status'};
                 this.$http.post(this.url,params).then(response=>{
-                    if (response.data.code === 200){
-                        let data = { msg:JSON.stringify({ info:response.data.msg,result:response.data.result}),token:this.$store.state.login.token };
+                    if (response && response.data.code === 200){
+                        let data = {  url:this.url,msg:JSON.stringify({ info:response.data.msg,result:response.data.result}),token:this.$store.state.login.token };
                         this.saveSystemLog(data);
                         this.$message({type:'success',message:response.data.msg});
                         return ;

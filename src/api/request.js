@@ -7,33 +7,32 @@ import {Message} from "element-ui";
 /**
  * todo：请求失败后的错误统一处理
  * @param {Number} status 请求失败的状态码
- * @param other
+ * @param msg
  */
-const errorHandle = (status,other) => {
+const errorHandle = (status,msg) => {
     // 状态码判断
     switch (status) {
         // 401: 未登录状态，跳转登录页
         case 401:
             router.push({path:'/login'});
-            localStorage.clear();
-            Message.warning(other.statusText);
+            store.commit('setToken','')
+            Message.warning(msg);
             break;
             // 清除token并跳转登录页
         case 403:
-            router.push({path:'/login'});
-            localStorage.clear();
-            Message.warning(other.statusText);
+            router.push({path:'/admin/index'});
+            Message.warning(msg);
             break;
             // 404请求不存在
         case 404:
-            Message.warning(other.statusText);
+            Message.warning(msg);
             break;
             //网络错误
         case 504:
-            Message.warning(other.statusText);
+            Message.warning(msg);
             break;
         default:
-            console.log(other);
+            console.log(msg);
             break;
     }
 };
@@ -56,6 +55,6 @@ instance.interceptors.response.use(response=>{
     return response
 },error=>{
     console.log(error.response);
-    errorHandle(error.response.status,error.response);
+    errorHandle(error.response.data.code,error.response.data.msg);
 });
 export default instance;

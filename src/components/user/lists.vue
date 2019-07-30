@@ -38,7 +38,7 @@
         </div>
         <!--table 分页-->
         <!---弹框-->
-        <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal"  center>
+        <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal"  :center="center">
             <el-form :label-width="labelWidth" :model="userModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="管理员" prop="username">
                     <el-input v-model="userModel.username" placeholder="管理员名称"></el-input>
@@ -95,6 +95,7 @@
                 modal:true, //遮盖层是否需要
                 labelWidth:'80px',
                 loading:true,
+                center:true,
                 loadingText:'玩命加载中。。。',
 
                 url:'',

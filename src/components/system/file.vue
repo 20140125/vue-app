@@ -40,7 +40,7 @@
             <!--文件内容-->
         </el-row>
         <!--权限框-->
-        <el-dialog :visible.sync="syncVisible" :modal="modal" :title="title" center>
+        <el-dialog :visible.sync="syncVisible" :modal="modal" :title="title" :center="center">
             <el-form :label-width="labelWidth" :model="chmodModel" :rules="rules" :ref="reFrom">
                 <el-form-item label="权限" prop="auth">
                     <el-input placeholder="请输入内容" @change="setChmodAuth" v-model="chmodModel.auth"></el-input>
@@ -67,7 +67,7 @@
         </el-dialog>
         <!--权限框-->
         <!--文件上传-->
-        <el-dialog :visible.sync="fileSyncVisible" :modal="modal" title="文件上传" center>
+        <el-dialog :visible.sync="fileSyncVisible" :modal="modal" title="文件上传" :center="center">
             <el-upload ref="upload"
                        :data="fileData"
                        :action="cgi.uploadUrl"
@@ -183,6 +183,7 @@
                 syncVisible:false, //是否显示弹框
                 modal:true, //遮盖层是否需要
                 labelWidth:'80px',
+                center:true,
                 loading:true,
                 loadingText:'玩命加载中。。。',
                 //自定义组件

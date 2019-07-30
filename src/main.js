@@ -4,7 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css';
+import 'element-ui/lib/theme-chalk/index.css'
 import VueRouter from 'vue-router'
 import http from './api/request'
 import md5 from 'js-md5'
@@ -30,7 +30,10 @@ router.beforeEach((to,from,next)=>{
         }
         apiLists.CheckToken({token:store.state.login.token}).then(response=>{
             if (response.data.code === 200) {
-                next({path:'/admin/index',redirect:to.path})
+                next({path:'/admin/index',redirect:to.path});
+                store.commit('setAuthUrl',response.data.item.auth);
+                store.commit('setToken',response.data.item.token);
+                store.commit('setUserName',response.data.item.username);
             }
             next();
         });
@@ -42,20 +45,22 @@ router.beforeEach((to,from,next)=>{
                 next({path:'/login',redirect:to.path});
                 return;
             }
-            localStorage.setItem('urls',response.data.item.auth);
-            let auth = store.state.login.auth_url === null ? localStorage.getItem('urls') : store.state.login.auth_url;
+            store.commit('setAuthUrl',response.data.item.auth);
+            store.commit('setToken',response.data.item.token);
+            store.commit('setUserName',response.data.item.username);
             //用户权限验证 (admin  最高权限不做权限验证)
-            if (auth.indexOf(to.path)===-1 && to.name !=='Welcome' && store.state.login.username!=='admin'){
+            if (store.state.login.auth_url.indexOf(to.path)===-1 && to.name !=='Welcome' && store.state.login.username!=='admin'){
                 let params={},info = '你没有访问权限，请联系管理员【'+code.QQ+'】检验数据的正确性';
                 params.username = store.state.login.username;
                 params.token = store.state.login.token;
-                params.info = JSON.stringify({url:to.path, info:info});
+                params.url=to.path
+                params.msg = JSON.stringify(params);
                 apiLists.LogSave(params).then(response=>{
                     if (response.data.code === code.SUCCESS){
                         ElementUI.MessageBox.alert(info).then(()=>{
                             location.href='tencent://message/?uin='+code.QQ+'&Site=后台权限认证&Menu=yes';
                         });
-                        next({path:'/login',redirect:to.path});
+                        next({path:'/admin/index',redirect:to.path});
                     }
                 });
             } else {

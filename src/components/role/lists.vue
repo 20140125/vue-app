@@ -25,7 +25,7 @@
         </el-table>
         <!--table 表格-->
         <!---弹框-->
-        <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal"  center>
+        <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal"  :center="center">
             <el-form :label-width="labelWidth" :model="roleModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="角色名称" prop="role_name">
                     <el-input v-model="roleModel.role_name" placeholder="角色名称"></el-input>
@@ -77,6 +77,7 @@
                 syncVisible:false, //是否显示弹框
                 modal:true, //遮盖层是否需要
                 labelWidth:'80px',
+                center:true,
 
                 url:'',
                 refs:this.$refs,

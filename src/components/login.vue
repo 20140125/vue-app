@@ -18,10 +18,18 @@
                     </el-form>
                 </el-main>
             </el-col>
+            <el-dialog :visible.sync = 'oauthVisible' title="授权登录" :destroy-on-close="destroy_on_close" :center="center" :width="dialogWidth">
+                <el-button plain>QQ</el-button>
+                <el-button plain>QQ</el-button>
+                <el-button plain>QQ</el-button>
+                <el-button plain>QQ</el-button>
+                <el-button plain>QQ</el-button>
+            </el-dialog>
         </el-row>
         <el-footer style="text-align: center">
             <el-button @click="resetForm(reFrom)" plain>取 消</el-button>
             <el-button type="primary" @click="onSubmit(reFrom)" plain>确 定</el-button>
+            <el-button type="primary" @click="oauthLogin">授权登录</el-button>
         </el-footer>
     </div>
 </template>
@@ -37,21 +45,26 @@
                     password:'',
                 },
                 rules:{
-                    username:[{required:true,message:'用户名必须',trigger:'blur'},],
-                    password:[{required:true,message:'用户密码必须',trigger:'blur'},],
+                    username:[{required:true,message:'用户名必须',trigger:'blur'}],
+                    password:[{required:true,message:'用户密码必须',trigger:'blur'}],
                 },
                 reFrom:'login',
                 bgStyle:{
                     'background':'url('+require('../assets/u0.jpg')+')',
                     'background-repeat':'no-repeat',
                     'height':(window.innerHeight-16)+'px',
-                }
+                },
+                oauthVisible:false,
+                center:true,
+                destroy_on_close:true, //关闭销毁资源
+                innerWidth:window.innerWidth,
+                dialogWidth:'30%',
             }
         },
         methods:{
             ...mapActions(['loginSystem']),
             /**
-             * todo: 用户登录
+             * todo:用户登录
              * @param formName
              */
             onSubmit:function (formName) {
@@ -62,6 +75,12 @@
                 })
             },
             /**
+             * TODO:第三方登录
+             */
+            oauthLogin:function(){
+                this.oauthVisible = true;
+            },
+            /**
              * todo：表单重置
              * @param formName
              */
@@ -69,9 +88,26 @@
                 this.$refs[formName].resetFields();
             },
         },
+        created(){
+            this.innerWidth = window.innerWidth;
+        },
         mounted() {
             this.$nextTick(function () {
-                console.log(window);
+                if (this.innerWidth>=1920){
+                    this.dialogWidth = '30%';
+                }
+                if (this.innerWidth>=1200 && this.innerWidth<1920){
+                    this.dialogWidth = '50%';
+                }
+                if (this.innerWidth>=992 && this.innerWidth<1200){
+                    this.dialogWidth = '60%'
+                }
+                if (this.innerWidth>=768 && this.innerWidth<992){
+                    this.dialogWidth = '70%'
+                }
+                if (this.innerWidth<768){
+                    this.dialogWidth = '95%'
+                }
             })
         }
     }

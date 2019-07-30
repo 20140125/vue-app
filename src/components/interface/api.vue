@@ -17,10 +17,10 @@
                 <el-tabs type="border-card" v-model="apiName">
                     <el-tab-pane :label="apiName" :key="apiName" :name="apiName"></el-tab-pane>
                     <el-card shadow="hover">
-                        <el-form :model="apiModel" :ref="reFrom" :rules="rules">
+                        <el-form :label-width="labelWidth" :model="apiModel" :ref="reFrom" :rules="rules">
                             <el-form-item label="接口名称" prop="type">
                                 <el-select v-model="apiModel.type"  auto-complete="true" style="width: 100%" placeholder="接口名称">
-                                    <el-option v-for="(category,index) in apiCategory"  :key="index" :label="setName(category)" :value="category.value"></el-option>
+                                    <el-option v-for="(category,index) in apiCategory"  :key="index" :label="setName(category)" :value="category.id"></el-option>
                                 </el-select>
                             </el-form-item>
                             <el-form-item label="接口描述" prop="desc">
@@ -75,7 +75,7 @@
         </el-row>
 
         <!---接口分类弹框-->
-        <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal"  center>
+        <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal"  :center="center">
             <el-form :label-width="labelWidth" :model="categoryModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="接口名称" prop="name">
                     <el-input v-model="categoryModel.name" placeholder="分类名称"></el-input>
@@ -139,6 +139,7 @@
                 modal:true, //遮盖层是否需要
                 labelWidth:'80px',
                 loading:true,
+                center:true,
                 loadingText:'玩命加载中。。。',
 
                 url:'',
@@ -320,7 +321,7 @@
                 //设置
                 this.addApiVisible(obj);
                 this.apiName = this.interfaceName;
-                apiLists.ApiLists( {type:data.value} ).then(response=>{
+                apiLists.ApiLists( {type:data.id} ).then(response=>{
                     if (response.data.code===200){
                         this.addApiModel(response.data.item);
                         this.apiModel.request = JSON.parse(this.apiModel.request);
@@ -328,7 +329,7 @@
                         this.url = this.cgi.update
                     } else {
                         this.url = this.cgi.insert;
-                        let apiModel = {desc:'', type:data.value, href:'', method:'POST', request:[{"name":"token","desc":"用户token","required":"1","type":"String","val":""}],
+                        let apiModel = {desc:'', type:data.id, href:'', method:'POST', request:[{"name":"token","desc":"用户token","required":"1","type":"String","val":""}],
                             response:[{"name":"code","desc":"200 成功","type":"number"},{"name":"msg","desc":"Success","type":"string"}],
                             response_string:'', remark:''};
                         this.addApiModel(apiModel);

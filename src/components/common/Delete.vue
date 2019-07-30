@@ -18,7 +18,7 @@
             }
         },
         methods:{
-            ...mapActions(['saveSystemLog']),
+            ...mapActions(['saveSystemLog','checkAuth']),
             /**
              * todo：删除记录
              * @param item
@@ -30,11 +30,12 @@
                     cancelButtonText:'取消',
                     type:'warning'
                 }).then(()=>{
+                    this.checkAuth({url:this.url});
                     let params = {id:item.id,token : this.$store.state.login.token};
                     this.$http.post(this.url,params).then(response=>{
-                        if (response.data.code === 200) {
+                        if (response && response.data.code === 200) {
                             this.Lists.splice(index,1);
-                            let data = { msg:JSON.stringify({info:response.data.msg,result:response.data.result}),token:this.$store.state.login.token };
+                            let data = { url:this.url,msg:JSON.stringify({info:response.data.msg,result:response.data.result}),token:this.$store.state.login.token };
                             this.saveSystemLog(data);
                             this.$message({type:'success',message:response.data.msg});
                             this.$emit('success');

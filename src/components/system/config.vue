@@ -5,7 +5,7 @@
                 <el-button icon="el-icon-plus" type="primary" size="medium" plain @click="addAuth">添 加</el-button>
             </el-form-item>
         </el-form>
-        <el-table :data="roleLists" border>
+        <el-table :data="configLists" border>
             <el-table-column label="#" prop="id"></el-table-column>
             <el-table-column label="显示状态">
                 <template slot-scope="scope">
@@ -17,7 +17,7 @@
             <el-table-column label="操作">
                 <template slot-scope="scope">
                     <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updateAuth(scope.row)">修 改</el-button>
-                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="roleLists"></Delete>
+                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="configLists"></Delete>
                 </template>
             </el-table-column>
         </el-table>
@@ -57,7 +57,7 @@
         components: {Submit, Delete, Radio},
         data(){
             return {
-                roleLists:[],
+                configLists:[],
                 page:1,
                 limit:15,
                 total:0,

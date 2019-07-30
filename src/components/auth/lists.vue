@@ -53,7 +53,7 @@
         </div>
         <!--table 分页-->
         <!---弹框-->
-        <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal"  center>
+        <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal" :center="center">
             <el-form :label-width="labelWidth" :model="authModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="权限名称" prop="name">
                     <el-input v-model="authModel.name" placeholder="权限名称"></el-input>
@@ -101,9 +101,12 @@
                 auth:'',
                 title:'',
                 status:'',
+
                 syncVisible:false, //是否显示弹框
                 modal:true, //遮盖层是否需要
+                center:true,
                 labelWidth:'80px',
+
                 authLevel:[],
                 loading:true,
                 loadingText:'玩命加载中。。。',

@@ -8,14 +8,17 @@ import RoleLists from '../components/role/lists'
 import UserLists from '../components/user/lists'
 import SystemLog from '../components/system/log'
 import SystemFile from '../components/system/file'
+import ConfigLists from '../components/system/config'
 import ApiLists from '../components/interface/api'
 import databaseLists from '../components/database/lists'
+import Empty from '../components/empty'
 
 Vue.use(Router);
 
 export default new Router({
     routes: [
         { path: '/', name: '/', component: Login,meta:{ mode:'',title:'登录' } },
+        { path: '/404', name: 'Empty', component: Empty,meta:{ mode:'',title:'404' } },
         { path: '/login', name: 'Login', component: Login,meta:{ mode:'',title:'登录' } },
         { path: '/admin', name: 'Index', component: Index,meta:{ mode:'',title:'首页' } },
         { path:'/admin',component: Index,
@@ -26,9 +29,11 @@ export default new Router({
                 { path: 'user/index', name:'UserLists',component:UserLists,meta:{ mode:'user',title:'管理员列表' } },
                 { path: 'log/index',  name:'SystemLog',component:SystemLog,meta:{ mode:'log',title:'日志列表' } },
                 { path: 'file/index',  name:'SystemFile',component:SystemFile,meta:{ mode:'file',title:'文件列表' } },
+                { path: 'config/index',  name:'ConfigLists',component:ConfigLists,meta:{ mode:'config',title:'基础配置' } },
                 { path: 'category/index', name:'categoryLists',component:ApiLists,meta:{ mode:'api_lists',title:'接口详情' } },
                 { path: 'database/index', name:'databaseLists',component:databaseLists,meta:{ mode:'',title:'数据表列表' } },
             ]
         },
+        { path: '*',redirect:'/404'}
     ]
 })
