@@ -25,7 +25,7 @@
         <el-footer style="text-align: center">
             <el-button @click="resetForm(reFrom)" plain>取 消</el-button>
             <el-button type="primary" @click="onSubmit(reFrom)" plain>确 定</el-button>
-            <el-button type="primary" @click="oauthLogin">授权登录</el-button>
+            <el-button v-show="oauth" type="primary" @click="oauthLogin">授权登录</el-button>
         </el-footer>
     </div>
 </template>
@@ -55,6 +55,7 @@
                 destroy_on_close:true, //关闭销毁资源
                 innerWidth:window.innerWidth,
                 dialogWidth:'30%',
+                oauth:true,
             }
         },
         computed:{
@@ -96,18 +97,23 @@
         mounted() {
             this.$nextTick(function () {
                 if (this.innerWidth>=1920){
+                    this.oauth = true;
                     this.dialogWidth = '30%';
                 }
                 if (this.innerWidth>=1200 && this.innerWidth<1920){
+                    this.oauth = true;
                     this.dialogWidth = '50%';
                 }
                 if (this.innerWidth>=992 && this.innerWidth<1200){
+                    this.oauth = false;
                     this.dialogWidth = '60%'
                 }
                 if (this.innerWidth>=768 && this.innerWidth<992){
+                    this.oauth = false;
                     this.dialogWidth = '70%'
                 }
                 if (this.innerWidth<768){
+                    this.oauth = false;
                     this.dialogWidth = '95%'
                 }
             });
