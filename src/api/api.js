@@ -74,6 +74,12 @@ const decompressionFile = function (params) {
 const imagePreview = function (params) {
     return request.post(url.imagePreview,qs.stringify(Object.assign(token,params)))
 }
+const configLists = function (params) {
+    return request.post(url.configLists,qs.stringify(Object.assign(token,params)))
+}
+const configValUpdate = function (params) {
+    return request.post(url.configValUpdate,qs.stringify(Object.assign(token,params)))
+}
 const interfaceLists = {
     LoginSys:loginSys,
     LogoutSys:logoutSys,
@@ -97,6 +103,8 @@ const interfaceLists = {
     CategoryDelete:categoryDelete,
     Compression:compressionFile,
     Decompression:decompressionFile,
-    ImagePreview:imagePreview
+    ImagePreview:imagePreview,
+    ConfigLists:configLists,
+    ConfigValUpdate:configValUpdate
 };
 export default interfaceLists;

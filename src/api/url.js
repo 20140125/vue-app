@@ -18,6 +18,12 @@ let url={
     logLists:'/v1/log/index',
     logSave:'/v1/log/save',
     logDelete:'/v1/log/delete',
+    //基础配置
+    configLists:'/v1/config/index',
+    configSave:'/v1/config/save',
+    configUpdate:'/v1/config/update',
+    configValUpdate:'/v1/config/updateVal',
+    configDelete:'/v1/config/delete',
     //接口列表
     apiLists:'/v1/api/index',
     apiSave:'/v1/api/save',
@@ -46,9 +52,6 @@ let url={
     fileCompression:'/v1/file/zip',
     fileDecompression:'/v1/file/unzip',
     imagePreview:'/v1/image/preview',
-    //地区列表
-    localLists:'/v1/local/index',
-    localTools:'/v1/tools/index',
     //公共操作接口
     tree:'/v1/menu',
     login:'/v1/user/login',

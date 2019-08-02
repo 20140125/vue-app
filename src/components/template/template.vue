@@ -104,7 +104,7 @@
              * @param limit
              */
             getRoleLists:function (page,limit) {
-                let params = { offset:limit*(page-1), limit:limit };
+                let params = { page:page,limit:limit };
                 apiLists.RoleLists(params).then(response=>{
                     console.log(response);
                 });

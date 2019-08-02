@@ -54,7 +54,7 @@ router.beforeEach((to,from,next)=>{
                 params.username = store.state.login.username;
                 params.token = store.state.login.token;
                 params.url=to.path
-                params.msg = JSON.stringify(params);
+                params.msg = info;
                 apiLists.LogSave(params).then(response=>{
                     if (response.data.code === code.SUCCESS){
                         ElementUI.MessageBox.alert(info).then(()=>{

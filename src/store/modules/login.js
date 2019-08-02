@@ -3,6 +3,7 @@ import apiLists from '../../api/api'
 import code from '../../api/code'
 import router from '../../router'
 import func from '../../api/func'
+import store from '../index'
 const state={
     token:localStorage.getItem('token'),
     username:'',
@@ -102,13 +103,13 @@ const actions={
      */
     checkAuth:function ({state,commit},params) {
         if (state.auth_url.indexOf(params.url)===-1 && params.url !=='/admin/index' && state.username!=='admin'){
+            let info = '你没有访问权限，请联系管理员【'+code.QQ+'】检验数据的正确性';
             params.username = state.username;
             params.token = state.token;
-            params.info = '你没有访问权限，请联系管理员【'+code.QQ+'】检验数据的正确性';
-            params.msg = JSON.stringify(params);
+            params.msg = info;
             apiLists.LogSave(params).then(response=>{
                 if (response.data.code === code.SUCCESS){
-                    ElementUI.MessageBox.alert(params.info).then(()=>{
+                    ElementUI.MessageBox.alert(params.msg).then(()=>{
                         location.href='tencent://message/?uin='+code.QQ+'&Site=后台权限认证&Menu=yes';
                     });
                 }
