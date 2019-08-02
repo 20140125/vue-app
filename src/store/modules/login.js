@@ -3,18 +3,19 @@ import apiLists from '../../api/api'
 import code from '../../api/code'
 import router from '../../router'
 import func from '../../api/func'
-import store from '../index'
 const state={
     token:localStorage.getItem('token'),
     username:'',
     auth_url:'',
     menuLists:[],
+    oauthConfig:[]
 };
 const getters={
     token:state=>state.token,
     username:state=>state.username,
     auth_url:state=>state.auth_url,
-    menuLists:state=>state.menuLists
+    menuLists:state=>state.menuLists,
+    oauthConfig:state=>state.oauthConfig
 };
 const mutations={
     setToken:function (state,token) {
@@ -29,6 +30,9 @@ const mutations={
     },
     setAuthUrl:function (state,auth_url) {
         state.auth_url = auth_url;
+    },
+    setOauthConfig:function (state,oauthConfig) {
+        state.oauthConfig = oauthConfig;
     }
 };
 const actions={
@@ -40,7 +44,7 @@ const actions={
      */
     loginSystem:function ({state,commit},users) {
         apiLists.LoginSys(users).then(response=>{
-            if (response.data.code === code.SUCCESS){
+            if (response && response.data.code === code.SUCCESS) {
                 Message.success(response.data.msg);
                 commit('setToken',response.data.item.token);
                 commit('setUserName',response.data.item.username);
@@ -49,18 +53,31 @@ const actions={
         });
     },
     /**
+     * TODO：获取配置
+     * @param state
+     * @param commit
+     * @param name
+     */
+    getOauthConfig:function({state,commit},name) {
+        apiLists.GetConfig({name:name}).then(response=>{
+            if (response && response.data.code === code.SUCCESS) {
+                commit('setOauthConfig',response.data.item);
+            }
+        })
+    },
+    /**
      * todo：获取权限菜单
      * @param state
      * @param commit
      * @param username
      */
-    getAuthMenu:function({state,commit},username){
+    getAuthMenu:function({state,commit},username) {
         if (state.menuLists.length>0){
             commit('setMenuLists',state.menuLists);
             return ;
         }
         apiLists.AuthTree({username:username}).then(response=>{
-            if (response.data.code === code.SUCCESS){
+            if (response && response.data.code === code.SUCCESS) {
                 commit('setMenuLists',func.set_tree(response.data.item));
             }
         })
@@ -73,7 +90,7 @@ const actions={
      */
     logoutSystem:function ({state,commit},token) {
         apiLists.LogoutSys({token:token}).then(response=>{
-            if (response.data.code === code.SUCCESS){
+            if (response && response.data.code === code.SUCCESS) {
                 Message.success(response.data.msg);
                 commit('setToken','');
                 commit('setUserName','');
@@ -90,7 +107,7 @@ const actions={
     saveSystemLog:function ({state,commit},params) {
         params.username = state.username;
         apiLists.LogSave(params).then(response=>{
-            if (response.data.code === code.SUCCESS){
+            if (response && response.data.code === code.SUCCESS) {
                 Message.success(response.data.msg);
             }
         });
@@ -108,7 +125,7 @@ const actions={
             params.token = state.token;
             params.msg = info;
             apiLists.LogSave(params).then(response=>{
-                if (response.data.code === code.SUCCESS){
+                if (response && response.data.code === code.SUCCESS) {
                     ElementUI.MessageBox.alert(params.msg).then(()=>{
                         location.href='tencent://message/?uin='+code.QQ+'&Site=后台权限认证&Menu=yes';
                     });

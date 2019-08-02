@@ -8,6 +8,9 @@ const token = {
 const loginSys = function (params) {
     return request.post(url.login,qs.stringify(Object.assign(token,params)))
 };
+const getConfig = function (params) {
+    return request.post(url.getConfig,qs.stringify(Object.assign(token,params)))
+};
 const logoutSys = function (params) {
     return request.post(url.logout,qs.stringify(Object.assign(token,params)))
 };
@@ -105,6 +108,7 @@ const interfaceLists = {
     Decompression:decompressionFile,
     ImagePreview:imagePreview,
     ConfigLists:configLists,
-    ConfigValUpdate:configValUpdate
+    ConfigValUpdate:configValUpdate,
+    GetConfig:getConfig
 };
 export default interfaceLists;

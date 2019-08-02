@@ -54,8 +54,9 @@ let url={
     imagePreview:'/v1/image/preview',
     //公共操作接口
     tree:'/v1/menu',
-    login:'/v1/user/login',
+    login:'/v1/login',
     logout:'/v1/logout',
-    checkToken:'/v1/checkLogin'
+    checkToken:'/v1/checkLogin',
+    getConfig:'/v1/config',
 };
 export default url

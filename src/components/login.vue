@@ -19,11 +19,7 @@
                 </el-main>
             </el-col>
             <el-dialog :visible.sync = 'oauthVisible' title="授权登录" :destroy-on-close="destroy_on_close" :center="center" :width="dialogWidth">
-                <el-button plain>QQ</el-button>
-                <el-button plain>QQ</el-button>
-                <el-button plain>QQ</el-button>
-                <el-button plain>QQ</el-button>
-                <el-button plain>QQ</el-button>
+                <el-button plain v-for="(oauth,index) in oauthConfig" type="primary" :key="index" v-if="oauth.status === 1" @click="goto(oauth.value)">{{oauth.name}}</el-button>
             </el-dialog>
         </el-row>
         <el-footer style="text-align: center">
@@ -35,7 +31,7 @@
 </template>
 
 <script>
-    import { mapActions } from 'vuex'
+    import { mapActions,mapGetters } from 'vuex'
     export default {
         name: "login",
         data(){
@@ -61,8 +57,11 @@
                 dialogWidth:'30%',
             }
         },
+        computed:{
+            ...mapGetters(['oauthConfig'])
+        },
         methods:{
-            ...mapActions(['loginSystem']),
+            ...mapActions(['loginSystem','getOauthConfig']),
             /**
              * todo:用户登录
              * @param formName
@@ -79,6 +78,9 @@
              */
             oauthLogin:function(){
                 this.oauthVisible = true;
+            },
+            goto:function(href) {
+                window.open(href,'OAuth');
             },
             /**
              * todo：表单重置
@@ -108,7 +110,8 @@
                 if (this.innerWidth<768){
                     this.dialogWidth = '95%'
                 }
-            })
+            });
+            this.getOauthConfig('oauth');
         }
     }
 </script>
