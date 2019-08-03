@@ -18,9 +18,9 @@ Vue.use(Router);
 export default new Router({
     routes: [
         { path: '/', name: '/', component: Login,meta:{ mode:'',title:'登录' } },
-        { path: '/404', name: 'Empty', component: Empty,meta:{ mode:'',title:'404' } },
         { path: '/login', name: 'Login', component: Login,meta:{ mode:'',title:'登录' } },
-        { path: '/admin', name: 'Index', component: Index,meta:{ mode:'',title:'首页' } },
+        { path: '/404', name: 'Empty', component: Empty,meta:{ mode:'',title:'404' } },
+        { path: '/admin', name: 'Admin', component: Index,meta:{ mode:'',title:'首页' } },
         { path:'/admin',component: Index,
             children:[
                 { path: 'index/:access_token?', name:'Welcome',component:Welcome,meta:{ mode:'',title:'欢迎页' } },

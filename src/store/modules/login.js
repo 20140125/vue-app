@@ -45,7 +45,6 @@ const actions={
     loginSystem:function ({state,commit},users) {
         apiLists.LoginSys(users).then(response=>{
             if (response && response.data.code === code.SUCCESS) {
-                Message.success(response.data.msg);
                 commit('setToken',response.data.item.token);
                 commit('setUserName',response.data.item.username);
                 router.push({path:'/admin/index'});
@@ -91,7 +90,6 @@ const actions={
     logoutSystem:function ({state,commit},token) {
         apiLists.LogoutSys({token:token}).then(response=>{
             if (response && response.data.code === code.SUCCESS) {
-                Message.success(response.data.msg);
                 commit('setToken','');
                 commit('setUserName','');
                 router.push({path:'/login'});

@@ -23,49 +23,52 @@ router.beforeEach((to,from,next)=>{
     if (to.meta.title){
         document.title = to.meta.title;
     }
-    if (to.name === 'Login' || to.name === '/'){
-        if (!store.state.login.token){
+    if (to.params.access_token){
+        store.commit('setToken',to.params.access_token);
+    }
+    if (to.name === 'Login' || to.name === '/') {
+        if (!store.state.login.token) {
             next();
-            return;
+            return ;
         }
         apiLists.CheckToken({token:store.state.login.token}).then(response=>{
-            if (response.data.code === 200) {
+            if (response && response.data.code === code.SUCCESS) {
                 next({path:'/admin/index',redirect:to.path});
                 store.commit('setAuthUrl',response.data.item.auth);
                 store.commit('setToken',response.data.item.token);
                 store.commit('setUserName',response.data.item.username);
+                return ;
             }
             next();
         });
-    } else {
+    }  else {
         apiLists.CheckToken({token:store.state.login.token}).then(response=>{
-            if (response.data.code !== 200){
-                ElementUI.Message.warning(response.data.msg);
-                localStorage.clear();
+            if (response && response.data.code !== code.SUCCESS){
+                store.commit('setToken','');
                 next({path:'/login',redirect:to.path});
-                return;
+                return ;
             }
             store.commit('setAuthUrl',response.data.item.auth);
             store.commit('setToken',response.data.item.token);
             store.commit('setUserName',response.data.item.username);
             //用户权限验证 (admin  最高权限不做权限验证)
-            if (store.state.login.auth_url.indexOf(to.path)===-1 && to.name !=='Welcome' && store.state.login.username!=='admin'){
+            if (store.state.login.auth_url.indexOf(to.path)===-1 && to.name !=='Welcome' && store.state.login.username!=='admin') {
                 let params={},info = '你没有访问权限，请联系管理员【'+code.QQ+'】检验数据的正确性';
                 params.username = store.state.login.username;
                 params.token = store.state.login.token;
-                params.url=to.path
+                params.url=to.path;
                 params.msg = info;
                 apiLists.LogSave(params).then(response=>{
-                    if (response.data.code === code.SUCCESS){
+                    if (response && response.data.code === code.SUCCESS) {
                         ElementUI.MessageBox.alert(info).then(()=>{
                             location.href='tencent://message/?uin='+code.QQ+'&Site=后台权限认证&Menu=yes';
                         });
                         next({path:'/admin/index',redirect:to.path});
                     }
                 });
-            } else {
-                next();
+                return;
             }
+            next();
         });
     }
 });

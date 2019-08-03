@@ -14,13 +14,14 @@ const errorHandle = (status,msg) => {
     switch (status) {
         // 401: 未登录状态，跳转登录页
         case 401:
+            store.commit('setToken','');
             router.push({path:'/login'});
-            store.commit('setToken','')
             Message.warning(msg);
             break;
             // 清除token并跳转登录页
         case 403:
-            router.push({path:'/admin/index'});
+            store.commit('setToken','');
+            router.push({path:'/login'});
             Message.warning(msg);
             break;
             // 404请求不存在
@@ -32,6 +33,7 @@ const errorHandle = (status,msg) => {
             Message.warning(msg);
             break;
         default:
+            router.push({path:'/login'});
             console.log(msg);
             break;
     }
