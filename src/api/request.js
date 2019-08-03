@@ -20,8 +20,7 @@ const errorHandle = (status,msg) => {
             break;
             // 清除token并跳转登录页
         case 403:
-            store.commit('setToken','');
-            router.push({path:'/login'});
+            router.push({path:'/admin/index'});
             Message.warning(msg);
             break;
             // 404请求不存在
