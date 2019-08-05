@@ -11,21 +11,19 @@
             <el-table-column label="显示状态">
                 <template slot-scope="scope">
                     <div v-if="scope.row.children">
-                        <Radio :item="scope.row" :url="cgi.status"></Radio>
+                        <Radio :item="scope.row" :url="cgi.status" v-on:success="success"></Radio>
                     </div>
                 </template>
             </el-table-column>
             <el-table-column label="创建时间" prop="created_at"> </el-table-column>
             <el-table-column label="修改时间" prop="updated_at"></el-table-column>
-            <el-table-column label="操作" width="300px">
+            <el-table-column label="操作" width="200px">
                 <template slot-scope="scope" >
-                    <div v-if="scope.row.children">
+                    <div v-if="scope.row.children" style="text-align: center">
                         <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="setConfigVal(scope.row)">添 加</el-button>
-                        <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updateConfig(scope.row)">修 改</el-button>
-                        <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="configLists"></Delete>
                     </div>
                     <div v-else>
-                        <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updateConfigVal(scope.row)">修 改</el-button>
+                        <el-button type="primary" plain icon="el-icon-search" size="mini" @click="getConfigVal(scope.row)">查 看</el-button>
                         <el-button plain type="danger" icon="el-icon-delete" size="mini" @click="removeConfigVal(scope.row)">删 除</el-button>
                     </div>
                 </template>
@@ -33,13 +31,13 @@
         </el-table>
         <div style="margin: 25px 0">
             <el-pagination
-                    @size-change="sizeChange"
-                    @current-change="currentChange"
-                    :page-sizes="[15, 30, 50, 100]"
-                    :page-size="limit"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="total"
-                    :current-page="page">
+                @size-change="sizeChange"
+                @current-change="currentChange"
+                :page-sizes="[15, 30, 50, 100]"
+                :page-size="limit"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="total"
+                :current-page="page">
             </el-pagination>
         </div>
         <!--table 分页-->
@@ -62,7 +60,7 @@
                     </el-radio-group>
                 </el-form-item>
             </el-form>
-            <div slot="footer" class="dialog-footer">
+            <div slot="footer" class="dialog-footer" v-show="showBtn">
                 <Submit :reFrom="reFrom" :model="configModel" :url="url" :refs="refs" v-on:success="success"></Submit>
             </div>
         </el-dialog>
@@ -114,6 +112,7 @@
                     name:[{required:true,message:'配置名称不得为空',trigger:'blur'}]
                 },
                 show:false,
+                showBtn:true,
             }
         },
         methods:{
@@ -168,27 +167,18 @@
                     value:'[]',
                 }
                 this.show = false;
+                this.showBtn = true;
                 this.url = this.cgi.insert;
             },
             /**
-             * todo：修改
-             * @param item
-             */
-            updateConfig:function (item) {
-                this.title='修改配置';
-                this.syncVisible = true;
-                this.configModel = item;
-                this.show = false;
-                this.url = this.cgi.update;
-            },
-            /**
-             * todo：设置配置
+             * todo：设置配置值
              * @param item
              */
             setConfigVal:function (item) {
                 this.title='设置【'+item.name+'】配置';
                 this.configVal = { name:'', value:'', status:1, id:1 };
                 this.show = true;
+                this.showBtn = true;
                 this.syncVisible = true;
                 this.configModel = item;
                 this.configVal.status = this.configModel.status;
@@ -196,18 +186,17 @@
                 this.url = this.cgi.update;
             },
             /**
-             * todo：修改配置值
+             * todo：查看配置值
              * @param item
              */
-            updateConfigVal:function(item){
-                this.title='修改配置值';
+            getConfigVal:function(item){
+                this.title='查看配置值';
                 this.show = true;
+                this.showBtn = false;
                 this.syncVisible = true;
                 this.configModel = item;
-                this.configModel.act = 'update';
                 this.configVal.name = item.name;
                 this.configVal.value = item.value;
-                this.url = this.cgi.updateVal;
             },
             /**
              * todo：移除配置值

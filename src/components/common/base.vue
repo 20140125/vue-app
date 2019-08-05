@@ -40,7 +40,7 @@
                     </el-tabs>
                 </el-main>
                 <el-footer>
-                    © element.com - 底部固定区域
+                    © fanglonger.com by fl140125@gmail.com
                 </el-footer>
             </el-container>
         </el-container>

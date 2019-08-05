@@ -34,7 +34,7 @@
             <el-table-column prop="操作">
                 <template slot-scope="scope">
                     <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updateAuth(scope.row)">修 改</el-button>
-                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="authLists"></Delete>
+                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="authLists" v-on:success="success"></Delete>
                 </template>
             </el-table-column>
         </el-table>

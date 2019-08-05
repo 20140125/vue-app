@@ -83,6 +83,9 @@ const configLists = function (params) {
 const configValUpdate = function (params) {
     return request.post(url.configValUpdate,qs.stringify(Object.assign(token,params)))
 }
+const oauthLists = function (params) {
+    return request.post(url.oauthLists,qs.stringify(Object.assign(token,params)))
+}
 const interfaceLists = {
     LoginSys:loginSys,
     LogoutSys:logoutSys,
@@ -109,6 +112,7 @@ const interfaceLists = {
     ImagePreview:imagePreview,
     ConfigLists:configLists,
     ConfigValUpdate:configValUpdate,
-    GetConfig:getConfig
+    GetConfig:getConfig,
+    OauthLists:oauthLists
 };
 export default interfaceLists;

@@ -36,9 +36,10 @@ let url={
     //数据表列表
     databaseLists:'/v1/database/index',
     databaseBackUp:'/v1/database/backup',
-    //音乐列表
-    musicLists:'/v1/music/index',
-    musicPlay:'/v1/music/play',
+    //授权列表
+    oauthLists:'/v1/oauth/index',
+    oauthUpdate:'/v1/oauth/update',
+    oauthDelete:'/v1/oauth/delete',
     //文件列表
     fileLists:'/v1/file/index',
     fileRead:'/v1/file/read',

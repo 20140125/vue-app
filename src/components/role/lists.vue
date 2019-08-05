@@ -19,7 +19,7 @@
             <el-table-column label="操作">
                 <template slot-scope="scope">
                     <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updateRole(scope.row)">修 改</el-button>
-                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="roleLists"></Delete>
+                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="roleLists" v-on:success="success"></Delete>
                 </template>
             </el-table-column>
         </el-table>
