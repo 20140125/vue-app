@@ -243,7 +243,7 @@
              */
             getCategoryLists:function () {
                 apiLists.CategoryLists().then(response=>{
-                    if (response.data.code === 200){
+                    if (response && response.data.code === 200){
                         this.apiCategory = response.data.item.category;
                         this.categoryLists = response.data.item.category_tree;
                         this.loading = false;
@@ -300,7 +300,7 @@
              */
             deleteCategory:function(){
                 apiLists.CategoryDelete({id:this.categoryModel.value}).then(response=>{
-                    if (response.data.code === 200){
+                    if (response && response.data.code === 200){
                         let data = { msg:JSON.stringify({url:this.cgi.remove, info:response.data.msg,result:response.data.result}),token:this.$store.state.login.token };
                         this.saveSystemLog(data);
                         this.$message({type:'success',message:response.data.msg});
@@ -322,7 +322,7 @@
                 this.addApiVisible(obj);
                 this.apiName = this.interfaceName;
                 apiLists.ApiLists( {type:data.id} ).then(response=>{
-                    if (response.data.code===200){
+                    if (response && response.data.code===200){
                         this.addApiModel(response.data.item);
                         this.apiModel.request = JSON.parse(this.apiModel.request);
                         this.apiModel.response = JSON.parse(this.apiModel.response);

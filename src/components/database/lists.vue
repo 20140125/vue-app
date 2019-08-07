@@ -41,7 +41,7 @@
              */
             getDatabaseLists:function () {
                 apiLists.DatabaseLists([]).then(response=>{
-                    if (response.data.code === 200){
+                    if (response && response.data.code === 200){
                         this.databaseLists = response.data.item;
                         this.loading = false;
                     }

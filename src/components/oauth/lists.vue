@@ -114,6 +114,7 @@
                 cgi:{
                     remove:$url.oauthDelete,
                     status:$url.oauthUpdate,
+                    update:$url.oauthUpdate,
                     uploadUrl:process.env.API_ROOT+$url.fileUpload
                 },
                 rules:{

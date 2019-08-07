@@ -68,7 +68,7 @@
             getLogLists:function (page,limit) {
                 let params = { page:page, limit:limit };
                 apiLists.LogLists(params).then(response=>{
-                    if (response.data.code === 200){
+                    if (response && response.data.code === 200){
                         this.logLists = response.data.item.data;
                         this.total = response.data.item.total;
                         this.loading = false;

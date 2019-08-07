@@ -152,7 +152,7 @@
             getAuthLists:function (page,limit) {
                 let params = { pid:this.pid,name:this.auth,page:page,limit:limit};
                 apiLists.AuthLists(params).then(response=>{
-                    if (response.data.code===200){
+                    if (response && response.data.code===200){
                         this.authLists = response.data.item.authLists.data;
                         this.authLevel = response.data.item.selectAuth;
                         this.total = response.data.item.authLists.total;

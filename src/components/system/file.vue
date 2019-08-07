@@ -251,7 +251,7 @@
             getFileLists:function (path) {
                 let params = {path:path,basename:'/'};
                 apiLists.FileLists(params).then(response=>{
-                    if (response.data.code === 200){
+                    if (response && response.data.code === 200){
                         this.fileLists = response.data.item;
                         this.loading = false;
                     }
@@ -361,7 +361,7 @@
                 this.url = this.cgi.update;
                 tabs.label = item.label;tabs.name = item.size.toString();tabs.path = item.path;
                 apiLists.FileRead(params).then(response=>{
-                    if (response.data.code === 200){
+                    if (response && response.data.code === 200){
                         this.fileModel.content = response.data.item.content;
                         this.fileModel.path = item.path;
                         tabs.content = this.fileModel.content;
@@ -378,7 +378,7 @@
                 this.$prompt('请输入文件名', '重命名', { confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
                     params.newFile = params.oldFile.replace(this.fileObject.label,value);
                     apiLists.FileRename(params).then(response=>{
-                        if (response.data.code === 200){
+                        if (response && response.data.code === 200){
                             this.fileObject.name = value;
                             this.$message({type: 'success', message: '你的新文件名: ' + value});
                             let data = { msg:JSON.stringify({url:$url.fileSave, info:'你的新文件名: ' + value,result:response.data.result}) };
@@ -401,7 +401,7 @@
                 }).then(()=>{
                     let params = {path:this.fileObject.path};
                     apiLists.FileDelete(params).then(response=>{
-                       if (response.data.code === 200){
+                       if (response && response.data.code === 200){
                            let data = { msg:'删除文件成功：'+params.path,result:response.data.result };
                            this.saveSystemLog(data);
                            this.getFileLists(this.path);
@@ -425,7 +425,7 @@
                         params.path = this.fileObject.path+'/'+value;
                     }
                     apiLists.FileSave(params).then(response=>{
-                        if (response.data.code === 200){
+                        if (response && response.data.code === 200){
                             let data = { msg:'你的新文件名: ' + params.path,result:response.data.result };
                             this.saveSystemLog(data);
                             this.getFileLists(this.path);
@@ -538,7 +538,7 @@
                     this.compressionModel.docLists.push(this.fileObject.path);
                     this.compressionModel.path = this.fileObject.path.replace(this.fileObject.label,'');
                     apiLists.Compression(this.compressionModel).then(response=>{
-                        if (response.data.code === 200){
+                        if (response && response.data.code === 200){
                             this.$message({type:'success',message:response.data.msg});
                             let data = { msg:'你的压缩包名: ' + this.compressionModel.type,result:response.data.result };
                             this.saveSystemLog(data);
@@ -559,7 +559,7 @@
                         resource:value
                     };
                     apiLists.Decompression(params).then(response=>{
-                        if (response.data.code === 200){
+                        if (response && response.data.code === 200){
                             this.$message({type:'success',message:response.data.msg});
                             let data = { msg:'文件解压成功',result:response.data.result };
                             this.saveSystemLog(data);
@@ -613,7 +613,7 @@
                         this.$alert('是否预览图片?','图片预览').then(()=>{
                             this.imgVisible = true;
                             apiLists.ImagePreview({name:response.item.name}).then(response=>{
-                                if (response.data.code === 200){
+                                if (response && response.data.code === 200){
                                     this.dialogImageUrl = response.data.item.src;
                                 }
                             })
@@ -625,14 +625,6 @@
                     this.getFileLists(this.path);
                     this.fileSyncVisible = false;
                 }
-            },
-            /**
-             * todo：取消文件上传
-             * @param file
-             */
-            handleRemove(file) {
-                console.log(file);
-                this.$message({type:'warning',message:'取消文件上传：'+file.name});
             },
             /**
              * todo：修改编辑器内容

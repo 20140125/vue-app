@@ -132,7 +132,7 @@
             getConfigLists:function (page,limit) {
                 let params = { page:page,limit:limit };
                 apiLists.ConfigLists(params).then(response=>{
-                    if (response.data.code === 200){
+                    if (response && response.data.code === 200){
                         this.configLists = response.data.item;
                         this.total = response.data.item.length;
                         this.loading = false;

@@ -117,7 +117,7 @@
             getRoleLists:function (page,limit) {
                 let params = { offset:limit*(page-1), limit:limit,level:4 };
                 apiLists.RoleLists(params).then(response=>{
-                    if (response.data.code===200){
+                    if (response && response.data.code===200){
                         this.roleLists = response.data.item.role;
                         this.authLists = response.data.item.auth
                         this.loading = false;

@@ -134,7 +134,7 @@
             getUserLists:function (page,limit) {
                 let params = { offset:limit*(page-1), limit:limit,level:'1'};
                 apiLists.UserLists(params).then(response=>{
-                    if (response.data.code===200){
+                    if (response && response.data.code===200){
                         this.userLists = response.data.item.userLists;
                         this.total = response.data.item.total;
                         this.roleLists = response.data.item.roleLists;
