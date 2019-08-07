@@ -168,7 +168,9 @@
                 if (response && response.code === 200){
                     this.$message({type:'success',message:response.msg});
                     this.OauthModel.avatar_url = response.item.src;
+                    return ;
                 }
+                this.$message({type:'warning',message:response.msg});
             },
             /**
              * TODO：图片上传前
