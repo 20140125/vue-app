@@ -282,7 +282,7 @@
                 this.url = this.cgi.categoryInsert;
                 this.categoryModel = {
                     name:'',
-                    pid:this.categoryModel.value,
+                    pid:this.categoryModel.id,
                     path:'1',
                     level:1
                 };

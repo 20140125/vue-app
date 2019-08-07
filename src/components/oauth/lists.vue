@@ -1,10 +1,5 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText">
-        <el-form :inline="true" style="margin-top: 10px">
-            <el-form-item style="float:right;">
-                <el-button icon="el-icon-plus" type="primary" size="medium" plain @click="addOauth">添 加</el-button>
-            </el-form-item>
-        </el-form>
         <el-table :data="oauthLists" border>
             <el-table-column label="#" prop="id"></el-table-column>
             <el-table-column label="用户名" prop="username"></el-table-column>
@@ -13,6 +8,7 @@
                     <el-image :src="scope.row.avatar_url"
                               style="width: 50px; height: 50px"
                               fit="cover"
+                              :title="scope.row.username"
                               :preview-src-list="oauthImageLists">
                     </el-image>
                 </template>
@@ -47,6 +43,29 @@
         <!---弹框-->
         <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
             <el-form :label-width="labelWidth" :model="OauthModel" :ref="reFrom" :rules="rules">
+                <el-form-item label="用户名称" prop="username">
+                    <el-input v-model="OauthModel.username"></el-input>
+                </el-form-item>
+                <el-form-item label="用户头像" prop="avatar_url">
+                    <el-upload :action="cgi.uploadUrl"
+                               :data="fileData"
+                               :show-file-list="false"
+                               :on-success="uploadSuccess"
+                               :before-upload="beforeUpload">
+                        <el-image :src="OauthModel.avatar_url" :title="OauthModel.username" fit="cover" style="width: 100px;height: 100px"></el-image>
+                    </el-upload>
+                </el-form-item>
+                <el-form-item label="角色" prop="role_id">
+                    <el-select v-model="OauthModel.role_id" style="width: 100%">
+                        <el-option v-for="(role,index) in roleLists" :key="index" :label="role.role_name" :value="role.id"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="用户状态" prop="status">
+                    <el-radio-group v-model="OauthModel.status" size="small">
+                        <el-radio-button label="2">关闭</el-radio-button>
+                        <el-radio-button label="1">开启</el-radio-button>
+                    </el-radio-group>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <Submit :reFrom="reFrom" :model="OauthModel" :url="url" :refs="refs" v-on:success="success"></Submit>
@@ -63,12 +82,14 @@
     import Radio from "../common/Radio";
     import Delete from "../common/Delete";
     import Submit from "../common/Submit";
+    import {mapGetters} from 'vuex'
     export default {
         name: "lists",
         components: {Submit, Delete, Radio},
         data(){
             return {
                 oauthLists:[],
+                roleLists:[],
                 page:1,
                 limit:15,
                 total:0,
@@ -88,13 +109,23 @@
 
                 OauthModel:{},
                 oauthImageLists:[],
+                fileData:{},
 
                 cgi:{
                     remove:$url.oauthDelete,
-                    status:$url.oauthUpdate
+                    status:$url.oauthUpdate,
+                    uploadUrl:process.env.API_ROOT+$url.fileUpload
                 },
-                rules:{},
+                rules:{
+                    username:[{required:true,message:'用户名不得为空',trigger:'blur'}],
+                    avatar_url:[{required:true,message:'用户头像不得为空',trigger:'blur'}],
+                    status:[{required:true,message:'用户状态不得为空',trigger:'change'}],
+                    role_id:[{required:true,message:'角色名称不为为空',trigger:'blur'}]
+                },
             }
+        },
+        computed:{
+            ...mapGetters(['token']),
         },
         methods:{
             /**
@@ -123,9 +154,37 @@
                         this.oauthLists = response.data.item.data;
                         this.total = response.data.item.total;
                         this.oauthImageLists = response.data.item.avatar_url_lists;
+                        this.roleLists = response.data.item.roleLists;
                         this.loading = false;
                     }
                 });
+            },
+            /**
+             * TODO：图片上传成功
+             * @param response
+             */
+            uploadSuccess:function(response){
+                if (response && response.code === 200){
+                    this.$message({type:'success',message:response.msg});
+                    this.OauthModel.avatar_url = response.item.src;
+                }
+            },
+            /**
+             * TODO：图片上传前
+             * @param file
+             */
+            beforeUpload:function(file){
+                let type = file.type;
+                let typeArr = ['image/jpg','image/gif','image/png','image/jpeg'];
+                if (!typeArr.includes(type)){
+                    this.$message({type:'warning',message:'upload image format error'});
+                    return false;
+                }
+                if (file.size>2*1024*1024){
+                    this.$message({type:'warning',message:'upload image size error'});
+                    return false;
+                }
+                return true;
             },
             /**
              * todo：每页记录数
@@ -144,23 +203,19 @@
                 this.getOauthLists(this.page,this.limit)
             },
             /**
-             * todo：添加
-             */
-            addOauth:function () {
-                this.title='添加';
-                this.syncVisible = true;
-                this.url = this.cgi.insert;
-            },
-            /**
              * todo：修改
              * @param item
              */
             updateOauth:function (item) {
-                this.title='修改';
+                this.title='修改授权用户';
                 this.syncVisible = true;
                 this.OauthModel = item;
                 this.url = this.cgi.update;
             }
+        },
+        created(){
+            this.fileData.token = this.token;
+            this.fileData.rand = true;
         },
         mounted() {
             this.$nextTick(function () {

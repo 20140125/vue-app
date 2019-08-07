@@ -19,13 +19,13 @@
         </el-form>
         <!--table 表格-->
         <el-table :data="authLists" border>
-            <el-table-column label="#" prop="id"></el-table-column>
+            <el-table-column label="#" prop="id" width="100px"></el-table-column>
             <el-table-column label="权限名称">
                 <template slot-scope="scope">
                     {{setAuthName(scope.row)}}
                 </template>
             </el-table-column>
-            <el-table-column label="权限链接" prop="url"></el-table-column>
+            <el-table-column label="权限链接" prop="href"></el-table-column>
             <el-table-column label="显示状态">
                 <template slot-scope="scope">
                     <Radio :item="scope.row" :url="cgi.status"></Radio>
