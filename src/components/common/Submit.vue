@@ -29,7 +29,11 @@
                         this.model.token = this.$store.state.login.token;
                         this.$http.post(this.url,this.model).then(response=>{
                             if (response && response.data.code === 200) {
-                                let data = {  url:this.url,msg:JSON.stringify({info:response.data.msg,result:response.data.result}),token:this.$store.state.login.token };
+                                let data = {
+                                    href:this.url,
+                                    msg:JSON.stringify({info:response.data.msg,result:response.data.result}),
+                                    token:this.$store.state.login.token
+                                };
                                 this.saveSystemLog(data);
                                 this.$message({type:'success',message:response.data.msg});
                                 this.$emit('success');

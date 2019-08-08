@@ -64,7 +64,7 @@
 
                 title:'',
                 syncVisible:false, //是否显示弹框
-                modal:false, //遮盖层是否需要
+                modal:true, //遮盖层是否需要
                 labelWidth:'80px',
                 loading:true,
                 destroy_on_close:true,

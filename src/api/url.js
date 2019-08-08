@@ -40,6 +40,11 @@ let url={
     oauthLists:'/v1/oauth/index',
     oauthUpdate:'/v1/oauth/update',
     oauthDelete:'/v1/oauth/delete',
+    //请求授权
+    reqRuleLists:'/v1/req-rule/index',
+    reqRuleSave:'/v1/req-rule/save',
+    reqRuleUpdate:'/v1/req-rule/update',
+    reqRuleDelete:'/v1/req-rule/delete',
     //文件列表
     fileLists:'/v1/file/index',
     fileRead:'/v1/file/read',

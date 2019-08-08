@@ -12,6 +12,7 @@ import ConfigLists from '../components/system/config'
 import ApiLists from '../components/interface/api'
 import DatabaseLists from '../components/database/lists'
 import OauthLists from '../components/oauth/lists'
+import ReqRuleLists from '../components/req_rule/lists'
 import Empty from '../components/empty'
 
 Vue.use(Router);
@@ -29,6 +30,7 @@ export default new Router({
                 { path: 'role/index', name:'RoleLists',component:RoleLists,meta:{ mode:'role',title:'角色列表' } },
                 { path: 'user/index', name:'UserLists',component:UserLists,meta:{ mode:'user',title:'管理员列表' } },
                 { path: 'oauth/index', name:'OauthLists', component:OauthLists,meta:{ mode:'oauth',title:'授权列表' }},
+                { path: 'req-rule/index', name:'ReqRuleLists', component:ReqRuleLists,meta:{ mode:'req_rule',title:'申请授权列表' }},
                 { path: 'log/index',  name:'SystemLog',component:SystemLog,meta:{ mode:'log',title:'日志列表' } },
                 { path: 'file/index',  name:'SystemFile',component:SystemFile,meta:{ mode:'file',title:'文件列表' } },
                 { path: 'config/index',  name:'ConfigLists',component:ConfigLists,meta:{ mode:'config',title:'基础配置' } },

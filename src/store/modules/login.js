@@ -3,6 +3,7 @@ import apiLists from '../../api/api'
 import code from '../../api/code'
 import router from '../../router'
 import func from '../../api/func'
+import store from '../index'
 const state={
     token:localStorage.getItem('token'),
     username:'',
@@ -117,17 +118,28 @@ const actions={
      * @param params
      */
     checkAuth:function ({state,commit},params) {
-        if (state.auth_url.indexOf(params.url)===-1 && params.url !=='/admin/index' && state.username!=='admin'){
-            let info = '你没有访问权限，请联系管理员【'+code.QQ+'】检验数据的正确性';
-            params.username = state.username;
-            params.token = state.token;
-            params.msg = info;
-            apiLists.LogSave(params).then(response=>{
-                if (response && response.data.code === code.SUCCESS) {
-                    ElementUI.MessageBox.alert(params.msg).then(()=>{
-                        location.href='tencent://message/?uin='+code.QQ+'&Site=后台权限认证&Menu=yes';
-                    });
-                }
+        if (state.auth_url.indexOf(params.url)===-1 && params.url !=='/admin/index' && state.username!=='admin') {
+            let info = '你没有访问权限，请联系管理员【' + code.QQ + '】检验数据的正确性'
+            ElementUI.MessageBox.alert(info).then(() => {
+                let req = {
+                    username:state.username,
+                    href:params.url
+                };
+                apiLists.ReqRuleSave(req).then((res) => {
+                    if (res && res.data.code === code.SUCCESS) {
+                        let data = {
+                            href: req.href,
+                            msg: JSON.stringify({info: info, result: res.data.result}),
+                            token: state.token
+                        };
+                        apiLists.LogSave(data).then((response) => {
+                            if (response && response.data.code === code.SUCCESS) {
+                                Message.success(response.data.msg);
+                                location.href = 'tencent://message/?uin=' + code.QQ + '&Site=后台权限认证&Menu=yes';
+                            }
+                        });
+                    }
+                });
             });
         }
     }

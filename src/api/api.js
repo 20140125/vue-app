@@ -86,6 +86,12 @@ const configValUpdate = function (params) {
 const oauthLists = function (params) {
     return request.post(url.oauthLists,qs.stringify(Object.assign(token,params)))
 }
+const reqRuleLists = function (params) {
+    return request.post(url.reqRuleLists,qs.stringify(Object.assign(token,params)))
+}
+const reqRuleSave = function (params) {
+    return request.post(url.reqRuleSave,qs.stringify(Object.assign(token,params)))
+}
 const interfaceLists = {
     LoginSys:loginSys,
     LogoutSys:logoutSys,
@@ -113,6 +119,8 @@ const interfaceLists = {
     ConfigLists:configLists,
     ConfigValUpdate:configValUpdate,
     GetConfig:getConfig,
-    OauthLists:oauthLists
+    OauthLists:oauthLists,
+    ReqRuleLists:reqRuleLists,
+    ReqRuleSave:reqRuleSave
 };
 export default interfaceLists;
