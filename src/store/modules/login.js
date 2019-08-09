@@ -118,17 +118,18 @@ const actions={
      * @param params
      */
     checkAuth:function ({state,commit},params) {
+        params.url = params.url.replace('v1','admin');
         if (state.auth_url.indexOf(params.url)===-1 && params.url !=='/admin/index' && state.username!=='admin') {
-            let info = '你没有访问权限，请联系管理员【' + code.QQ + '】检验数据的正确性'
+            let info = '你没有访问权限，请联系管理员【' + code.QQ + '】检验数据的正确性！！'
             ElementUI.MessageBox.alert(info).then(() => {
                 let req = {
                     username:state.username,
-                    href:params.url
+                    href:[params.url]
                 };
                 apiLists.ReqRuleSave(req).then((res) => {
                     if (res && res.data.code === code.SUCCESS) {
                         let data = {
-                            href: req.href,
+                            href: params.url,
                             msg: JSON.stringify({info: info, result: res.data.result}),
                             token: state.token
                         };

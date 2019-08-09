@@ -46,6 +46,14 @@
                 <el-form-item label="用户名称" prop="username">
                     <el-input v-model="OauthModel.username"></el-input>
                 </el-form-item>
+                <el-form-item label="邮箱账号" prop="email">
+                    <el-input v-model="OauthModel.email">
+                        <el-button slot="append" plain type="primary" @click="sendEmail(OauthModel.email)">发 送</el-button>
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="验证码" prop="code" v-if="showCode">
+                    <el-input v-model="OauthModel.code"></el-input>
+                </el-form-item>
                 <el-form-item label="用户头像" prop="avatar_url">
                     <el-upload :action="cgi.uploadUrl"
                                :data="fileData"
@@ -110,6 +118,7 @@
                 OauthModel:{},
                 oauthImageLists:[],
                 fileData:{},
+                showCode:false,
 
                 cgi:{
                     remove:$url.oauthDelete,
@@ -188,6 +197,10 @@
                     return false;
                 }
                 return true;
+            },
+            sendEmail:function(item){
+                this.showCode = true;
+                console.log(item)
             },
             /**
              * todo：每页记录数

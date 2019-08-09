@@ -1,12 +1,12 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText">
         <el-table :data="logLists" border>
-            <el-table-column label="#" prop="id"></el-table-column>
-            <el-table-column label="执行人" prop="username"></el-table-column>
+            <el-table-column label="#" prop="id" sortable width="100px"></el-table-column>
+            <el-table-column label="执行人" prop="username" sortable width="150px"></el-table-column>
             <el-table-column label="日志信息" prop="log" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column label="地址" prop="ip_address"></el-table-column>
-            <el-table-column label="创建时间" sortable prop="created_at"></el-table-column>
-            <el-table-column label="操作">
+            <el-table-column label="地址" prop="ip_address" width="200px"></el-table-column>
+            <el-table-column label="创建时间" sortable prop="created_at" width="200px"></el-table-column>
+            <el-table-column label="操作" width="100px">
                 <template slot-scope="scope">
                     <Delete :url="cgi.remove" :func="functions" :item="scope.row" :index="scope.$index" :Lists="logLists" v-on:success="success"></Delete>
                 </template>

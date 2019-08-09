@@ -1,22 +1,28 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText">
-        <el-form :inline="true" style="margin-top: 10px">
+        <el-form :inline="true" style="margin-top: 10px" v-if="username!=='admin'">
             <el-form-item style="float:right;">
                 <el-button icon="el-icon-plus" type="primary" size="medium" plain @click="addReqRule">添 加</el-button>
             </el-form-item>
         </el-form>
         <el-table :data="reqRuleLists" border>
-            <el-table-column label="#" prop="id" width="120px"></el-table-column>
+            <el-table-column label="#" prop="id" width="120px" sortable></el-table-column>
             <el-table-column label="申请人" prop="username" width="150px"></el-table-column>
             <el-table-column label="授权地址" prop="href"></el-table-column>
-            <el-table-column label="授权状态" width="150px">
+            <el-table-column label="授权状态" width="150px" v-if="username === 'admin'">
                 <template slot-scope="scope">
                     <Radio :item="scope.row" :url="cgi.status" v-on:success="success"></Radio>
                 </template>
             </el-table-column>
-            <el-table-column label="创建时间" prop="created_at"> </el-table-column>
-            <el-table-column label="修改时间" prop="updated_at"></el-table-column>
-            <el-table-column label="权限时效" prop="expires"></el-table-column>
+            <el-table-column label="授权状态" width="150px" v-if="username!=='admin'">
+                <template slot-scope="scope">
+                    <el-button v-if="scope.row.status === 1" type="success" size="mini">已授权</el-button>
+                    <el-button v-if="scope.row.status === 2" type="info" size="mini">未授权</el-button>
+                </template>
+            </el-table-column>
+            <el-table-column label="创建时间" prop="created_at" sortable></el-table-column>
+            <el-table-column label="修改时间" prop="updated_at" sortable></el-table-column>
+            <el-table-column label="权限时效" prop="expires" sortable></el-table-column>
             <el-table-column label="操作" width="200px">
                 <template slot-scope="scope">
                     <el-button type="primary" v-if="scope.row.status === 1" plain icon="el-icon-plus" size="mini" @click="updateReqRule(scope.row)">续 期</el-button>
@@ -43,10 +49,15 @@
                     <el-input v-model="reqRuleModel.username"></el-input>
                 </el-form-item>
                 <el-form-item label="授权地址" prop="href">
-                    <el-input v-model="reqRuleModel.href"></el-input>
+                    <el-select multiple="multiple" filterable style="width: 100%" v-model="reqRuleModel.href">
+                        <el-option v-for="(rule,index) in ruleLists" :label="setAuthName(rule)" :key="index" :value="rule.href" :disabled="rule.disable"></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="授权时间" prop="expires">
-                    <el-date-picker v-model="reqRuleModel.expires" type="datetime" placeholder="选择授权时间" style="width: 100%"></el-date-picker>
+                    <el-date-picker v-model="reqRuleModel.expires" type="datetime"  value-format="yyyy-MM-dd HH:mm:ss"
+                                    placeholder="选择授权时间"
+                                    :picker-options="pickerOptions"
+                                    style="width: 100%"></el-date-picker>
                 </el-form-item>
                 <el-form-item label="授权说明" prop="desc">
                     <el-input v-model="reqRuleModel.desc" type="textarea"></el-input>
@@ -74,6 +85,7 @@
         data(){
             return {
                 reqRuleLists:[],
+                ruleLists:[],
                 page:1,
                 limit:15,
                 total:0,
@@ -96,13 +108,56 @@
                 cgi:{
                     remove:$url.reqRuleDelete,
                     status:$url.reqRuleUpdate,
-                    update:$url.reqRuleUpdate
+                    update:$url.reqRuleUpdate,
+                    insert:$url.reqRuleSave
                 },
                 rules:{
                     username:[{required:true,message:'申请人不得为空',trigger:'blur'}],
                     href:[{required:true,message:'授权地址不得为空',trigger:'change'}],
                     expires: [{required:true,message:'授权时效不得为空',trigger:'change'}],
                     desc:[{required:true,message:'申请理由不得为空',trigger:'blur'}]
+                },
+                //日期快捷键
+                pickerOptions: {
+                    disabledDate(time) {
+                        return time.getTime() < Date.now();
+                    },
+                    shortcuts: [{
+                        text: '一星期',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() + 3600 * 1000 * 24 * 7);
+                            picker.$emit('pick', date);
+                        }
+                    }, {
+                        text: '一个月',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() + 3600 * 1000 * 24 * 30);
+                            picker.$emit('pick', date);
+                        }
+                    },{
+                        text: '三个月',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() + 3600 * 1000 * 24 * 30 * 3);
+                            picker.$emit('pick', date);
+                        }
+                    },{
+                        text: '六个月',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() + 3600 * 1000 * 24 * 30 * 6);
+                            picker.$emit('pick', date);
+                        }
+                    },{
+                        text: '一年',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() + 3600 * 1000 * 24 * 30 * 12);
+                            picker.$emit('pick', date);
+                        }
+                    }]
                 },
             }
         },
@@ -135,9 +190,18 @@
                     if (response && response.data.code === 200){
                         this.loading = false;
                         this.reqRuleLists = response.data.item.data;
+                        this.ruleLists = response.data.item.ruleLists;
                         this.total = response.data.item.total;
                     }
                 });
+            },
+            /**
+             * 设置权限名称
+             * @param item
+             * @return {String}
+             */
+            setAuthName:function(item){
+                return Array(item.level+1).join('　　')+item.name;
             },
             /**
              * todo：每页记录数
@@ -155,6 +219,9 @@
                 this.page = val;
                 this.getReqRuleLists(this.page,this.limit)
             },
+            /**
+             * todo：权限申请
+             */
             addReqRule:function() {
                 this.title='权限申请';
                 this.syncVisible = true;
@@ -167,13 +234,14 @@
                 this.url = this.cgi.insert;
             },
             /**
-             * todo：修改
+             * todo：权限续期
              * @param item
              */
             updateReqRule:function (item) {
                 this.title='权限续期';
                 this.syncVisible = true;
                 this.reqRuleModel = item;
+                this.reqRuleModel.href = [this.reqRuleModel.href];
                 this.url = this.cgi.update;
             }
         },

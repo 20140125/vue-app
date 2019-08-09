@@ -57,12 +57,12 @@ router.beforeEach((to,from,next)=>{
                 ElementUI.MessageBox.alert(info).then(()=>{
                     let req = {
                         username:store.state.login.username,
-                        href:to.path
+                        href:[to.path]
                     };
                     apiLists.ReqRuleSave(req).then((res)=>{
                         if (res && res.data.code === code.SUCCESS) {
                             let data = {
-                                href: req.href,
+                                href: to.path,
                                 msg: JSON.stringify({info: info, result: res.data.result}),
                                 token: store.state.login.token
                             };
