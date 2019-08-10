@@ -48,11 +48,12 @@
                 </el-form-item>
                 <el-form-item label="邮箱账号" prop="email">
                     <el-input v-model="OauthModel.email">
-                        <el-button slot="append" plain type="primary" @click="sendEmail(OauthModel.email)">发 送</el-button>
+                        <el-button slot="append" plain type="primary" v-if="!OauthModel.code" @click="sendMail(OauthModel)" icon="el-icon-circle-plus">绑 定</el-button>
+                        <el-button slot="append" plain type="primary" v-else @click="sendMail(OauthModel)" icon="el-icon-edit">修 改</el-button>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="验证码" prop="code" v-if="showCode">
-                    <el-input v-model="OauthModel.code"></el-input>
+                    <el-input v-model="OauthModel.code" @blur="checkCode(OauthModel)"></el-input>
                 </el-form-item>
                 <el-form-item label="用户头像" prop="avatar_url">
                     <el-upload :action="cgi.uploadUrl"
@@ -130,7 +131,9 @@
                     username:[{required:true,message:'用户名不得为空',trigger:'blur'}],
                     avatar_url:[{required:true,message:'用户头像不得为空',trigger:'blur'}],
                     status:[{required:true,message:'用户状态不得为空',trigger:'change'}],
-                    role_id:[{required:true,message:'角色名称不为为空',trigger:'blur'}]
+                    role_id:[{required:true,message:'角色名称不为为空',trigger:'blur'}],
+                    email:[{required:true,message:'邮箱不得为空',trigger:'blur'}],
+                    code:[{required:true,message:'验证码不得为空',trigger:'blur'}]
                 },
             }
         },
@@ -144,13 +147,6 @@
             success:function(){
                 this.syncVisible = false;
                 this.getOauthLists(this.page,this.limit)
-            },
-            /**
-             * todo：设置时间
-             * @param timestamp
-             */
-            setTimes:function(timestamp){
-                return func.set_time(timestamp*1000);
             },
             /**
              * todo：获取角色列表
@@ -198,9 +194,35 @@
                 }
                 return true;
             },
-            sendEmail:function(item){
-                this.showCode = true;
-                console.log(item)
+            /**
+             * TODO:发送邮件获取验证码
+             * @param oauthObject
+             */
+            sendMail:function(oauthObject){
+                let params = {
+                    email:oauthObject.email,
+                    id:oauthObject.id
+                };
+                apiLists.SendEmail(params).then(response=>{
+                    if (response && response.data.code === 200) {
+                        this.$message({type:'success',message:response.data.msg});
+                        this.showCode = true;
+                        return ;
+                    }
+                });
+            },
+            checkCode:function(oauthObject) {
+                let params = {
+                    code:oauthObject.code,
+                    id:oauthObject.id
+                };
+                apiLists.VerifyCode(params).then(response=>{
+                    if (response && response.data.code === 200) {
+                        this.$message({type:'success',message:response.data.msg});
+                        return ;
+                    }
+                    oauthObject.code = '';
+                });
             },
             /**
              * todo：每页记录数
@@ -226,6 +248,7 @@
                 this.title='修改授权用户';
                 this.syncVisible = true;
                 this.OauthModel = item;
+                this.showCode = false;
                 this.url = this.cgi.update;
             }
         },

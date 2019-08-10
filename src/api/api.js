@@ -43,7 +43,7 @@ const categoryLists = function (params) {
 };
 const categoryDelete = function (params) {
     return request.post(url.categoryDelete,qs.stringify(Object.assign(token,params)))
-}
+};
 const fileLists = function (params) {
     return request.post(url.fileLists,qs.stringify(Object.assign(token,params)))
 };
@@ -70,28 +70,34 @@ const musicPlay = function (params) {
 };
 const compressionFile = function (params) {
     return request.post(url.fileCompression,qs.stringify(Object.assign(token,params)))
-}
+};
 const decompressionFile = function (params) {
     return request.post(url.fileDecompression,qs.stringify(Object.assign(token,params)))
-}
+};
 const imagePreview = function (params) {
     return request.post(url.imagePreview,qs.stringify(Object.assign(token,params)))
-}
+};
 const configLists = function (params) {
     return request.post(url.configLists,qs.stringify(Object.assign(token,params)))
-}
+};
 const configValUpdate = function (params) {
     return request.post(url.configValUpdate,qs.stringify(Object.assign(token,params)))
-}
+};
 const oauthLists = function (params) {
     return request.post(url.oauthLists,qs.stringify(Object.assign(token,params)))
-}
+};
 const reqRuleLists = function (params) {
     return request.post(url.reqRuleLists,qs.stringify(Object.assign(token,params)))
-}
+};
 const reqRuleSave = function (params) {
     return request.post(url.reqRuleSave,qs.stringify(Object.assign(token,params)))
-}
+};
+const sendEmail = function (params) {
+    return request.post(url.sendMail,qs.stringify(Object.assign(token,params)))
+};
+const verifyCode = function (params) {
+    return request.post(url.verifyCode,qs.stringify(Object.assign(token,params)))
+};
 const interfaceLists = {
     LoginSys:loginSys,
     LogoutSys:logoutSys,
@@ -121,6 +127,8 @@ const interfaceLists = {
     GetConfig:getConfig,
     OauthLists:oauthLists,
     ReqRuleLists:reqRuleLists,
-    ReqRuleSave:reqRuleSave
+    ReqRuleSave:reqRuleSave,
+    SendEmail:sendEmail,
+    VerifyCode:verifyCode
 };
 export default interfaceLists;
