@@ -201,16 +201,21 @@
             sendMail:function(oauthObject){
                 let params = {
                     email:oauthObject.email,
-                    id:oauthObject.id
+                    id:oauthObject.id,
+                    username:oauthObject.username,
+                    remember_token:oauthObject.remember_token
                 };
                 apiLists.SendEmail(params).then(response=>{
                     if (response && response.data.code === 200) {
                         this.$message({type:'success',message:response.data.msg});
                         this.showCode = true;
-                        return ;
                     }
                 });
             },
+            /**
+             * TODO：校验邮箱验证码
+             * @param oauthObject
+             */
             checkCode:function(oauthObject) {
                 let params = {
                     code:oauthObject.code,
