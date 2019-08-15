@@ -277,6 +277,14 @@ const verifyCode = function (params) {
 const areaLists = function (params) {
     return request.post(url.areaLists,qs.stringify(Object.assign(token,params)))
 };
+/**
+ * TODO:城市天气
+ * @param params
+ * @returns {Promise<AxiosResponse<T>>}
+ */
+const areaWeather = function (params) {
+    return request.post(url.areaWeather,qs.stringify(Object.assign(token,params)))
+};
 const interfaceLists = {
     LoginSys:loginSys,
     LogoutSys:logoutSys,
@@ -311,6 +319,7 @@ const interfaceLists = {
     ReqRuleSave:reqRuleSave,
     SendEmail:sendEmail,
     VerifyCode:verifyCode,
-    AreaLists:areaLists
+    AreaLists:areaLists,
+    AreaWeather:areaWeather
 };
 export default interfaceLists;

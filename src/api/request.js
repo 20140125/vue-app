@@ -33,7 +33,7 @@ const errorHandle = (status,msg) => {
             break;
     }
 };
-const instance = axios.create({ timeout:5000 });
+const instance = axios.create({ timeout:10000 });
 instance.defaults.baseURL = process.env.API_ROOT;
 // http request 拦截器
 instance.interceptors.request.use(config=>{

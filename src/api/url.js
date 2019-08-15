@@ -65,6 +65,7 @@ let url={
     imagePreview:'/v1/image/preview',
     //城市地区
     areaLists:'/v1/area/index',
+    areaWeather:'/v1/area/weather',
     //公共操作接口
     tree:'/v1/menu',
     login:'/v1/login',
