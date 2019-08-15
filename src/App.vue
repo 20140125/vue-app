@@ -24,7 +24,7 @@
     }
     .CodeMirror-scroll {
         height: auto;
-        min-height: 700px;
+        min-height: 500px;
         max-height: 1000px;
         overflow-y: hidden;
         overflow-x: auto;
@@ -51,5 +51,9 @@
     }
     a:link{
         text-decoration: none;
+    }
+    .code .el-input__inner{
+        background-color: #1b1e21 !important;
+        color: #fff !important;
     }
 </style>

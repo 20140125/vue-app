@@ -94,8 +94,6 @@
     import Submit from "../common/Submit";
     import { mapGetters,mapActions } from 'vuex';
     import { codemirror } from 'vue-codemirror-lite'
-    require('codemirror/lib/codemirror.css');
-    require('codemirror/lib/codemirror.js');
     //编辑器代码 php
     require('codemirror/mode/php/php.js');
     require('codemirror/addon/selection/active-line');
@@ -151,8 +149,9 @@
                     theme:'monokai',
                     //智能提示
                     extraKeys:{"Ctrl-Space":"autocomplete"},//ctrl-space唤起智能提示
-                    //代码折叠
+                    //自动换行
                     lineWrapping:true,
+                    //代码折叠
                     foldGutter: true,
                     gutters:["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
                     //在缩进时，是否需要把 n*tab宽度个空格替换成n个tab字符，默认为false
@@ -601,6 +600,13 @@
              */
             submitUpload() {
                 this.$refs.upload.submit();
+            },
+            /**
+             * todo：取消文件上传
+             * @param file
+             */
+            handleRemove(file) {
+                this.$message({type:'warning',message:'取消文件上传：'+file.name});
             },
             /**
              * todo：文件上传成功回调

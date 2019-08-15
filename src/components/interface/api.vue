@@ -101,8 +101,6 @@
     import Delete from "../common/Delete";
     import Submit from "../common/Submit";
     import { codemirror } from 'vue-codemirror-lite'
-    require('codemirror/lib/codemirror.css');
-    require('codemirror/lib/codemirror.js');
     //编辑器
     require('codemirror/addon/hint/javascript-hint.js');
     require('codemirror/mode/javascript/javascript.js');

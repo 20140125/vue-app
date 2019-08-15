@@ -36,6 +36,9 @@ let url={
     //数据表列表
     databaseLists:'/v1/database/index',
     databaseBackUp:'/v1/database/backup',
+    databaseRepair:'/v1/database/repair',
+    databaseOptimize:'/v1/database/optimize',
+    databaseUpdateComment:'/v1/database/comment',
     //授权列表
     oauthLists:'/v1/oauth/index',
     oauthUpdate:'/v1/oauth/update',
@@ -60,6 +63,8 @@ let url={
     fileCompression:'/v1/file/zip',
     fileDecompression:'/v1/file/unzip',
     imagePreview:'/v1/image/preview',
+    //城市地区
+    areaLists:'/v1/area/index',
     //公共操作接口
     tree:'/v1/menu',
     login:'/v1/login',

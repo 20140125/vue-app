@@ -12,28 +12,24 @@ import {Message} from "element-ui";
 const errorHandle = (status,msg) => {
     // 状态码判断
     switch (status) {
-        // 401: 未登录状态，跳转登录页
+             // 401: 未登录状态，跳转登录页
         case 401:
             store.commit('setToken','');
             router.push({path:'/login'});
             Message.warning(msg);
             break;
-            // 清除token并跳转登录页
+            // 没有权限访问
         case 403:
             router.push({path:'/admin/index'});
             Message.warning(msg);
             break;
             // 404请求不存在
         case 404:
-            Message.warning(msg);
-            break;
-            //网络错误
-        case 504:
+            router.push({path:'/login'});
             Message.warning(msg);
             break;
         default:
-            router.push({path:'/login'});
-            console.log(msg);
+            Message.warning('Internal Server Error');
             break;
     }
 };
@@ -55,7 +51,6 @@ instance.interceptors.response.use(response=>{
     }
     return response
 },error=>{
-    console.log(error.response);
     errorHandle(error.response.data.code,error.response.data.msg);
 });
 export default instance;

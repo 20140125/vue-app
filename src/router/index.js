@@ -13,6 +13,7 @@ import ApiLists from '../components/interface/api'
 import DatabaseLists from '../components/database/lists'
 import OauthLists from '../components/oauth/lists'
 import ReqRuleLists from '../components/req_rule/lists'
+import AreaLists from '../components/area/lists'
 import Empty from '../components/empty'
 
 Vue.use(Router);
@@ -26,7 +27,7 @@ export default new Router({
         { path:'/admin',component: Index,
             children:[
                 { path: 'index/:access_token?', name:'Welcome',component:Welcome,meta:{ mode:'',title:'欢迎页' } },
-                { path: 'auth/index', name:'AuthLists',component:AuthLists,meta:{ mode:'auth_role',title:'权限列表' } },
+                { path: 'auth/index', name:'AuthLists',component:AuthLists,meta:{ mode:'rule',title:'权限列表' } },
                 { path: 'role/index', name:'RoleLists',component:RoleLists,meta:{ mode:'role',title:'角色列表' } },
                 { path: 'user/index', name:'UserLists',component:UserLists,meta:{ mode:'user',title:'管理员列表' } },
                 { path: 'oauth/index', name:'OauthLists', component:OauthLists,meta:{ mode:'oauth',title:'授权列表' }},
@@ -36,6 +37,7 @@ export default new Router({
                 { path: 'config/index',  name:'ConfigLists',component:ConfigLists,meta:{ mode:'config',title:'基础配置' } },
                 { path: 'category/index', name:'CategoryLists',component:ApiLists,meta:{ mode:'api_lists',title:'接口详情' } },
                 { path: 'database/index', name:'DatabaseLists',component:DatabaseLists,meta:{ mode:'',title:'数据表列表' } },
+                { path: 'area/index', name:'AreaLists',component:AreaLists,meta:{ mode:'china_area',title:'城市列表' } },
             ]
         },
         { path: '*',redirect:'/404'}
