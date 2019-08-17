@@ -49,7 +49,6 @@
 
 <script>
     import { mapGetters,mapActions } from 'vuex';
-    import openSocket from 'socket.io-client';
     export default {
         name: "baseModule",
         data(){
@@ -149,16 +148,6 @@
         mounted() {
             this.$nextTick(function () {
                 this.getAuthMenu(this.username);
-                this.server = openSocket('http://www.laravel.com:2021');
-                // 触发服务端的chat message事件
-                this.server.emit('notification from web', 'this is message');
-                // 服务端通过emit('chat message from server', $msg)触发客户端的chat message from server事件
-                this.server.on('notification from server', function(msg){
-                     console.log('get message:' + msg + ' from server');
-                });
-                this.server.on('new message',function (msg) {
-                    console.log(msg)
-                })
             });
         }
     }
