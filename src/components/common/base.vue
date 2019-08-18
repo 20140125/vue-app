@@ -144,6 +144,14 @@
             this.asideHeight = {
                 'min-height':(window.innerHeight - 60)+'px'
             };
+            this.server = new WebSocket('ws://127.0.0.1:2346');
+            this.server.onopen = function() {
+                alert("connection success");
+                this.server.send('tom');
+            };
+            this.server.onmessage = function (e) {
+                console.log(e);
+            }
         },
         mounted() {
             this.$nextTick(function () {
