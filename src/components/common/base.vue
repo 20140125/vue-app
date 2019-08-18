@@ -64,7 +64,7 @@
                 headerStyle:{
                     'margin-left':'200px',
                 },
-                server:''
+                server:'',
             }
         },
         computed:{

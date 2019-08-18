@@ -3,9 +3,9 @@ import apiLists from '../../api/api'
 import code from '../../api/code'
 import router from '../../router'
 import func from '../../api/func'
-import store from '../index'
 const state={
     token:localStorage.getItem('token'),
+    ip:'',
     username:'',
     auth_url:'',
     menuLists:[],
@@ -16,7 +16,8 @@ const getters={
     username:state=>state.username,
     auth_url:state=>state.auth_url,
     menuLists:state=>state.menuLists,
-    oauthConfig:state=>state.oauthConfig
+    oauthConfig:state=>state.oauthConfig,
+    ip:state=>state.ip
 };
 const mutations={
     setToken:function (state,token) {
@@ -34,6 +35,9 @@ const mutations={
     },
     setOauthConfig:function (state,oauthConfig) {
         state.oauthConfig = oauthConfig;
+    },
+    setIp:function (state,ip) {
+        state.ip = ip;
     }
 };
 const actions={
@@ -48,6 +52,7 @@ const actions={
             if (response && response.data.code === code.SUCCESS) {
                 commit('setToken',response.data.item.token);
                 commit('setUserName',response.data.item.username);
+                commit('setIp',response.data.item.ip);
                 router.push({path:'/admin/index'});
             }
         });
