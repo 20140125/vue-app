@@ -68,7 +68,7 @@
             }
         },
         computed:{
-            ...mapGetters(['tabs','token','username','activeAuthName','contentVisible','menuLists']),
+            ...mapGetters(['tabs','token','username','activeAuthName','contentVisible','menuLists','ip']),
         },
         methods:{
             ...mapActions(['addTabs','deleteTabs','addCurrTabs','logoutSystem','getAuthMenu']),
@@ -144,14 +144,27 @@
             this.asideHeight = {
                 'min-height':(window.innerHeight - 60)+'px'
             };
-            this.server = new WebSocket('ws://127.0.0.1:2346');
-            this.server.onopen = function() {
-                alert("connection success");
-                this.server.send('tom');
-            };
-            this.server.onmessage = function (e) {
-                console.log(e);
-            }
+            // 连接服务端
+            let socket,__this = this;
+            socket = io(__this.ip)
+            // 连接后登录
+            socket.on('connect', function(){
+                socket.emit('login', __this.username);
+            });
+            // 后端推送来消息时
+            socket.on('new_msg', function(msg){
+                __this.$notify({
+                    title: '系统通知',
+                    message: msg,
+                    position: 'bottom-right',
+                    type:'success',
+                    duration:0
+                });
+            });
+            // 后端推送来在线数据时
+            socket.on('update_online_count', function(online_stat){
+                console.log(online_stat);
+            });
         },
         mounted() {
             this.$nextTick(function () {
