@@ -49,7 +49,6 @@
 
 <script>
     import { mapGetters,mapActions } from 'vuex';
-    import md5 from 'js-md5'
     export default {
         name: "baseModule",
         data(){
@@ -64,12 +63,11 @@
                 },
                 headerStyle:{
                     'margin-left':'200px',
-                },
-                socketServer:'',
+                }
             }
         },
         computed:{
-            ...mapGetters(['tabs','token','username','activeAuthName','contentVisible','menuLists','ip']),
+            ...mapGetters(['tabs','token','username','activeAuthName','contentVisible','menuLists','socketServer']),
         },
         methods:{
             ...mapActions(['addTabs','deleteTabs','addCurrTabs','logoutSystem','getAuthMenu']),
@@ -149,10 +147,9 @@
         mounted() {
             this.$nextTick(function () {
                 this.getAuthMenu(this.username);
-                this.socketServer = io(this.ip);
                 // 连接后登录
                 this.socketServer.on('connect', ()=>{
-                    this.socketServer.emit('login', md5(this.username));
+                    this.socketServer.emit('login', this.username);
                 });
                 // 服务端（http）推送站内通知信息
                 this.socketServer.on('new_msg', (msg)=>{
@@ -163,12 +160,6 @@
                     console.log(msg);
                 });
             });
-            //聊天信息
-            //socket.emit('chat_web',{'user':__this.username,'msg':'from web','date':new Date()});
-
-            // socket.on('chat_client',function (data) {
-            //     console.log(data);
-            // })
         }
     }
 </script>

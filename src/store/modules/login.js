@@ -1,11 +1,13 @@
-import ElementUI, {Message} from "element-ui"
+import {Message,Notification,MessageBox } from "element-ui"
 import apiLists from '../../api/api'
 import code from '../../api/code'
 import router from '../../router'
 import func from '../../api/func'
+import io from 'socket.io-client'
+import md5 from 'js-md5'
 const state={
     token:localStorage.getItem('token'),
-    ip:'',
+    socketServer:'',
     username:'',
     auth_url:'',
     menuLists:[],
@@ -17,7 +19,7 @@ const getters={
     auth_url:state=>state.auth_url,
     menuLists:state=>state.menuLists,
     oauthConfig:state=>state.oauthConfig,
-    ip:state=>state.ip
+    socketServer:state=>state.socketServer
 };
 const mutations={
     setToken:function (state,token) {
@@ -36,8 +38,8 @@ const mutations={
     setOauthConfig:function (state,oauthConfig) {
         state.oauthConfig = oauthConfig;
     },
-    setIp:function (state,ip) {
-        state.ip = ip;
+    setSocketServer:function (state,ip) {
+        state.socketServer = io(ip);
     }
 };
 const actions={
@@ -52,7 +54,7 @@ const actions={
             if (response && response.data.code === code.SUCCESS) {
                 commit('setToken',response.data.item.token);
                 commit('setUserName',response.data.item.username);
-                commit('setIp',response.data.item.ip);
+                commit('setSocketServer',response.data.item.ip);
                 router.push({path:'/admin/index'});
             }
         });
@@ -126,11 +128,16 @@ const actions={
         params.url = params.url.replace('v1','admin');
         if (state.auth_url.indexOf(params.url)===-1 && params.url !=='/admin/index' && state.username!=='admin') {
             let info = '你没有访问权限，请联系管理员【' + code.QQ + '】检验数据的正确性！！'
-            ElementUI.MessageBox.alert(info).then(() => {
+            MessageBox.alert(info).then(() => {
                 let req = {
                     username:state.username,
                     href:[params.url]
                 };
+                //先发消息给客户端，客户端再回推给对应的用户
+                state.socketServer.emit('chat_web',{'username':state.username,'message':'用户申请权限：'+params.url,'type':'get_oauth'});
+                state.socketServer.on('chat_client', (msg)=>{
+                    Notification.success({ title: '系统通知', message: msg['username']+msg['message'], position: 'top-right', duration:0 });
+                });
                 apiLists.ReqRuleSave(req).then((res) => {
                     if (res && res.data.code === code.SUCCESS) {
                         let data = {

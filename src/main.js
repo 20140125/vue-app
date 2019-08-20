@@ -16,7 +16,6 @@ Vue.use(ElementUI);
 Vue.use(VueRouter);
 Vue.prototype.$http = http;
 Vue.prototype.md5 = md5;
-Vue.prototype.code = code;
 
 // 登录验证拦截 （校验token）
 router.beforeEach((to,from,next)=>{
@@ -37,7 +36,7 @@ router.beforeEach((to,from,next)=>{
                 store.commit('setAuthUrl',response.data.item.auth);
                 store.commit('setToken',response.data.item.token);
                 store.commit('setUserName',response.data.item.username);
-                store.commit('setIp',response.data.item.ip);
+                store.commit('setSocketServer',response.data.item.ip);
                 return ;
             }
             next();
@@ -52,7 +51,7 @@ router.beforeEach((to,from,next)=>{
             store.commit('setAuthUrl',response.data.item.auth);
             store.commit('setToken',response.data.item.token);
             store.commit('setUserName',response.data.item.username);
-            store.commit('setIp',response.data.item.ip);
+            store.commit('setSocketServer',response.data.item.ip);
             //用户权限验证 (admin  最高权限不做权限验证)
             if (store.state.login.auth_url.indexOf(to.path)===-1 && to.name !=='Welcome' && store.state.login.username!=='admin') {
                 let info = '你没有访问权限，请联系管理员【'+code.QQ+'】检验数据的正确性'
