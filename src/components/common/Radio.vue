@@ -41,9 +41,9 @@
                         this.$emit('success');
                         return ;
                     }
-                    item.status = params.status === 1 ? 2 : 1;
+                    item.status = parseInt(params.status) === 1 ? 2 : 1;
                 },error=>{
-                    item.status = params.status === 1 ? 2 : 1;
+                    item.status = parseInt(params.status) === 1 ? 2 : 1;
                     console.log(error);
                 })
             }

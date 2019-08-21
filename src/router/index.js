@@ -14,6 +14,7 @@ import DatabaseLists from '../components/database/lists'
 import OauthLists from '../components/oauth/lists'
 import ReqRuleLists from '../components/req_rule/lists'
 import AreaLists from '../components/area/lists'
+import PushList from '../components/system/push'
 import Empty from '../components/empty'
 
 Vue.use(Router);
@@ -38,6 +39,7 @@ export default new Router({
                 { path: 'category/index', name:'CategoryLists',component:ApiLists,meta:{ mode:'api_lists',title:'接口详情' } },
                 { path: 'database/index', name:'DatabaseLists',component:DatabaseLists,meta:{ mode:'',title:'数据表列表' } },
                 { path: 'area/index', name:'AreaLists',component:AreaLists,meta:{ mode:'china_area',title:'城市列表' } },
+                { path: 'push/index', name:'PushList',component:PushList,meta:{ mode:'push',title:'推送列表' }}
             ]
         },
         { path: '*',redirect:'/404'}

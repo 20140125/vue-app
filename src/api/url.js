@@ -66,6 +66,8 @@ let url={
     //城市地区
     areaLists:'/v1/area/index',
     areaWeather:'/v1/area/weather',
+    //推送列表
+    pushList:'/v1/push/index',
     //公共操作接口
     tree:'/v1/menu',
     login:'/v1/login',

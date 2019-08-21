@@ -105,10 +105,6 @@
     require('codemirror/addon/hint/javascript-hint.js');
     require('codemirror/mode/javascript/javascript.js');
     require('codemirror/addon/selection/active-line');
-    //自动补全
-    require('codemirror/addon/hint/show-hint.js');
-    require('codemirror/addon/hint/show-hint.css');
-    require('codemirror/addon/hint/anyword-hint.js');
     //编辑器主题
     require('codemirror/theme/monokai.css');
     //代码折叠

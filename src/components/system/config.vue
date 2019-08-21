@@ -21,6 +21,7 @@
                 <template slot-scope="scope" >
                     <div v-if="scope.row.children" style="text-align: center">
                         <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="setConfigVal(scope.row)">添 加</el-button>
+                        <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updateConfig(scope.row)">修 改</el-button>
                     </div>
                     <div v-else>
                         <el-button type="primary" plain icon="el-icon-search" size="mini" @click="getConfigVal(scope.row)">查 看</el-button>
@@ -41,7 +42,8 @@
             </el-pagination>
         </div>
         <!--table 分页-->
-        <!---弹框-->
+
+        <!---配置值弹框-->
         <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
             <el-form :label-width="labelWidth" :model="configModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="配置名称" prop="name" v-show="!show">
@@ -64,7 +66,30 @@
                 <Submit :reFrom="reFrom" :model="configModel" :url="url" :refs="refs" v-on:success="success"></Submit>
             </div>
         </el-dialog>
-        <!---弹框-->
+        <!---配置值弹框-->
+
+        <!---配置弹框-->
+        <el-dialog :title="title" :visible.sync="syncConfigVisible" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
+            <el-form :label-width="labelWidth" :model="configModel" :ref="reFrom" :rules="rules">
+                <el-form-item label="配置名称" prop="name">
+                    <el-input v-model="configModel.name" placeholder="配置名称"></el-input>
+                </el-form-item>
+                <el-form-item label="配置值" prop="value">
+                    <codemirror ref="edit" @change="updateContent"  :value="configModel.value" :options="options" style="line-height: 20px"></codemirror>
+                </el-form-item>
+                <el-form-item label="配置状态" prop="status">
+                    <el-radio-group v-model="configModel.status" size="small">
+                        <el-radio-button label="2">关闭</el-radio-button>
+                        <el-radio-button label="1">开启</el-radio-button>
+                    </el-radio-group>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <Submit :reFrom="reFrom" :model="configModel" :url="url" :refs="refs" v-on:success="success"></Submit>
+            </div>
+        </el-dialog>
+        <!---配置弹框-->
+
     </div>
 </template>
 
@@ -75,9 +100,25 @@
     import Delete from "../common/Delete";
     import Submit from "../common/Submit";
     import { mapActions } from 'vuex'
+    import { codemirror } from 'vue-codemirror-lite'
+    //编辑器
+    require('codemirror/addon/hint/javascript-hint.js');
+    require('codemirror/mode/javascript/javascript.js');
+    require('codemirror/addon/selection/active-line');
+    //编辑器主题
+    require('codemirror/theme/monokai.css');
+    //代码折叠
+    require('codemirror/addon/fold/foldgutter.css');
+    require('codemirror/addon/fold/foldcode.js');
+    require('codemirror/addon/fold/foldgutter.js');
+    require('codemirror/addon/fold/brace-fold.js');
+    require('codemirror/addon/fold/brace-fold.js');
+    require('codemirror/addon/fold/comment-fold.js');
+    //括号匹配
+    require('codemirror/addon/edit/matchbrackets.js');
     export default {
         name: "lists",
-        components: {Submit, Delete, Radio},
+        components: {Submit, Delete, Radio,codemirror},
         data(){
             return {
                 configLists:[],
@@ -113,6 +154,36 @@
                 },
                 show:false,
                 showBtn:true,
+
+                //代码编辑器配置
+                syncConfigVisible:false,
+                options:{
+                    mode: 'application/ld+json',
+                    //缩进
+                    tabSize: 4,
+                    //显示行号
+                    lineNumbers: true,
+                    //theme
+                    theme:'monokai',
+                    //智能提示
+                    extraKeys:{"Ctrl-Space":"autocomplete"},//ctrl-space唤起智能提示
+                    //代码折叠
+                    lineWrapping:true,
+                    foldGutter: true,
+                    gutters:["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+                    //在缩进时，是否需要把 n*tab宽度个空格替换成n个tab字符，默认为false
+                    indentWithTabs: true,
+                    //自动缩进，设置是否根据上下文自动缩进（和上一行相同的缩进量）。默认为true。
+                    smartIndent: true,
+                    //括号匹配
+                    matchBrackets:true,
+                    // 光标高度
+                    cursorHeight:1,
+                    //自动刷新
+                    autoRefresh: true,
+                    //设置光标所在行高亮
+                    styleActiveLine:true,
+                },
             }
         },
         methods:{
@@ -122,6 +193,7 @@
              */
             success:function(){
                 this.syncVisible = false;
+                this.syncConfigVisible = false;
                 this.getConfigLists(this.page,this.limit)
             },
             /**
@@ -151,9 +223,21 @@
              * todo：当前页码
              * @param val
              */
-            currentChange:function(val){
+            currentChange:function(val) {
                 this.page = val;
                 this.getConfigLists(this.page,this.limit)
+            },
+            /**
+             * 修改配置
+             */
+            updateConfig:function(item) {
+                this.title='修改配置';
+                this.syncConfigVisible = true;
+                this.configModel = item;
+                this.url = this.cgi.update;
+            },
+            updateContent:function(content) {
+                this.configModel.value = content;
             },
             /**
              * todo：添加

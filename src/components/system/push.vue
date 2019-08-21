@@ -2,22 +2,25 @@
     <div v-loading="loading" :element-loading-text="loadingText">
         <el-form :inline="true" style="margin-top: 10px">
             <el-form-item style="float:right;">
-                <el-button icon="el-icon-plus" type="primary" size="medium" plain @click="addAuth">添 加</el-button>
+                <el-button icon="el-icon-plus" type="primary" size="medium" plain @click="addPush">添 加</el-button>
             </el-form-item>
         </el-form>
-        <el-table :data="roleLists" border>
+        <el-table :data="pushLists" border>
             <el-table-column label="#" prop="id"></el-table-column>
-            <el-table-column label="显示状态">
+            <el-table-column label="UID" prop="uid"> </el-table-column>
+            <el-table-column label="用户" prop="username"> </el-table-column>
+            <el-table-column label="信息" prop="info"> </el-table-column>
+                <el-table-column label="实时">
                 <template slot-scope="scope">
                     <Radio :item="scope.row" :url="cgi.status"></Radio>
                 </template>
             </el-table-column>
-            <el-table-column label="创建时间" prop="created_at"> </el-table-column>
-            <el-table-column label="修改时间" prop="updated_at"></el-table-column>
+            <el-table-column label="状态" prop="state"> </el-table-column>
+            <el-table-column label="时间" prop="created_at"></el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
-                    <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updateAuth(scope.row)">修 改</el-button>
-                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="roleLists" v-on:success="success"></Delete>
+                    <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updatePush(scope.row)">执 行</el-button>
+                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="pushLists" v-on:success="success"></Delete>
                 </template>
             </el-table-column>
         </el-table>
@@ -35,10 +38,10 @@
         <!--table 分页-->
         <!---弹框-->
         <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
-            <el-form :label-width="labelWidth" :model="authModel" :ref="reFrom" :rules="rules">
+            <el-form :label-width="labelWidth" :model="pushModel" :ref="reFrom" :rules="rules">
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <Submit :reFrom="reFrom" :model="authModel" :url="url" :refs="refs" v-on:success="success"></Submit>
+                <Submit :reFrom="reFrom" :model="pushModel" :url="url" :refs="refs" v-on:success="success"></Submit>
             </div>
         </el-dialog>
         <!---弹框-->
@@ -57,9 +60,11 @@
         components: {Submit, Delete, Radio},
         data(){
             return {
-                roleLists:[],
+                pushLists:[],
                 page:1,
                 limit:15,
+                state:'',
+                status:'',
                 total:0,
 
                 title:'',
@@ -73,9 +78,9 @@
 
                 url:'',
                 refs:this.$refs,
-                reFrom:'role',
+                reFrom:'push',
 
-                authModel:{},
+                pushModel:{},
 
                 cgi:{
                     remove:$url.remove,
@@ -103,9 +108,9 @@
              * @param page
              * @param limit
              */
-            getRoleLists:function (page,limit) {
-                let params = { page:page,limit:limit };
-                apiLists.RoleLists(params).then(response=>{
+            getPushLists:function (page,limit) {
+                let params = { page:page,limit:limit,state:this.state,status:this.status };
+                apiLists.PushList(params).then(response=>{
                     console.log(response);
                 });
                 this.loading = false;
@@ -116,7 +121,7 @@
              */
             sizeChange:function(val){
                 this.limit = val;
-                this.getRoleLists(this.page,this.limit)
+                this.getPushLists(this.page,this.limit)
             },
             /**
              * todo：当前页码
@@ -124,12 +129,12 @@
              */
             currentChange:function(val){
                 this.page = val;
-                this.getRoleLists(this.page,this.limit)
+                this.getPushLists(this.page,this.limit)
             },
             /**
              * todo：添加
              */
-            addAuth:function () {
+            addPush:function () {
                 this.title='添加';
                 this.syncVisible = true;
                 this.url = this.cgi.insert;
@@ -138,16 +143,16 @@
              * todo：修改
              * @param item
              */
-            updateAuth:function (item) {
+            updatePush:function (item) {
                 this.title='修改';
                 this.syncVisible = true;
-                this.roleModel = item;
+                this.pushModel = item;
                 this.url = this.cgi.update;
             }
         },
         mounted() {
             this.$nextTick(function () {
-                this.getRoleLists(this.page,this.limit)
+                this.getPushLists(this.page,this.limit)
             });
         }
     }
