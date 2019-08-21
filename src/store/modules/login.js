@@ -1,10 +1,9 @@
-import {Message,Notification,MessageBox } from "element-ui"
+import {Message,MessageBox } from "element-ui"
 import apiLists from '../../api/api'
 import code from '../../api/code'
 import router from '../../router'
 import func from '../../api/func'
 import io from 'socket.io-client'
-import md5 from 'js-md5'
 const state={
     token:localStorage.getItem('token'),
     socketServer:'',
@@ -133,11 +132,6 @@ const actions={
                     username:state.username,
                     href:[params.url]
                 };
-                //先发消息给客户端，客户端再回推给对应的用户
-                state.socketServer.emit('chat_web',{'username':state.username,'message':'用户申请权限：'+params.url,'type':'get_oauth'});
-                state.socketServer.on('chat_client', (msg)=>{
-                    Notification.success({ title: '系统通知', message: msg['username']+msg['message'], position: 'top-right', duration:0 });
-                });
                 apiLists.ReqRuleSave(req).then((res) => {
                     if (res && res.data.code === code.SUCCESS) {
                         let data = {

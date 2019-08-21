@@ -149,7 +149,7 @@
                 this.getAuthMenu(this.username);
                 // 连接后登录
                 this.socketServer.on('connect', ()=>{
-                    this.socketServer.emit('login', this.username);
+                    this.socketServer.emit('login', this.md5(this.username));
                 });
                 // 服务端（http）推送站内通知信息
                 this.socketServer.on('new_msg', (msg)=>{
