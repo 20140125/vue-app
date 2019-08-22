@@ -68,6 +68,9 @@ let url={
     areaWeather:'/v1/area/weather',
     //推送列表
     pushList:'/v1/push/index',
+    pushSave:'/v1/push/save',
+    pushUpdate:'/v1/push/update',
+    pushDelete:'v1/push/delete',
     //公共操作接口
     tree:'/v1/menu',
     login:'/v1/login',

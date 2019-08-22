@@ -147,17 +147,13 @@
         mounted() {
             this.$nextTick(function () {
                 this.getAuthMenu(this.username);
-                // 连接后登录
                 this.socketServer.on('connect', ()=>{
+                    // 连接后登录
                     this.socketServer.emit('login', this.md5(this.username));
                 });
                 // 服务端（http）推送站内通知信息
                 this.socketServer.on('new_msg', (msg)=>{
                     this.$notify({ title: '系统通知', message: msg, position: 'top-right', type:'success', duration:0 });
-                });
-                // 推送离线用户信息
-                this.socketServer.on('logout',(msg)=> {
-                    console.log(msg);
                 });
             });
         }
