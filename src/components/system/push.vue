@@ -23,7 +23,7 @@
             <el-table-column label="时间" prop="created_at" width="200px"></el-table-column>
             <el-table-column label="操作" width="200px">
                 <template slot-scope="scope">
-                    <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updatePush(scope.row)">执 行</el-button>
+                    <el-button type="primary" v-if="scope.row.state!=='successfully'" plain icon="el-icon-edit" size="mini" @click="updatePush(scope.row)">执 行</el-button>
                     <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="pushLists" v-on:success="success"></Delete>
                 </template>
             </el-table-column>

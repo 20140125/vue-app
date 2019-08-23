@@ -1,6 +1,6 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText">
-        <el-form :inline="true" style="margin-top: 10px" v-if="username!=='admin'">
+        <el-form :inline="true" style="margin-top: 10px">
             <el-form-item style="float:right;">
                 <el-button icon="el-icon-plus" type="primary" size="medium" plain @click="addReqRule">添 加</el-button>
             </el-form-item>
@@ -46,7 +46,9 @@
         <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
             <el-form :label-width="labelWidth" :model="reqRuleModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="申请人" prop="username">
-                    <el-input v-model="reqRuleModel.username"></el-input>
+                    <el-select filterable style="width: 100%" v-model="reqRuleModel.username" @change="getAuth">
+                        <el-option v-for="(user,index) in userLists" :label="user.username" :key="index" :value="user.username"></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="授权地址" prop="href">
                     <el-select multiple="multiple" filterable style="width: 100%" v-model="reqRuleModel.href">
@@ -61,6 +63,12 @@
                 </el-form-item>
                 <el-form-item label="授权说明" prop="desc">
                     <el-input v-model="reqRuleModel.desc" type="textarea"></el-input>
+                </el-form-item>
+                <el-form-item label="是否授权" prop="status" v-if="username==='admin'">
+                    <el-radio-group v-model="reqRuleModel.status" size="small">
+                        <el-radio-button label="2">否</el-radio-button>
+                        <el-radio-button label="1">是</el-radio-button>
+                    </el-radio-group>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -86,6 +94,7 @@
             return {
                 reqRuleLists:[],
                 ruleLists:[],
+                userLists:[],
                 page:1,
                 limit:15,
                 total:0,
@@ -115,7 +124,8 @@
                     username:[{required:true,message:'申请人不得为空',trigger:'blur'}],
                     href:[{required:true,message:'授权地址不得为空',trigger:'change'}],
                     expires: [{required:true,message:'授权时效不得为空',trigger:'change'}],
-                    desc:[{required:true,message:'申请理由不得为空',trigger:'blur'}]
+                    desc:[{required:true,message:'申请理由不得为空',trigger:'blur'}],
+                    status:[{required:true,message:'授权状态不得为空',trigger:'blur'}]
                 },
                 //日期快捷键
                 pickerOptions: {
@@ -162,7 +172,7 @@
             }
         },
         computed:{
-            ...mapGetters(['username'])
+            ...mapGetters(['username','token'])
         },
         methods:{
             /**
@@ -190,8 +200,8 @@
                     if (response && response.data.code === 200){
                         this.loading = false;
                         this.reqRuleLists = response.data.item.data;
-                        this.ruleLists = response.data.item.ruleLists;
                         this.total = response.data.item.total;
+                        this.userLists = response.data.item.userLists;
                     }
                 });
             },
@@ -226,12 +236,27 @@
                 this.title='权限申请';
                 this.syncVisible = true;
                 this.reqRuleModel = {
-                    username:this.username,
+                    username:'',
                     href:'',
                     desc:'',
-                    expires:''
+                    expires:'',
+                    status:1
                 };
+                this.getAuth();
                 this.url = this.cgi.insert;
+            },
+            /**
+             * TODO:获取权限
+             */
+            getAuth:function(params){
+                console.log(this.userLists);
+                console.log(this.reqRuleModel.username)
+                return ;
+                apiLists.GetAuthByToken(params).then(response=>{
+                    if (response && response.data.code === 200) {
+                        this.ruleLists = response.data.item;
+                    }
+                });
             },
             /**
              * todo：权限续期

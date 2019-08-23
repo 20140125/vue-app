@@ -254,6 +254,14 @@ const reqRuleSave = function (params) {
     return request.post(url.reqRuleSave,qs.stringify(Object.assign(token,params)))
 };
 /**
+ * TODO:根据角色获取权限
+ * @param params
+ * @returns {Promise<AxiosResponse<T>>}
+ */
+const getAuthByToken = function (params) {
+    return request.post(url.getAuthByToken,qs.stringify(Object.assign(token,params)))
+};
+/**
  * TODO:邮件发送
  * @param params
  * @returns {Promise<AxiosResponse<T>>}
@@ -325,6 +333,7 @@ const interfaceLists = {
     OauthLists:oauthLists,
     ReqRuleLists:reqRuleLists,
     ReqRuleSave:reqRuleSave,
+    GetAuthByToken:getAuthByToken,
     SendEmail:sendEmail,
     VerifyCode:verifyCode,
     AreaLists:areaLists,

@@ -50,6 +50,7 @@ let url={
     reqRuleSave:'/v1/req-rule/save',
     reqRuleUpdate:'/v1/req-rule/update',
     reqRuleDelete:'/v1/req-rule/delete',
+    getAuthByToken:'/v1/req-rule/getAuth',
     //文件列表
     fileLists:'/v1/file/index',
     fileRead:'/v1/file/read',
