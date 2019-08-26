@@ -1,6 +1,6 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText">
-        <el-table :data="oauthLists" border>
+        <el-table :data="oauthLists.filter(data=>(!search || data.username.toLowerCase().includes(search.toLowerCase()) || data.oauth_type.toLowerCase().includes(search.toLowerCase())))" border>
             <el-table-column label="#" prop="id"></el-table-column>
             <el-table-column label="用户名" prop="username"></el-table-column>
             <el-table-column label="头像">
@@ -21,7 +21,10 @@
             </el-table-column>
             <el-table-column label="创建时间" prop="created_at"> </el-table-column>
             <el-table-column label="修改时间" prop="updated_at"></el-table-column>
-            <el-table-column label="操作">
+            <el-table-column label="操作" align="right">
+                <template slot="header" slot-scope="scope">
+                    <el-input v-model="search"  placeholder="请输入关键词查询"></el-input>
+                </template>
                 <template slot-scope="scope">
                     <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updateOauth(scope.row)">修 改</el-button>
                     <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="oauthLists" v-on:success="success"></Delete>
@@ -103,6 +106,7 @@
                 page:1,
                 limit:15,
                 total:0,
+                search:'',
 
                 title:'',
                 syncVisible:false, //是否显示弹框

@@ -5,7 +5,7 @@
                 <el-button icon="el-icon-plus" type="primary" size="medium" plain @click="addReqRule">添 加</el-button>
             </el-form-item>
         </el-form>
-        <el-table :data="reqRuleLists" border>
+        <el-table :data="reqRuleLists.filter(data=>(!search || data.username.toLowerCase().includes(search.toLowerCase()) || data.href.includes(search.toLowerCase())))" border>
             <el-table-column label="#" prop="id" width="120px" sortable></el-table-column>
             <el-table-column label="申请人" prop="username" width="150px"></el-table-column>
             <el-table-column label="授权地址" prop="href"></el-table-column>
@@ -23,7 +23,10 @@
             <el-table-column label="创建时间" prop="created_at" sortable></el-table-column>
             <el-table-column label="修改时间" prop="updated_at" sortable></el-table-column>
             <el-table-column label="权限时效" prop="expires" sortable></el-table-column>
-            <el-table-column label="操作" width="200px">
+            <el-table-column label="操作" width="200px" align="right">
+                <template slot="header" slot-scope="scope">
+                    <el-input v-model="search"  placeholder="请输入关键字查询"></el-input>
+                </template>
                 <template slot-scope="scope">
                     <el-button type="primary" v-if="scope.row.status === 1" plain icon="el-icon-plus" size="mini" @click="updateReqRule(scope.row)">续 期</el-button>
                     <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="reqRuleLists" v-on:success="success"></Delete>
@@ -98,6 +101,7 @@
                 page:1,
                 limit:15,
                 total:0,
+                search:'',
 
                 title:'',
                 syncVisible:false, //是否显示弹框

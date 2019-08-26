@@ -1,6 +1,6 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText">
-        <el-table :data="databaseLists" border>
+        <el-table border :data="databaseLists.filter(data=>(!search || data.name.toLowerCase().includes(search.toLowerCase())))">
             <el-table-column label="表名" prop="name" width="150"></el-table-column>
             <el-table-column label="版本号" prop="version" width="100"></el-table-column>
             <el-table-column label="引擎" prop="engine" width="100"></el-table-column>
@@ -16,7 +16,10 @@
                 </template>
             </el-table-column>
             <el-table-column label="创建时间" sortable prop="create_time"></el-table-column>
-            <el-table-column label="操作" width="350px">
+            <el-table-column width="350px" align="right">
+                <template slot="header" slot-scope="scope">
+                    <el-input v-model="search"  placeholder="输入关键词查询"></el-input>
+                </template>
                 <template slot-scope="scope">
                     <el-button type="primary" plain size="mini" @click="setComment(scope.row)" icon="el-icon-edit">修 改</el-button>
                     <el-button type="primary" plain size="mini" @click="BACKUP(scope.row)">备 份</el-button>
@@ -40,6 +43,7 @@
                 loadingText:'玩命加载中。。。',
                 edit:false,
                 name:'',
+                search:'',
             }
         },
         methods:{
@@ -85,9 +89,9 @@
             updateComment:function(databaseObject) {
                 this.loading = true;
                 apiLists.DatabaseUpdateComment(databaseObject).then(response=>{
+                    this.loading = false;
                     if (response && response.data.code === 200){
                         this.$message({type:'success',message:response.data.msg});
-                        this.loading = false;
                         this.edit = false;
                         this.name = '';
                     }

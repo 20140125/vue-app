@@ -1,11 +1,14 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText">
         <el-form :inline="true" style="margin-top: 10px">
+            <el-form-item>
+                <el-button v-for="(state,index) in pushState" :key="index" @click="getState(state.val)" :type="state.type" size="medium" plain>{{ state.val.toUpperCase() }}</el-button>
+            </el-form-item>
             <el-form-item style="float:right;">
                 <el-button icon="el-icon-plus" type="primary" size="medium" plain @click="addPush">添 加</el-button>
             </el-form-item>
         </el-form>
-        <el-table :data="pushLists" border>
+        <el-table :data="pushLists.filter(data=>(!search || data.username.toLowerCase().includes(search.toLowerCase()) || data.info.toLowerCase().includes(search.toLowerCase())))" border>
             <el-table-column label="#" prop="id" width="100px"></el-table-column>
             <el-table-column label="用户" prop="username" width="120px"> </el-table-column>
             <el-table-column label="信息" prop="info"> </el-table-column>
@@ -21,7 +24,10 @@
                 </template>
             </el-table-column>
             <el-table-column label="时间" prop="created_at" width="200px"></el-table-column>
-            <el-table-column label="操作" width="200px">
+            <el-table-column width="200px" align="right">
+                <template slot="header" slot-scope="scope">
+                    <el-input v-model="search"  placeholder="请输入关键词查询"></el-input>
+                </template>
                 <template slot-scope="scope">
                     <el-button type="primary" v-if="scope.row.state!=='successfully'" plain icon="el-icon-edit" size="mini" @click="updatePush(scope.row)">执 行</el-button>
                     <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="pushLists" v-on:success="success"></Delete>
@@ -91,6 +97,7 @@
                 state:'',
                 status:'',
                 total:0,
+                search:'',
 
                 oauthLists:[],
 
@@ -118,6 +125,11 @@
                 rules:{
                     info:[{required:true,message:'站内推送信息不得为空',trigger:'blur'}]
                 },
+                pushState:[
+                    {'val':'successfully','label':'成功','type':'success'},
+                    {'val':'failed','label':'失败','type':'danger'},
+                    {'val':'offline','label':'离线','type':'default'}
+                ]
             }
         },
         methods:{
@@ -168,6 +180,10 @@
              */
             changeOauthName:function(item) {
                 this.pushModel.uid = item!=='all' ? this.md5(item) : ''
+            },
+            getState:function(state) {
+               this.state = state;
+                this.getPushLists(1,this.limit)
             },
             /**
              * todo：每页记录数

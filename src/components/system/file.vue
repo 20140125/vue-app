@@ -1,14 +1,23 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText">
         <el-row :gutter="24">
+            <el-col :xl="{'span':5}" :lg="{'span':5}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" style="margin-bottom: 20px">
+                <el-input placeholder="输入关键字搜索" v-model="filterText"></el-input>
+            </el-col>
+        </el-row>
+        <el-row :gutter="24">
             <!--文件列表-->
             <el-col :xl="{'span':5}" :lg="{'span':5}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" style="margin-bottom: 20px">
                 <el-tree :data="fileLists"  @node-contextmenu="rightClick"
                          :highlight-current="highlight"
                          :props="props"
-                         :node-key="props.id" @node-click="getFileContent" style="background-color: #393d49"></el-tree>
+                         :filter-node-method="filterNode"
+                         :node-key="props.id" @node-click="getFileContent"
+                         ref="tree"
+                         style="background-color: #393d49"></el-tree>
             </el-col>
             <!--文件列表-->
+
             <!--鼠标右键-->
             <div v-show="menuVisible">
                 <ul id="menu" class="menu">
@@ -229,6 +238,12 @@
                         { type: 'number', message: '权限必须为数字值',trigger:'blur'}
                     ]
                 },
+                filterText:''
+            }
+        },
+        watch: {
+            filterText(val) {
+                this.$refs.tree.filter(val);
             }
         },
         computed:{
@@ -242,6 +257,15 @@
             success:function(){
                 this.getFileLists(this.path);
                 this.syncVisible = false;
+            },
+            /**
+             * TODO：搜索文件名称
+             * @param value
+             * @param data
+             */
+            filterNode(value, data) {
+                if (!value) return true;
+                return data.label.toLowerCase().indexOf(value.toLowerCase()) !== -1;
             },
             /**
              * todo：获取文件列表

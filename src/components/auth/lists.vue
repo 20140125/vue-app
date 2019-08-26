@@ -6,7 +6,7 @@
             </el-form-item>
         </el-form>
         <!--table 表格-->
-        <el-table :data="authLists.filter(data=>(!search || data.name.includes(search)))"
+        <el-table :data="authLists.filter(data=>(!search || data.name.toLowerCase().includes(search.toLowerCase()) || data.href.includes(search.toLowerCase())))"
                   row-key="id"
                   default-expand-all
                   :tree-props="{children: '__child', hasChildren: 'hasChildren'}">

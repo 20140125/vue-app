@@ -2,7 +2,23 @@
     <div v-loading="loading" :element-loading-text="loadingText">
         <el-row :gutter="24">
             <el-col :xl="{'span':4}" :lg="{'span':4}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" style="margin-bottom: 20px">
-                <el-tree :props="props" @node-contextmenu="rightClick"  :highlight-current="highlight" :data="categoryLists" @node-click="getApiDetail" default-expand-all :node-key="props.id" style="background-color: #393d49"></el-tree>
+                <el-input placeholder="输入关键字搜索" v-model="filterText"></el-input>
+            </el-col>
+        </el-row>
+
+        <el-row :gutter="24">
+            <el-col :xl="{'span':4}" :lg="{'span':4}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" style="margin-bottom: 20px">
+                <el-tree :props="props"
+                         @node-contextmenu="rightClick"
+                         :filter-node-method="filterNode"
+                         :highlight-current="highlight"
+                         :data="categoryLists"
+                         @node-click="getApiDetail"
+                         default-expand-all
+                         ref="tree"
+                         :node-key="props.id"
+                         style="background-color: #393d49">
+                </el-tree>
             </el-col>
 
             <div v-show="menuVisible">
@@ -128,6 +144,8 @@
                     children:'children',
                     id:'id'
                 },
+                filterText:'',
+                //弹框配置值
                 title:'',
                 syncVisible:false, //是否显示弹框
                 modal:true, //遮盖层是否需要
@@ -135,20 +153,16 @@
                 loading:true,
                 center:true,
                 loadingText:'玩命加载中。。。',
-
                 url:'',
                 refs:this.$refs,
                 reFrom:'category',
-
                 //接口名称
                 apiName:'',
-
                 //右键功能显示与否
                 menuVisible:false,
                 categoryModel:{},
                 apiCategory:[],
                 highlight:true,
-
                 //代码编辑器配置
                 options:{
                     mode: 'application/ld+json',
@@ -202,7 +216,7 @@
                     categoryUpdate:$url.categoryUpdate,
                     remove:$url.categoryDelete,
                 },
-
+                //表单规则
                 rules:{
                     type:[{required:true,message:'请输入权限名称', trigger: 'change'}],
                     href:[{required:true,message:'请输入权限地址', trigger: 'blur'},],
@@ -210,6 +224,11 @@
                     desc:[{required:true,message:'请输入接口描述', trigger: 'blur'},],
                     response_string:[{required:true,message:'请输入返回参数', trigger: 'blur'},],
                 },
+            }
+        },
+        watch: {
+            filterText(val) {
+                this.$refs.tree.filter(val);
             }
         },
         computed:{
@@ -223,6 +242,15 @@
             success:function(){
                 this.getCategoryLists();
                 this.syncVisible = false;
+            },
+            /**
+             * TODO：搜索接口名称
+             * @param value
+             * @param data
+             */
+            filterNode(value, data) {
+                if (!value) return true;
+                return data.name.indexOf(value) !== -1;
             },
             /**
              * todo:设置API名称
