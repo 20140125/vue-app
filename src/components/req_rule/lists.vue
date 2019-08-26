@@ -93,8 +93,8 @@
         data(){
             return {
                 reqRuleLists:[],
-                ruleLists:[],
-                userLists:[],
+                ruleLists:[], //权限列表
+                userLists:[], //授权用户列表
                 page:1,
                 limit:15,
                 total:0,
@@ -242,16 +242,13 @@
                     expires:'',
                     status:1
                 };
-                this.getAuth();
                 this.url = this.cgi.insert;
             },
             /**
              * TODO:获取权限
              */
-            getAuth:function(params){
-                console.log(this.userLists);
-                console.log(this.reqRuleModel.username)
-                return ;
+            getAuth:function(username){
+                let params = {username:username}
                 apiLists.GetAuthByToken(params).then(response=>{
                     if (response && response.data.code === 200) {
                         this.ruleLists = response.data.item;
@@ -267,6 +264,7 @@
                 this.syncVisible = true;
                 this.reqRuleModel = item;
                 this.reqRuleModel.href = [this.reqRuleModel.href];
+                this.ruleLists = this.reqRuleModel.ruleLists
                 this.url = this.cgi.update;
             }
         },
