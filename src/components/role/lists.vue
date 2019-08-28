@@ -6,7 +6,7 @@
             </el-form-item>
         </el-form>
         <!--table 表格-->
-        <el-table :data="roleLists" border>
+        <el-table :data="roleLists.filter(data=>(!search || data.role_name.includes(search)))" border>
             <el-table-column label="#" prop='id' sortable></el-table-column>
             <el-table-column label="角色名称" prop="role_name" ></el-table-column>
             <el-table-column label="显示状态">
@@ -16,7 +16,10 @@
             </el-table-column>
             <el-table-column label="创建时间" sortable prop="created_at"></el-table-column>
             <el-table-column label="修改时间" sortable prop="updated_at"></el-table-column>
-            <el-table-column label="操作">
+            <el-table-column label="操作" align="right">
+                <template slot="header" slot-scope="scope">
+                    <el-input v-model="search"  placeholder="请输入关键词查询"></el-input>
+                </template>
                 <template slot-scope="scope">
                     <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updateRole(scope.row)">修 改</el-button>
                     <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="roleLists" v-on:success="success"></Delete>
@@ -72,6 +75,7 @@
                 loadingText:'玩命加载中。。。',
                 authLists:[],
                 defaultChecked:[],
+                search:'',
 
                 title:'',
                 syncVisible:false, //是否显示弹框

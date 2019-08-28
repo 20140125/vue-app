@@ -68,7 +68,7 @@
                         <el-image :src="OauthModel.avatar_url" :title="OauthModel.username" fit="cover" style="width: 100px;height: 100px"></el-image>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="角色" prop="role_id">
+                <el-form-item label="角色" prop="role_id" v-if="username === 'admin'">
                     <el-select v-model="OauthModel.role_id" style="width: 100%">
                         <el-option v-for="(role,index) in roleLists" :key="index" :label="role.role_name" :value="role.id"></el-option>
                     </el-select>
@@ -144,7 +144,7 @@
             }
         },
         computed:{
-            ...mapGetters(['token']),
+            ...mapGetters(['token','username']),
         },
         methods:{
             /**

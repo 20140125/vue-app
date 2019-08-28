@@ -79,9 +79,10 @@
              */
             oauthLogin:function(){
                 this.oauthVisible = true;
+                this.getOauthConfig('oauth');
             },
             goto:function(href) {
-                window.open(href,'OAuth');
+                window.open(href,'_self');
             },
             /**
              * todo：表单重置
@@ -117,7 +118,6 @@
                     this.dialogWidth = '95%'
                 }
             });
-            this.getOauthConfig('oauth');
         }
     }
 </script>
