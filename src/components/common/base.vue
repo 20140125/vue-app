@@ -9,10 +9,13 @@
                      active-text-color="#ffd04b" :style="headerStyle">
                 <el-menu-item index="1" @click="hideMenu"> <i :class="menuClass"></i></el-menu-item>
                 <el-submenu index="2" style="float: right">
-                    <template slot="title">{{username}}</template>
+                    <template slot="title"><el-badge is-dot class="item">{{username}}</el-badge></template>
                     <el-menu-item index="2-1">账号资料</el-menu-item>
                     <el-menu-item index="2-2">基础设置</el-menu-item>
-                    <el-menu-item index="2-3">退出系统</el-menu-item>
+                    <el-menu-item index="2-3">
+                        <el-badge :max="10" :value="noticeLength" class="item">站内通知</el-badge>
+                    </el-menu-item>
+                    <el-menu-item index="2-4">退出系统</el-menu-item>
                 </el-submenu>
             </el-menu>
         </el-header>
@@ -44,11 +47,22 @@
                 </el-footer>
             </el-container>
         </el-container>
+
+        <el-dialog :visible.sync="noticeVisible" :title="title" :center="center">
+            <el-alert v-for="(item,index) in notice" :key="index" type="success" :description="item.info" show-icon
+                      @close="readNotice(item)"
+                      close-text="Close"
+                      style="margin-bottom: 20px">
+
+            </el-alert>
+        </el-dialog>
     </el-container>
 </template>
 
 <script>
-    import { mapGetters,mapActions } from 'vuex';
+    import { mapGetters,mapActions } from 'vuex'
+    import apiLists from '../../api/api'
+    import func from '../../api/func'
     export default {
         name: "baseModule",
         data(){
@@ -63,7 +77,12 @@
                 },
                 headerStyle:{
                     'margin-left':'200px',
-                }
+                },
+                noticeLength:0,
+                notice:[],
+                noticeVisible:false,
+                title:'站内通知',
+                center:true,
             }
         },
         computed:{
@@ -116,11 +135,23 @@
             handleSelect(key, keyPath) {
                 switch (key) {
                     case '2-3':
+                        this.noticeVisible = true;
+                        break;
+                    case '2-4':
                         this.logoutSystem(this.token);
                         break;
                     default:
                         break;
                 }
+            },
+            readNotice:function(noticeObj) {
+                noticeObj.see = 1;
+                noticeObj.created_at = func.set_time(noticeObj.created_at*1000)
+                apiLists.PushRead(noticeObj).then(response=>{
+                    if (response && response.data.code === 200) {
+
+                    }
+                })
             },
             /**
              * @todo：设置导航栏
@@ -154,6 +185,11 @@
                 // 服务端（http）推送站内通知信息
                 this.socketServer.on('new_msg', (msg)=>{
                     this.$notify({ title: '系统通知', message: msg, position: 'top-right', type:'success', duration:0 });
+                });
+                //用户通知
+                this.socketServer.on('notice',(response)=>{
+                    this.noticeLength = response.length;
+                    this.notice = response;
                 });
             });
         }

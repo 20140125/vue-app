@@ -301,6 +301,14 @@ const areaWeather = function (params) {
 const pushList = function (params) {
     return request.post(url.pushList,qs.stringify(Object.assign(token,params)))
 }
+/**
+ * TODO:通知已查看
+ * @param params
+ * @returns {Promise<AxiosResponse<T>>}
+ */
+const pushRead = function (params) {
+    return request.post(url.pushUpdate,qs.stringify(Object.assign(token,params)))
+}
 const interfaceLists = {
     LoginSys:loginSys,
     LogoutSys:logoutSys,
@@ -338,6 +346,7 @@ const interfaceLists = {
     VerifyCode:verifyCode,
     AreaLists:areaLists,
     AreaWeather:areaWeather,
-    PushList:pushList
+    PushList:pushList,
+    PushRead:pushRead
 };
 export default interfaceLists;

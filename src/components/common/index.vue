@@ -1,58 +1,28 @@
 <template>
-    <charts :seriesData="seriesData" :legendData="legendData" :legendSelected="legendSelected" :xAxisData="xAxisData" id="charts" :chartsTitle="chartsTitle"></charts>
+    <div id="charts" style="width: 100%;height: 600px"></div>
 </template>
 
 <script>
-    import charts from './Charts'
-    import { mapMutations } from 'vuex'
+    import echarts from 'echarts'
+    import { mapMutations,mapGetters } from 'vuex'
     export default {
         name: "index",
         data(){
             return {
-                seriesData: [
-                    {
-                        name:'日志管理',
-                        type:'line',
-                        stack: '总量',
-                        data:[120, 132, 101, 134, 90, 230, 210]
-                    },
-                    {
-                        name:'接口管理',
-                        type:'line',
-                        stack: '总量',
-                        data:[220, 182, 191, 234, 290, 330, 310]
-                    },
-                    {
-                        name:'权限管理',
-                        type:'line',
-                        stack: '总量',
-                        data:[150, 232, 201, 154, 190, 330, 410]
-                    },
-                    {
-                        name:'角色管理',
-                        type:'line',
-                        stack: '总量',
-                        data:[320, 332, 301, 334, 390, 330, 320]
-                    },
-                    {
-                        name:'管理员管理',
-                        type:'line',
-                        stack: '总量',
-                        data:[820, 932, 901, 934, 1290, 1330, 1320]
-                    }
-                ],
-                legendData:['日志管理','接口管理','权限管理','角色管理','管理员管理'],
-                legendSelected:{ 'Log':true,'Api':false,'Auth':false,'Role':false,'User':false},
-                xAxisData:['周一','周二','周三','周四','周五','周六','周日'],
-                chartsTitle:'数据分析',
-                access_token:''
+                access_token:'',
+                charts:{},
+                xAxisData:[],
+                seriesData:{
+                    log:[],
+                    notice:[],
+                },
             }
         },
-        components:{
-            charts:charts,
+        computed:{
+            ...mapGetters(['socketServer']),
         },
         methods:{
-            ...mapMutations(['setToken'])
+            ...mapMutations(['setToken']),
         },
         created(){
             if (this.$route.params.access_token){
@@ -64,6 +34,60 @@
                 if (this.access_token){
                     this.setToken(this.access_token);
                 }
+                this.echarts = echarts.init(document.getElementById('charts'));
+                //用户通知
+                this.socketServer.on('charts',(response)=>{
+                    //日期
+                    this.xAxisData = response.day;
+                    //系统日志总量
+                    this.seriesData.log = response.total.log;
+                    //站内通知总量
+                    this.seriesData.notice = response.total.push;
+                    this.echarts.setOption({
+                        title: {
+                            text: '数据统计'
+                        },
+                        tooltip: {
+                            trigger: 'axis'
+                        },
+                        legend: {
+                            data:['系统日志','站内通知','视频广告','直接访问','搜索引擎']
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        toolbox: {
+                            feature: {
+                                saveAsImage: {}
+                            }
+                        },
+                        xAxis: {
+                            type: 'category',
+                            boundaryGap: true,
+                            data: this.xAxisData
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [
+                            {
+                                name:'系统日志',
+                                type:'line',
+                                stack: '总量',
+                                data:this.seriesData.log
+                            },
+                            {
+                                name:'站内通知',
+                                type:'bar',
+                                stack: '总量',
+                                data:this.seriesData.notice
+                            }
+                        ]
+                    });
+                });
             })
         }
     }

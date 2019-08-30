@@ -39,7 +39,7 @@
                     <el-input v-model="authModel.href" placeholder="/admin/auth/lists"></el-input>
                 </el-form-item>
                 <el-form-item label="权限上级" prop="pid">
-                   <el-select placeholder="权限上级" style="width: 100%" v-model="authModel.pid">
+                   <el-select placeholder="权限上级" filterable style="width: 100%" v-model="authModel.pid">
                        <el-option label="默认权限" value="0" v-if="authModel.pid === '0'" selected></el-option>
                        <el-option v-for="(item,index) in authLevel" :key="index" :label="setAuthName(item)" :value="item.id.toString()"></el-option>
                    </el-select>
