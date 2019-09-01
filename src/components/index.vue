@@ -4,7 +4,7 @@
     </el-row>
 </template>
 <script>
-    import baseModule from '../components/common/Base'
+    import baseModule from './common/Base'
     export default{
         name:'index',
         data(){
