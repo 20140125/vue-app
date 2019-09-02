@@ -181,9 +181,13 @@
             changeOauthName:function(item) {
                 this.pushModel.uid = item!=='all' ? this.md5(item) : ''
             },
+            /**
+             * TODO：推送状态查询
+             * @param state
+             */
             getState:function(state) {
                this.state = state;
-                this.getPushLists(1,this.limit)
+               this.getPushLists(1,this.limit)
             },
             /**
              * todo：每页记录数

@@ -9,12 +9,12 @@
                      active-text-color="#ffd04b" :style="headerStyle">
                 <el-menu-item index="1" @click="hideMenu"> <i :class="menuClass"></i></el-menu-item>
                 <el-submenu index="2" style="float: right">
-                    <template slot="title" v-if="noticeLength"><el-badge is-dot class="item" >{{username}}</el-badge></template>
+                    <template slot="title" v-if="noticeLength"><el-badge is-dot type="success">{{username}}</el-badge></template>
                     <template slot="title" v-else>{{username}}</template>
                     <el-menu-item index="2-1">账号资料</el-menu-item>
                     <el-menu-item index="2-2">基础设置</el-menu-item>
                     <el-menu-item index="2-3" v-if="noticeLength">
-                        <el-badge :max="10" :value="noticeLength" class="item">站内通知</el-badge>
+                        <el-badge :max="10" :value="noticeLength" type="success">站内通知</el-badge>
                     </el-menu-item>
                     <el-menu-item index="2-3" v-else>站内通知</el-menu-item>
                     <el-menu-item index="2-4">退出系统</el-menu-item>
@@ -45,7 +45,7 @@
                     </el-tabs>
                 </el-main>
                 <el-footer>
-                    © fanglonger.com by fl140125@gmail.com
+                    ©fl140125@gmail.com 在线人数：{{online}}
                 </el-footer>
             </el-container>
         </el-container>
@@ -85,6 +85,7 @@
                 noticeVisible:false,
                 title:'站内通知',
                 center:true,
+                online:0
             }
         },
         computed:{
@@ -193,6 +194,10 @@
                     this.noticeLength = response.length;
                     this.notice = response;
                 });
+                //在线人数
+                this.socketServer.on('online',(response)=>{
+                    this.online = response;
+                })
             });
         }
     }

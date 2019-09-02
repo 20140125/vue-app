@@ -141,10 +141,11 @@
                     code:[{required:true,message:'验证码不得为空',trigger:'blur'}]
                 },
                 headers:{},
+                onlineUser:[],
             }
         },
         computed:{
-            ...mapGetters(['token','username']),
+            ...mapGetters(['token','username','socketServer']),
         },
         methods:{
             /**
@@ -270,7 +271,7 @@
         },
         mounted() {
             this.$nextTick(function () {
-                this.getOauthLists(this.page,this.limit)
+                this.getOauthLists(this.page,this.limit);
             });
         }
     }

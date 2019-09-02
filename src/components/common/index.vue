@@ -15,6 +15,7 @@
                 seriesData:{
                     log:[],
                     notice:[],
+                    oauth:[],
                 },
             }
         },
@@ -34,6 +35,7 @@
                 if (this.access_token){
                     this.setToken(this.access_token);
                 }
+                //图表初始化
                 this.echarts = echarts.init(document.getElementById('charts'));
                 //用户通知
                 this.socketServer.on('charts',(response)=>{
@@ -43,6 +45,8 @@
                     this.seriesData.log = response.total.log;
                     //站内通知总量
                     this.seriesData.notice = response.total.push;
+                    //授权用户
+                    this.seriesData.oauth = response.total.oauth;
                     this.echarts.setOption({
                         title: {
                             text: '数据统计'
@@ -51,7 +55,7 @@
                             trigger: 'axis'
                         },
                         legend: {
-                            data:['系统日志','站内通知','视频广告','直接访问','搜索引擎']
+                            data:['系统日志','站内通知','授权用户']
                         },
                         grid: {
                             left: '3%',
@@ -84,6 +88,12 @@
                                 type:'bar',
                                 stack: '总量',
                                 data:this.seriesData.notice
+                            },
+                            {
+                                name:'授权用户',
+                                type:'bar',
+                                stack: '总量',
+                                data:this.seriesData.oauth
                             }
                         ]
                     });
