@@ -119,7 +119,7 @@
                 cgi:{
                     insert:$url.pushSave,
                     update:$url.pushUpdate,
-                    delete:$url.pushDelete,
+                    remove:$url.pushDelete,
                     status:$url.pushUpdate
                 },
                 rules:{

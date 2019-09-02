@@ -71,6 +71,7 @@ let url={
     pushList:'/v1/push/index',
     pushSave:'/v1/push/save',
     pushUpdate:'/v1/push/update',
+    pushRead:'/v1/push/see',
     pushDelete:'v1/push/delete',
     //公共操作接口
     tree:'/v1/menu',

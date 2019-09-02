@@ -147,12 +147,17 @@
                         break;
                 }
             },
+            /**
+             * TODO:站内通知读取
+             * @param noticeObj
+             */
             readNotice:function(noticeObj) {
-                noticeObj.see = 1;
-                noticeObj.created_at = func.set_time(noticeObj.created_at*1000)
-                apiLists.PushRead(noticeObj).then(response=>{
+                let params = {};
+                params.see = parseInt(noticeObj.see)+1;
+                params.id = noticeObj.id;
+                apiLists.PushRead(params).then(response=>{
                     if (response && response.data.code === 200) {
-
+                        this.$message({type:'success',message:response.data.msg});
                     }
                 })
             },
