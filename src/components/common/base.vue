@@ -50,12 +50,58 @@
             </el-container>
         </el-container>
 
+        <el-card shadow="always">
+            <el-dialog :title="chatTitle" :center="center" :visible.sync="chatVisible">
+                <el-row :gutter="24">
+                    <el-col :span="6" class="user-list">
+                        <el-menu background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+                            <el-menu-item @click="sendUser(user,index)" v-for="(user,index) in client_list"
+                                          :key="index"
+                                          :index="index">
+                                <span slot="title">{{user}}</span>
+                            </el-menu-item>
+                        </el-menu>
+                    </el-col>
+                    <el-col :offset="1" :span="17" class="contact-list">
+                        <div class="msg">
+                            <div class="caption" id="dialog">
+                                <div style="margin: 20px">
+                                    <div v-for="(message,index) in messageLists" :key="index">
+                                        <h4>{{message.username}} {{message.timestamp}}</h4>
+                                        <div class="msg-list" v-html="message.content"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-msg">
+                            <emotion @emotion="getEmotion" v-show="showEmotion" :height="200"></emotion>
+                            <div style="float: left">
+                                <i style="font-size: 25px;margin-bottom: 10px;color: #000"  @click="showEmotion = !showEmotion" class="el-icon-picture-outline-round"></i>
+                                <el-upload :action="cgi.uploadUrl"
+                                           :data="fileData"
+                                           :headers="headers"
+                                           :show-file-list="false"
+                                           :on-success="uploadSuccess"
+                                           :before-upload="beforeUpload" style="float: left">
+                                    <i style="font-size: 25px;margin:0 10px;color: #000"  class="el-icon-picture"></i>
+                                </el-upload>
+                            </div>
+                            <el-input type="textarea" @focus="showEmotion = false" v-model="inputMsg" resize="none" rows="4"></el-input>
+                        </div>
+                        <div class="input-button" style="text-align: right">
+                            <el-button type="primary" plain size="medium" @click="sendMsg">发 送</el-button>
+                        </div>
+                    </el-col>
+                </el-row>
+            </el-dialog>
+        </el-card>
+
+
         <el-dialog :visible.sync="noticeVisible" :title="title" :center="center">
             <el-alert v-for="(item,index) in notice" :key="index" type="success" :description="item.info" show-icon
                       @close="readNotice(item)"
                       close-text="Close"
                       style="margin-bottom: 20px">
-
             </el-alert>
         </el-dialog>
     </el-container>
@@ -64,7 +110,9 @@
 <script>
     import { mapGetters,mapActions } from 'vuex'
     import apiLists from '../../api/api'
+    import $url from '../../api/url'
     import func from '../../api/func'
+    import emotion from '../common/emotion/Index'
     export default {
         name: "baseModule",
         data(){
@@ -85,8 +133,34 @@
                 noticeVisible:false,
                 title:'站内通知',
                 center:true,
-                online:0
+                online:0,
+
+                //workerManChat
+                cgi:{
+                    uploadUrl:process.env.API_ROOT+$url.fileUpload
+                },
+                bgStyle:{
+                    'background':'url('+require('../../assets/u0.jpg')+')',
+                    'background-repeat':'no-repeat',
+                },
+                chatTitle:'ChatRoom',
+                fileData:{},
+                headers:{},
+                chatVisible:true,
+                ws:'',
+                client_list:{},
+                inputMsg:'',
+                content:'',
+                showEmotion:false,
+                messageLists:[],
+                msg_type:'text',
+                to_client_name:'',
+                to_client_id:'all',
+                emotionLists:['微笑', '撇嘴', '色', '发呆', '得意', '流泪', '害羞', '闭嘴', '睡', '大哭', '尴尬', '发怒', '调皮', '呲牙', '惊讶', '难过', '酷', '冷汗', '抓狂', '吐', '偷笑', '可爱', '白眼', '傲慢', '饥饿', '困', '惊恐', '流汗', '憨笑', '大兵', '奋斗', '咒骂', '疑问', '嘘', '晕', '折磨', '衰', '骷髅', '敲打', '再见', '擦汗', '抠鼻', '鼓掌', '糗大了', '坏笑', '左哼哼', '右哼哼', '哈欠', '鄙视', '委屈', '快哭了', '阴险', '亲亲', '吓', '可怜', '菜刀', '西瓜', '啤酒', '篮球', '乒乓', '咖啡', '饭', '猪头', '玫瑰', '凋谢', '示爱', '爱心', '心碎', '蛋糕', '闪电', '炸弹', '刀', '足球', '瓢虫', '便便', '月亮', '太阳', '礼物', '拥抱', '强', '弱', '握手', '胜利', '抱拳', '勾引', '拳头', '差劲', '爱你', 'NO', 'OK', '爱情', '飞吻', '跳跳', '发抖', '怄火', '转圈', '磕头', '回头', '跳绳', '挥手', '激动', '街舞', '献吻', '左太极', '右太极']
             }
+        },
+        components:{
+            emotion
         },
         computed:{
             ...mapGetters(['tabs','token','username','activeAuthName','contentVisible','menuLists','socketServer']),
@@ -175,17 +249,153 @@
                     this.asideWidth = "65px";
                     this.headerStyle = {'margin-left':'65px'};
                 }
-            }
-        },
-        created(){
-            this.activeName = this.activeAuthName;
-            this.asideHeight = {
-                'min-height':(window.innerHeight - 60)+'px'
-            }
-        },
-        mounted() {
-            this.$nextTick(function () {
-                this.getAuthMenu(this.username);
+            },
+
+            /**
+             * TODO:workerMan-chat链接
+             * @param ws
+             */
+            connect:function(ws){
+                let __this = this;
+                ws.onopen = function(){
+                    let send_data = '{"type":"login","client_name":"'+__this.username+'","room_id":1}';
+                    ws.send(send_data)
+                }
+                ws.onmessage = function(response){
+                    let data = JSON.parse(response.data);
+                    console.log(data);
+                    switch (data['type']) {
+                        case 'ping':
+                            ws.send('{"type":"pong"}');
+                            break;
+                        case 'login':
+                            __this.client_list = {};
+                            if(data['client_list']) {
+                                __this.client_list = data['client_list'];
+                            } else {
+                                __this.client_list[data['client_id']] = data['client_name'];
+                            }
+                            break;
+                        case 'say':
+                            __this.say(data['from_client_id'], data['from_client_name'], data['content'], data['time'],data['msg_type']);
+                            break;
+                    }
+                }
+                ws.onclose = function() {
+                    console.log("连接关闭，定时重连");
+                    this.connect(ws);
+                };
+                ws.onerror = function() {
+                    console.log("出现错误");
+                };
+            },
+            /**
+             * TODO:设置发送给谁
+             * @param user
+             * @param client_id
+             */
+            sendUser:function(user,client_id) {
+                this.to_client_name = user;
+                this.to_client_id = client_id;
+                this.chatTitle = user;
+            },
+            /**
+             * TODO:获取表情
+             * @param i
+             */
+            getEmotion (i) {
+                // 将匹配结果替换表情图片
+                let word = i.replace(/\#|\;/gi,'');
+                this.msg_type = 'icon';
+                this.inputMsg+= `[${word}],`
+            },
+            /**
+             * TODO:设置文本内容
+             */
+            setContent:function(content,msg_type){
+                let __this = this,msg='';
+                switch (msg_type) {
+                    case 'icon':
+                        let inputMsg = content.split(',');
+                        for (let i in inputMsg) {
+                            if (inputMsg[i]!=='' && (inputMsg[i].indexOf('[')>=0 && inputMsg[i].indexOf(']')>=0)) {
+                                let index = __this.emotionLists.indexOf(inputMsg[i].replace('[','').replace(']',''));
+                                msg+= `<img src="https://res.wx.qq.com/mpres/htmledition/images/icon/emotion/${index}.gif" alt="${inputMsg[i]}">`
+                            } else {
+                                msg+=inputMsg[i];
+                            }
+                        }
+                        break;
+                    case 'text':
+                        msg = content;
+                        break;
+                    case 'img':
+                        msg = '<img src="'+content+'" width="100px" height="100px" alt=""/>'
+                        break;
+                }
+                return msg;
+            },
+            /**
+             * TODO：图片上传成功
+             * @param response
+             */
+            uploadSuccess:function(response){
+                if (response && response.code === 200){
+                    this.msg_type = 'img';
+                    this.ws.send('{"type":"say","to_client_id":"'+this.to_client_id+'","to_client_name":"'+this.to_client_name+'","msg_type":"'+this.msg_type+'","content":"'+response.item.src+'"}');
+                    return ;
+                }
+                this.$message({type:'warning',message:response.msg});
+            },
+            /**
+             * TODO：图片上传前
+             * @param file
+             */
+            beforeUpload:function(file){
+                let type = file.type;
+                let typeArr = ['image/jpg','image/gif','image/png','image/jpeg'];
+                if (!typeArr.includes(type)){
+                    this.$message({type:'warning',message:'upload image format error'});
+                    return false;
+                }
+                if (file.size>2*1024*1024){
+                    this.$message({type:'warning',message:'upload image size error'});
+                    return false;
+                }
+                return true;
+            },
+            /**
+             * TODO:发送消息
+             * @param from_client_id
+             * @param from_client_name
+             * @param content
+             * @param time
+             * @param msg_type
+             */
+            say:function(from_client_id, from_client_name, content, time,msg_type){
+                content = this.setContent(content,msg_type);
+                let msg = {
+                    "username":from_client_name,
+                    "timestamp":time,
+                    "content":content,
+                    "msg_type":msg_type
+                };
+                this.messageLists.push(msg);
+                console.log(this.messageLists);
+            },
+            /**
+             * TODO:消息发送
+             */
+            sendMsg:function(){
+                this.showEmotion = false;
+                this.ws.send('{"type":"say","to_client_id":"'+this.to_client_id+'","to_client_name":"'+this.to_client_name+'","msg_type":"'+this.msg_type+'","content":"'+this.inputMsg+'"}');
+                this.inputMsg = '';
+            },
+            /**
+             * TODO：站内消息推送
+             */
+            webPush:function () {
+                //站内消息推送
                 this.socketServer.on('connect', ()=>{
                     // 连接后登录
                     this.socketServer.emit('login', this.md5(this.username));
@@ -194,7 +404,7 @@
                 this.socketServer.on('new_msg', (msg)=>{
                     this.$notify({ title: '系统通知', message: msg, position: 'top-right', type:'success', duration:0 });
                 });
-                //用户通知
+                //用户站内通知
                 this.socketServer.on('notice',(response)=>{
                     this.noticeLength = response.length;
                     this.notice = response;
@@ -202,7 +412,24 @@
                 //在线人数
                 this.socketServer.on('online',(response)=>{
                     this.online = response;
-                })
+                });
+            }
+        },
+        created(){
+            this.activeName = this.activeAuthName;
+            this.asideHeight = {
+                'min-height':(window.innerHeight - 60)+'px'
+            }
+            this.fileData.token = this.token;
+            this.fileData.rand = true;
+            this.headers.Authorization = `${func.set_password(func.set_random(32),func.set_random(12))}-${this.token}-${func.set_password(func.set_random(32),func.set_random(12))}`
+            this.ws = new WebSocket("ws://127.0.0.1:7272");
+            this.connect(this.ws);
+        },
+        mounted() {
+            this.$nextTick(function () {
+                this.getAuthMenu(this.username);
+                this.webPush();
             });
         }
     }
@@ -220,10 +447,50 @@
         text-align: center;
         line-height: 60px;
     }
-
     .el-aside {
         background-color: #393d49;
         color: #333;
         line-height: 200px;
+    }
+    .user-list{
+        box-shadow: 0 2px 4px #2b2f01, 0 0 6px #545c64;
+        min-height:600px;
+        background-color:#545c64;
+        padding: 0 !important;
+    }
+    .contact-list{
+        box-shadow: 0 2px 12px 0 #545c64;
+        min-height:600px;
+    }
+    .msg{
+        max-height: 380px;
+        min-height: 380px;
+        margin-bottom: 20px;
+        margin-top: 10px;
+        overflow: hidden;
+        overflow-y: auto;
+        border: 2px solid #eee;
+        border-radius: 10px;
+        -moz-border-radius:10px;
+        -webkit-border-radius:10px;
+        box-shadow: 0 2px 4px #ffffff, 0 0 6px #545c64;
+    }
+    .msg .msg-list{
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+        line-height: 28px;
+        min-height: 40px;
+        padding-left: 20px;
+        padding-top: 12px;
+        border-radius: 10px;
+        -moz-border-radius:10px;
+        -webkit-border-radius:10px;
+        background:-webkit-gradient(linear, left top, left bottom, from(#f9db1e), to(#f38012));
+        　background:-moz-linear-gradient(top, #f9db1e, #f38012);
+        　　　　background:-o-linear-gradient(top, #f9db1e, #f38012);
+        　　　　background:linear-gradient(top, #f9db1e, #f38012);
+    }
+    .input-msg{
+        min-height: 100px;
+        margin-bottom: 10px;
     }
 </style>
