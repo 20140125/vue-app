@@ -381,7 +381,7 @@
             uploadSuccess:function(response){
                 if (response && response.code === 200){
                     this.msg_type = 'img';
-                    this.ws.send('{"type":"say","to_client_id":"'+this.to_client_id+'","to_client_name":"'+this.to_client_name+'","msg_type":"'+this.msg_type+'","content":"'+response.item.src+'","avatar_url":"'+this.avatar_url+'"}');
+                    this.websocketServer.send('{"type":"say","to_client_id":"'+this.to_client_id+'","to_client_name":"'+this.to_client_name+'","msg_type":"'+this.msg_type+'","content":"'+response.item.src+'","avatar_url":"'+this.avatar_url+'"}');
                     return ;
                 }
                 this.$message({type:'warning',message:response.msg});
