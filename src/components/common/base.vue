@@ -156,7 +156,6 @@
                 fileData:{},
                 headers:{},
                 chatVisible:false,
-                ws:'',
                 client_list:{},
                 inputMsg:'',
                 content:'',
@@ -337,7 +336,7 @@
                 this.avatar_url = this.avatarUrl;
                 //获取聊天记录
                 let __this = this;
-                this.ws.send('{"type":"msgLists","from_client_name":"'+__this.username+'","to_client_name":"'+this.to_client_name+'"}');
+                this.websocketServer.send('{"type":"msgLists","from_client_name":"'+__this.username+'","to_client_name":"'+this.to_client_name+'"}');
             },
             /**
              * TODO:获取表情
@@ -347,7 +346,7 @@
                 // 将匹配结果替换表情图片
                 let word = i.replace(/\#|\;/gi,'');
                 this.msg_type = 'icon';
-                this.inputMsg+= `[${word}],`
+                this.inputMsg+= `,[${word}],`
             },
             /**
              * TODO:设置文本内容
@@ -440,7 +439,7 @@
              */
             sendMsg:function(){
                 this.showEmotion = false;
-                this.ws.send('{"type":"say","to_client_id":"'+this.to_client_id+'","to_client_name":"'+this.to_client_name+'","msg_type":"'+this.msg_type+'","content":"'+this.inputMsg+'","avatar_url":"'+this.avatar_url+'"}');
+                this.websocketServer.send('{"type":"say","to_client_id":"'+this.to_client_id+'","to_client_name":"'+this.to_client_name+'","msg_type":"'+this.msg_type+'","content":"'+this.inputMsg+'","avatar_url":"'+this.avatar_url+'"}');
                 this.inputMsg = '';
             },
             /**
