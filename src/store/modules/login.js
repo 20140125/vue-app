@@ -7,6 +7,7 @@ import io from 'socket.io-client'
 const state={
     token:localStorage.getItem('token'),
     socketServer:'',
+    avatarUrl:'',
     username:'',
     auth_url:'',
     menuLists:[],
@@ -18,7 +19,8 @@ const getters={
     auth_url:state=>state.auth_url,
     menuLists:state=>state.menuLists,
     oauthConfig:state=>state.oauthConfig,
-    socketServer:state=>state.socketServer
+    socketServer:state=>state.socketServer,
+    avatarUrl:state=>state.avatarUrl
 };
 const mutations={
     setToken:function (state,token) {
@@ -39,6 +41,9 @@ const mutations={
     },
     setSocketServer:function (state,ip) {
         state.socketServer = io(ip);
+    },
+    setAvatarUrl:function (state,avatarUrl) {
+        state.avatarUrl = avatarUrl;
     }
 };
 const actions={

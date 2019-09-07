@@ -37,6 +37,7 @@ router.beforeEach((to,from,next)=>{
                 store.commit('setToken',response.data.item.token);
                 store.commit('setUserName',response.data.item.username);
                 store.commit('setSocketServer',response.data.item.ip);
+                store.commit('setAvatarUrl',response.data.item.avatar_url);
                 return ;
             }
             next();
@@ -52,6 +53,7 @@ router.beforeEach((to,from,next)=>{
             store.commit('setToken',response.data.item.token);
             store.commit('setUserName',response.data.item.username);
             store.commit('setSocketServer',response.data.item.ip);
+            store.commit('setAvatarUrl',response.data.item.avatar_url);
             //用户权限验证 (admin  最高权限不做权限验证)
             if (store.state.login.auth_url.indexOf(to.path)===-1 && to.name !=='Welcome' && store.state.login.username!=='admin') {
                 let info = '你没有访问权限，请联系管理员【'+code.QQ+'】检验数据的正确性'
