@@ -8,6 +8,7 @@ const state={
     token:localStorage.getItem('token'),
     socketServer:'',
     avatarUrl:'',
+    websocketServer:'',
     username:'',
     auth_url:'',
     menuLists:[],
@@ -20,7 +21,8 @@ const getters={
     menuLists:state=>state.menuLists,
     oauthConfig:state=>state.oauthConfig,
     socketServer:state=>state.socketServer,
-    avatarUrl:state=>state.avatarUrl
+    avatarUrl:state=>state.avatarUrl,
+    websocketServer:state=>state.websocketServer
 };
 const mutations={
     setToken:function (state,token) {
@@ -44,6 +46,9 @@ const mutations={
     },
     setAvatarUrl:function (state,avatarUrl) {
         state.avatarUrl = avatarUrl;
+    },
+    setWebsocketServer:function (state,websocketServer) {
+        state.websocketServer = new WebSocket(websocketServer);
     }
 };
 const actions={
@@ -58,7 +63,6 @@ const actions={
             if (response && response.data.code === code.SUCCESS) {
                 commit('setToken',response.data.item.token);
                 commit('setUserName',response.data.item.username);
-                commit('setSocketServer',response.data.item.ip);
                 router.push({path:'/admin/index'});
             }
         });

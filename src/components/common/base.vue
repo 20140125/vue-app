@@ -176,7 +176,7 @@
             emotion
         },
         computed:{
-            ...mapGetters(['tabs','token','username','activeAuthName','contentVisible','menuLists','socketServer','avatarUrl']),
+            ...mapGetters(['tabs','token','username','activeAuthName','contentVisible','menuLists','socketServer','avatarUrl','websocketServer']),
         },
         methods:{
             ...mapActions(['addTabs','deleteTabs','addCurrTabs','logoutSystem','getAuthMenu']),
@@ -288,7 +288,6 @@
                 };
                 ws.onmessage = function(response){
                     let data = JSON.parse(response.data);
-                    console.log(data);
                     switch (data['type']) {
                             //心跳
                         case 'ping':
@@ -320,7 +319,7 @@
                 };
                 ws.onclose = function() {
                     console.log("连接关闭，定时重连");
-                    this.connect(ws);
+                    __this.connect(ws);
                 };
                 ws.onerror = function() {
                     console.log("出现错误");
@@ -483,8 +482,7 @@
             this.fileData.token = this.token;
             this.fileData.rand = true;
             this.headers.Authorization = `${func.set_password(func.set_random(32),func.set_random(12))}-${this.token}-${func.set_password(func.set_random(32),func.set_random(12))}`
-            this.ws = new WebSocket("ws://127.0.0.1:7272");
-            this.connect(this.ws);
+            this.connect(this.websocketServer);
         },
         mounted() {
             this.$nextTick(function () {
