@@ -53,11 +53,7 @@
                     </i>
                 </el-footer>
                 <!---chat message-->
-                <el-dialog :title="chatTitle"
-                           :center="center"
-                           :show-close="closeModel"
-                           :close-on-click-modal="closeModel"
-                           :visible.sync="chatVisible">
+                <el-dialog :title="chatTitle" :center="center" :show-close="closeModel" :close-on-click-modal="closeModel" :visible.sync="chatVisible">
                     <el-row :gutter="24">
                         <el-col :span="6" class="user-list">
                             <el-menu background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
@@ -69,14 +65,12 @@
                         </el-col>
                         <el-col :offset="1" :span="17" class="contact-list">
                             <div id="msg">
-                                <div style="margin: 20px">
-                                    <div v-for="(message,index) in messageLists" :key="index">
-                                        <div class="msg-img">
-                                            <el-avatar :size="50" :src="message.avatar_url"></el-avatar>
-                                            <span>{{message.from_client_name}}   {{message.time}}</span>
-                                        </div>
-                                        <div class="msg-list" v-html="message.content"></div>
+                                <div v-for="(message,index) in messageLists" :key="index" style="margin: 20px">
+                                    <div class="msg-img">
+                                        <el-avatar :size="50" :src="message.avatar_url"></el-avatar>
+                                        <span>{{message.from_client_name}}   {{message.time}}</span>
                                     </div>
+                                    <div class="msg-list" v-html="message.content"></div>
                                 </div>
                             </div>
                             <div class="input-msg">
@@ -335,8 +329,8 @@
                 this.chatTitle = user.client_name;
                 this.avatar_url = this.avatarUrl;
                 //获取聊天记录
-                let __this = this;
-                this.websocketServer.send('{"type":"msgLists","from_client_name":"'+__this.username+'","to_client_name":"'+this.to_client_name+'"}');
+                this.websocketServer.send('{"type":"msgLists","from_client_name":"'+this.username+'","to_client_name":"'+this.to_client_name+'"}');
+                this.scrollToBottom();
             },
             /**
              * TODO:获取表情
@@ -359,7 +353,11 @@
                         for (let i in inputMsg) {
                             if (inputMsg[i]!=='' && (inputMsg[i].indexOf('[')>=0 && inputMsg[i].indexOf(']')>=0)) {
                                 let index = __this.emotionLists.indexOf(inputMsg[i].replace('[','').replace(']',''));
-                                msg+= `<img src="https://res.wx.qq.com/mpres/htmledition/images/icon/emotion/${index}.gif" alt="${inputMsg[i]}">`
+                                if (index>=0){
+                                    msg+= `<img src="https://res.wx.qq.com/mpres/htmledition/images/icon/emotion/${index}.gif" alt="${inputMsg[i]}">`
+                                } else {
+                                    msg+=inputMsg[i].replace('[','').replace(']','');
+                                }
                             } else {
                                 msg+=inputMsg[i];
                             }
@@ -416,13 +414,14 @@
                     "msg_type":data['msg_type'],
                     "avatar_url":data['avatar_url']
                 };
+                this.websocketServer.send('{"type":"msgLists","from_client_name":"'+data['from_client_name']+'","to_client_name":"'+data['to_client_name']+'"}');
+                console.log(data);
                 this.messageLists.push(msg);
                 if (this.username!==data['from_client_name']){
                     if (data['to_client_id']!=='all') {
                         this.chatTitle = data['from_client_name'];
                         this.to_client_id = data['from_client_id'];
                     }
-                    this.to_client_id = 'all';
                     this.msg_dot = true;
                 }
                 if (this.chatVisible && this.username===data['from_client_name']) {
@@ -430,7 +429,6 @@
                         this.chatTitle = data['to_client_name'];
                         this.to_client_id = data['to_client_id'];
                     }
-                    this.to_client_id = 'all';
                     this.scrollToBottom();
                 }
             },
@@ -465,10 +463,16 @@
                     this.online = response;
                 });
             },
+            /**
+             * TODO:滚动条股东到底部
+             */
             scrollToBottom: function () {
                 this.$nextTick(() => {
                     let div = document.getElementById('msg');
-                    div.scrollTop = div.scrollHeight
+                    try {
+                        div.scrollTop = div.scrollHeight
+                    } catch (e) {
+                    }
                 })
             },
         },
@@ -533,7 +537,7 @@
         border-radius: 10px;
         -moz-border-radius:10px;
         -webkit-border-radius:10px;
-        box-shadow: 0 2px 4px #ffffff, 0 0 6px #545c64;
+        box-shadow: 0 2px 12px #ffffff, 0 0 6px #545c64;
     }
     #msg .msg-list{
         box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
