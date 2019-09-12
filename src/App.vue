@@ -56,4 +56,22 @@
         background-color: #1b1e21 !important;
         color: #fff !important;
     }
+    /* 设置滚动条的样式 */
+    ::-webkit-scrollbar {
+        width:10px;
+    }
+    /* 滚动槽 */
+    ::-webkit-scrollbar-track {
+        -webkit-box-shadow:inset 0 0 6px rgb(245, 223, 210);
+        border-radius:10px;
+    }
+    /* 滚动条滑块 */
+    ::-webkit-scrollbar-thumb {
+        border-radius:10px;
+        background: rgb(245,245,245);
+        -webkit-box-shadow:inset 0 0 6px rgba(0,0,0,0.5);
+    }
+    ::-webkit-scrollbar-thumb:window-inactive {
+        background: rgb(245,245,245);
+    }
 </style>

@@ -67,6 +67,10 @@ let url={
     //城市地区
     areaLists:'/v1/area/index',
     areaWeather:'/v1/area/weather',
+    //聊天记录
+    chatHistory:'/v1/chat/history',
+    //聊天记录
+    emotionLists:'/v1/emotion/index',
     //推送列表
     pushList:'/v1/push/index',
     pushSave:'/v1/push/save',

@@ -1,49 +1,85 @@
 <template>
-    <div style="position: absolute;bottom: 207px; width: 464px; background: #fff;">
-        <div class="emotion-box" :style="{height: height + 'px' }" >
-            <div class="emotion-box-line" v-for="(line, i) in list" :key="i" >
-                <emotion class="emotion-item" v-for="(item, i) in line" :key="i" @click.native="clickHandler(item)" >{{item}}</emotion>
-            </div>
+    <div style="position: absolute;bottom: 207px; width: 450px; background: #fff;">
+        <div class="emotion-box" :style="{height: height + 'px' }">
+            <el-tabs type="border-card" @tab-click="changeEmotionLists" v-model="type" v-infinite-scroll="scrollEmotion">
+                <el-tab-pane v-for="(emotionType,index) in emotionTypeLists" :name="emotionType.type" :key="index" :label="emotionType.title">
+                    <el-card shadow="always">
+                        <div class="emotion-box-line" v-for="(emotion, index) in emotionList" :key="index">
+                            <div class="emotion-item" >
+                                <el-image :src="emotion.icon" :alt="emotion.title" style="width: 30px;height: 30px;" lazy @click.native="clickHandler(emotion)"/>
+                            </div>
+                        </div>
+                    </el-card>
+                </el-tab-pane>
+            </el-tabs>
         </div>
     </div>
 </template>
 
 <script>
-    import Emotion from './Emotion'
+    import apiLists from '../../../api/api'
     export default {
-        props: {
-            height: {
-                type: Number,
-                default: 200,
-            }
+        props:{
+            height:Number,
         },
         data () {
             return {
-                list: [
-                    ['微笑', '撇嘴', '色', '发呆', '得意', '流泪', '害羞', '闭嘴'],
-                    ['睡', '大哭', '尴尬', '发怒', '调皮', '呲牙', '惊讶', '难过'],
-                    ['酷', '冷汗', '抓狂', '吐', '偷笑', '可爱', '白眼', '傲慢'],
-                    ['饥饿', '困', '惊恐', '流汗', '憨笑', '大兵', '奋斗', '咒骂'],
-                    ['疑问', '嘘', '晕', '折磨', '衰', '骷髅', '敲打', '再见'],
-                    ['擦汗', '抠鼻', '鼓掌', '糗大了', '坏笑', '左哼哼', '右哼哼', '哈欠'],
-                    ['鄙视', '委屈', '快哭了', '阴险', '亲亲', '吓', '可怜', '菜刀'],
-                    ['西瓜', '啤酒', '篮球', '乒乓', '咖啡', '饭', '猪头', '玫瑰',],
-                    ['凋谢', '示爱', '爱心', '心碎', '蛋糕', '闪电', '炸弹', '刀'],
-                    ['足球', '瓢虫', '便便', '月亮', '太阳', '礼物', '拥抱', '强'],
-                    ['弱', '握手', '胜利', '抱拳', '勾引', '拳头', '差劲', '爱你'],
-                    ['NO', 'OK', '爱情', '飞吻', '跳跳', '发抖', '怄火', '转圈'],
-                    ['磕头', '回头', '跳绳', '挥手', '激动', '街舞', '左太极', '右太极'],
-                ]
+                emotionTypeLists:[
+                    {'type':'1','title':'表情','id':'emotion'},
+                    {'type':'2','title':'人物','id':'person'},
+                    {'type':'3','title':'动作','id':'action'},
+                    {'type':'4','title':'家庭','id':'family'},
+                    {'type':'5','title':'自然','id':'natural'},
+                    {'type':'6','title':'食物','id':'food'},
+                    {'type':'7','title':'体育','id':'sport'},
+                    {'type':'8','title':'建筑','id':'building'},
+                    {'type':'9','title':'用品','id':'supplies'},
+                    {'type':'10','title':'符号','id':'symbol'},
+                    {'type':'11','title':'国旗','id':'flag'}
+                ],
+                type:'1',
+                emotionList:[],
+                limit:55,
+                page:1,
+                pages:0
             }
         },
         methods: {
-            clickHandler (i) {
-                let emotion = `#${i};`
-                this.$emit('emotion', emotion)
+            changeEmotionLists:function(typeObj){
+                this.type = typeObj.name;
+                this.page = 1;
+                this.emotionList = [];
+                this.showEmotionLists(this.page,this.limit);
+            },
+            clickHandler (emotion) {
+                this.$emit('clickEmotion', emotion)
+            },
+            /**
+             * TODO:展示表情数据
+             */
+            showEmotionLists:function(page,limit) {
+                apiLists.EmotionLists( {type:this.type,limit:limit,page:page}).then(response=>{
+                    this.pages = response.data.item.pages
+                    let data = response.data.item.data;
+                    for (let i in data) {
+                        this.emotionList.push(data[i]);
+                    }
+                })
+            },
+            /**
+             * TODO:数据流加载
+             */
+            scrollEmotion:function () {
+                if (this.page<=this.pages) {
+                    this.page = this.page+1;
+                    this.showEmotionLists(this.page,this.limit);
+                }
             }
         },
-        components: {
-            Emotion
+        mounted(){
+            this.$nextTick(function () {
+                this.showEmotionLists(this.page,this.limit);
+            })
         }
     }
 </script>
@@ -52,9 +88,12 @@
         margin: 0 auto;
         width: 100%;
         box-sizing: border-box;
+        box-shadow: 0 2px 12px #ffffff, 0 1px 6px #545c64;
         padding: 3px;
         border: 1px solid rgba(226, 226, 226, 0.84);
-        border-radius: 5px;
+        border-radius: 10px;
+        -moz-border-radius:10px;
+        -webkit-border-radius:10px;
         overflow: hidden;
         overflow-y: auto;
         position: initial;
@@ -62,10 +101,11 @@
     }
     .emotion-box-line {
         display: flex;
+        float: left;
     }
     .emotion-item {
         flex: 1;
-        text-align: center;
+        margin-left: 13px;
         cursor: pointer;
     }
 </style>

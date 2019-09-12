@@ -308,6 +308,22 @@ const pushList = function (params) {
 const pushRead = function (params) {
     return request.post(url.pushRead,qs.stringify(Object.assign(access_token,params)))
 }
+/**
+ * TODO:获取历史聊天记录
+ * @param params
+ * @returns {Promise<AxiosResponse<T>>}
+ */
+const chatHistory = function (params) {
+    return request.post(url.chatHistory,qs.stringify(Object.assign(access_token,params)))
+}
+/**
+ * TODO:表情列表
+ * @param params
+ * @returns {Promise<AxiosResponse<T>>}
+ */
+const emotionLists = function (params) {
+    return request.post(url.emotionLists,qs.stringify(Object.assign(access_token,params)))
+}
 const interfaceLists = {
     LoginSys:loginSys,
     LogoutSys:logoutSys,
@@ -346,6 +362,8 @@ const interfaceLists = {
     AreaLists:areaLists,
     AreaWeather:areaWeather,
     PushList:pushList,
-    PushRead:pushRead
+    PushRead:pushRead,
+    ChatHistory:chatHistory,
+    EmotionLists:emotionLists
 };
 export default interfaceLists;
