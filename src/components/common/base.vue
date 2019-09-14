@@ -466,7 +466,7 @@
             this.avatar_url = this.avatarUrl;
             this.fileData.token = this.token;
             this.fileData.rand = true;
-            this.headers.Authorization = `${func.set_password(func.set_random(32),func.set_random(12))}-${this.token}-${func.set_password(func.set_random(32),func.set_random(12))}`
+            this.headers.Authorization = `${func.set_password(func.set_random(32),func.set_random(12))}${this.token}${func.set_password(func.set_random(32),func.set_random(12))}`
             //客服系统初始化
             this.connect(this.websocketServer);
             let __this = this;
