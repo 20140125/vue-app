@@ -267,7 +267,7 @@
         created(){
             this.fileData.token = this.token;
             this.fileData.rand = true;
-            this.headers.Authorization = `${func.set_password(func.set_random(32),func.set_random(12))}-${this.token}-${func.set_password(func.set_random(32),func.set_random(12))}`
+            this.headers.Authorization = `${func.set_password(func.set_random(32),func.set_random(12))}${this.token}${func.set_password(func.set_random(32),func.set_random(12))}`
         },
         mounted() {
             this.$nextTick(function () {
