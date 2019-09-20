@@ -7,18 +7,30 @@
                      text-color="#fff"
                      @select="handleSelect"
                      active-text-color="#ffd04b" :style="headerStyle">
-                <el-menu-item index="1" @click="hideMenu"> <i :class="menuClass"></i></el-menu-item>
+                <el-menu-item index="1" @click="hideMenu"> <i :class="menuClass" style="color: #fff;font-size: 25px"> </i></el-menu-item>
                 <el-submenu index="2" style="float: right">
-                    <template slot="title" v-if="noticeLength"><el-badge is-dot type="success">{{username}}</el-badge></template>
-                    <template slot="title" v-else>{{username}}</template>
-                    <el-menu-item index="2-1">账号资料</el-menu-item>
-                    <el-menu-item index="2-2">基础设置</el-menu-item>
-                    <el-menu-item index="2-3" v-if="noticeLength">
-                        <el-badge :max="10" :value="noticeLength" type="success">站内通知</el-badge>
-                    </el-menu-item>
-                    <el-menu-item index="2-3" v-else>站内通知</el-menu-item>
-                    <el-menu-item index="2-4">退出系统</el-menu-item>
+                    <template slot="title">
+                        <el-avatar :src="avatarUrl" :alt="username" :size="35"/>
+                        <span v-html="username" style="margin-left: 10px"></span>
+                    </template>
+                    <el-menu-item index="2-1"><i class="el-icon-user-solid"> </i> 账号资料</el-menu-item>
+                    <el-menu-item index="2-2"><i class="el-icon-setting"> </i> 基础设置</el-menu-item>
+                    <el-menu-item index="2-3"><i class="el-icon-upload2"> </i> 退出系统</el-menu-item>
                 </el-submenu>
+                <el-menu-item index="3" style="float: right">
+                    <el-dropdown trigger="click" @command="readNotice">
+                        <i class="el-icon-message-solid" style="color: #fff;font-size: 22px"> </i>
+                        <el-badge :value="noticeLength" style="margin-top: -30px;margin-left: -18px" v-if="noticeLength"/>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item>站内通知</el-dropdown-item>
+                            <el-dropdown-item :command="item" divided v-for="(item,index) in notice" :key="index" :disabled="item.disabled">
+                                <el-badge is-dot v-if="!item.disabled"></el-badge>【{{item.title}}】 {{item.info}}
+                            </el-dropdown-item>
+                            <el-dropdown-item command="more" style="text-align: center;color: #66b1ff">查看更多</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+
+                </el-menu-item>
             </el-menu>
         </el-header>
         <el-container>
@@ -96,16 +108,6 @@
                 </el-dialog>
                 <!---chat message-->
 
-                <!---notice message-->
-                <el-dialog :visible.sync="noticeVisible" :title="title" :center="center">
-                    <el-alert v-for="(item,index) in notice" :key="index" type="success" :description="item.info" show-icon
-                              @close="readNotice(item)"
-                              close-text="Close"
-                              style="margin-bottom: 20px">
-                    </el-alert>
-                </el-dialog>
-                <!---notice message-->
-
             </el-container>
         </el-container>
     </el-container>
@@ -119,6 +121,7 @@
     import emotion from '../common/emotion/Index'
     export default {
         name: "baseModule",
+        inject:['reload'],
         data(){
             return {
                 isCollapse:false,
@@ -134,9 +137,6 @@
                 },
                 noticeLength:0,
                 notice:[],
-                noticeVisible:false,
-                title:'站内通知',
-                center:true,
                 online:0,
 
                 //workerManChat
@@ -152,6 +152,7 @@
                 emotionLists:[],
                 showEmotion:false,
                 closeModel:false,
+                center:true,
                 messageLists:[],
                 msg_type:'text',
                 to_client_name:'all',
@@ -160,6 +161,7 @@
                 chatMsgClass:'el-icon-chat-dot-round',
                 msg_dot:false,
                 room_id:'1',
+                currentUrl:'',
             }
         },
         components:{
@@ -202,6 +204,7 @@
              * @param tab
              */
             goto:function(tab){
+                this.currentUrl = tab.name;
                 this.$router.push({path:tab.name});
             },
             /**
@@ -229,9 +232,6 @@
             handleSelect(key, keyPath) {
                 switch (key) {
                     case '2-3':
-                        this.noticeVisible = true;
-                        break;
-                    case '2-4':
                         this.logoutSystem(this.token);
                         break;
                     default:
@@ -243,14 +243,19 @@
              * @param noticeObj
              */
             readNotice:function(noticeObj) {
+                if (noticeObj === 'more') {
+                    let pushParams = {label:'站内通知',name:'/admin/push/index'};
+                    this.activeName = pushParams.name;
+                    this.addCurrTabs(pushParams);
+                    this.addTabs(pushParams);
+                    this.$router.push({path:pushParams.name});
+                    return false;
+                }
                 let params = {};
                 params.see = parseInt(noticeObj.see)+1;
                 params.id = noticeObj.id;
-                apiLists.PushRead(params).then(response=>{
-                    if (response && response.data.code === 200) {
-                        this.$message({type:'success',message:response.data.msg});
-                    }
-                })
+                params.type = noticeObj.type
+                apiLists.PushRead(params).then()
             },
             /**
              * TODO：设置导航栏
@@ -292,7 +297,6 @@
                             } else {
                                 __this.client_list[data['client_id']] = data['client_name'];
                             }
-                            console.log(__this.client_list);
                             break;
                             //发送消息
                         case 'say':
@@ -436,7 +440,14 @@
                 });
                 //用户站内通知
                 this.socketServer.on('notice',(response)=>{
-                    this.noticeLength = response.length;
+                    let j = 1;
+                    for (let i in response) {
+                        response[i].disabled = true
+                        if (response[i].status !== 'successfully' && response[i].see === 0) {
+                            response[i].disabled = false
+                            this.noticeLength = j++;
+                        }
+                    }
                     this.notice = response;
                 });
                 //在线人数
