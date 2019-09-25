@@ -13,8 +13,8 @@
                         <el-avatar :src="avatarUrl" :alt="username" :size="35"/>
                         <span v-html="username" style="margin-left: 10px"></span>
                     </template>
-                    <el-menu-item index="2-1"><i class="el-icon-user-solid"> </i> 账号资料</el-menu-item>
-                    <el-menu-item index="2-2"><i class="el-icon-setting"> </i> 基础设置</el-menu-item>
+                    <el-menu-item index="2-1"><i class="el-icon-user-solid"> </i> 个人中心</el-menu-item>
+                    <el-menu-item index="2-2"><i class="el-icon-setting"> </i> 安全设置</el-menu-item>
                     <el-menu-item index="2-3"><i class="el-icon-upload2"> </i> 退出系统</el-menu-item>
                 </el-submenu>
                 <el-menu-item index="3" style="float: right">
@@ -161,7 +161,6 @@
                 chatMsgClass:'el-icon-chat-dot-round',
                 msg_dot:false,
                 room_id:'1',
-                currentUrl:'',
             }
         },
         components:{
@@ -204,7 +203,6 @@
              * @param tab
              */
             goto:function(tab){
-                this.currentUrl = tab.name;
                 this.$router.push({path:tab.name});
             },
             /**
@@ -231,6 +229,20 @@
              */
             handleSelect(key, keyPath) {
                 switch (key) {
+                    case '2-1':
+                        let userParams = {label:'个人中心',name:'/admin/user/center'};
+                        this.activeName = userParams.name;
+                        this.addCurrTabs(userParams);
+                        this.addTabs(userParams);
+                        this.$router.push({path:userParams.name});
+                        break;
+                    case '2-2':
+                        let pushParams = {label:'个人中心',name:'/admin/user/center'};
+                        this.activeName = pushParams.name;
+                        this.addCurrTabs(pushParams);
+                        this.addTabs(pushParams);
+                        this.$router.push({path:pushParams.name});
+                        break;
                     case '2-3':
                         this.logoutSystem(this.token);
                         break;
@@ -436,7 +448,7 @@
                 });
                 // 服务端（http）推送站内通知信息
                 this.socketServer.on('new_msg', (msg)=>{
-                    this.$notify({ title: '系统通知', message: msg, position: 'top-right', type:'success', duration:0 });
+                    this.$notify({ title: '站内通知', message: msg, position: 'top-right', type:'success', duration:0 });
                 });
                 //用户站内通知
                 this.socketServer.on('notice',(response)=>{

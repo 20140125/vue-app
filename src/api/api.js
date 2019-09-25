@@ -279,10 +279,11 @@ const verifyCode = function (params) {
 /**
  * TODO:城市列表
  * @param params
+ * @param href
  * @returns {Promise<AxiosResponse<T>>}
  */
-const areaLists = function (params) {
-    return request.post(url.areaLists,qs.stringify(Object.assign(access_token,params)))
+const areaLists = function (params,href) {
+    return request.post(href,qs.stringify(Object.assign(access_token,params)))
 };
 /**
  * TODO:城市天气

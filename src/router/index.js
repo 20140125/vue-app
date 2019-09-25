@@ -6,6 +6,7 @@ import Login from '../components/login'
 import AuthLists from '../components/auth/lists'
 import RoleLists from '../components/role/lists'
 import UserLists from '../components/user/lists'
+import UserCenter from '../components/user/center'
 import SystemLog from '../components/system/log'
 import SystemFile from '../components/system/file'
 import ConfigLists from '../components/system/config'
@@ -31,6 +32,7 @@ export default new Router({
                 { path: 'auth/index', name:'AuthLists',component:AuthLists,meta:{ mode:'rule',title:'权限列表' } },
                 { path: 'role/index', name:'RoleLists',component:RoleLists,meta:{ mode:'role',title:'角色列表' } },
                 { path: 'user/index', name:'UserLists',component:UserLists,meta:{ mode:'user',title:'管理员列表' } },
+                { path: 'user/center', name:'UserCenter',component:UserCenter,meta:{ mode:'user_center',title:'个人中心' }},
                 { path: 'oauth/index', name:'OauthLists', component:OauthLists,meta:{ mode:'oauth',title:'授权列表' }},
                 { path: 'req-rule/index', name:'ReqRuleLists', component:ReqRuleLists,meta:{ mode:'req_rule',title:'申请授权列表' }},
                 { path: 'log/index',  name:'SystemLog',component:SystemLog,meta:{ mode:'log',title:'日志列表' } },

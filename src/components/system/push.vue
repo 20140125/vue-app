@@ -4,7 +4,7 @@
             <el-form-item>
                 <el-button v-for="(state,index) in pushState" :key="index" @click="getState(state.val)" :type="state.type" size="medium" plain>{{ state.val.toUpperCase() }}</el-button>
             </el-form-item>
-            <el-form-item style="float:right;">
+            <el-form-item style="float:right;" v-if="username === 'admin'">
                 <el-button icon="el-icon-plus" type="primary" size="medium" plain @click="addPush">添 加</el-button>
             </el-form-item>
         </el-form>
@@ -29,7 +29,7 @@
                     <el-input v-model="search"  placeholder="请输入关键词查询"></el-input>
                 </template>
                 <template slot-scope="scope">
-                    <el-button type="primary" v-if="scope.row.state!=='successfully'" plain icon="el-icon-edit" size="mini" @click="updatePush(scope.row)">执 行</el-button>
+                    <el-button type="primary" v-if="scope.row.state!=='successfully' && username === 'admin'" plain icon="el-icon-edit" size="mini" @click="updatePush(scope.row)">执 行</el-button>
                     <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="pushLists" v-on:success="success"></Delete>
                 </template>
             </el-table-column>
@@ -86,6 +86,7 @@
     import Radio from "../common/Radio";
     import Delete from "../common/Delete";
     import Submit from "../common/Submit";
+    import {mapGetters} from 'vuex'
     export default {
         name: "lists",
         components: {Submit, Delete, Radio},
@@ -131,6 +132,9 @@
                     {'val':'offline','label':'离线','type':'default'}
                 ]
             }
+        },
+        computed:{
+            ...mapGetters(['username']),
         },
         methods:{
             /**

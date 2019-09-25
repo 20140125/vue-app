@@ -65,11 +65,11 @@ let url={
     fileDecompression:'/v1/file/unzip',
     imagePreview:'/v1/image/preview',
     //城市地区
-    areaLists:'/v1/area/index',
+    areaIndex:'/v1/area/index',
+    areaLists:'/v1/area/lists',
     areaWeather:'/v1/area/weather',
     //聊天记录
     chatHistory:'/v1/chat/history',
-    //聊天记录
     emotionLists:'/v1/emotion/index',
     //推送列表
     pushList:'/v1/push/index',
