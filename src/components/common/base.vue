@@ -88,14 +88,18 @@
                             <div class="input-msg">
                                 <emotion @clickEmotion="getEmotion" v-show="showEmotion" :height="300"></emotion>
                                 <div style="float: left">
-                                    <i  @click="showEmotion = !showEmotion" class="el-icon-picture-outline-round icon"></i>
+                                    <el-tooltip effect="dark" content="发送表情" placement="top-start">
+                                        <i  @click="showEmotion = !showEmotion" class="el-icon-picture-outline-round icon"></i>
+                                    </el-tooltip>
                                     <el-upload :action="cgi.uploadUrl"
                                                :data="fileData"
                                                :headers="headers"
                                                :show-file-list="false"
                                                :on-success="uploadSuccess"
                                                :before-upload="beforeUpload" style="float: left">
-                                        <i class="el-icon-picture-outline icon"></i>
+                                        <el-tooltip effect="dark" content="发送文件和图片" placement="top-start">
+                                            <i class="el-icon-picture-outline icon"></i>
+                                        </el-tooltip>
                                     </el-upload>
                                 </div>
                                 <el-input type="textarea" ref="message" id="content" @focus="showEmotion = false" v-model="inputMsg" resize="none" rows="4"></el-input>

@@ -32,7 +32,7 @@
             <el-col :xl="{'span':19,'push':1}" :lg="{'span':19,'push':1}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" v-show="apiVisible">
                 <el-tabs type="border-card" v-model="apiName">
                     <el-tab-pane :label="apiName" :key="apiName" :name="apiName"></el-tab-pane>
-                    <el-card shadow="hover">
+                    <el-card shadow="always">
                         <el-form :label-width="labelWidth" :model="apiModel" :ref="reFrom" :rules="rules">
                             <el-form-item label="接口名称" prop="type">
                                 <el-select v-model="apiModel.type"  auto-complete="true" style="width: 100%" placeholder="接口名称">

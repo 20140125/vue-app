@@ -38,7 +38,7 @@
                     <el-form-item style="margin-left: -30px !important;">
                         <el-tabs type="border-card" closable v-model="activeFileTabName"  @tab-click="goto" @tab-remove="removeTabName" style="text-align: left!important;">
                             <el-tab-pane v-for="item in fileTabs" :label="item.label" :key="item.name" :name="item.name"></el-tab-pane>
-                            <el-card shadow="hover">
+                            <el-card shadow="always">
                                 <codemirror @change="updateContent" ref="edit" :value="fileModel.content" :options="options" style="line-height: 20px"></codemirror>
                             </el-card>
                         </el-tabs>
