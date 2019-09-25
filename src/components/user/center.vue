@@ -9,7 +9,7 @@
                     </div>
                     <div class="message">
                         <p><i class="el-icon-message"> </i> {{userCenter.email}} </p>
-                        <p><i class="el-icon-location-information" > </i> {{userCenter.local}} </p>
+                        <p><i class="el-icon-location-information" > </i> {{setLocal(userCenter.local)}} </p>
                         <p><i class="el-icon-aim" > </i> {{userCenter.desc}} </p>
                         <p>个人标签：
                             <el-tag style="margin-left: 10px" :key="tag" v-for="tag in userCenter.tags">
@@ -25,13 +25,15 @@
                     <el-card shadow="always">
                         <el-form :model="userCenter" label-width="80px" label-position="left" ref="center" :rules="rules">
                             <el-form-item label="头像" prop="avatarUrl">
-                                <Upload :avatar_url="userCenter.avatarUrl" :username="username" @uploadSuccess="uploadSuccess"></Upload>
+                                <el-tooltip effect="dark" content="用户头像修改请移步至用户列表" placement="top-start">
+                                    <Upload :avatar_url="userCenter.avatarUrl" :username="username" @uploadSuccess="uploadSuccess"></Upload>
+                                </el-tooltip>
                             </el-form-item>
                             <el-form-item label="用户名" prop="u_name">
                                 <el-input v-model="userCenter.u_name" placeholder="用户名"/>
                             </el-form-item>
                             <el-form-item label="账户类型" prop="u_type">
-                                <el-select v-model="userCenter.u_type" style="width: 100%">
+                                <el-select v-model="userCenter.u_type.toString()" style="width: 100%">
                                     <el-option label="授权用户" value="1"></el-option>
                                     <el-option label="管理员" value="2"></el-option>
                                 </el-select>
@@ -67,8 +69,7 @@
                                 </el-tooltip>
                             </el-form-item>
                             <el-form-item style="text-align: center">
-                                <el-button @click="resetForm('center')" plain>重置</el-button>
-                                <el-button @click="submitForm('center')" type="primary" plain>确定</el-button>
+                                <Submit :reFrom="reFrom" :url="url" :model="userCenter" :refs="refs"></Submit>
                             </el-form-item>
                         </el-form>
                     </el-card>
@@ -83,24 +84,30 @@
     import $url from '../../api/url';
     import Upload from '../common/Upload'
     import {mapGetters} from 'vuex'
+    import Submit from '../common/Submit'
     export default {
         name: "lists",
-        components: {Upload},
+        components: {Submit, Upload},
         data(){
             return {
                 loading:true,
                 loadingText:'玩命加载中。。。',
+
                 userCenter:{
                     avatarUrl:'',
                     u_name:'',
-                    local:'',
-                    ip_address:'',
-                    notice_status:'1',
-                    user_status:'1',
+                    local:[],
+                    ip_address:[],
+                    notice_status:'',
+                    user_status:'',
                     desc:'',
                     tags:[],
-                    u_type:'1'
+                    u_type:''
                 },
+                reFrom:'center',
+                refs:this.$refs,
+                url:$url.saveUserCenter,
+
                 fileData:{},
                 headers:{},
                 cgi:{
@@ -110,8 +117,8 @@
                     avatarUrl:[{required:true,message:'用户头像不得为空',trigger:'change'}],
                     u_name:[{required: true,message:'用户名称不得为空',trigger:'blur'}],
                     u_type:[{required: true,message:'账户类型不得为空',trigger:'blur'}],
-                    local:[{required: true,message:'居住地址不得为空',trigger:'blur'}],
-                    ip_address:[{required: true,message:'用户地址不得为空',trigger:'blur'}],
+                    local:[{required: true,message:'居住地址不得为空',trigger:'change'}],
+                    ip_address:[{required: true,message:'用户地址不得为空',trigger:'change'}],
                     desc:[{required: true,message:'个人介绍不得为空',trigger:'blur'}],
                     tags:[{required: true,message:'用户标签不得为空',trigger:'blur'}],
                     notice_status:[{required: true,message:'站内通知',trigger:'change'}],
@@ -123,7 +130,7 @@
                 pid:1,
                 options:[],
                 props:{
-                    value:'id',
+                    value:'name',
                     label:'name'
                 }
             }
@@ -139,18 +146,32 @@
             uploadSuccess:function (src) {
                 this.userCenter.avatarUrl = src;
             },
+            /**
+             * TODO:关闭标签
+             * @param tag
+             */
             handleClose(tag) {
                 this.userCenter.tags.splice( this.userCenter.tags.indexOf(tag), 1);
             },
+            /**
+             * TODO:展示文本框
+             */
             showInput:function() {
                 this.inputVisible = true;
                 this.$nextTick(_ => {
-                    this.$refs.saveTagInput.$refs.input.focus();
+                    this.$refs.saveTagInput.focus();
                 });
             },
+            setLocal:function(item) {
+                let str = item.join(',');
+                return str.replace(new RegExp(/,/g),' / ')
+            },
+            /**
+             * TODO:文本框输入
+             */
             handleInputConfirm:function() {
                 let inputValue = this.inputValue;
-                if (inputValue) {
+                if (inputValue && this.userCenter.tags.indexOf(inputValue)<0) {
                     this.userCenter.tags.push(inputValue);
                 }
                 this.inputVisible = false;
@@ -161,23 +182,38 @@
              * @param pid
              */
             getCity:function(pid) {
-                this.loading = true;
                 apiLists.AreaLists({parent_id:pid},$url.areaLists).then(response=>{
                     if (response && response.data.code === 200) {
-                        this.loading = false;
-                        this.options = response.data.item;
+                        this.setOptions(response.data.item);
                     }
                 });
             },
             /**
-             * TODO:表单提交
-             * @param form
+             * TODO:设置数据
+             * @param data
              */
-            submitForm:function (form) {
-                this.$refs[form].validate((valid)=>{
-                    if (!valid) {
-                        this.$message.warning('请检查字段的完整性~')
-                        return false;
+            setOptions:function(data) {
+                for (let i in data) {
+                    if (data[i].children.length === 0) {
+                        delete data[i].children
+                    }
+                    this.setOptions(data[i].children)
+                }
+                this.options = data;
+            },
+            /**
+             * TODO:获取用户信息
+             */
+            getUserCenter:function() {
+                this.loading = true;
+                apiLists.UserCenter([]).then(response=>{
+                    if (response && response.data.code === 200) {
+                        this.loading = false;
+                        this.userCenter = response.data.item;
+                        this.userCenter.avatarUrl = this.avatarUrl;
+                        this.userCenter.user_status = this.userCenter.user_status.toString();
+                        this.userCenter.notice_status = this.userCenter.notice_status.toString();
+                        this.getCity(this.pid);
                     }
                 })
             },
@@ -189,12 +225,9 @@
                 this.$refs[form].resetFields();
             }
         },
-        created(){
-            this.userCenter.avatarUrl = this.avatarUrl;
-        },
         mounted() {
             this.$nextTick(function () {
-                this.getCity(this.pid);
+                this.getUserCenter();
             });
         }
     }

@@ -98,7 +98,7 @@
                                         <i class="el-icon-picture-outline icon"></i>
                                     </el-upload>
                                 </div>
-                                <el-input type="textarea" id="content" @focus="showEmotion = false" v-model="inputMsg" resize="none" rows="4"></el-input>
+                                <el-input type="textarea" ref="message" id="content" @focus="showEmotion = false" v-model="inputMsg" resize="none" rows="4"></el-input>
                             </div>
                             <div class="input-button" style="text-align: right">
                                 <el-button type="primary" plain size="medium" @click="sendMsg">发 送</el-button>
@@ -434,8 +434,10 @@
                     this.inputMsg = '';
                     return ;
                 }
-                document.getElementById('content').focus();
-                this.$message({type:'info',message:'Please enter message'})
+                if (this.chatVisible) {
+                    this.$refs.message.focus();
+                    this.$message({type:'info',message:'Please enter message'})
+                }
             },
             /**
              * TODO：站内消息推送

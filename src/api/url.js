@@ -14,6 +14,8 @@ let url={
     userSave:'/v1/user/save',
     userUpdate:'/v1/user/update',
     userDelete:'/v1/user/delete',
+    userCenter:'/v1/user/center',
+    saveUserCenter:'/v1/center/save',
     //系统日志操作接口
     logLists:'/v1/log/index',
     logSave:'/v1/log/save',

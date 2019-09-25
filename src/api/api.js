@@ -77,6 +77,14 @@ const userLists = function(params){
     return request.post(url.userLists,qs.stringify(Object.assign(access_token,params)))
 };
 /**
+ * TODO:个人中心
+ * @param params
+ * @returns {Promise<AxiosResponse<T>>}
+ */
+const userCenter = function(params){
+    return request.post(url.userCenter,qs.stringify(Object.assign(access_token,params)))
+};
+/**
  * TODO:日志列表
  * @param params
  * @returns {Promise<AxiosResponse<T>>}
@@ -334,6 +342,7 @@ const interfaceLists = {
     RoleLists:roleLists,
     AuthTree:authTree,
     UserLists:userLists,
+    UserCenter:userCenter,
     LogLists:logLists,
     ApiLists:apiLists,
     CategoryLists:categoryLists,
