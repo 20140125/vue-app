@@ -14,8 +14,7 @@
                         <span v-html="username" style="margin-left: 10px"></span>
                     </template>
                     <el-menu-item index="2-1"><i class="el-icon-user-solid"> </i> 个人中心</el-menu-item>
-                    <el-menu-item index="2-2"><i class="el-icon-setting"> </i> 安全设置</el-menu-item>
-                    <el-menu-item index="2-3"><i class="el-icon-upload2"> </i> 退出系统</el-menu-item>
+                    <el-menu-item index="2-2"><i class="el-icon-upload2"> </i> 退出系统</el-menu-item>
                 </el-submenu>
                 <el-menu-item index="3" style="float: right">
                     <el-dropdown trigger="click" @command="readNotice">
@@ -241,13 +240,6 @@
                         this.$router.push({path:userParams.name});
                         break;
                     case '2-2':
-                        let pushParams = {label:'个人中心',name:'/admin/user/center'};
-                        this.activeName = pushParams.name;
-                        this.addCurrTabs(pushParams);
-                        this.addTabs(pushParams);
-                        this.$router.push({path:pushParams.name});
-                        break;
-                    case '2-3':
                         this.logoutSystem(this.token);
                         break;
                     default:
@@ -459,6 +451,7 @@
                 //用户站内通知
                 this.socketServer.on('notice',(response)=>{
                     let j = 1;
+                    this.noticeLength = 0;
                     for (let i in response) {
                         response[i].disabled = true
                         if (response[i].status !== 'successfully' && response[i].see === 0) {
@@ -510,7 +503,7 @@
         },
         mounted() {
             this.$nextTick(function () {
-                this.getAuthMenu(this.username);
+                this.getAuthMenu();
                 this.webPush();
             });
         }

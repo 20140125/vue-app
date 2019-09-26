@@ -50,12 +50,12 @@ router.beforeEach((to,from,next)=>{
                 next({path:'/login',redirect:to.path});
                 return ;
             }
-            store.commit('setAuthUrl',response.data.item.auth);
-            store.commit('setToken',response.data.item.token);
-            store.commit('setUserName',response.data.item.username);
-            store.commit('setSocketServer',response.data.item.socket);
-            store.commit('setAvatarUrl',response.data.item.avatar_url);
-            store.commit('setWebsocketServer',response.data.item.websocket);
+            store.commit('setAuthUrl',(response && response.data && response.data.item) ? response.data.item.auth:'');
+            store.commit('setToken',(response && response.data && response.data.item) ? response.data.item.token:'');
+            store.commit('setUserName',(response && response.data && response.data.item) ? response.data.item.username:'');
+            store.commit('setSocketServer',(response && response.data && response.data.item) ? response.data.item.socket:code.Socket);
+            store.commit('setAvatarUrl',(response && response.data && response.data.item) ? response.data.item.avatar_url:'');
+            store.commit('setWebsocketServer',(response && response.data && response.data.item) ? response.data.item.websocket:code.Websocket);
             //用户权限验证 (admin  最高权限不做权限验证)
             if (store.state.login.auth_url.indexOf(to.path)===-1 && to.name !=='Welcome' && store.state.login.username!=='admin') {
                 let info = '你没有访问权限，请联系管理员【'+code.QQ+'】检验数据的正确性'

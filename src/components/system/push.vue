@@ -58,6 +58,9 @@
                 <el-form-item label="UID" prop="uid">
                     <el-input v-model="pushModel.uid" readonly placeholder="用户UID"></el-input>
                 </el-form-item>
+                <el-form-item label="标题" prop="title">
+                    <el-input v-model="pushModel.title" placeholder="推送标题"></el-input>
+                </el-form-item>
                 <el-form-item label="时间" prop="created_at">
                     <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" v-model="pushModel.created_at" style="width: 100%"></el-date-picker>
                 </el-form-item>
@@ -124,7 +127,8 @@
                     status:$url.pushUpdate
                 },
                 rules:{
-                    info:[{required:true,message:'站内推送信息不得为空',trigger:'blur'}]
+                    info:[{required:true,message:'站内通知不得为空',trigger:'blur'}],
+                    title:[{required:true,message:'站内通知标题不得为空',trigger:'blur'}]
                 },
                 pushState:[
                     {'val':'successfully','label':'成功','type':'success'},
@@ -221,6 +225,7 @@
                     state:'',
                     status:2,
                     created_at:func.set_time(new Date()),
+                    title:'系统通知',
                 };
                 this.url = this.cgi.insert;
             },
