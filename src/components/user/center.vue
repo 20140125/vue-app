@@ -163,8 +163,11 @@
                 });
             },
             setLocal:function(item) {
-                let str = item.join(',');
-                return str.replace(new RegExp(/,/g),' / ')
+                if (item.length>0) {
+                    let str = item.join(',');
+                    return str.replace(new RegExp(/,/g),' / ')
+                }
+                return item;
             },
             /**
              * TODO:文本框输入

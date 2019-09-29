@@ -64,7 +64,7 @@
                     </i>
                 </el-footer>
                 <!---chat message-->
-                <el-dialog :title="chatTitle" :center="center" :show-close="closeModel" :close-on-click-modal="closeModel" :visible.sync="chatVisible">
+                <el-dialog :title="chatTitle" :center="center" :show-close="closeModel" :close-on-press-escape="closeModel" :visible.sync="chatVisible">
                     <el-row :gutter="24">
                         <el-col :span="6" class="user-list">
                             <el-menu background-color="#393D49" text-color="#fff" active-text-color="#ffd04b">
