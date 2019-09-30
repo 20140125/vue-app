@@ -51,7 +51,7 @@
                                 </el-select>
                             </el-form-item>
                             <el-form-item label="请求字段" prop="request">
-                                <el-button type="primary" plain icon="el-icon-plus" @click="requestAdd()" size="medium"></el-button>
+                                <el-button type="primary" style="margin-bottom: 5px" plain icon="el-icon-plus" @click="requestAdd()" size="medium"></el-button>
                                 <div v-for="(request,index) in apiModel.request" :key="index">
                                     <el-input v-model="request.name"  auto-complete="true" style="width: 195px;margin-bottom: 5px" placeholder="参数名"></el-input>
                                     <el-select v-model="request.type"  auto-complete="true" style="width: 195px" placeholder="字段类型">
@@ -70,7 +70,7 @@
                                 <codemirror ref="edit" @change="updateContent"  :value="apiModel.response_string" :options="options" style="line-height: 20px"></codemirror>
                             </el-form-item>
                             <el-form-item label="返回字段" prop="response">
-                                <el-button type="primary"  plain icon="el-icon-plus" @click="responseAdd()" size="medium"></el-button>
+                                <el-button type="primary" style="margin-bottom: 5px"  plain icon="el-icon-plus" @click="responseAdd()" size="medium"></el-button>
                                 <div v-for="(response,index) in apiModel.response" :key="index">
                                     <el-input v-model="response.name"   auto-complete="true" style="width: 195px;margin-bottom: 5px" placeholder="参数名"></el-input>
                                     <el-select v-model="response.type" auto-complete="true" style="width: 195px" placeholder="字段类型">
@@ -206,6 +206,7 @@
                     Float:'Float',
                     Number:'Number',
                     Object:'Object',
+                    Array:'Array',
                     Timestamp:'Timestamp'
                 },
                 cgi:{
@@ -406,6 +407,11 @@
         },
         created(){
             this.apiName = this.interfaceName;
+            if (this.apiModel.id) {
+                this.url = this.cgi.update
+            } else {
+                this.url = this.cgi.insert
+            }
         },
         mounted() {
             this.$nextTick(function () {

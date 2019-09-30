@@ -28,7 +28,11 @@
                             <el-dropdown-item command="more" style="text-align: center;color: #66b1ff">查看更多</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
-
+                </el-menu-item>
+                <el-menu-item index="4"  style="float: right">
+                    <a href="https://gitee.com/f_longer/vue-app" target="_blank">
+                        <img src="https://gitee.com/f_longer/longer/widgets/widget_6.svg?color=C71D24" alt="gitee"/>
+                    </a>
                 </el-menu-item>
             </el-menu>
         </el-header>
@@ -64,7 +68,11 @@
                     </i>
                 </el-footer>
                 <!---chat message-->
-                <el-dialog :title="chatTitle" :center="center" :show-close="closeModel" :close-on-press-escape="closeModel" :visible.sync="chatVisible">
+                <el-dialog :title="chatTitle"
+                           :center="center"
+                           :show-close="closeModel"
+                           :close-on-press-escape="closeModel"
+                           :visible.sync="chatVisible">
                     <el-row :gutter="24">
                         <el-col :span="6" class="user-list">
                             <el-menu background-color="#393D49" text-color="#fff" active-text-color="#ffd04b">
