@@ -263,7 +263,7 @@
              * @param value
              * @param data
              */
-            filterNode(value, data) {
+            filterNode:function(value, data) {
                 if (!value) return true;
                 return data.label.toLowerCase().indexOf(value.toLowerCase()) !== -1;
             },
@@ -283,15 +283,15 @@
             /**
              * todo：鼠标右击触发事件
              * @param MouseEvent event 事件
-             * @param object 传递给 data 属性的数组中该节点所对应的对象
+             * @param object
              * @param Node 节点对应的 Node、
              * @param element 节点组件本身。
              */
             rightClick:function(MouseEvent, object, Node, element) {
-                this.menuVisible = false; // 关闭模态框
-                this.menuVisible = true;  // 显示模态窗口，跳出自定义菜单栏
+                this.menuVisible = false;
+                this.menuVisible = true;
                 const menu = document.querySelector('#menu');
-                document.addEventListener('click', this.foo); // 给整个document添加监听鼠标事件，点击任何位置执行foo方法
+                document.addEventListener('click', this.foo);
                 menu.style.left = '340px';
                 menu.style.top = MouseEvent.clientY - 195 + 'px';
                 this.fileObject = object;
@@ -622,14 +622,14 @@
             /**
              * todo：确定文件上传
              */
-            submitUpload() {
+            submitUpload:function() {
                 this.$refs.upload.submit();
             },
             /**
              * todo：取消文件上传
              * @param file
              */
-            handleRemove(file) {
+            handleRemove:function(file) {
                 this.$message({type:'warning',message:'取消文件上传：'+file.name});
             },
             /**
