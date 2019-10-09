@@ -25,11 +25,11 @@ const errorHandle = (status,msg) => {
             break;
             // 404请求不存在
         case 404:
-            router.push({path:'/login'});
+            router.push({path:'/404'});
             Message.warning(msg);
             break;
         default:
-            Message.warning('Internal Server Error');
+            Message.warning('network error');
             break;
     }
 };
