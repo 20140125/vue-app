@@ -50,13 +50,13 @@
                     <el-input v-model="OauthModel.username"></el-input>
                 </el-form-item>
                 <el-form-item label="邮箱账号" prop="email">
-                    <el-input v-model="OauthModel.email">
+                    <el-input v-model="OauthModel.email" ref="bindEmail">
                         <el-button slot="append" plain type="primary" v-if="!OauthModel.code" @click="sendMail(OauthModel)" icon="el-icon-circle-plus">绑 定</el-button>
                         <el-button slot="append" plain type="primary" v-else @click="sendMail(OauthModel)" icon="el-icon-edit">修 改</el-button>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="验证码" prop="code" v-if="showCode">
-                    <el-input v-model="OauthModel.code" @blur="checkCode(OauthModel)"></el-input>
+                    <el-input v-model="OauthModel.code" @blur="checkCode(OauthModel)" ref="bindCode"></el-input>
                 </el-form-item>
                 <el-form-item label="用户头像" prop="avatar_url">
                     <Upload :avatar_url="OauthModel.avatar_url" :username="OauthModel.username" @uploadSuccess="uploadSuccess"></Upload>
@@ -149,6 +149,10 @@
                 this.syncVisible = false;
                 this.getOauthLists(this.page,this.limit)
             },
+            /**
+             * TODO:图片上传回调
+             * @param src
+             */
             uploadSuccess:function(src) {
                 this.OauthModel.avatar_url = src;
             },
@@ -174,6 +178,11 @@
              * @param oauthObject
              */
             sendMail:function(oauthObject){
+                if (!oauthObject.email) {
+                    this.$refs['bindEmail'].focus();
+                    this.$message.warning('Please Enter Email')
+                    return ;
+                }
                 let params = {
                     email:oauthObject.email,
                     id:oauthObject.id,
@@ -192,6 +201,11 @@
              * @param oauthObject
              */
             checkCode:function(oauthObject) {
+                if (!oauthObject.code) {
+                    this.$refs['bindCode'].focus();
+                    this.$message.warning('Please Enter Code')
+                    return ;
+                }
                 let params = {
                     code:oauthObject.code,
                     id:oauthObject.id
@@ -231,11 +245,6 @@
                 this.showCode = false;
                 this.url = this.cgi.update;
             }
-        },
-        created(){
-            this.fileData.token = this.token;
-            this.fileData.rand = true;
-            this.headers.Authorization = `${func.set_password(func.set_random(32),func.set_random(12))}${this.token}${func.set_password(func.set_random(32),func.set_random(12))}`
         },
         mounted() {
             this.$nextTick(function () {
