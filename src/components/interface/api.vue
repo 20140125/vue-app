@@ -2,12 +2,7 @@
     <div v-loading="loading" :element-loading-text="loadingText">
         <el-row :gutter="24">
             <el-col :xl="{'span':4}" :lg="{'span':4}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" style="margin-bottom: 20px">
-                <el-input placeholder="输入关键字搜索" v-model="filterText"></el-input>
-            </el-col>
-        </el-row>
-
-        <el-row :gutter="24">
-            <el-col :xl="{'span':4}" :lg="{'span':4}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" style="margin-bottom: 20px">
+                <el-input placeholder="输入关键字搜索" v-model="filterText" style="margin-bottom: 20px"></el-input>
                 <el-tree :props="props"
                          @node-contextmenu="rightClick"
                          :filter-node-method="filterNode"

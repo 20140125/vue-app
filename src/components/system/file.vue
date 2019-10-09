@@ -1,13 +1,9 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText">
         <el-row :gutter="24">
-            <el-col :xl="{'span':5}" :lg="{'span':5}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" style="margin-bottom: 20px">
-                <el-input placeholder="输入关键字搜索" v-model="filterText"></el-input>
-            </el-col>
-        </el-row>
-        <el-row :gutter="24">
             <!--文件列表-->
             <el-col :xl="{'span':5}" :lg="{'span':5}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" style="margin-bottom: 20px">
+                <el-input placeholder="输入关键字搜索" v-model="filterText" style="margin-bottom: 20px"></el-input>
                 <el-tree :data="fileLists"  @node-contextmenu="rightClick"
                          :highlight-current="highlight"
                          :props="props"
@@ -105,6 +101,11 @@
     import { codemirror } from 'vue-codemirror-lite'
     //编辑器代码 php
     require('codemirror/mode/php/php.js');
+    require('codemirror/mode/markdown/markdown.js');
+    require('codemirror/mode/xml/xml.js');
+    require('codemirror/mode/xml/xml.js');
+    require('codemirror/addon/hint/javascript-hint.js');
+    require('codemirror/mode/javascript/javascript.js');
     require('codemirror/addon/selection/active-line');
     //编辑器主题
     require('codemirror/theme/monokai.css');
@@ -146,6 +147,12 @@
                     docLists:[],
                     resource:'',
                     path:''
+                },
+                mode:{
+                    markdown:"text/markdown",
+                    php:"text/x-php",
+                    xml:"text/xml",
+                    json:"application/ld+json"
                 },
                 //代码编辑器配置
                 options:{
@@ -255,6 +262,7 @@
              * todo：关闭弹框
              */
             success:function(){
+                this.addCurrFileObj(this.fileModel);
                 this.getFileLists(this.path);
                 this.syncVisible = false;
             },
@@ -327,6 +335,8 @@
              * @val content tabs 标签下的内容
              */
             goto:function(tab){
+                let ext = tab.label.split(".")[1];
+                this.setOptionsMode(ext);
                 let item = this.fileTabs;
                 for (const i in item){
                     if (item[i].label === tab.label) {
@@ -378,6 +388,7 @@
                     this.$notify({type:'success',title:'通知',message:'该文件不支持直接查看'});
                     return false;
                 }
+                this.setOptionsMode(ext);
                 this.showIdea = true;
                 this.activeFileTabName = item.size.toString();
                 let params = {path:item.path},tabs = {};
@@ -392,6 +403,27 @@
                         this.addFileTabs(tabs)
                     }
                 });
+            },
+            /**
+             * TODO:设置编辑器的mode
+             * @param ext
+             */
+            setOptionsMode:function(ext) {
+                switch (ext) {
+                    case 'xml':
+                        this.options.mode = this.mode.xml;
+                        break;
+                    case 'md':
+                        this.options.mode = this.mode.markdown;
+                        break;
+                    case 'json':
+                    case 'lock':
+                        this.options.mode = this.mode.json;
+                        break;
+                    default:
+                        this.options.mode = this.mode.php;
+                        break;
+                }
             },
             /**
              * todo：文件重新命名
