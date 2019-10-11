@@ -41,8 +41,7 @@
                 <el-menu unique-opened background-color="#393d49" text-color="#fff" active-text-color="#ffd04b" :collapse="isCollapse">
                     <el-submenu v-for="(menu,index) in menuLists" :key="index" :index="menu.id.toString()">
                         <template slot="title">
-                            <i class="el-icon-menu" v-if="menu.id!==2"> </i>
-                            <span v-html="menu.name"></span>
+                            <i class="el-icon-menu" v-if="menu.id!==2"> </i>{{menu.name}}
                         </template>
                         <el-menu-item :index="child.id.toString()"  v-for="(child,index) in menu.__child" @click="setAttr(child)" :key="index">
                             <router-link :to="child.href" v-html="child.name" style="color: #fff;"></router-link>
@@ -202,7 +201,7 @@
                 this.chatVisible = !this.chatVisible;
                 if (!this.chatVisible) {
                     this.chatMsgClass = 'el-icon-chat-dot-round';
-                } else {
+                } else if (this.chatVisible) {
                     this.chatMsgClass = 'el-icon-close';
                     //获取聊天记录
                     this.websocketServer.send('{"type":"history","from_client_name":"'+this.username+'","to_client_name":"'+this.to_client_name+'"}');
@@ -490,7 +489,7 @@
         created(){
             this.activeName = this.activeAuthName;
             this.asideHeight = {
-                'min-height':(window.innerHeight - 76)+'px'
+                'min-height':(window.innerHeight - 60)+'px'
             };
             //图片上传参数
             this.avatar_url = this.avatarUrl;
@@ -523,17 +522,37 @@
         color: #333;
         text-align: center;
         line-height: 60px;
+        width: 100%;
+        right: -12px;
+        position: relative;
     }
     .el-footer {
-        background-color: #cccccc;
-        color: #333;
+        background-color: #ccc;
+        color: #fff;
         text-align: center;
         line-height: 60px;
+        position: fixed;
+        left: 187px;
+        right: 0;
+        bottom: 0;
+        z-index: 3000;
+    }
+    .el-main {
+        position: fixed;
+        top: 60px;
+        bottom: 50px;
+        left: 200px;
+        right: 0;
+        z-index: 998;
+        width: auto;
+        overflow-y: auto;
+        box-sizing: border-box;
     }
     .el-aside {
         background-color: #393d49;
         color: #333;
         line-height: 200px;
+        bottom: 0;
     }
     .user-list{
         box-shadow: 0 2px 12px #ffffff, 0 0 6px #F5F5F5;
@@ -629,9 +648,9 @@
         -webkit-border-radius:40px;
         z-index: 20004;
     }
-    .msg-count{
-        position:absolute;
-        right:9px;
-        bottom:54%;
+    .msg-count {
+        position: absolute;
+        right: 9px;
+        bottom: 54%;
     }
 </style>
