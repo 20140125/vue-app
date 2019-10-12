@@ -1,12 +1,7 @@
 <template>
     <el-container>
         <el-header>
-            <el-menu :default-active="activeIndex"
-                     mode="horizontal"
-                     background-color="#393d49"
-                     text-color="#fff"
-                     @select="handleSelect"
-                     active-text-color="#ffd04b" :style="headerStyle">
+            <el-menu :default-active="activeIndex" mode="horizontal" background-color="#393d49" text-color="#fff" active-text-color="#ffd04b" @select="handleSelect" :style="headerStyle">
                 <el-menu-item index="1" @click="hideMenu"> <i :class="menuClass" style="color: #fff;font-size: 25px"> </i></el-menu-item>
                 <el-submenu index="2" style="float: right">
                     <template slot="title">
@@ -38,20 +33,23 @@
         </el-header>
         <el-container>
             <el-aside :width="asideWidth" :style="asideHeight">
-                <el-menu unique-opened background-color="#393d49" text-color="#fff" active-text-color="#ffd04b" :collapse="isCollapse">
+                <el-menu unique-opened  background-color="#393d49" text-color="#fff" active-text-color="#ffd04b" :collapse="isCollapse">
                     <el-submenu v-for="(menu,index) in menuLists" :key="index" :index="menu.id.toString()">
                         <template slot="title">
-                            <i class="el-icon-menu" v-if="menu.id!==2"> </i>{{menu.name}}
+                            <i class="el-icon-menu" v-if="menu.id!==2"> </i>
+                            <span v-html="menu.name"></span>
                         </template>
                         <el-menu-item :index="child.id.toString()"  v-for="(child,index) in menu.__child" @click="setAttr(child)" :key="index">
-                            <router-link :to="child.href" v-html="child.name" style="color: #fff;"></router-link>
+                           <template slot="title">
+                               <span v-html="child.name"></span>
+                           </template>
                         </el-menu-item>
                     </el-submenu>
                 </el-menu>
             </el-aside>
-            <el-container>
+            <el-container direction="vertical">
                 <el-main>
-                    <el-tabs type="border-card" closable  v-model="activeName" @tab-click="goto" @tab-remove="remove" style="text-align: left!important;" v-show="contentVisible">
+                    <el-tabs type="border-card" closable  v-model="activeName" @tab-click="goto" @tab-remove="remove">
                         <el-tab-pane v-for="item in tabs" :label="item.label" :key="item.name" :name="item.name"></el-tab-pane>
                         <el-card shadow="always">
                             <router-view/>
@@ -60,66 +58,61 @@
                 </el-main>
                 <el-footer>
                     ©fl140125@gmail.com 在线人数：{{online}}
-                    <i class="msg-icon" @click="getMsgDialog">
-                        <i :class="chatMsgClass" style="margin-top: 12px">
-                            <el-badge is-dot v-if="msg_dot" type="danger" class="msg-count"></el-badge>
-                        </i>
-                    </i>
                 </el-footer>
-                <!---chat message-->
-                <el-dialog :title="chatTitle"
-                           :center="center"
-                           :show-close="closeModel"
-                           :close-on-press-escape="closeModel"
-                           :visible.sync="chatVisible">
-                    <el-row :gutter="24">
-                        <el-col :span="6" class="user-list">
-                            <el-menu background-color="#393D49" text-color="#fff" active-text-color="#ffd04b">
-                                <el-menu-item @click="sendUser(user,index)" v-for="(user,index) in client_list" :key="index" :index="index">
-                                    <el-avatar :size="50" :src="user.client_img" style="cursor: pointer"></el-avatar>
-                                    <span slot="title" style="margin-left: 20px">{{user.client_name}}</span>
-                                </el-menu-item>
-                            </el-menu>
-                        </el-col>
-                        <el-col :offset="1" :span="17" class="contact-list">
-                            <div id="msg">
-                                <div v-for="(message,index) in messageLists" :key="index" style="margin: 20px">
-                                    <div class="msg-img">
-                                        <el-avatar :size="50" :src="message.avatar_url" style="cursor: pointer"></el-avatar>
-                                        <span style="margin-left: 15px">{{message.from_client_name}}   {{message.time}}</span>
-                                    </div>
-                                    <div class="msg-list" v-html="message.content"></div>
-                                </div>
-                            </div>
-                            <div class="input-msg">
-                                <emotion @clickEmotion="getEmotion" v-show="showEmotion" :height="300"></emotion>
-                                <div style="float: left">
-                                    <el-tooltip effect="dark" content="发送表情" placement="top-start">
-                                        <i  @click="showEmotion = !showEmotion" class="el-icon-picture-outline-round icon"></i>
-                                    </el-tooltip>
-                                    <el-upload :action="cgi.uploadUrl"
-                                               :data="fileData"
-                                               :headers="headers"
-                                               :show-file-list="false"
-                                               :on-success="uploadSuccess"
-                                               :before-upload="beforeUpload" style="float: left">
-                                        <el-tooltip effect="dark" content="发送文件和图片" placement="top-start">
-                                            <i class="el-icon-picture-outline icon"></i>
-                                        </el-tooltip>
-                                    </el-upload>
-                                </div>
-                                <el-input type="textarea" ref="message" id="content" @focus="showEmotion = false" v-model="inputMsg" resize="none" rows="4"></el-input>
-                            </div>
-                            <div class="input-button" style="text-align: right">
-                                <el-button type="primary" plain size="medium" @click="sendMsg">发 送</el-button>
-                            </div>
-                        </el-col>
-                    </el-row>
-                </el-dialog>
-                <!---chat message-->
-
+                <i class="msg-icon" @click="getMsgDialog">
+                    <i :class="chatMsgClass" style="margin:13px 15px;">
+                        <el-badge is-dot v-if="msg_dot" type="danger" class="msg-count"></el-badge>
+                    </i>
+                </i>
             </el-container>
         </el-container>
+        <!---chat message-->
+        <el-dialog :title="chatTitle" :center="center" :show-close="closeModel" :close-on-press-escape="closeModel" :visible.sync="chatVisible">
+            <el-row :gutter="24">
+                <el-col :span="6" class="user-list">
+                    <el-menu background-color="#393D49" text-color="#fff" active-text-color="#ffd04b">
+                        <el-menu-item @click="sendUser(user,index)" v-for="(user,index) in client_list" :key="index" :index="index">
+                            <el-avatar :size="50" :src="user.client_img" style="cursor: pointer"></el-avatar>
+                            <span slot="title" style="margin-left: 20px">{{user.client_name}}</span>
+                        </el-menu-item>
+                    </el-menu>
+                </el-col>
+                <el-col :offset="1" :span="17" class="contact-list">
+                    <div id="msg">
+                        <div v-for="(message,index) in messageLists" :key="index" style="margin: 20px">
+                            <div class="msg-img">
+                                <el-avatar :size="50" :src="message.avatar_url" style="cursor: pointer"></el-avatar>
+                                <span style="margin-left: 15px">{{message.from_client_name}}   {{message.time}}</span>
+                            </div>
+                            <div class="msg-list" v-html="message.content"></div>
+                        </div>
+                    </div>
+                    <div class="input-msg">
+                        <emotion @clickEmotion="getEmotion" v-show="showEmotion" :height="300"></emotion>
+                        <div style="float: left">
+                            <el-tooltip effect="dark" content="发送表情" placement="top-start">
+                                <i  @click="showEmotion = !showEmotion" class="el-icon-picture-outline-round icon"></i>
+                            </el-tooltip>
+                            <el-upload :action="cgi.uploadUrl"
+                                       :data="fileData"
+                                       :headers="headers"
+                                       :show-file-list="false"
+                                       :on-success="uploadSuccess"
+                                       :before-upload="beforeUpload" style="float: left">
+                                <el-tooltip effect="dark" content="发送文件和图片" placement="top-start">
+                                    <i class="el-icon-picture-outline icon"></i>
+                                </el-tooltip>
+                            </el-upload>
+                        </div>
+                        <el-input type="textarea" ref="message" id="content" @focus="showEmotion = false" v-model="inputMsg" resize="none" rows="4"></el-input>
+                    </div>
+                    <div class="input-button" style="text-align: right">
+                        <el-button type="primary" plain size="medium" @click="sendMsg">发 送</el-button>
+                    </div>
+                </el-col>
+            </el-row>
+        </el-dialog>
+        <!---chat message-->
     </el-container>
 </template>
 
@@ -139,9 +132,7 @@
                 activeIndex:'1',
                 menuClass:'el-icon-s-unfold',
                 asideWidth:"200px",
-                asideHeight:{
-                    'min-height':(window.innerHeight - 60)+'px'
-                },
+                asideHeight:{},
                 headerStyle:{
                     'margin-left':'200px',
                 },
@@ -177,7 +168,7 @@
             emotion
         },
         computed:{
-            ...mapGetters(['tabs','token','username','activeAuthName','contentVisible','menuLists','socketServer','avatarUrl','websocketServer']),
+            ...mapGetters(['tabs','token','username','activeAuthName','menuLists','socketServer','avatarUrl','websocketServer']),
         },
         methods:{
             ...mapActions(['addTabs','deleteTabs','addCurrTabs','logoutSystem','getAuthMenu']),
@@ -190,9 +181,7 @@
                 this.activeName = params.name;
                 this.addCurrTabs(params);
                 this.addTabs(params);
-                this.asideHeight = {
-                    'min-height':(window.innerHeight - 60)+'px'
-                };
+                this.$router.push({path:params.name});
             },
             /**
              * TODO:弹出框展示
@@ -201,7 +190,7 @@
                 this.chatVisible = !this.chatVisible;
                 if (!this.chatVisible) {
                     this.chatMsgClass = 'el-icon-chat-dot-round';
-                } else if (this.chatVisible) {
+                } else {
                     this.chatMsgClass = 'el-icon-close';
                     //获取聊天记录
                     this.websocketServer.send('{"type":"history","from_client_name":"'+this.username+'","to_client_name":"'+this.to_client_name+'"}');
@@ -300,11 +289,11 @@
                 ws.onmessage = function(response){
                     let data = JSON.parse(response.data);
                     switch (data['type']) {
-                            //心跳
+                      //心跳
                         case 'ping':
                             ws.send('{"type":"pong"}');
                             break;
-                            //登陆
+                      //登陆
                         case 'login':
                             __this.client_list = {};
                             if(data['client_list']) {
@@ -313,11 +302,11 @@
                                 __this.client_list[data['client_id']] = data['client_name'];
                             }
                             break;
-                            //发送消息
+                      //发送消息
                         case 'say':
                             __this.say(data);
                             break;
-                            //聊天记录
+                      //聊天记录
                         case 'history':
                             for (let i in data.message) {
                                 data.message[i]['content'] = __this.setContent(data.message[i]['content'],data.message[i]['msg_type'])
@@ -501,11 +490,11 @@
             let __this = this;
             //键盘事件
             document.onkeydown = function (e) {
-               if (e.code === 'Enter') {
-                   e.preventDefault();
-                   __this.sendMsg();
-                   return false;
-               }
+                if (e.code === 'Enter') {
+                    e.preventDefault();
+                    __this.sendMsg();
+                    return false;
+                }
             }
         },
         mounted() {
@@ -522,37 +511,26 @@
         color: #333;
         text-align: center;
         line-height: 60px;
-        width: 100%;
-        right: -12px;
-        position: relative;
     }
     .el-footer {
-        background-color: #ccc;
-        color: #fff;
+        background-color: #cccccc;
+        color: #333;
         text-align: center;
         line-height: 60px;
+        /*固定底部布局*/
         position: fixed;
-        left: 187px;
-        right: 0;
+        width: 100%;
+        height: 100%;
         bottom: 0;
-        z-index: 3000;
-    }
-    .el-main {
-        position: fixed;
-        top: 60px;
-        bottom: 50px;
-        left: 200px;
-        right: 0;
-        z-index: 998;
-        width: auto;
-        overflow-y: auto;
-        box-sizing: border-box;
+        z-index:1
     }
     .el-aside {
         background-color: #393d49;
         color: #333;
         line-height: 200px;
-        bottom: 0;
+    }
+    .el-main{
+        margin-bottom: 60px;
     }
     .user-list{
         box-shadow: 0 2px 12px #ffffff, 0 0 6px #F5F5F5;
@@ -648,9 +626,9 @@
         -webkit-border-radius:40px;
         z-index: 20004;
     }
-    .msg-count {
-        position: absolute;
-        right: 9px;
-        bottom: 54%;
+    .msg-count{
+        position:absolute;
+        right:9px;
+        bottom:54%;
     }
 </style>
