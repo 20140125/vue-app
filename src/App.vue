@@ -1,7 +1,5 @@
 <template>
-    <div id="app">
-        <router-view></router-view>
-    </div>
+    <router-view :class="ClassName"></router-view>
 </template>
 
 <script>
@@ -14,7 +12,8 @@
         },
         data(){
             return {
-                isRouterAlive:true,
+                ClassName:'clear_box',
+                isRouterAlive:true
             }
         },
         methods:{
@@ -29,11 +28,15 @@
 </script>
 
 <style>
+    .clear_box{
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow-x: hidden !important;
+    }
     body{
         margin: 0 !important;
-        overflow-x: hidden;
-    }
-    #app {
+        padding: 0 !important;
+        overflow-x: hidden !important;
         font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -43,6 +46,7 @@
         border: 1px solid #eee;
         min-height: 300px;
         height: auto !important;
+        z-index: 1;
     }
     .CodeMirror-scroll {
         height: auto;
@@ -78,27 +82,29 @@
         background-color: #1b1e21 !important;
         color: #fff !important;
     }
-    /* 设置滚动条的样式 */
+    /* 滚动槽 */
     ::-webkit-scrollbar {
-        -webkit-box-shadow:inset 0 0 3px rgb(121, 85, 72);
+        -webkit-box-shadow:inset 0 0 5px rgb(255, 255, 255);
         opacity:0.3;
         width:5px;
     }
     /* 滚动槽 */
     ::-webkit-scrollbar-track {
-        -webkit-box-shadow:inset 0 0 3px rgb(121, 85, 72);
+        -webkit-box-shadow:inset 0 0 5px rgb(255, 255, 255);
         opacity:0.3;
         border-radius:5px;
     }
     /* 滚动条滑块 */
     ::-webkit-scrollbar-thumb {
         border-radius:5px;
-        background: rgb(121, 85, 72);
+        background: rgb(255, 211, 224);
         opacity:0.3;
-        -webkit-box-shadow:inset 0 0 3px rgba(0,0,0,0.5);
+        -webkit-box-shadow:inset 0 0 5px rgb(255, 211, 224);
     }
+    /* 滚动条滑块 */
     ::-webkit-scrollbar-thumb:window-inactive {
-        background: rgb(121, 85, 72);
+        background: rgb(255, 211, 224);
         opacity:0.3;
+        border-radius:5px;
     }
 </style>

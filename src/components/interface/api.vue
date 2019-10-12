@@ -169,8 +169,9 @@
                     theme:'monokai',
                     //智能提示
                     extraKeys:{"Ctrl-Space":"autocomplete"},//ctrl-space唤起智能提示
+                    //自动换行
+                    lineWrapping:false,
                     //代码折叠
-                    lineWrapping:true,
                     foldGutter: true,
                     gutters:["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
                     //在缩进时，是否需要把 n*tab宽度个空格替换成n个tab字符，默认为false

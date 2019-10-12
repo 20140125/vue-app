@@ -26,7 +26,7 @@
                 </el-menu-item>
                 <el-menu-item index="4"  style="float: right">
                     <a href="https://gitee.com/f_longer/vue-app" target="_blank">
-                        <img src="https://gitee.com/f_longer/longer/widgets/widget_6.svg?color=C71D24" alt="gitee"/>
+                        <img src="https://gitee.com/f_longer/longer/widgets/widget_5.svg?color=C71D24" alt="gitee"/>
                     </a>
                 </el-menu-item>
             </el-menu>
@@ -522,7 +522,7 @@
         width: 100%;
         height: 100%;
         bottom: 0;
-        z-index:1
+        z-index:2
     }
     .el-aside {
         background-color: #393d49;
