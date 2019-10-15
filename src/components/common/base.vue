@@ -181,6 +181,9 @@
                 this.activeName = params.name;
                 this.addCurrTabs(params);
                 this.addTabs(params);
+                this.asideHeight = {
+                    'min-height':(window.innerHeight - 60)+'px'
+                };
                 this.$router.push({path:params.name});
             },
             /**
@@ -499,6 +502,10 @@
         },
         mounted() {
             this.$nextTick(function () {
+                let params = {label:this.$route.meta.title,name:this.$route.path};
+                this.activeName = params.name;
+                this.addCurrTabs(params);
+                this.addTabs(params)
                 this.getAuthMenu();
                 this.webPush();
             });

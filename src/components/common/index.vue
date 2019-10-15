@@ -3,26 +3,28 @@
         <el-col :span="12">
             <div id="charts" style="height: 500px"></div>
         </el-col>
-        <el-col :span="12"><div class="block">
-            <div class="radio">
-                <el-radio-group v-model="reverse">
-                    <el-radio :label="true">倒序</el-radio>
-                    <el-radio :label="false">正序</el-radio>
-                </el-radio-group>
-            </div>
+        <el-col :span="12">
+            <div class="block">
+                <div class="radio">
+                    <el-radio-group v-model="reverse">
+                        <el-radio :label="true">倒序</el-radio>
+                        <el-radio :label="false">正序</el-radio>
+                    </el-radio-group>
+                </div>
 
-            <el-timeline :reverse="reverse">
-                <el-timeline-item
-                    v-for="(activity, index) in activities"
-                    :key="index"
-                    :type="activity.type"
-                    placement="top"
-                    :color="activity.color"
-                    :timestamp="activity.timestamp">
-                    <el-card>{{activity.content}}</el-card>
-                </el-timeline-item>
-            </el-timeline>
-        </div></el-col>
+                <el-timeline :reverse="reverse">
+                    <el-timeline-item
+                        v-for="(activity, index) in activities"
+                        :key="index"
+                        :type="activity.type"
+                        placement="top"
+                        :color="activity.color"
+                        :timestamp="activity.timestamp">
+                        <el-card>{{activity.content}}</el-card>
+                    </el-timeline-item>
+                </el-timeline>
+            </div>
+        </el-col>
     </el-row>
 </template>
 <script>

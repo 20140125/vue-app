@@ -55,32 +55,32 @@
         overflow-y: hidden;
         overflow-x: auto;
     }
-    .menu__item {
-        display: block;
-        text-align: center;
-        margin-top: 10px;
-        margin-right: 33px;
+    .CodeMirror-hscrollbar{
+        left: 0 !important;
+        height:9px !important;
     }
     .menu {
-        padding-bottom: 10px;
         z-index:100;
         position: absolute;
         border-radius: 5px;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
         border: 1px solid #393D49;
         color: #606266;
         background-color: #393D49;
     }
     #menu li:hover {
-        background-color: #ffffff;
-        color: #606266;
+        background-color: #393D49;
+        color: #ffd04b !important;
         cursor: pointer;
     }
     a:link{
         text-decoration: none;
     }
-    .code .el-input__inner{
-        background-color: #1b1e21 !important;
-        color: #fff !important;
+    .el-card{
+        border-radius: 15px;
+        -webkit-border-radius: 15px;
+        -moz-border-radius: 15px;
     }
     /* 滚动槽 */
     ::-webkit-scrollbar {
@@ -90,7 +90,7 @@
     }
     /* 滚动槽 */
     ::-webkit-scrollbar-track {
-        -webkit-box-shadow:inset 0 0 5px rgb(255, 255, 255);
+        -webkit-box-shadow:inset 0 0 0 rgb(255, 255, 255);
         opacity:0.3;
         border-radius:5px;
     }

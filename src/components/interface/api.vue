@@ -1,6 +1,7 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText">
         <el-row :gutter="24">
+            <!--分类列表-->
             <el-col :xl="{'span':4}" :lg="{'span':4}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" style="margin-bottom: 20px">
                 <el-input placeholder="输入关键字搜索" v-model="filterText" style="margin-bottom: 20px"></el-input>
                 <el-tree :props="props"
@@ -15,15 +16,8 @@
                          style="background-color: #393d49">
                 </el-tree>
             </el-col>
-
-            <div v-show="menuVisible">
-                <ul id="menu" class="menu">
-                    <li class="menu__item" @click="addCategory"><i class="el-icon-circle-plus-outline"></i> 添 加</li>
-                    <li class="menu__item" @click="updateCategory"><i class="el-icon-edit-outline"></i> 修 改</li>
-                    <li class="menu__item" @click="deleteCategory"><i class="el-icon-delete-solid"></i> 删 除</li>
-                </ul>
-            </div>
-
+            <!--分类列表-->
+            <!--接口详情-->
             <el-col :xl="{'span':19,'push':1}" :lg="{'span':19,'push':1}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" v-show="apiVisible">
                 <el-tabs type="border-card" v-model="apiName">
                     <el-tab-pane :label="apiName" :key="apiName" :name="apiName"></el-tab-pane>
@@ -83,12 +77,21 @@
                     </el-card>
                 </el-tabs>
             </el-col>
+            <!--接口详情-->
         </el-row>
-
+        <!--右键弹框-->
+        <div v-show="menuVisible">
+            <el-menu id="menu" class="menu" style="border-bottom: solid 1px #393d49" background-color="#393d49" text-color="#cccccc" mode="horizontal" active-text-color="#ffd04b">
+                <el-menu-item @click="addCategory"><i class="el-icon-circle-plus-outline"></i>添 加</el-menu-item>
+                <el-menu-item @click="updateCategory"><i class="el-icon-edit-outline"></i>修 改</el-menu-item>
+                <el-menu-item @click="deleteCategory"><i class="el-icon-delete-solid"></i>删 除</el-menu-item>
+            </el-menu>
+        </div>
+        <!--右键弹框-->
         <!---接口分类弹框-->
         <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal"  :center="center">
             <el-form :label-width="labelWidth" :model="categoryModel" :ref="reFrom" :rules="rules">
-                <el-form-item label="接口名称" prop="name">
+                <el-form-item label="接口名称" prop="name" required>
                     <el-input v-model="categoryModel.name" placeholder="分类名称"></el-input>
                 </el-form-item>
                 <el-form-item label="接口上级" prop="pid">
@@ -107,6 +110,7 @@
 
 <script>
     import apiLists from '../../api/api';
+    import func from '../../api/func'
     import $url from '../../api/url';
     import Radio from "../common/Radio";
     import Delete from "../common/Delete";
@@ -221,6 +225,8 @@
                     desc:[{required:true,message:'请输入接口描述', trigger: 'blur'},],
                     response_string:[{required:true,message:'请输入返回参数', trigger: 'blur'},],
                 },
+                //滚动条高度
+                scrollTop:0
             }
         },
         watch: {
@@ -280,9 +286,10 @@
                 this.menuVisible = false;
                 this.menuVisible = true;
                 const menu = document.querySelector('#menu');
+                this.scrollTop = func.get_scroll_top();
                 document.addEventListener('click', this.foo);
-                menu.style.left = '275px';
-                menu.style.top = MouseEvent.screenY - 185 + 'px';
+                menu.style.left = '290px';
+                menu.style.top = MouseEvent.clientY + this.scrollTop - 125 + 'px';
                 this.categoryModel = object;
             },
             /**
