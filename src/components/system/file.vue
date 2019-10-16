@@ -104,7 +104,6 @@
     require('codemirror/mode/php/php.js');
     require('codemirror/mode/markdown/markdown.js');
     require('codemirror/mode/xml/xml.js');
-    require('codemirror/mode/xml/xml.js');
     require('codemirror/addon/hint/javascript-hint.js');
     require('codemirror/mode/javascript/javascript.js');
     require('codemirror/addon/selection/active-line');
@@ -183,6 +182,8 @@
                     autoRefresh: true,
                     //设置光标所在行高亮
                     styleActiveLine:true,
+                    //只读
+                    readOnly:true,
                 },
                 //展示自定义右键菜单
                 menuVisible:false,
@@ -257,7 +258,7 @@
             }
         },
         computed:{
-            ...mapGetters(['fileTabs','currFileObj','token']),
+            ...mapGetters(['fileTabs','currFileObj','token','username']),
         },
         methods:{
             ...mapActions(['addFileTabs','deleteFileTabs','addCurrFileObj','saveSystemLog']),
@@ -718,6 +719,9 @@
             if (this.activeFileTabName === null){
                 this.fileModel.content = '';
                 this.showIdea = false; //隐藏编辑器
+            }
+            if (this.username === 'admin') {
+                this.options.readOnly = false;
             }
         },
         mounted() {
