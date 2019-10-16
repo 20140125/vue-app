@@ -3,6 +3,7 @@
                :data="fileData"
                :headers="headers"
                :show-file-list="false"
+               :index="index"
                :on-success="uploadSuccess"
                :before-upload="beforeUpload">
         <el-avatar :src="avatar_url" :alt="username" fit="cover" :size="size"></el-avatar>
@@ -20,6 +21,10 @@
             size:{
                 type:[Number,String],
                 default:100
+            },
+            index:{
+                type:[Number,String],
+                default:1
             }
         },
         data(){
