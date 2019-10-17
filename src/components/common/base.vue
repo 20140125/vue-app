@@ -12,7 +12,7 @@
                     <el-menu-item index="2-2"><i class="el-icon-upload2"> </i> 退出系统</el-menu-item>
                 </el-submenu>
                 <el-menu-item index="3" style="float: right">
-                    <el-dropdown trigger="click" @command="readNotice">
+                    <el-dropdown trigger="hover" @command="readNotice">
                         <i class="el-icon-message-solid" style="color: #fff;font-size: 22px"> </i>
                         <el-badge :value="noticeLength" style="margin-top: -30px;margin-left: -18px" v-if="noticeLength"/>
                         <el-dropdown-menu slot="dropdown">
