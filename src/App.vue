@@ -59,6 +59,11 @@
         left: 0 !important;
         height:9px !important;
     }
+    .el-dialog{
+        border-radius: 10px;
+        -moz-border-radius: 10px;
+        -webkit-border-radius: 10px;
+    }
     .menu {
         z-index:100;
         position: absolute;

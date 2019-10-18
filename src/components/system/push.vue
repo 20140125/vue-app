@@ -12,7 +12,7 @@
             <el-table-column label="#" prop="id" width="100px"></el-table-column>
             <el-table-column label="目标用户" prop="username" width="120px"> </el-table-column>
             <el-table-column label="推送类型" prop="title" width="150px"> </el-table-column>
-            <el-table-column label="推送内容" prop="info"> </el-table-column>
+            <el-table-column label="推送内容" prop="info" :show-overflow-tooltip="true"> </el-table-column>
             <el-table-column label="实时" width="80px"  :filters="[{ text: '是', value: '1' }, { text: '否', value: '2' }]"
                              :filter-method="filterStatus">
                 <template slot-scope="scope">
@@ -67,7 +67,7 @@
                     <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" v-model="pushModel.created_at" style="width: 100%"></el-date-picker>
                 </el-form-item>
                 <el-form-item label="消息" prop="info">
-                    <el-input v-model="pushModel.info" placeholder="推送消息" type="textarea"></el-input>
+                    <el-input v-model="pushModel.info" placeholder="推送消息" type="textarea" resize="none" rows="4"></el-input>
                 </el-form-item>
                 <el-form-item label="实时推送" prop="status">
                     <el-radio-group v-model="pushModel.status" size="small">
