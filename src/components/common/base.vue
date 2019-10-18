@@ -49,9 +49,9 @@
             </el-aside>
             <el-container direction="vertical">
                 <el-main>
-                    <el-carousel :interval="4000" height="200px" v-if="noticeLength">
-                        <el-carousel-item v-for="item in 6" :key="item">
-                            <h3 class="medium">{{ item }}</h3>
+                    <el-carousel :interval="3500" arrow="never" height="50px" direction="vertical" indicator-position="none" v-if="noticeArr.length>0">
+                        <el-carousel-item v-for="(item,index) in noticeArr" :key="index">
+                            <el-alert type="success" show-icon :title="item.message" effect="light" @close="closeNotice(item)"></el-alert>
                         </el-carousel-item>
                     </el-carousel>
                     <el-tabs type="border-card" closable lazy v-model="activeName" @tab-click="goto" @tab-remove="remove">
@@ -174,6 +174,7 @@
                 roomLists:[
                     {room_id:'1',room_name:'谈笑风生'},
                 ],
+                noticeArr:[],
             }
         },
         components:{
@@ -500,7 +501,7 @@
                 });
                 // 服务端（http）推送站内通知信息
                 this.socketServer.on('new_msg', (msg)=>{
-                    this.$notify({ title: '站内通知', message: msg, position: 'top-right', type:'success', duration:0 });
+                    this.noticeArr.push({time:func.get_timestamp(),message:msg})
                 });
                 //用户站内通知
                 this.socketServer.on('notice',(response)=>{
@@ -519,6 +520,13 @@
                 this.socketServer.on('online',(response)=>{
                     this.online = response;
                 });
+            },
+            /**
+             * TODO:移除通知
+             * @param item
+             */
+            closeNotice:function(item){
+                this.noticeArr.splice(this.noticeArr.indexOf(item.time),1);
             },
             /**
              * TODO:滚动条滚动到底部
