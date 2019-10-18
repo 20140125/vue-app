@@ -79,10 +79,16 @@
                             text: '数据统计'
                         },
                         tooltip: {
-                            trigger: 'axis'
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'cross',
+                                label: {
+                                    backgroundColor: '#6a7985'
+                                }
+                            }
                         },
                         legend: {
-                            data:['系统日志','站内通知','授权用户']
+                            data:['授权用户','站内通知','系统日志']
                         },
                         grid: {
                             left: '3%',
@@ -97,7 +103,7 @@
                         },
                         xAxis: {
                             type: 'category',
-                            boundaryGap: true,
+                            boundaryGap: false,
                             data: this.xAxisData
                         },
                         yAxis: {
@@ -105,22 +111,25 @@
                         },
                         series: [
                             {
-                                name:'系统日志',
+                                name:'授权用户',
                                 type:'line',
                                 stack: '总量',
-                                data:this.seriesData.log
+                                areaStyle: {normal: {}},
+                                data:this.seriesData.oauth
                             },
                             {
                                 name:'站内通知',
-                                type:'bar',
+                                type:'line',
                                 stack: '总量',
+                                areaStyle: {normal: {}},
                                 data:this.seriesData.notice
                             },
                             {
-                                name:'授权用户',
-                                type:'bar',
+                                name:'系统日志',
+                                type:'line',
                                 stack: '总量',
-                                data:this.seriesData.oauth
+                                areaStyle: {normal: {}},
+                                data:this.seriesData.log
                             }
                         ]
                     });

@@ -166,6 +166,9 @@
                 chatMsgClass:'el-icon-chat-dot-round',
                 msg_dot:false,
                 room_id:'1',
+                roomLists:[
+                    {room_id:'1',room_name:'谈笑风生'},
+                ],
             }
         },
         components:{

@@ -45,9 +45,9 @@
 
         <!---配置值弹框-->
         <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
-            <el-form :label-width="labelWidth" :model="configModel" :ref="reFrom" :rules="rules">
+            <el-form :label-width="labelWidth" :model="configValModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="配置名称" prop="name" v-show="!show">
-                    <el-input v-model="configModel.name" placeholder="配置名称"></el-input>
+                    <el-input v-model="configValModel.name" placeholder="配置名称"></el-input>
                 </el-form-item>
                 <el-form-item label="配置健" v-show="show">
                     <el-input v-model="configVal.name" placeholder="配置内容"></el-input>
@@ -56,14 +56,14 @@
                     <el-input v-model="configVal.value" placeholder="配置内容"></el-input>
                 </el-form-item>
                 <el-form-item label="配置状态" prop="status">
-                    <el-radio-group v-model="configModel.status" size="small">
+                    <el-radio-group v-model="configValModel.status" size="small">
                         <el-radio-button label="2">关闭</el-radio-button>
                         <el-radio-button label="1">开启</el-radio-button>
                     </el-radio-group>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer" v-show="showBtn">
-                <Submit :reFrom="reFrom" :model="configModel" :url="url" :refs="refs" v-on:success="success"></Submit>
+                <Submit :reFrom="reFrom" :model="configValModel" :url="url" :refs="refs" v-on:success="success"></Submit>
             </div>
         </el-dialog>
         <!---配置值弹框-->
@@ -75,7 +75,7 @@
                     <el-input v-model="configModel.name" placeholder="配置名称"></el-input>
                 </el-form-item>
                 <el-form-item label="配置值" prop="value">
-                    <codemirror ref="edit" @change="updateContent"  :value="configModel.value" :options="options" style="line-height: 20px"></codemirror>
+                    <codemirror ref="edit" @change="updateContent" :value="configModel.value" :options="options" style="line-height: 20px"></codemirror>
                 </el-form-item>
                 <el-form-item label="配置状态" prop="status">
                     <el-radio-group v-model="configModel.status" size="small">
@@ -139,6 +139,7 @@
                 refs:this.$refs,
                 reFrom:'config',
 
+                configValModel:{},
                 configModel:{},
                 configVal:{},
 
@@ -228,14 +229,19 @@
                 this.getConfigLists(this.page,this.limit)
             },
             /**
-             * 修改配置
+             * TODO:修改配置
+             * @param item
              */
             updateConfig:function(item) {
                 this.title='修改配置';
-                this.syncConfigVisible = true;
                 this.configModel = item;
                 this.url = this.cgi.update;
+                this.syncConfigVisible = true;
             },
+            /**
+             * TODO:编辑器修改值
+             * @param content
+             */
             updateContent:function(content) {
                 this.configModel.value = content;
             },
@@ -244,7 +250,6 @@
              */
             addConfig:function () {
                 this.title='添加配置';
-                this.syncVisible = true;
                 this.configModel = {
                     name:'',
                     status:1,
@@ -252,6 +257,7 @@
                 }
                 this.show = false;
                 this.showBtn = true;
+                this.syncVisible = true;
                 this.url = this.cgi.insert;
             },
             /**
@@ -259,14 +265,14 @@
              * @param item
              */
             setConfigVal:function (item) {
-                this.title='设置【'+item.name+'】配置';
                 this.configVal = { name:'', value:'', status:1, id:1 };
+                this.configValModel = item;
+                this.configVal.status = this.configValModel.status;
+                this.configValModel.value = this.configVal;
+                this.title='设置【'+item.name+'】配置值';
                 this.show = true;
                 this.showBtn = true;
                 this.syncVisible = true;
-                this.configModel = item;
-                this.configVal.status = this.configModel.status;
-                this.configModel.value = this.configVal;
                 this.url = this.cgi.update;
             },
             /**
@@ -275,12 +281,12 @@
              */
             getConfigVal:function(item){
                 this.title='查看配置值';
+                this.configValModel = item;
+                this.configVal.name = item.name;
+                this.configVal.value = item.value;
                 this.show = true;
                 this.showBtn = false;
                 this.syncVisible = true;
-                this.configModel = item;
-                this.configVal.name = item.name;
-                this.configVal.value = item.value;
             },
             /**
              * todo：移除配置值

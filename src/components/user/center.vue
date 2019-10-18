@@ -45,7 +45,7 @@
                                 <el-cascader :props="props" :options="options" filterable v-model="userCenter.ip_address" style="width: 100%"></el-cascader>
                             </el-form-item>
                             <el-form-item label="座右铭" prop="desc">
-                                <el-input type="textarea" resize="none" rows="4" show-word-limit maxlength="128" v-model="userCenter.desc" placeholder="座右铭/个人介绍"/>
+                                <el-input type="textarea" resize="none" rows="4" show-word-limit maxlength="128" v-model="userCenter.desc" placeholder="这个人很懒，什么也没有留下"/>
                             </el-form-item>
                             <el-form-item label="个人标签" prop="tags">
                                 <el-tag style="margin-left: 10px" :key="tag" v-for="tag in userCenter.tags" closable :disable-transitions="false" @close="handleClose(tag)">
