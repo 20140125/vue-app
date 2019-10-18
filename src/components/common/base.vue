@@ -49,6 +49,11 @@
             </el-aside>
             <el-container direction="vertical">
                 <el-main>
+                    <el-carousel :interval="4000" height="200px" v-if="noticeLength">
+                        <el-carousel-item v-for="item in 6" :key="item">
+                            <h3 class="medium">{{ item }}</h3>
+                        </el-carousel-item>
+                    </el-carousel>
                     <el-tabs type="border-card" closable lazy v-model="activeName" @tab-click="goto" @tab-remove="remove">
                         <el-tab-pane v-for="item in tabs" :label="item.label" :key="item.name" :name="item.name"></el-tab-pane>
                         <el-card shadow="always">
