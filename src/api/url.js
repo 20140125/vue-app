@@ -14,6 +14,8 @@ let url={
     userSave:'/v1/user/save',
     userUpdate:'/v1/user/update',
     userDelete:'/v1/user/delete',
+    userCenter:'/v1/user/center',
+    saveUserCenter:'/v1/center/save',
     //系统日志操作接口
     logLists:'/v1/log/index',
     logSave:'/v1/log/save',
@@ -65,11 +67,11 @@ let url={
     fileDecompression:'/v1/file/unzip',
     imagePreview:'/v1/image/preview',
     //城市地区
-    areaLists:'/v1/area/index',
+    areaIndex:'/v1/area/index',
+    areaLists:'/v1/area/lists',
     areaWeather:'/v1/area/weather',
     //聊天记录
     chatHistory:'/v1/chat/history',
-    //聊天记录
     emotionLists:'/v1/emotion/index',
     //推送列表
     pushList:'/v1/push/index',

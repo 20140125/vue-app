@@ -1,7 +1,32 @@
 <template>
-    <div id="charts" style="width: 100%;height: 600px"></div>
-</template>
+    <el-row :gutter="24">
+        <el-col :span="12">
+            <div id="charts" style="height: 500px"></div>
+        </el-col>
+        <el-col :span="12">
+            <div class="block">
+                <div class="radio">
+                    <el-radio-group v-model="reverse">
+                        <el-radio :label="true">倒序</el-radio>
+                        <el-radio :label="false">正序</el-radio>
+                    </el-radio-group>
+                </div>
 
+                <el-timeline :reverse="reverse">
+                    <el-timeline-item
+                        v-for="(activity, index) in activities"
+                        :key="index"
+                        :type="activity.type"
+                        placement="top"
+                        :color="activity.color"
+                        :timestamp="activity.timestamp">
+                        <el-card>{{activity.content}}</el-card>
+                    </el-timeline-item>
+                </el-timeline>
+            </div>
+        </el-col>
+    </el-row>
+</template>
 <script>
     import echarts from 'echarts'
     import { mapMutations,mapGetters } from 'vuex'
@@ -17,6 +42,8 @@
                     notice:[],
                     oauth:[],
                 },
+                reverse: false,
+                activities:require('../../assets/timeline.json'),
             }
         },
         computed:{
@@ -52,10 +79,16 @@
                             text: '数据统计'
                         },
                         tooltip: {
-                            trigger: 'axis'
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'cross',
+                                label: {
+                                    backgroundColor: '#6a7985'
+                                }
+                            }
                         },
                         legend: {
-                            data:['系统日志','站内通知','授权用户']
+                            data:['授权用户','站内通知','系统日志']
                         },
                         grid: {
                             left: '3%',
@@ -70,7 +103,7 @@
                         },
                         xAxis: {
                             type: 'category',
-                            boundaryGap: true,
+                            boundaryGap: false,
                             data: this.xAxisData
                         },
                         yAxis: {
@@ -78,22 +111,25 @@
                         },
                         series: [
                             {
-                                name:'系统日志',
+                                name:'授权用户',
                                 type:'line',
                                 stack: '总量',
-                                data:this.seriesData.log
+                                areaStyle: {normal: {}},
+                                data:this.seriesData.oauth
                             },
                             {
                                 name:'站内通知',
-                                type:'bar',
+                                type:'line',
                                 stack: '总量',
+                                areaStyle: {normal: {}},
                                 data:this.seriesData.notice
                             },
                             {
-                                name:'授权用户',
-                                type:'bar',
+                                name:'系统日志',
+                                type:'line',
                                 stack: '总量',
-                                data:this.seriesData.oauth
+                                areaStyle: {normal: {}},
+                                data:this.seriesData.log
                             }
                         ]
                     });
@@ -104,5 +140,7 @@
 </script>
 
 <style scoped>
-
+    .radio{
+        margin-bottom: 30px;
+    }
 </style>

@@ -1,17 +1,42 @@
 <template>
-    <div id="app">
-        <router-view></router-view>
-    </div>
+    <router-view :class="ClassName"></router-view>
 </template>
 
 <script>
     export default {
-        name: 'App'
+        name: 'App',
+        provide(){
+            return {
+                reload:this.reload,
+            }
+        },
+        data(){
+            return {
+                ClassName:'clear_box',
+                isRouterAlive:true
+            }
+        },
+        methods:{
+            reload:function () {
+                this.isRouterAlive = false;
+                this.$nextTick(function () {
+                    this.isRouterAlive = true;
+                })
+            }
+        }
     }
 </script>
 
 <style>
-    #app {
+    .clear_box{
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow-x: hidden !important;
+    }
+    body{
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow-x: hidden !important;
         font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -21,6 +46,7 @@
         border: 1px solid #eee;
         min-height: 300px;
         height: auto !important;
+        z-index: 1;
     }
     .CodeMirror-scroll {
         height: auto;
@@ -29,49 +55,61 @@
         overflow-y: hidden;
         overflow-x: auto;
     }
-    .menu__item {
-        display: block;
-        text-align: center;
-        margin-top: 10px;
-        margin-right: 33px;
+    .CodeMirror-hscrollbar{
+        left: 0 !important;
+        height:9px !important;
+    }
+    .el-dialog{
+        border-radius: 10px;
+        -moz-border-radius: 10px;
+        -webkit-border-radius: 10px;
     }
     .menu {
-        padding-bottom: 10px;
         z-index:100;
         position: absolute;
         border-radius: 5px;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
         border: 1px solid #393D49;
         color: #606266;
         background-color: #393D49;
     }
     #menu li:hover {
-        background-color: #ffffff;
-        color: #606266;
+        background-color: #393D49;
+        color: #ffd04b !important;
         cursor: pointer;
     }
     a:link{
         text-decoration: none;
     }
-    .code .el-input__inner{
-        background-color: #1b1e21 !important;
-        color: #fff !important;
+    .el-card{
+        border-radius: 15px;
+        -webkit-border-radius: 15px;
+        -moz-border-radius: 15px;
     }
-    /* 设置滚动条的样式 */
+    /* 滚动槽 */
     ::-webkit-scrollbar {
-        width:10px;
+        -webkit-box-shadow:inset 0 0 5px rgb(255, 255, 255);
+        opacity:0.3;
+        width:5px;
     }
     /* 滚动槽 */
     ::-webkit-scrollbar-track {
-        -webkit-box-shadow:inset 0 0 6px rgb(245, 223, 210);
-        border-radius:10px;
+        -webkit-box-shadow:inset 0 0 0 rgb(255, 255, 255);
+        opacity:0.3;
+        border-radius:5px;
     }
     /* 滚动条滑块 */
     ::-webkit-scrollbar-thumb {
-        border-radius:10px;
-        background: rgb(245,245,245);
-        -webkit-box-shadow:inset 0 0 6px rgba(0,0,0,0.5);
+        border-radius:5px;
+        background: rgb(255, 211, 224);
+        opacity:0.3;
+        -webkit-box-shadow:inset 0 0 5px rgb(255, 211, 224);
     }
+    /* 滚动条滑块 */
     ::-webkit-scrollbar-thumb:window-inactive {
-        background: rgb(245,245,245);
+        background: rgb(255, 211, 224);
+        opacity:0.3;
+        border-radius:5px;
     }
 </style>

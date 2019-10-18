@@ -50,23 +50,16 @@
                     <el-input v-model="OauthModel.username"></el-input>
                 </el-form-item>
                 <el-form-item label="邮箱账号" prop="email">
-                    <el-input v-model="OauthModel.email">
+                    <el-input v-model="OauthModel.email" ref="bindEmail">
                         <el-button slot="append" plain type="primary" v-if="!OauthModel.code" @click="sendMail(OauthModel)" icon="el-icon-circle-plus">绑 定</el-button>
                         <el-button slot="append" plain type="primary" v-else @click="sendMail(OauthModel)" icon="el-icon-edit">修 改</el-button>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="验证码" prop="code" v-if="showCode">
-                    <el-input v-model="OauthModel.code" @blur="checkCode(OauthModel)"></el-input>
+                    <el-input v-model="OauthModel.code" @blur="checkCode(OauthModel)" ref="bindCode"></el-input>
                 </el-form-item>
                 <el-form-item label="用户头像" prop="avatar_url">
-                    <el-upload :action="cgi.uploadUrl"
-                               :data="fileData"
-                               :headers="headers"
-                               :show-file-list="false"
-                               :on-success="uploadSuccess"
-                               :before-upload="beforeUpload">
-                        <el-image :src="OauthModel.avatar_url" :title="OauthModel.username" fit="cover" style="width: 100px;height: 100px"></el-image>
-                    </el-upload>
+                    <Upload :avatar_url="OauthModel.avatar_url" :username="OauthModel.username" @uploadSuccess="uploadSuccess"></Upload>
                 </el-form-item>
                 <el-form-item label="角色" prop="role_id" v-if="username === 'admin'">
                     <el-select v-model="OauthModel.role_id" style="width: 100%">
@@ -95,10 +88,11 @@
     import Radio from "../common/Radio";
     import Delete from "../common/Delete";
     import Submit from "../common/Submit";
+    import Upload from '../common/Upload'
     import {mapGetters} from 'vuex'
     export default {
         name: "lists",
-        components: {Submit, Delete, Radio},
+        components: {Submit, Delete, Radio,Upload},
         data(){
             return {
                 oauthLists:[],
@@ -110,7 +104,7 @@
 
                 title:'',
                 syncVisible:false, //是否显示弹框
-                modal:false, //遮盖层是否需要
+                modal:true, //遮盖层是否需要
                 labelWidth:'80px',
                 loading:true,
                 destroy_on_close:true,
@@ -156,6 +150,13 @@
                 this.getOauthLists(this.page,this.limit)
             },
             /**
+             * TODO:图片上传回调
+             * @param src
+             */
+            uploadSuccess:function(src) {
+                this.OauthModel.avatar_url = src;
+            },
+            /**
              * todo：获取角色列表
              * @param page
              * @param limit
@@ -173,39 +174,15 @@
                 });
             },
             /**
-             * TODO：图片上传成功
-             * @param response
-             */
-            uploadSuccess:function(response){
-                if (response && response.code === 200){
-                    this.$message({type:'success',message:response.msg});
-                    this.OauthModel.avatar_url = response.item.src;
-                    return ;
-                }
-                this.$message({type:'warning',message:response.msg});
-            },
-            /**
-             * TODO：图片上传前
-             * @param file
-             */
-            beforeUpload:function(file){
-                let type = file.type;
-                let typeArr = ['image/jpg','image/gif','image/png','image/jpeg'];
-                if (!typeArr.includes(type)){
-                    this.$message({type:'warning',message:'upload image format error'});
-                    return false;
-                }
-                if (file.size>2*1024*1024){
-                    this.$message({type:'warning',message:'upload image size error'});
-                    return false;
-                }
-                return true;
-            },
-            /**
              * TODO:发送邮件获取验证码
              * @param oauthObject
              */
             sendMail:function(oauthObject){
+                if (!oauthObject.email) {
+                    this.$refs['bindEmail'].focus();
+                    this.$message.warning('Please Enter Email')
+                    return ;
+                }
                 let params = {
                     email:oauthObject.email,
                     id:oauthObject.id,
@@ -224,6 +201,11 @@
              * @param oauthObject
              */
             checkCode:function(oauthObject) {
+                if (!oauthObject.code) {
+                    this.$refs['bindCode'].focus();
+                    this.$message.warning('Please Enter Code')
+                    return ;
+                }
                 let params = {
                     code:oauthObject.code,
                     id:oauthObject.id
@@ -263,11 +245,6 @@
                 this.showCode = false;
                 this.url = this.cgi.update;
             }
-        },
-        created(){
-            this.fileData.token = this.token;
-            this.fileData.rand = true;
-            this.headers.Authorization = `${func.set_password(func.set_random(32),func.set_random(12))}-${this.token}-${func.set_password(func.set_random(32),func.set_random(12))}`
         },
         mounted() {
             this.$nextTick(function () {

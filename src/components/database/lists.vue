@@ -9,9 +9,7 @@
             <el-table-column label="字符集编码" prop="collation"></el-table-column>
             <el-table-column label="备注">
                 <template slot-scope="scope">
-                    <el-input v-model="scope.row.comment" v-if="scope.row.name === name && edit">
-                        <el-button slot="append" icon="el-icon-edit" plain type="primary" @click="updateComment(scope.row)"></el-button>
-                    </el-input>
+                    <el-input v-model="scope.row.comment" :id="scope.row.name" ref="comment" v-if="scope.row.name === name && edit" placeholder="请输入数据表备注"></el-input>
                     <div v-html="scope.row.comment" v-else></div>
                 </template>
             </el-table-column>
@@ -21,10 +19,15 @@
                     <el-input v-model="search"  placeholder="输入关键词查询"></el-input>
                 </template>
                 <template slot-scope="scope">
-                    <el-button type="primary" plain size="mini" @click="setComment(scope.row)" icon="el-icon-edit">修 改</el-button>
-                    <el-button type="primary" plain size="mini" @click="BACKUP(scope.row)">备 份</el-button>
-                    <el-button type="primary" plain size="mini" @click="REPAIR(scope.row)">修 复</el-button>
-                    <el-button type="primary" plain size="mini" @click="OPTIMIZE(scope.row)">优 化</el-button>
+                    <el-button-group>
+                        <el-button round type="primary" plain size="small" @click="updateComment(scope.row)" icon="el-icon-edit-outline"
+                                   v-if="scope.row.name === name && edit">更 新</el-button>
+                        <el-button round type="primary" plain size="small" @click="setComment(scope.row)" icon="el-icon-edit"
+                                   v-else>修 改</el-button>
+                        <el-button round type="primary" plain size="small" @click="BACKUP(scope.row)">备 份</el-button>
+                        <el-button round type="primary" plain size="small" @click="REPAIR(scope.row)">修 复</el-button>
+                        <el-button round type="primary" plain size="small" @click="OPTIMIZE(scope.row)">优 化</el-button>
+                    </el-button-group>
                 </template>
             </el-table-column>
         </el-table>
@@ -64,7 +67,8 @@
              * @constructor
              */
             BACKUP:function (databaseObject) {
-                this.loading = true
+                this.loading = true;
+                this.edit = false;
                 apiLists.DatabaseBackup(databaseObject).then(response=>{
                     if (response && response.data.code === 200) {
                         setTimeout(()=>{
@@ -87,6 +91,11 @@
              * @param databaseObject
              */
             updateComment:function(databaseObject) {
+                if (!databaseObject.comment) {
+                    this.$message.warning('请输入数据表备注');
+                    this.$refs['comment'].focus();
+                    return;
+                }
                 this.loading = true;
                 apiLists.DatabaseUpdateComment(databaseObject).then(response=>{
                     this.loading = false;
@@ -104,6 +113,7 @@
              */
             REPAIR:function (databaseObject) {
                 this.loading = true;
+                this.edit = false;
                 apiLists.DatabaseRepair(databaseObject).then(response=>{
                     if (response && response.data.code === 200) {
                         this.loading = false;
@@ -118,6 +128,7 @@
              */
             OPTIMIZE:function (databaseObject) {
                 this.loading = true;
+                this.edit = false;
                 apiLists.DatabaseOptimize(databaseObject).then(response=>{
                     if (response && response.data.code === 200) {
                         this.loading = false;

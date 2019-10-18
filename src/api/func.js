@@ -126,6 +126,20 @@ const str_shuffle=function(str){
 const set_password=function(pass,slat){
     return md5(md5(pass)+md5(slat));
 };
+/**
+ * todo:获取滚动条高度
+ * @returns {number}
+ */
+const get_scroll_top = function () {
+    let scroll_top = 0;
+    if (document.documentElement && document.documentElement.scrollTop) {
+        scroll_top = document.documentElement.scrollTop;
+    }
+    else if (document.body) {
+        scroll_top = document.body.scrollTop;
+    }
+    return scroll_top;
+}
 const func = {
     str_count:str_count,
     set_time:set_time,
@@ -135,5 +149,6 @@ const func = {
     set_random:set_random,
     str_shuffle:str_shuffle,
     set_password:set_password,
+    get_scroll_top:get_scroll_top
 };
 module.exports = func;

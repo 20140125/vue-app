@@ -86,16 +86,20 @@ const actions={
      * @param commit
      * @param username
      */
-    getAuthMenu:function({state,commit},username) {
+    getAuthMenu:function({state,commit}) {
         if (state.menuLists.length>0){
             commit('setMenuLists',state.menuLists);
             return ;
         }
-        apiLists.AuthTree({username:username}).then(response=>{
-            if (response && response.data.code === code.SUCCESS) {
-                commit('setMenuLists',func.set_tree(response.data.item));
-            }
-        })
+        if (state.username) {
+            apiLists.AuthTree([]).then(response=>{
+                if (response && response.data.code === code.SUCCESS) {
+                    commit('setMenuLists',func.set_tree(response.data.item));
+                }
+            })
+        } else {
+            router.push({path:'/login'});
+        }
     },
     /**
      * todo：系统登出

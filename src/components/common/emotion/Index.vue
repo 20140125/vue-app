@@ -1,15 +1,13 @@
 <template>
-    <div style="position: absolute;bottom: 207px; width: 450px; background: #fff;">
+    <div class="emotion">
         <div class="emotion-box" :style="{height: height + 'px' }">
-            <el-tabs type="border-card" @tab-click="changeEmotionLists" v-model="type" v-infinite-scroll="scrollEmotion">
+            <el-tabs type="border-card" tab-position="top" @tab-click="changeEmotionLists" v-model="type" v-infinite-scroll="scrollEmotion">
                 <el-tab-pane v-for="(emotionType,index) in emotionTypeLists" :name="emotionType.type" :key="index" :label="emotionType.title">
-                    <el-card shadow="always">
-                        <div class="emotion-box-line" v-for="(emotion, index) in emotionList" :key="index">
-                            <div class="emotion-item" >
-                                <el-image :src="emotion.icon" :alt="emotion.title" style="width: 30px;height: 30px;" lazy @click.native="clickHandler(emotion)"/>
-                            </div>
+                    <div class="emotion-box-line" v-for="(emotion, index) in emotionList" :key="index">
+                        <div class="emotion-item" >
+                            <el-image :src="emotion.icon" :alt="emotion.title" style="width: 30px;height: 30px;" lazy @click.native="clickHandler(emotion)"/>
                         </div>
-                    </el-card>
+                    </div>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -84,17 +82,23 @@
     }
 </script>
 <style scoped>
+    .emotion{
+        position: absolute;
+        bottom: 208px;
+        width: 500px;
+        left: 285px;
+    }
     .emotion-box {
         margin: 0 auto;
         width: 100%;
         box-sizing: border-box;
-        box-shadow: 0 2px 12px #ffffff, 0 1px 6px #545c64;
-        padding: 3px;
-        border: 1px solid rgba(226, 226, 226, 0.84);
-        border-radius: 10px;
-        -moz-border-radius:10px;
-        -webkit-border-radius:10px;
-        overflow: hidden;
+        padding: 0 0 10px 10px;
+        border-left: 1px solid rgba(226, 226, 226, 0.84);
+        border-bottom: 1px solid rgba(226, 226, 226, 0.84);
+        border-bottom-left-radius: 10px;
+        -moz-border-radius-bottomleft: 10px;
+        -webkit-border-bottom-left-radius:10px;
+        overflow-x: hidden;
         overflow-y: auto;
         position: initial;
         z-index:2000
@@ -106,6 +110,7 @@
     .emotion-item {
         flex: 1;
         margin-left: 13px;
+        margin-top: 10px;
         cursor: pointer;
     }
 </style>

@@ -2,13 +2,11 @@ const state= {
     tabs: [{label:'欢迎页',name:'/admin/index'}],
     currTabs: {label:null,name:null},
     activeAuthName:'/admin/index',
-    contentVisible:true,
 };
 const getters={
     tabs:state=>state.tabs,
     currTabs:state=>state.currTabs,
     activeAuthName:state=>state.activeAuthName,
-    contentVisible:state=>state.contentVisible
 };
 const mutations={
     /**
@@ -34,7 +32,6 @@ const mutations={
      */
     setActiveAuthName(state,activeAuthName){
         state.activeAuthName = activeAuthName;
-        state.contentVisible = true;
     },
     /**
      * todo：移除tabs

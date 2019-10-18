@@ -1,10 +1,13 @@
 const state={
     fileTabs:[],
-    currFileObj:{name:null,content:null,path:null,label:null}
+    currFileObj:{name:null,content:null,path:null,label:null},
+
+    currSystemLogObj:{},
 };
 const getters={
-    fileTabs:state=>state.fileTabs,
-    currFileObj:state=>state.currFileObj
+    fileTabs: state=>state.fileTabs,
+    currFileObj: state=>state.currFileObj,
+    currSystemLogObj: state=>state.currSystemLogObj
 };
 const mutations={
     /**
@@ -30,6 +33,14 @@ const mutations={
      */
     setCurrFileObj(state,currFileObj){
         state.currFileObj = currFileObj;
+    },
+    /**
+     * TODO：设置系统日志的内容
+     * @param state
+     * @param currSystemLogObj
+     */
+    setCurrSystemLogObj(state,currSystemLogObj) {
+        state.currSystemLogObj = currSystemLogObj;
     }
 };
 const actions={
@@ -68,7 +79,16 @@ const actions={
      */
     addCurrFileObj({state,commit},currFileObj){
         commit('setCurrFileObj',currFileObj)
-    }
+    },
+    /**
+     * TODO：添加系统日志
+     * @param state
+     * @param commit
+     * @param currSystemLogObj
+     */
+    addCurrSystemLogObj({state,commit},currSystemLogObj) {
+        commit('setCurrSystemLogObj',currSystemLogObj)
+    },
 };
 export default {
     state,

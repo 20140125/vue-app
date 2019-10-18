@@ -23,6 +23,7 @@
 
 <script>
     import apiLists from '../../api/api';
+    import $url from '../../api/url'
     export default {
         name: "lists",
         data(){
@@ -40,7 +41,7 @@
              * todo：获取城市列表
              */
             getAreaLists:function (pid) {
-                apiLists.AreaLists({parent_id:pid}).then(response=>{
+                apiLists.AreaLists({parent_id:pid},$url.areaIndex).then(response=>{
                     if (response && response.data.code === 200) {
                         this.areaLists = response.data.item;
                         this.loading = false;
@@ -54,7 +55,7 @@
              * @param resolve
              */
             load:function (tree, treeNode, resolve) {
-                apiLists.AreaLists({parent_id:tree.id}).then(response=>{
+                apiLists.AreaLists({parent_id:tree.id},$url.areaIndex).then(response=>{
                     if (response && response.data.code === 200) {
                         setTimeout(()=>{
                             resolve(response.data.item);

@@ -77,6 +77,14 @@ const userLists = function(params){
     return request.post(url.userLists,qs.stringify(Object.assign(access_token,params)))
 };
 /**
+ * TODO:个人中心
+ * @param params
+ * @returns {Promise<AxiosResponse<T>>}
+ */
+const userCenter = function(params){
+    return request.post(url.userCenter,qs.stringify(Object.assign(access_token,params)))
+};
+/**
  * TODO:日志列表
  * @param params
  * @returns {Promise<AxiosResponse<T>>}
@@ -279,10 +287,11 @@ const verifyCode = function (params) {
 /**
  * TODO:城市列表
  * @param params
+ * @param href
  * @returns {Promise<AxiosResponse<T>>}
  */
-const areaLists = function (params) {
-    return request.post(url.areaLists,qs.stringify(Object.assign(access_token,params)))
+const areaLists = function (params,href) {
+    return request.post(href,qs.stringify(Object.assign(access_token,params)))
 };
 /**
  * TODO:城市天气
@@ -333,6 +342,7 @@ const interfaceLists = {
     RoleLists:roleLists,
     AuthTree:authTree,
     UserLists:userLists,
+    UserCenter:userCenter,
     LogLists:logLists,
     ApiLists:apiLists,
     CategoryLists:categoryLists,

@@ -1,9 +1,6 @@
 <template>
-    <div style="text-align: center;margin-top: 200px">
-        <img src="../assets/logo.png" alt="vue-laravel">
-        <div>
-            <i class="el-icon-warning-outline" style="font-size: 300px"></i>
-        </div>
+    <div style="text-align: center;padding-top: 200px !important;">
+        <img src="../assets/404.png" alt="error" style="width:600px">
     </div>
 </template>
 

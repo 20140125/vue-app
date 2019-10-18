@@ -1,43 +1,60 @@
 <template>
     <el-container>
         <el-header>
-            <el-menu :default-active="activeIndex"
-                     mode="horizontal"
-                     background-color="#393d49"
-                     text-color="#fff"
-                     @select="handleSelect"
-                     active-text-color="#ffd04b" :style="headerStyle">
-                <el-menu-item index="1" @click="hideMenu"> <i :class="menuClass"></i></el-menu-item>
+            <el-menu :default-active="activeIndex" mode="horizontal" background-color="#393d49" text-color="#fff" active-text-color="#ffd04b" @select="handleSelect" :style="headerStyle">
+                <el-menu-item index="1" @click="hideMenu"> <i :class="menuClass" style="color: #fff;font-size: 25px"> </i></el-menu-item>
                 <el-submenu index="2" style="float: right">
-                    <template slot="title" v-if="noticeLength"><el-badge is-dot type="success">{{username}}</el-badge></template>
-                    <template slot="title" v-else>{{username}}</template>
-                    <el-menu-item index="2-1">账号资料</el-menu-item>
-                    <el-menu-item index="2-2">基础设置</el-menu-item>
-                    <el-menu-item index="2-3" v-if="noticeLength">
-                        <el-badge :max="10" :value="noticeLength" type="success">站内通知</el-badge>
-                    </el-menu-item>
-                    <el-menu-item index="2-3" v-else>站内通知</el-menu-item>
-                    <el-menu-item index="2-4">退出系统</el-menu-item>
+                    <template slot="title">
+                        <el-avatar :src="avatarUrl" :alt="username" :size="35"/>
+                        <span v-html="username" style="margin-left: 10px"></span>
+                    </template>
+                    <el-menu-item index="2-1"><i class="el-icon-user-solid"> </i> 个人中心</el-menu-item>
+                    <el-menu-item index="2-2"><i class="el-icon-upload2"> </i> 退出系统</el-menu-item>
                 </el-submenu>
+                <el-menu-item index="3" style="float: right">
+                    <el-dropdown trigger="hover" @command="readNotice" :hide-on-click="false" :show-timeout="100">
+                        <i class="el-icon-message-solid" style="color: #fff;font-size: 22px"> </i>
+                        <el-badge :value="noticeLength" style="margin-top: -30px;margin-left: -18px" v-if="noticeLength"/>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item style="text-align: center;color: #66b1ff">站内通知</el-dropdown-item>
+                            <el-dropdown-item :command="item" divided v-for="(item,index) in notice" :key="index" :disabled="item.disabled">
+                                <el-badge is-dot v-if="!item.disabled"></el-badge>【{{item.title}}】 {{item.info}}
+                            </el-dropdown-item>
+                            <el-dropdown-item command="more" style="text-align: center;color: #66b1ff">查看更多</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </el-menu-item>
+                <el-menu-item index="4"  style="float: right">
+                    <a href="https://gitee.com/f_longer/vue-app" target="_blank">
+                        <img src="https://gitee.com/f_longer/longer/widgets/widget_5.svg?color=C71D24" alt="gitee"/>
+                    </a>
+                </el-menu-item>
             </el-menu>
         </el-header>
         <el-container>
             <el-aside :width="asideWidth" :style="asideHeight">
-                <el-menu unique-opened background-color="#393d49" text-color="#fff" active-text-color="#ffd04b" :collapse="isCollapse">
+                <el-menu unique-opened  background-color="#393d49" text-color="#fff" active-text-color="#ffd04b" :collapse="isCollapse">
                     <el-submenu v-for="(menu,index) in menuLists" :key="index" :index="menu.id.toString()">
                         <template slot="title">
                             <i class="el-icon-menu" v-if="menu.id!==2"> </i>
                             <span v-html="menu.name"></span>
                         </template>
                         <el-menu-item :index="child.id.toString()"  v-for="(child,index) in menu.__child" @click="setAttr(child)" :key="index">
-                            <router-link :to="child.href" v-html="child.name" style="color: #fff;"></router-link>
+                           <template slot="title">
+                               <span v-html="child.name"></span>
+                           </template>
                         </el-menu-item>
                     </el-submenu>
                 </el-menu>
             </el-aside>
-            <el-container>
+            <el-container direction="vertical">
                 <el-main>
-                    <el-tabs type="border-card" closable  v-model="activeName" @tab-click="goto" @tab-remove="remove" style="text-align: left!important;" v-show="contentVisible">
+                    <el-carousel :interval="3500" arrow="never" height="50px" direction="vertical" indicator-position="none" v-if="noticeArr.length>0">
+                        <el-carousel-item v-for="(item,index) in noticeArr" :key="index">
+                            <el-alert type="success" show-icon :title="item.message" effect="light" @close="closeNotice(item)"></el-alert>
+                        </el-carousel-item>
+                    </el-carousel>
+                    <el-tabs type="border-card" closable lazy v-model="activeName" @tab-click="goto" @tab-remove="remove">
                         <el-tab-pane v-for="item in tabs" :label="item.label" :key="item.name" :name="item.name"></el-tab-pane>
                         <el-card shadow="always">
                             <router-view/>
@@ -46,68 +63,65 @@
                 </el-main>
                 <el-footer>
                     ©fl140125@gmail.com 在线人数：{{online}}
-                    <i class="msg-icon" @click="getMsgDialog">
-                        <i :class="chatMsgClass" style="margin-top: 12px">
-                            <el-badge is-dot v-if="msg_dot" type="danger" class="msg-count"></el-badge>
-                        </i>
-                    </i>
                 </el-footer>
-                <!---chat message-->
-                <el-dialog :title="chatTitle" :center="center" :show-close="closeModel" :close-on-click-modal="closeModel" :visible.sync="chatVisible">
-                    <el-row :gutter="24">
-                        <el-col :span="6" class="user-list">
-                            <el-menu background-color="#393D49" text-color="#fff" active-text-color="#ffd04b">
-                                <el-menu-item @click="sendUser(user,index)" v-for="(user,index) in client_list" :key="index" :index="index">
-                                    <el-avatar :size="50" :src="user.client_img" style="cursor: pointer"></el-avatar>
-                                    <span slot="title" style="margin-left: 20px">{{user.client_name}}</span>
-                                </el-menu-item>
-                            </el-menu>
-                        </el-col>
-                        <el-col :offset="1" :span="17" class="contact-list">
-                            <div id="msg">
-                                <div v-for="(message,index) in messageLists" :key="index" style="margin: 20px">
-                                    <div class="msg-img">
-                                        <el-avatar :size="50" :src="message.avatar_url" style="cursor: pointer"></el-avatar>
-                                        <span style="margin-left: 15px">{{message.from_client_name}}   {{message.time}}</span>
-                                    </div>
-                                    <div class="msg-list" v-html="message.content"></div>
-                                </div>
-                            </div>
-                            <div class="input-msg">
-                                <emotion @clickEmotion="getEmotion" v-show="showEmotion" :height="300"></emotion>
-                                <div style="float: left">
-                                    <i  @click="showEmotion = !showEmotion" class="el-icon-picture-outline-round icon"></i>
-                                    <el-upload :action="cgi.uploadUrl"
-                                               :data="fileData"
-                                               :headers="headers"
-                                               :show-file-list="false"
-                                               :on-success="uploadSuccess"
-                                               :before-upload="beforeUpload" style="float: left">
-                                        <i class="el-icon-picture-outline icon"></i>
-                                    </el-upload>
-                                </div>
-                                <el-input type="textarea" id="content" @focus="showEmotion = false" v-model="inputMsg" resize="none" rows="4"></el-input>
-                            </div>
-                            <div class="input-button" style="text-align: right">
-                                <el-button type="primary" plain size="medium" @click="sendMsg">发 送</el-button>
-                            </div>
-                        </el-col>
-                    </el-row>
-                </el-dialog>
-                <!---chat message-->
-
-                <!---notice message-->
-                <el-dialog :visible.sync="noticeVisible" :title="title" :center="center">
-                    <el-alert v-for="(item,index) in notice" :key="index" type="success" :description="item.info" show-icon
-                              @close="readNotice(item)"
-                              close-text="Close"
-                              style="margin-bottom: 20px">
-                    </el-alert>
-                </el-dialog>
-                <!---notice message-->
-
+                <i class="msg-icon" @click="getMsgDialog">
+                    <i :class="chatMsgClass" style="margin:13px 15px;">
+                        <el-badge is-dot v-if="msg_dot" type="danger" class="msg-count"></el-badge>
+                    </i>
+                </i>
             </el-container>
         </el-container>
+        <!---chat message-->
+        <el-dialog :title="chatTitle" @close="chatVisible = false" :center="center" :show-close="closeModel" :close-on-press-escape="closeModel" :visible.sync="chatVisible">
+            <el-row :gutter="24">
+                <el-col :span="6" class="user-list">
+                    <el-aside>
+                        <el-menu background-color="#393d49" text-color="#fff" active-text-color="#ffd04b">
+                            <el-menu-item @click="sendUser(user,index)" v-for="(user,index) in client_list" :key="index" :index="index">
+                                <el-avatar :size="50" :src="user.client_img" style="cursor: pointer"/>
+                                <span slot="title" style="margin-left: 20px" v-html="user.client_name"></span>
+                            </el-menu-item>
+                        </el-menu>
+                    </el-aside>
+                </el-col>
+                <el-col :offset="1" :span="17">
+                    <el-card shadow="always">
+                        <div id="msg">
+                            <div v-for="(message,index) in messageLists" :key="index">
+                                <div class="msg-img">
+                                    <el-avatar :size="50" :src="message.avatar_url" style="cursor: pointer"></el-avatar>
+                                    <i>{{message.from_client_name}}   {{message.time}}</i>
+                                </div>
+                                <div class="msg-list" v-html="unescape(message.content)"></div>
+                            </div>
+                        </div>
+                        <div class="input-msg">
+                            <emotion @clickEmotion="getEmotion" v-show="showEmotion" :height="300"></emotion>
+                            <div>
+                                <el-tooltip effect="dark" content="发送表情" placement="top-start">
+                                    <i @click="showEmotion = !showEmotion" class="el-icon-picture-outline-round icon"></i>
+                                </el-tooltip>
+                                <el-upload :action="cgi.uploadUrl"
+                                           :data="fileData"
+                                           :headers="headers"
+                                           :show-file-list="false"
+                                           :on-success="uploadSuccess"
+                                           :before-upload="beforeUpload" style="float: left">
+                                    <el-tooltip effect="dark" content="发送文件和图片" placement="top-start">
+                                        <i class="el-icon-picture-outline icon"></i>
+                                    </el-tooltip>
+                                </el-upload>
+                            </div>
+                            <div contentEditable="true" ref="message" id="content" @focus="showEmotion = false" @keydown="setMsg"></div>
+                        </div>
+                        <div class="input-button" style="text-align: right">
+                            <el-button type="primary" round plain size="medium" @click="sendMsg">发 送</el-button>
+                        </div>
+                    </el-card>
+                </el-col>
+            </el-row>
+        </el-dialog>
+        <!---chat message-->
     </el-container>
 </template>
 
@@ -119,6 +133,7 @@
     import emotion from '../common/emotion/Index'
     export default {
         name: "baseModule",
+        inject:['reload'],
         data(){
             return {
                 isCollapse:false,
@@ -126,17 +141,12 @@
                 activeIndex:'1',
                 menuClass:'el-icon-s-unfold',
                 asideWidth:"200px",
-                asideHeight:{
-                    'min-height':(window.innerHeight - 60)+'px'
-                },
+                asideHeight:{},
                 headerStyle:{
                     'margin-left':'200px',
                 },
                 noticeLength:0,
                 notice:[],
-                noticeVisible:false,
-                title:'站内通知',
-                center:true,
                 online:0,
 
                 //workerManChat
@@ -152,6 +162,7 @@
                 emotionLists:[],
                 showEmotion:false,
                 closeModel:false,
+                center:true,
                 messageLists:[],
                 msg_type:'text',
                 to_client_name:'all',
@@ -160,16 +171,32 @@
                 chatMsgClass:'el-icon-chat-dot-round',
                 msg_dot:false,
                 room_id:'1',
+                roomLists:[
+                    {room_id:'1',room_name:'谈笑风生'},
+                ],
+                noticeArr:[],
             }
         },
         components:{
             emotion
         },
         computed:{
-            ...mapGetters(['tabs','token','username','activeAuthName','contentVisible','menuLists','socketServer','avatarUrl','websocketServer']),
+            ...mapGetters(['tabs','token','username','activeAuthName','menuLists','socketServer','avatarUrl','websocketServer']),
         },
         methods:{
             ...mapActions(['addTabs','deleteTabs','addCurrTabs','logoutSystem','getAuthMenu']),
+            /**
+             * TODO:字符串标签转换
+             * @param html
+             */
+            unescape:function (html) {
+                return html
+                  .replace(html ? /&(?!#?\w+;)/g : /&/g, '&amp;')
+                  .replace(/&lt;/g, "<")
+                  .replace(/&gt;/g, ">")
+                  .replace(/&quot;/g, "\"")
+                  .replace(/&#39;/g, "\'");
+            },
             /**
              * TODO：设置tabs
              * @param item
@@ -182,6 +209,7 @@
                 this.asideHeight = {
                     'min-height':(window.innerHeight - 60)+'px'
                 };
+                this.$router.push({path:params.name});
             },
             /**
              * TODO:弹出框展示
@@ -228,10 +256,14 @@
              */
             handleSelect(key, keyPath) {
                 switch (key) {
-                    case '2-3':
-                        this.noticeVisible = true;
+                    case '2-1':
+                        let userParams = {label:'个人中心',name:'/admin/user/center'};
+                        this.activeName = userParams.name;
+                        this.addCurrTabs(userParams);
+                        this.addTabs(userParams);
+                        this.$router.push({path:userParams.name});
                         break;
-                    case '2-4':
+                    case '2-2':
                         this.logoutSystem(this.token);
                         break;
                     default:
@@ -243,14 +275,19 @@
              * @param noticeObj
              */
             readNotice:function(noticeObj) {
+                if (noticeObj === 'more') {
+                    let pushParams = {label:'站内通知',name:'/admin/push/index'};
+                    this.activeName = pushParams.name;
+                    this.addCurrTabs(pushParams);
+                    this.addTabs(pushParams);
+                    this.$router.push({path:pushParams.name});
+                    return false;
+                }
                 let params = {};
                 params.see = parseInt(noticeObj.see)+1;
                 params.id = noticeObj.id;
-                apiLists.PushRead(params).then(response=>{
-                    if (response && response.data.code === 200) {
-                        this.$message({type:'success',message:response.data.msg});
-                    }
-                })
+                params.type = noticeObj.type
+                apiLists.PushRead(params)
             },
             /**
              * TODO：设置导航栏
@@ -274,17 +311,23 @@
             connect:function(ws){
                 let __this = this;
                 ws.onopen = function(){
-                    let send_data = '{"type":"login","client_name":"'+__this.username+'","room_id":"'+__this.room_id+'","client_img":"'+__this.avatarUrl+'","uid":"'+__this.md5(__this.username)+'"}';
-                    ws.send(send_data)
+                    let str = {
+                        type:'login',
+                        client_name:__this.username,
+                        room_id:__this.room_id,
+                        client_img:__this.avatarUrl,
+                        uid:__this.md5(__this.username),
+                    };
+                    ws.send(JSON.stringify(str))
                 };
                 ws.onmessage = function(response){
                     let data = JSON.parse(response.data);
                     switch (data['type']) {
-                            //心跳
+                        //心跳
                         case 'ping':
                             ws.send('{"type":"pong"}');
                             break;
-                            //登陆
+                        //登陆
                         case 'login':
                             __this.client_list = {};
                             if(data['client_list']) {
@@ -293,11 +336,11 @@
                                 __this.client_list[data['client_id']] = data['client_name'];
                             }
                             break;
-                            //发送消息
+                       //发送消息
                         case 'say':
                             __this.say(data);
                             break;
-                            //聊天记录
+                        //聊天记录
                         case 'history':
                             for (let i in data.message) {
                                 data.message[i]['content'] = __this.setContent(data.message[i]['content'],data.message[i]['msg_type'])
@@ -327,15 +370,24 @@
                 this.chatTitle = user.client_name === 'all' ? 'ChatRoom' : user.client_name;
                 this.avatar_url = this.avatarUrl;
                 //获取聊天记录
-                this.websocketServer.send('{"type":"history","from_client_name":"'+this.username+'","to_client_name":"'+this.to_client_name+'"}');
+                let str = {
+                    type:'history',
+                    from_client_name:this.username,
+                    to_client_name:this.to_client_name,
+                };
+                this.websocketServer.send(JSON.stringify(str));
+            },
+            setMsg:function(){
+                this.inputMsg = this.$refs.message.innerHTML;
             },
             /**
              * TODO:发送表情
              * @param emotion
              */
             getEmotion (emotion) {
-                this.msg_type = 'icon';
-                this.websocketServer.send('{"type":"say","to_client_id":"'+this.to_client_id+'","to_client_name":"'+this.to_client_name+'","msg_type":"'+this.msg_type+'","content":"'+emotion.icon+'","avatar_url":"'+this.avatar_url+'"}');
+                this.msg_type = 'text';
+                this.inputMsg+= "<img src='"+emotion.icon+"' width='50px' height='50px' alt='"+emotion.emoji+"' title='"+emotion.title+"'>"
+                this.$refs.message.innerHTML = this.inputMsg;
             },
             /**
              * TODO:设置文本内容
@@ -343,9 +395,9 @@
             setContent:function(content,msg_type){
                 let msg='';
                 switch (msg_type) {
-                    case 'icon': msg = '<img src="'+content+'" alt=""/>';break;
+                    case 'file': msg = '<img src="'+content+'" alt="" width="50px" height="50px"/>';break; //后期修改
                     case 'text': msg = content;break;
-                    case 'img' : msg = '<img src="'+content+'" width="100px" height="100px" alt=""/>';break;
+                    case 'video' : msg = '<video src="'+content+'" width="100px" height="100px"/>';break;
                 }
                 return msg;
             },
@@ -355,8 +407,9 @@
              */
             uploadSuccess:function(response){
                 if (response && response.code === 200){
-                    this.msg_type = 'img';
-                    this.websocketServer.send('{"type":"say","to_client_id":"'+this.to_client_id+'","to_client_name":"'+this.to_client_name+'","msg_type":"'+this.msg_type+'","content":"'+response.item.src+'","avatar_url":"'+this.avatar_url+'"}');
+                    this.msg_type = 'text';
+                    this.inputMsg+= "<img src='"+response.item.src+"' width='100px' height='100px' alt=''>"
+                    this.$refs.message.innerHTML = this.inputMsg;
                     return ;
                 }
                 this.$message({type:'warning',message:response.msg});
@@ -390,7 +443,12 @@
                     "msg_type":data['msg_type'],
                     "avatar_url":data['avatar_url']
                 };
-                this.websocketServer.send('{"type":"history","from_client_name":"'+data['from_client_name']+'","to_client_name":"'+data['to_client_name']+'"}');
+                let str = {
+                    type:'history',
+                    from_client_name:data['from_client_name'],
+                    to_client_name:data['to_client_name'],
+                };
+                this.websocketServer.send(JSON.stringify(str));
                 this.messageLists.push(msg);
                 if (this.username!==data['from_client_name']){
                     if (data['to_client_id']!=='all') {
@@ -412,13 +470,25 @@
              */
             sendMsg:function(){
                 this.showEmotion = false;
+                this.inputMsg= this.$refs.message.innerHTML;
                 if (this.inputMsg !== '') {
-                    this.websocketServer.send('{"type":"say","to_client_id":"'+this.to_client_id+'","to_client_name":"'+this.to_client_name+'","msg_type":"'+this.msg_type+'","content":"'+this.inputMsg+'","avatar_url":"'+this.avatar_url+'"}');
+                    let str = {
+                        type:'say',
+                        to_client_id:this.to_client_id,
+                        to_client_name:this.to_client_name,
+                        msg_type:this.msg_type,
+                        content:this.inputMsg,
+                        avatar_url:this.avatar_url
+                    };
+                    this.websocketServer.send(JSON.stringify(str));
+                    this.$refs.message.innerHTML = '';
                     this.inputMsg = '';
                     return ;
                 }
-                document.getElementById('content').focus();
-                this.$message({type:'info',message:'Please enter message'})
+                if (this.chatVisible) {
+                    this.$refs.message.focus();
+                    this.$message({type:'info',message:'Please enter message'})
+                }
             },
             /**
              * TODO：站内消息推送
@@ -431,17 +501,32 @@
                 });
                 // 服务端（http）推送站内通知信息
                 this.socketServer.on('new_msg', (msg)=>{
-                    this.$notify({ title: '系统通知', message: msg, position: 'top-right', type:'success', duration:0 });
+                    this.noticeArr.push({time:func.get_timestamp(),message:msg})
                 });
                 //用户站内通知
                 this.socketServer.on('notice',(response)=>{
-                    this.noticeLength = response.length;
+                    let j = 1;
+                    this.noticeLength = 0;
+                    for (let i in response) {
+                        response[i].disabled = true
+                        if (response[i].status !== 'successfully' && response[i].see === 0) {
+                            response[i].disabled = false
+                            this.noticeLength = j++;
+                        }
+                    }
                     this.notice = response;
                 });
                 //在线人数
                 this.socketServer.on('online',(response)=>{
                     this.online = response;
                 });
+            },
+            /**
+             * TODO:移除通知
+             * @param item
+             */
+            closeNotice:function(item){
+                this.noticeArr.splice(this.noticeArr.indexOf(item.time),1);
             },
             /**
              * TODO:滚动条滚动到底部
@@ -459,7 +544,7 @@
         created(){
             this.activeName = this.activeAuthName;
             this.asideHeight = {
-                'min-height':(window.innerHeight - 76)+'px'
+                'min-height':(window.innerHeight - 60)+'px'
             };
             //图片上传参数
             this.avatar_url = this.avatarUrl;
@@ -471,16 +556,30 @@
             let __this = this;
             //键盘事件
             document.onkeydown = function (e) {
-               if (e.code === 'Enter') {
-                   e.preventDefault();
-                   __this.sendMsg();
-                   return false;
-               }
+                if (e.code === 'Enter') {
+                    e.preventDefault();
+                    __this.sendMsg();
+                    return false;
+                }
+            }
+        },
+        watch:{
+            chatVisible:function () {
+                if (!this.chatVisible) {
+                    this.chatMsgClass = 'el-icon-chat-dot-round';
+                }
+            },
+            inputMsg:function () {
+                this.inputMsg = this.$refs.message.innerHTML;
             }
         },
         mounted() {
             this.$nextTick(function () {
-                this.getAuthMenu(this.username);
+                let params = {label:this.$route.meta.title,name:this.$route.path};
+                this.activeName = params.name;
+                this.addCurrTabs(params);
+                this.addTabs(params)
+                this.getAuthMenu();
                 this.webPush();
             });
         }
@@ -498,26 +597,35 @@
         color: #333;
         text-align: center;
         line-height: 60px;
+        /*固定底部布局*/
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        bottom: 0;
+        z-index:2
     }
     .el-aside {
         background-color: #393d49;
         color: #333;
         line-height: 200px;
     }
+    .el-main{
+        margin-bottom: 60px;
+    }
     .user-list{
         box-shadow: 0 2px 12px #ffffff, 0 0 6px #F5F5F5;
-        min-height:600px;
+        min-height:650px;
         background-color:#393D49;
         border-radius:10px;
         -moz-border-radius:10px;
         -webkit-border-radius:10px;
-        max-height: 600px;
+        max-height: 650px;
         overflow: hidden;
         overflow-y: auto;
         padding: 0 !important;
     }
     .contact-list{
-        box-shadow: 0 2px 12px #ffffff, 0 1px 6px #545c64;
+        box-shadow: 0 1px 0 #ffffff, 0 1px 2px #545c64;
         min-height:600px;
         border: 1px solid #F5F5F5;
         border-radius:10px;
@@ -527,52 +635,54 @@
     #msg{
         max-height: 380px;
         min-height: 380px;
-        margin-bottom: 20px;
-        margin-top: 10px;
+        margin:10px 0 20px 0;
         overflow: hidden;
         overflow-y: auto;
         border: 1px solid #eee;
         border-radius: 10px;
         -moz-border-radius:10px;
         -webkit-border-radius:10px;
-        background-color: rgb(255,255,255);
     }
     #msg .msg-list{
-        box-shadow: 0 2px 12px #ffffff, 0 1px 6px #505860;
+        box-shadow: 0 1px 0 #ffffff, 0 1px 2px #505860;
         line-height: 28px;
         min-height: 20px;
+        margin: 0 15px 15px 15px;
         font-family: "Source Code Pro", monospace;
-        font-size: 14px;
+        font-size: 15px;
         padding:15px;
-        margin-bottom: 15px;
         border-radius: 10px;
         -moz-border-radius:10px;
         -webkit-border-radius:10px;
-        background:-webkit-gradient(linear, left top, left bottom, from(#cccccc), to(#ffffff));
-        　background:-moz-linear-gradient(top, #cccccc, #ffffff);
-        　　　　background:-o-linear-gradient(top, #cccccc, #ffffff);
-        　　　　background:linear-gradient(top, #cccccc, #ffffff);
+        background:-webkit-gradient(linear, left top, left bottom, from(#eaeaea), to(#ffffff));
+        　background:-moz-linear-gradient(top, #eaeaea, #ffffff);
+        　　　　background:-o-linear-gradient(top, #eaeaea, #ffffff);
+        　　　　background:linear-gradient(top, #eaeaea, #ffffff);
         position:relative;
     }
     #msg .msg-list:after {
-        content: '';
-        width: 10px;
-        height: 10px;
-        position: absolute;
-        top: -5px;
-        right: 552px;
-        transform: rotate(45deg);
-        background-color: #cccccc;
-        border: 1px #cccccc;
-        border-style: none none solid solid ;
+        content:'';
+        position:absolute;
+        bottom:100%;
+        left:15px;
+        width:0;
+        height:0;
+        border-width:10px;
+        border-style:solid;
+        border-color:transparent;
+        margin-bottom:-4px;
+        border-bottom-width:16px;
+        border-bottom-color:currentColor;
+        color:#eaeaea;
     }
     #msg .msg-img{
-        margin-bottom: 15px;
+        margin: 15px;
     }
-    #msg .history{
-        text-align: center;
-        margin-top: 20px;
-        cursor: pointer
+    #content{
+        border: 1px solid #eee;
+        height: 95px;
+        border-radius: 10px;
+        padding:10px;
     }
     .input-msg{
         min-height: 100px;

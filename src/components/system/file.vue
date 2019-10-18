@@ -1,13 +1,9 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText">
         <el-row :gutter="24">
-            <el-col :xl="{'span':5}" :lg="{'span':5}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" style="margin-bottom: 20px">
-                <el-input placeholder="输入关键字搜索" v-model="filterText"></el-input>
-            </el-col>
-        </el-row>
-        <el-row :gutter="24">
             <!--文件列表-->
             <el-col :xl="{'span':5}" :lg="{'span':5}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" style="margin-bottom: 20px">
+                <el-input placeholder="输入关键字搜索" v-model="filterText" style="margin-bottom: 20px"></el-input>
                 <el-tree :data="fileLists"  @node-contextmenu="rightClick"
                          :highlight-current="highlight"
                          :props="props"
@@ -17,28 +13,13 @@
                          style="background-color: #393d49"></el-tree>
             </el-col>
             <!--文件列表-->
-
-            <!--鼠标右键-->
-            <div v-show="menuVisible">
-                <ul id="menu" class="menu">
-                    <li class="menu__item" @click="addFile" v-show="showRightBtn.add"><i class="el-icon-circle-plus-outline"></i> 添 加</li>
-                    <li class="menu__item" @click="renameFile" v-show="showRightBtn.rename"><i class="el-icon-edit-outline"></i> 修 改</li>
-                    <li class="menu__item" @click="authFile" v-show="showRightBtn.auth"><i class="el-icon-user-solid"></i> 权 限</li>
-                    <li class="menu__item" @click="compressionFile" v-show="showRightBtn.compression"><i class="el-icon-collection"></i> 压 缩</li>
-                    <li class="menu__item" @click="DecompressionFile" v-show="showRightBtn.DeCompression"><i class="el-icon-receiving"></i> 解 压</li>
-                    <li class="menu__item" @click="downloadFile" v-show="showRightBtn.download"><i class="el-icon-download"></i> 下 载</li>
-                    <li class="menu__item" @click="uploadFile" v-show="showRightBtn.upload"><i class="el-icon-upload"></i> 上 传</li>
-                    <li class="menu__item" @click="deleteFile" v-show="showRightBtn.remove"><i class="el-icon-delete-solid"></i> 删 除</li>
-                </ul>
-            </div>
-            <!--鼠标右键-->
             <!--文件内容-->
             <el-col :xl="{'span':18,'push':1}" :lg="{'span':18,'push':1}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" v-show="showIdea">
                 <el-form :model="fileModel" :ref="reFrom">
                     <el-form-item style="margin-left: -30px !important;">
                         <el-tabs type="border-card" closable v-model="activeFileTabName"  @tab-click="goto" @tab-remove="removeTabName" style="text-align: left!important;">
                             <el-tab-pane v-for="item in fileTabs" :label="item.label" :key="item.name" :name="item.name"></el-tab-pane>
-                            <el-card shadow="hover">
+                            <el-card shadow="always">
                                 <codemirror @change="updateContent" ref="edit" :value="fileModel.content" :options="options" style="line-height: 20px"></codemirror>
                             </el-card>
                         </el-tabs>
@@ -48,23 +29,37 @@
             </el-col>
             <!--文件内容-->
         </el-row>
+        <!--鼠标右键-->
+        <div v-show="menuVisible" style="z-index:100">
+            <el-menu id="menu" class="menu" mode="horizontal" style="border-bottom: solid 1px #393d49" background-color="#393d49" text-color="#cccccc" active-text-color="#ffd04b">
+                <el-menu-item @click="addFile" v-show="showRightBtn.add"><i class="el-icon-circle-plus-outline"></i>添 加</el-menu-item>
+                <el-menu-item @click="renameFile" v-show="showRightBtn.rename"><i class="el-icon-edit-outline"></i>重命名</el-menu-item>
+                <el-menu-item @click="authFile" v-show="showRightBtn.auth"><i class="el-icon-user-solid"></i>权 限</el-menu-item>
+                <el-menu-item @click="compressionFile" v-show="showRightBtn.compression"><i class="el-icon-collection"></i>压 缩</el-menu-item>
+                <el-menu-item @click="DecompressionFile" v-show="showRightBtn.DeCompression"><i class="el-icon-receiving"></i>解 压</el-menu-item>
+                <el-menu-item @click="downloadFile" v-show="showRightBtn.download"><i class="el-icon-download"></i>下 载</el-menu-item>
+                <el-menu-item @click="uploadFile" v-show="showRightBtn.upload"><i class="el-icon-upload"></i>上 传</el-menu-item>
+                <el-menu-item @click="deleteFile" v-show="showRightBtn.remove"><i class="el-icon-delete-solid"></i>删 除</el-menu-item>
+            </el-menu>
+        </div>
+        <!--鼠标右键-->
         <!--权限框-->
         <el-dialog :visible.sync="syncVisible" :modal="modal" :title="title" :center="center">
             <el-form :label-width="labelWidth" :model="chmodModel" :rules="rules" :ref="reFrom">
-                <el-form-item label="权限" prop="auth">
+                <el-form-item label="权限" prop="auth" required>
                     <el-input placeholder="请输入内容" @change="setChmodAuth" v-model="chmodModel.auth"></el-input>
                 </el-form-item>
-                <el-form-item label="所有者">
+                <el-form-item label="所有者" required>
                     <el-checkbox-group v-model="all"  @change="allChange">
                         <el-checkbox border size="small" v-for="checkBox in checkBoxArr" :label="checkBox.value" :key="checkBox.id"></el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="用户组">
+                <el-form-item label="用户组" required>
                     <el-checkbox-group v-model="user"  @change="userChange">
                         <el-checkbox border size="small" v-for="checkBox in checkBoxArr" :label="checkBox.value" :key="checkBox.id"></el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="公共">
+                <el-form-item label="公共" required>
                     <el-checkbox-group v-model="common" @change="commonChange">
                         <el-checkbox border size="small" v-for="checkBox in checkBoxArr" :label="checkBox.value" :key="checkBox.id"></el-checkbox>
                     </el-checkbox-group>
@@ -80,6 +75,7 @@
             <el-upload ref="upload"
                        :data="fileData"
                        :action="cgi.uploadUrl"
+                       :headers="headers"
                        :on-remove="handleRemove"
                        :on-success="handelSuccess"
                        :file-list="fileList"
@@ -99,12 +95,17 @@
 
 <script>
     import apiLists from '../../api/api';
+    import func from '../../api/func';
     import $url from '../../api/url';
     import Submit from "../common/Submit";
     import { mapGetters,mapActions } from 'vuex';
     import { codemirror } from 'vue-codemirror-lite'
     //编辑器代码 php
     require('codemirror/mode/php/php.js');
+    require('codemirror/mode/markdown/markdown.js');
+    require('codemirror/mode/xml/xml.js');
+    require('codemirror/addon/hint/javascript-hint.js');
+    require('codemirror/mode/javascript/javascript.js');
     require('codemirror/addon/selection/active-line');
     //编辑器主题
     require('codemirror/theme/monokai.css');
@@ -147,6 +148,12 @@
                     resource:'',
                     path:''
                 },
+                mode:{
+                    markdown:"text/markdown",
+                    php:"text/x-php",
+                    xml:"text/xml",
+                    json:"application/ld+json"
+                },
                 //代码编辑器配置
                 options:{
                     mode: "text/x-php",
@@ -159,7 +166,7 @@
                     //智能提示
                     extraKeys:{"Ctrl-Space":"autocomplete"},//ctrl-space唤起智能提示
                     //自动换行
-                    lineWrapping:true,
+                    lineWrapping:false,
                     //代码折叠
                     foldGutter: true,
                     gutters:["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
@@ -175,6 +182,8 @@
                     autoRefresh: true,
                     //设置光标所在行高亮
                     styleActiveLine:true,
+                    //只读
+                    readOnly:true,
                 },
                 //展示自定义右键菜单
                 menuVisible:false,
@@ -220,6 +229,7 @@
                 fileList:[],
                 fileSyncVisible:false,
                 fileData:{},
+                headers:{},
                 //编辑器显示与否
                 showIdea:true,
                 //地址
@@ -238,7 +248,8 @@
                         { type: 'number', message: '权限必须为数字值',trigger:'blur'}
                     ]
                 },
-                filterText:''
+                filterText:'',
+                scrollTop:0
             }
         },
         watch: {
@@ -247,7 +258,7 @@
             }
         },
         computed:{
-            ...mapGetters(['fileTabs','currFileObj','token']),
+            ...mapGetters(['fileTabs','currFileObj','token','username']),
         },
         methods:{
             ...mapActions(['addFileTabs','deleteFileTabs','addCurrFileObj','saveSystemLog']),
@@ -255,6 +266,7 @@
              * todo：关闭弹框
              */
             success:function(){
+                this.addCurrFileObj(this.fileModel);
                 this.getFileLists(this.path);
                 this.syncVisible = false;
             },
@@ -263,7 +275,7 @@
              * @param value
              * @param data
              */
-            filterNode(value, data) {
+            filterNode:function(value, data) {
                 if (!value) return true;
                 return data.label.toLowerCase().indexOf(value.toLowerCase()) !== -1;
             },
@@ -283,17 +295,18 @@
             /**
              * todo：鼠标右击触发事件
              * @param MouseEvent event 事件
-             * @param object 传递给 data 属性的数组中该节点所对应的对象
+             * @param object
              * @param Node 节点对应的 Node、
              * @param element 节点组件本身。
              */
             rightClick:function(MouseEvent, object, Node, element) {
-                this.menuVisible = false; // 关闭模态框
-                this.menuVisible = true;  // 显示模态窗口，跳出自定义菜单栏
+                this.menuVisible = false;
+                this.menuVisible = true;
                 const menu = document.querySelector('#menu');
-                document.addEventListener('click', this.foo); // 给整个document添加监听鼠标事件，点击任何位置执行foo方法
-                menu.style.left = '340px';
-                menu.style.top = MouseEvent.clientY - 195 + 'px';
+                this.scrollTop = func.get_scroll_top();
+                document.addEventListener('click', this.foo);
+                menu.style.left = '360px';
+                menu.style.top = MouseEvent.clientY + this.scrollTop - 125 + 'px';
                 this.fileObject = object;
                 switch (this.fileObject.fileType) {
                     case 'file':
@@ -327,6 +340,8 @@
              * @val content tabs 标签下的内容
              */
             goto:function(tab){
+                let ext = tab.label.split(".")[1];
+                this.setOptionsMode(ext);
                 let item = this.fileTabs;
                 for (const i in item){
                     if (item[i].label === tab.label) {
@@ -368,16 +383,12 @@
              * @val content tabs 标签下的内容
              */
             getFileContent:function (item) {
-                if (item.fileType!=='file'){
-                    this.$notify({type:'success',title:'通知',message:'不是一个文件'});
-                    return false;
-                }
                 let ext = item.label.split(".")[1];
                 let compressionExt = ['tar','zip','7z','TAR','ZIP','7Z'];
-                if (compressionExt.includes(ext)){
-                    this.$notify({type:'success',title:'通知',message:'该文件不支持直接查看'});
+                if (compressionExt.includes(ext) || item.fileType!=='file'){
                     return false;
                 }
+                this.setOptionsMode(ext);
                 this.showIdea = true;
                 this.activeFileTabName = item.size.toString();
                 let params = {path:item.path},tabs = {};
@@ -394,17 +405,42 @@
                 });
             },
             /**
+             * TODO:设置编辑器的mode
+             * @param ext
+             */
+            setOptionsMode:function(ext) {
+                switch (ext) {
+                    case 'xml':
+                        this.options.mode = this.mode.xml;
+                        break;
+                    case 'md':
+                        this.options.mode = this.mode.markdown;
+                        break;
+                    case 'json':
+                    case 'lock':
+                        this.options.mode = this.mode.json;
+                        break;
+                    default:
+                        this.options.mode = this.mode.php;
+                        break;
+                }
+            },
+            /**
              * todo：文件重新命名
              */
             renameFile:function(){
                 let params = {oldFile:this.fileObject.path};
                 this.$prompt('请输入文件名', '重命名', { confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
+                    if (value === '' || value === null || value === 'null' || value === 'undefined') {
+                        this.$message.warning('文件名不得为空');
+                        return false;
+                    }
                     params.newFile = params.oldFile.replace(this.fileObject.label,value);
                     apiLists.FileRename(params).then(response=>{
                         if (response && response.data.code === 200){
                             this.fileObject.name = value;
                             this.$message({type: 'success', message: '你的新文件名: ' + value});
-                            let data = { msg:JSON.stringify({url:$url.fileSave, info:'你的新文件名: ' + value,result:response.data.result}) };
+                            let data = { msg:JSON.stringify({href:$url.fileSave, info:'你的新文件名: ' + value,result:response.data.result}) };
                             this.saveSystemLog(data);
                             this.getFileLists(this.path);
                         }
@@ -425,7 +461,7 @@
                     let params = {path:this.fileObject.path};
                     apiLists.FileDelete(params).then(response=>{
                        if (response && response.data.code === 200){
-                           let data = { msg:'删除文件成功：'+params.path,result:response.data.result };
+                           let data = { msg:'删除文件成功：'+params.path,result:response.data.result,href:$url.fileDelete };
                            this.saveSystemLog(data);
                            this.getFileLists(this.path);
                            this.$message({type:'success',message:'删除记录成功！：'+params.path});
@@ -441,6 +477,10 @@
             addFile:function () {
                 let params = {};
                 this.$prompt('请输入文件名', '新建文件', { confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
+                    if (value === '' || value === null || value === 'null' || value === 'undefined') {
+                        this.$message.warning('文件名不得为空');
+                        return false;
+                    }
                     //这是一个文件
                     if(this.fileObject.fileType === 'file'){
                         params.path = this.fileObject.path.replace(this.fileObject.label,value);
@@ -449,7 +489,7 @@
                     }
                     apiLists.FileSave(params).then(response=>{
                         if (response && response.data.code === 200){
-                            let data = { msg:'你的新文件名: ' + params.path,result:response.data.result };
+                            let data = { msg:'你的新文件名: ' + params.path,result:response.data.result,href:$url.fileRename };
                             this.saveSystemLog(data);
                             this.getFileLists(this.path);
                             this.$message({type: 'success', message: '你的新文件名: ' + params.path});
@@ -557,13 +597,17 @@
              */
             compressionFile:function(){
                 this.$prompt('请输入文件名', '压缩包名称', { confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
+                    if (value === '' || value === null || value === 'null' || value === 'undefined') {
+                        this.$message.warning('压缩包名称不得为空');
+                        return false;
+                    }
                     this.compressionModel.resource = value;
                     this.compressionModel.docLists.push(this.fileObject.path);
                     this.compressionModel.path = this.fileObject.path.replace(this.fileObject.label,'');
                     apiLists.Compression(this.compressionModel).then(response=>{
                         if (response && response.data.code === 200){
                             this.$message({type:'success',message:response.data.msg});
-                            let data = { msg:'你的压缩包名: ' + this.compressionModel.type,result:response.data.result };
+                            let data = { msg:'你的压缩包名: ' + this.compressionModel.type,result:response.data.result,href:$url.fileCompression };
                             this.saveSystemLog(data);
                             this.getFileLists(this.path);
                         }
@@ -577,6 +621,10 @@
              */
             DecompressionFile:function(){
                 this.$prompt('请输入文件名', '解压包名称', { confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
+                    if (value === '' || value === null || value === 'null' || value === 'undefined') {
+                        this.$message.warning('解压包名称不得为空');
+                        return false;
+                    }
                     let params = {
                         path : this.fileObject.path,
                         resource:value
@@ -584,7 +632,7 @@
                     apiLists.Decompression(params).then(response=>{
                         if (response && response.data.code === 200){
                             this.$message({type:'success',message:response.data.msg});
-                            let data = { msg:'文件解压成功',result:response.data.result };
+                            let data = { msg:'文件解压成功',result:response.data.result,href:$url.fileDecompression };
                             this.saveSystemLog(data);
                             this.getFileLists(this.path);
                         }
@@ -599,7 +647,7 @@
             downloadFile:function(){
                 this.$alert('确定下载文件：'+this.fileObject.path,'文件下载').then(()=>{
                     window.open(process.env.API_ROOT+$url.fileDownload+"?token="+this.token+"&path="+this.fileObject.path,'__target');
-                    let data = { msg:'文件下载成功：'+this.fileObject.path };
+                    let data = { msg:'文件下载成功：'+this.fileObject.path,href:$url.fileDownload };
                     this.saveSystemLog(data);
                     this.$message({type:'success',message:'download file successfully'});
                 }).catch(() => {
@@ -622,14 +670,15 @@
             /**
              * todo：确定文件上传
              */
-            submitUpload() {
+            submitUpload:function() {
+                this.headers.Authorization = `${func.set_password(func.set_random(32),func.set_random(12))}${this.token}${func.set_password(func.set_random(32),func.set_random(12))}`
                 this.$refs.upload.submit();
             },
             /**
              * todo：取消文件上传
              * @param file
              */
-            handleRemove(file) {
+            handleRemove:function(file) {
                 this.$message({type:'warning',message:'取消文件上传：'+file.name});
             },
             /**
@@ -638,7 +687,7 @@
             handelSuccess:function(response){
                 if (response.code === 200){
                     let ext = response.item.name.split(".")[1];
-                    let imgArr = ['png','jpeg','gif'];
+                    let imgArr = ['png','jpeg','gif','jpg'];
                     if (imgArr.includes(ext.toLowerCase())){
                         this.$alert('是否预览图片?','图片预览').then(()=>{
                             this.imgVisible = true;
@@ -650,7 +699,7 @@
                         })
                     }
                     this.$message({type:'success',message:response.msg});
-                    let data = { msg:response.msg,result:response };
+                    let data = { msg:response.msg,result:response,href:$url.fileUpload };
                     this.saveSystemLog(data);
                     this.getFileLists(this.path);
                     this.fileSyncVisible = false;
@@ -670,6 +719,9 @@
             if (this.activeFileTabName === null){
                 this.fileModel.content = '';
                 this.showIdea = false; //隐藏编辑器
+            }
+            if (this.username === 'admin') {
+                this.options.readOnly = false;
             }
         },
         mounted() {
