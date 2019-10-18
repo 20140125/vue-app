@@ -73,8 +73,8 @@
                     <el-aside>
                         <el-menu background-color="#393d49" text-color="#fff" active-text-color="#ffd04b">
                             <el-menu-item @click="sendUser(user,index)" v-for="(user,index) in client_list" :key="index" :index="index">
-                                <el-avatar :size="50" :src="user.client_img" style="cursor: pointer"></el-avatar>
-                                <span slot="title" style="margin-left: 20px">{{user.client_name}}</span>
+                                <el-avatar :size="50" :src="user.client_img" style="cursor: pointer"/>
+                                <span slot="title" style="margin-left: 20px" v-html="user.client_name"></span>
                             </el-menu-item>
                         </el-menu>
                     </el-aside>
@@ -598,12 +598,12 @@
     }
     .user-list{
         box-shadow: 0 2px 12px #ffffff, 0 0 6px #F5F5F5;
-        min-height:600px;
+        min-height:650px;
         background-color:#393D49;
         border-radius:10px;
         -moz-border-radius:10px;
         -webkit-border-radius:10px;
-        max-height: 600px;
+        max-height: 650px;
         overflow: hidden;
         overflow-y: auto;
         padding: 0 !important;
