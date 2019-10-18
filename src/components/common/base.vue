@@ -292,7 +292,6 @@
                             } else {
                                 __this.client_list[data['client_id']] = data['client_name'];
                             }
-                            console.log(__this.client_list);
                             break;
                             //发送消息
                         case 'say':
