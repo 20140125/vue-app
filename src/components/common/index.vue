@@ -83,7 +83,7 @@
                             axisPointer: {
                                 type: 'cross',
                                 label: {
-                                    backgroundColor: '#6a7985'
+                                    backgroundColor: '#688583'
                                 }
                             }
                         },
