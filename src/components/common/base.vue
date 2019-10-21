@@ -72,7 +72,9 @@
             </el-container>
         </el-container>
         <!---chat message-->
-        <el-dialog :title="chatTitle" @close="chatVisible = false" :center="center" :show-close="closeModel" :close-on-press-escape="closeModel" :visible.sync="chatVisible">
+        <el-dialog :title="chatTitle" @close="chatVisible = false" top="5vh"
+                   :center="center" :show-close="closeModel"
+                   :close-on-press-escape="closeModel" :visible.sync="chatVisible">
             <el-row :gutter="24">
                 <el-col :span="6" class="user-list">
                     <el-aside>
@@ -98,6 +100,13 @@
                         <div class="input-msg">
                             <emotion @clickEmotion="getEmotion" v-show="showEmotion" :height="300"></emotion>
                             <div>
+                                <el-tooltip effect="dark" content="房间名称" placement="top-start">
+                                    <el-menu :default-active="room_id" mode="horizontal" style="margin-bottom: 10px;border: none">
+                                        <el-menu-item @click="setRoomID(room)" v-for="(room,index) in oauthConfig" :key="index" :index="room.id.toString()">
+                                            {{room.value}}
+                                        </el-menu-item>
+                                    </el-menu>
+                                </el-tooltip>
                                 <el-tooltip effect="dark" content="发送表情" placement="top-start">
                                     <i @click="showEmotion = !showEmotion" class="el-icon-picture-outline-round icon"></i>
                                 </el-tooltip>
@@ -153,7 +162,7 @@
                 cgi:{
                     uploadUrl:process.env.API_ROOT+$url.fileUpload
                 },
-                chatTitle:'ChatRoom',
+                chatTitle:'随心所欲',
                 fileData:{},
                 headers:{},
                 chatVisible:false,
@@ -170,10 +179,8 @@
                 avatar_url:'',
                 chatMsgClass:'el-icon-chat-dot-round',
                 msg_dot:false,
-                room_id:'1',
-                roomLists:[
-                    {room_id:'1',room_name:'谈笑风生'},
-                ],
+                room_id:'1200',
+                roomLists:[],
                 noticeArr:[],
             }
         },
@@ -181,10 +188,10 @@
             emotion
         },
         computed:{
-            ...mapGetters(['tabs','token','username','activeAuthName','menuLists','socketServer','avatarUrl','websocketServer']),
+            ...mapGetters(['tabs','token','username','activeAuthName','menuLists','socketServer','avatarUrl','websocketServer','oauthConfig']),
         },
         methods:{
-            ...mapActions(['addTabs','deleteTabs','addCurrTabs','logoutSystem','getAuthMenu']),
+            ...mapActions(['addTabs','deleteTabs','addCurrTabs','logoutSystem','getAuthMenu','getOauthConfig']),
             /**
              * TODO:字符串标签转换
              * @param html
@@ -195,6 +202,7 @@
                   .replace(/&lt;/g, "<")
                   .replace(/&gt;/g, ">")
                   .replace(/&quot;/g, "\"")
+                  .replace(/&amp;nbsp;/g," ")
                   .replace(/&#39;/g, "\'");
             },
             /**
@@ -221,9 +229,41 @@
                 } else {
                     this.chatMsgClass = 'el-icon-close';
                     //获取聊天记录
-                    this.websocketServer.send('{"type":"history","from_client_name":"'+this.username+'","to_client_name":"'+this.to_client_name+'"}');
+                    let str = {
+                        type:'history',
+                        from_client_name:this.username,
+                        to_client_name:this.to_client_name,
+                        room_id:this.room_id
+                    };
+                    this.websocketServer.send(JSON.stringify(str));
+                    this.getOauthConfig('RoomLists');
                     this.msg_dot = false;
                 }
+            },
+            /**
+             * TODO:设置群聊房间号
+             * @param room
+             */
+            setRoomID:function(room) {
+                this.room_id = room.id.toString();
+                this.chatTitle = room.value;
+                //加入房间
+                let open = {
+                    type:'login',
+                    client_name:this.username,
+                    room_id:this.room_id,
+                    client_img:this.avatarUrl,
+                    uid:this.md5(this.username),
+                };
+                this.websocketServer.send(JSON.stringify(open))
+                //获取聊天记录
+                let str = {
+                    type:'history',
+                    from_client_name:this.username,
+                    to_client_name:this.to_client_name,
+                    room_id:this.room_id
+                };
+                this.websocketServer.send(JSON.stringify(str));
             },
             /**
              * TODO：路由追加
@@ -310,6 +350,7 @@
              */
             connect:function(ws){
                 let __this = this;
+                // 连接建立时发送登录信息
                 ws.onopen = function(){
                     let str = {
                         type:'login',
@@ -348,6 +389,7 @@
                             __this.messageLists = data.message;
                             break;
                         case 'logout':
+                            console.log(data);
                             break;
                     }
                 };
@@ -374,6 +416,7 @@
                     type:'history',
                     from_client_name:this.username,
                     to_client_name:this.to_client_name,
+                    room_id:this.room_id
                 };
                 this.websocketServer.send(JSON.stringify(str));
             },
@@ -437,16 +480,18 @@
             say:function(data){
                 let content = this.setContent(data['content'],data['msg_type']);
                 let msg = {
-                    "from_client_name":data['from_client_name'],
-                    "time":data['time'],
-                    "content":content,
-                    "msg_type":data['msg_type'],
-                    "avatar_url":data['avatar_url']
+                    from_client_name:data['from_client_name'],
+                    time:data['time'],
+                    content:content,
+                    msg_type:data['msg_type'],
+                    avatar_url:data['avatar_url'],
+                    room_id:data['room_id']
                 };
                 let str = {
                     type:'history',
                     from_client_name:data['from_client_name'],
                     to_client_name:data['to_client_name'],
+                    room_id:data['room_id']
                 };
                 this.websocketServer.send(JSON.stringify(str));
                 this.messageLists.push(msg);
@@ -478,7 +523,8 @@
                         to_client_name:this.to_client_name,
                         msg_type:this.msg_type,
                         content:this.inputMsg,
-                        avatar_url:this.avatar_url
+                        avatar_url:this.avatar_url,
+                        room_id:this.room_id,
                     };
                     this.websocketServer.send(JSON.stringify(str));
                     this.$refs.message.innerHTML = '';
@@ -614,12 +660,12 @@
     }
     .user-list{
         box-shadow: 0 2px 12px #ffffff, 0 0 6px #F5F5F5;
-        min-height:650px;
+        min-height:715px;
         background-color:#393D49;
         border-radius:10px;
         -moz-border-radius:10px;
         -webkit-border-radius:10px;
-        max-height: 650px;
+        max-height: 715px;
         overflow: hidden;
         overflow-y: auto;
         padding: 0 !important;
