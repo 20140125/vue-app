@@ -420,6 +420,9 @@
                 };
                 this.websocketServer.send(JSON.stringify(str));
             },
+            /**
+             * TODO:获取发送内容
+             */
             setMsg:function(){
                 this.inputMsg = this.$refs.message.innerHTML;
             },

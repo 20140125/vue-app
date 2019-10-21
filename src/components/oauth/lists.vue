@@ -14,7 +14,7 @@
                 </template>
             </el-table-column>
             <el-table-column label="账号来源" prop="oauth_type"></el-table-column>
-            <el-table-column label="显示状态">
+            <el-table-column label="显示状态" v-if="username === 'admin'">
                 <template slot-scope="scope">
                     <Radio :item="scope.row" :url="cgi.status"></Radio>
                 </template>
@@ -66,7 +66,7 @@
                         <el-option v-for="(role,index) in roleLists" :key="index" :label="role.role_name" :value="role.id"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="用户状态" prop="status">
+                <el-form-item label="用户状态" prop="status" v-if="username === 'admin'">
                     <el-radio-group v-model="OauthModel.status" size="small">
                         <el-radio-button label="2">关闭</el-radio-button>
                         <el-radio-button label="1">开启</el-radio-button>
