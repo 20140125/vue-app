@@ -1,6 +1,6 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText">
-        <el-form :inline="true" style="margin-top: 10px">
+        <el-form :inline="true" style="margin-top: 10px" v-if="btn.add">
             <el-form-item style="float:right;">
                 <el-button icon="el-icon-plus" type="primary" size="medium" plain @click="addRole">添 加</el-button>
             </el-form-item>
@@ -9,7 +9,7 @@
         <el-table :data="roleLists.filter(data=>(!search || data.role_name.includes(search)))" border>
             <el-table-column label="#" prop='id' sortable></el-table-column>
             <el-table-column label="角色名称" prop="role_name" ></el-table-column>
-            <el-table-column label="显示状态">
+            <el-table-column label="显示状态" v-if="btn.edit">
                 <template slot-scope="scope">
                     <Radio :item="scope.row" :url="cgi.status"></Radio>
                 </template>
@@ -22,7 +22,7 @@
                 </template>
                 <template slot-scope="scope">
                     <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updateRole(scope.row)">修 改</el-button>
-                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="roleLists" v-on:success="success"></Delete>
+                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="roleLists" v-on:success="success" v-if="btn.del"></Delete>
                 </template>
             </el-table-column>
         </el-table>
@@ -50,7 +50,7 @@
                     </el-radio-group>
                 </el-form-item>
             </el-form>
-            <div slot="footer" class="dialog-footer">
+            <div slot="footer" class="dialog-footer" v-if="btn.edit">
                 <Submit :reFrom="reFrom" :model="roleModel" :url="url" :refs="refs" v-on:success="success"></Submit>
             </div>
         </el-dialog>
@@ -103,6 +103,8 @@
                     ids:[{ required:true,message:'权限ID不得为空',trigger:'blur' }],
                     urls:[{ required:true,message:'权限地址不得为空',trigger:'blur' }]
                 },
+                //细化权限按钮
+                btn:{},
             }
         },
         methods:{
@@ -162,7 +164,7 @@
                     updated_at:func.get_timestamp()
                 }
             },
-             /**
+            /**
              * @param value      当前值
              * @param direction  数据移动的方向（'left' / 'right'）
              * @param movedKeys  发生移动的数据 key 数组
@@ -170,13 +172,13 @@
             handleChange(value, direction, movedKeys) {
                 let __this = this;
                 switch (direction) {
-                    //删除
+                  //删除
                     case 'left':
                         movedKeys.forEach(function (item,index) {
                             __this.ids.splice(__this.ids.indexOf(item),1);
                         });
                         break;
-                    //添加
+                  //添加
                     case 'right':
                         movedKeys.forEach(function (item,index) {
                             __this.ids.push(parseInt(item));
@@ -206,6 +208,7 @@
         },
         mounted() {
             this.$nextTick(function () {
+                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.$store.state.login.auth_url);
                 this.getRoleLists(this.page,this.limit)
             });
         }

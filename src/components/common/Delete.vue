@@ -1,5 +1,7 @@
 <template>
-    <el-button plain type="danger" icon="el-icon-delete" size="mini" @click="remove(item,index)">删 除</el-button>
+    <el-tooltip content="三思而后行" placement="top">
+        <el-button plain type="danger" icon="el-icon-delete" size="mini" @click="remove(item,index)">删 除</el-button>
+    </el-tooltip>
 </template>
 
 <script>

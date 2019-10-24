@@ -25,21 +25,21 @@
                         </el-tabs>
                     </el-form-item>
                 </el-form>
-                <Submit style="text-align: center !important;" :reFrom="reFrom" :model="fileModel" :url="url" :refs="refs" v-on:success="success"></Submit>
+                <Submit style="text-align: center !important;" :reFrom="reFrom" :model="fileModel" :url="url" :refs="refs" v-on:success="success" v-if="btn.edit"></Submit>
             </el-col>
             <!--文件内容-->
         </el-row>
         <!--鼠标右键-->
         <div v-show="menuVisible" style="z-index:100">
             <el-menu id="menu" class="menu" mode="horizontal" style="border-bottom: solid 1px #393d49" background-color="#393d49" text-color="#cccccc" active-text-color="#ffd04b">
-                <el-menu-item @click="addFile" v-show="showRightBtn.add"><i class="el-icon-circle-plus-outline"></i>添 加</el-menu-item>
-                <el-menu-item @click="renameFile" v-show="showRightBtn.rename"><i class="el-icon-edit-outline"></i>重命名</el-menu-item>
-                <el-menu-item @click="authFile" v-show="showRightBtn.auth"><i class="el-icon-user-solid"></i>权 限</el-menu-item>
-                <el-menu-item @click="compressionFile" v-show="showRightBtn.compression"><i class="el-icon-collection"></i>压 缩</el-menu-item>
-                <el-menu-item @click="DecompressionFile" v-show="showRightBtn.DeCompression"><i class="el-icon-receiving"></i>解 压</el-menu-item>
-                <el-menu-item @click="downloadFile" v-show="showRightBtn.download"><i class="el-icon-download"></i>下 载</el-menu-item>
-                <el-menu-item @click="uploadFile" v-show="showRightBtn.upload"><i class="el-icon-upload"></i>上 传</el-menu-item>
-                <el-menu-item @click="deleteFile" v-show="showRightBtn.remove"><i class="el-icon-delete-solid"></i>删 除</el-menu-item>
+                <el-menu-item  @click="addFile" v-show="showRightBtn.add && btn.add"><i class="el-icon-circle-plus-outline"></i>添 加</el-menu-item>
+                <el-menu-item  @click="renameFile" v-show="showRightBtn.rename && btn.rename"><i class="el-icon-edit-outline"></i>重命名</el-menu-item>
+                <el-menu-item  @click="authFile" v-show="showRightBtn.auth && btn.chmod"><i class="el-icon-user-solid"></i>权 限</el-menu-item>
+                <el-menu-item  @click="compressionFile" v-show="showRightBtn.compression && btn.gzip"><i class="el-icon-collection"></i>压 缩</el-menu-item>
+                <el-menu-item  @click="DecompressionFile" v-show="showRightBtn.DeCompression && btn.unzip"><i class="el-icon-receiving"></i>解 压</el-menu-item>
+                <el-menu-item  @click="downloadFile" v-show="showRightBtn.download && btn.download"><i class="el-icon-download"></i>下 载</el-menu-item>
+                <el-menu-item  @click="uploadFile" v-show="showRightBtn.upload && btn.upload"><i class="el-icon-upload"></i>上 传</el-menu-item>
+                <el-menu-item  @click="deleteFile" v-show="showRightBtn.remove && btn.del"><i class="el-icon-delete-solid"></i>删 除</el-menu-item>
             </el-menu>
         </div>
         <!--鼠标右键-->
@@ -249,7 +249,9 @@
                     ]
                 },
                 filterText:'',
-                scrollTop:0
+                scrollTop:0,
+
+                btn:{},
             }
         },
         watch: {
@@ -726,6 +728,7 @@
         },
         mounted() {
             this.$nextTick(function () {
+                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.$store.state.login.auth_url);
                 this.url = this.cgi.update;
                 this.getFileLists(this.path);
             });

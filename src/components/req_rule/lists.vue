@@ -1,6 +1,6 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText">
-        <el-form :inline="true" style="margin-top: 10px">
+        <el-form :inline="true" style="margin-top: 10px" v-if="btn.add">
             <el-form-item style="float:right;">
                 <el-button icon="el-icon-plus" type="primary" size="medium" plain @click="addReqRule">添 加</el-button>
             </el-form-item>
@@ -14,7 +14,7 @@
                     <Radio :item="scope.row" :url="cgi.status" v-on:success="success"></Radio>
                 </template>
             </el-table-column>
-            <el-table-column label="授权状态" width="150px" v-if="username!=='admin'">
+            <el-table-column label="授权状态" width="150px" v-if="username !== 'admin'">
                 <template slot-scope="scope">
                     <el-button v-if="scope.row.status === 1" type="success" size="mini">已授权</el-button>
                     <el-button v-if="scope.row.status === 2" type="info" size="mini">未授权</el-button>
@@ -28,8 +28,8 @@
                     <el-input v-model="search"  placeholder="请输入关键字查询"></el-input>
                 </template>
                 <template slot-scope="scope">
-                    <el-button type="primary" v-if="scope.row.status === 1" plain icon="el-icon-plus" size="mini" @click="updateReqRule(scope.row)">续 期</el-button>
-                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="reqRuleLists" v-on:success="success"></Delete>
+                    <el-button type="primary" v-if="scope.row.status === 1 && btn.edit" plain icon="el-icon-plus" size="mini" @click="updateReqRule(scope.row)">续 期</el-button>
+                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="reqRuleLists" v-on:success="success" v-if="btn.del"></Delete>
                 </template>
             </el-table-column>
         </el-table>
@@ -50,7 +50,7 @@
             <el-form :label-width="labelWidth" :model="reqRuleModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="申请人" prop="username">
                     <el-select filterable style="width: 100%" v-model="reqRuleModel.username" @change="getAuth">
-                        <el-option v-for="(user,index) in userLists" :label="user.username" :key="index" :value="user.username"></el-option>
+                        <el-option v-for="(user,index) in userLists" :label="user.username" :key="index" :value="user.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="授权地址" prop="href">
@@ -173,6 +173,8 @@
                         }
                     }]
                 },
+                //细化权限按钮
+                btn:{}
             }
         },
         computed:{
@@ -251,8 +253,8 @@
             /**
              * TODO:获取权限
              */
-            getAuth:function(username){
-                let params = {username:username}
+            getAuth:function(user_id){
+                let params = {user_id:user_id}
                 apiLists.GetAuthByToken(params).then(response=>{
                     if (response && response.data.code === 200) {
                         this.ruleLists = response.data.item;
@@ -274,6 +276,7 @@
         },
         mounted() {
             this.$nextTick(function () {
+                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.$store.state.login.auth_url);
                 this.getReqRuleLists(this.page,this.limit)
             });
         }

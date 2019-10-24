@@ -49,7 +49,7 @@
             </el-aside>
             <el-container direction="vertical">
                 <el-main>
-                    <el-carousel :interval="3500" arrow="never" height="50px" direction="vertical" indicator-position="none" v-if="noticeArr.length>0">
+                    <el-carousel :interval="2000" arrow="never" height="50px" direction="vertical" indicator-position="none" v-if="noticeArr.length>0">
                         <el-carousel-item v-for="(item,index) in noticeArr" :key="index">
                             <el-alert type="success" show-icon :title="item.message" effect="light" @close="closeNotice(item)"></el-alert>
                         </el-carousel-item>

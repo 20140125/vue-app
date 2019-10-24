@@ -82,9 +82,9 @@
         <!--右键弹框-->
         <div v-show="menuVisible">
             <el-menu id="menu" class="menu" style="border-bottom: solid 1px #393d49" background-color="#393d49" text-color="#cccccc" mode="horizontal" active-text-color="#ffd04b">
-                <el-menu-item @click="addCategory"><i class="el-icon-circle-plus-outline"></i>添 加</el-menu-item>
-                <el-menu-item @click="updateCategory"><i class="el-icon-edit-outline"></i>修 改</el-menu-item>
-                <el-menu-item @click="deleteCategory"><i class="el-icon-delete-solid"></i>删 除</el-menu-item>
+                <el-menu-item v-show="btn.add" @click="addCategory"><i class="el-icon-circle-plus-outline"></i>添 加</el-menu-item>
+                <el-menu-item v-show="btn.edit" @click="updateCategory"><i class="el-icon-edit-outline"></i>修 改</el-menu-item>
+                <el-menu-item v-show="btn.del" @click="deleteCategory"><i class="el-icon-delete-solid"></i>删 除</el-menu-item>
             </el-menu>
         </div>
         <!--右键弹框-->
@@ -226,7 +226,9 @@
                     response_string:[{required:true,message:'请输入返回参数', trigger: 'blur'},],
                 },
                 //滚动条高度
-                scrollTop:0
+                scrollTop:0,
+                //细化权限按钮
+                btn:{}
             }
         },
         watch: {
@@ -418,6 +420,7 @@
         },
         mounted() {
             this.$nextTick(function () {
+                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.$store.state.login.auth_url);
                 this.getCategoryLists();
             });
         }

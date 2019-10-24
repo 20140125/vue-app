@@ -4,7 +4,7 @@
             <el-form-item>
                 <el-button v-for="(state,index) in pushState" :key="index" @click="getState(state.val)" :type="state.type" size="medium" plain>{{ state.val.toUpperCase() }}</el-button>
             </el-form-item>
-            <el-form-item style="float:right;" v-if="username === 'admin'">
+            <el-form-item style="float:right;" v-if="btn.add">
                 <el-button icon="el-icon-plus" type="primary" size="medium" plain @click="addPush">添 加</el-button>
             </el-form-item>
         </el-form>
@@ -31,8 +31,8 @@
                     <el-input v-model="search"  placeholder="请输入关键词查询"></el-input>
                 </template>
                 <template slot-scope="scope">
-                    <el-button type="primary" v-if="scope.row.state!=='successfully' && username === 'admin'" plain icon="el-icon-edit" size="mini" @click="updatePush(scope.row)">执 行</el-button>
-                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="pushLists" v-on:success="success"></Delete>
+                    <el-button type="primary" v-if="scope.row.state!=='successfully' && btn.edit" plain icon="el-icon-edit" size="mini" @click="updatePush(scope.row)">执 行</el-button>
+                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="pushLists" v-on:success="success" v-if="btn.del"></Delete>
                 </template>
             </el-table-column>
         </el-table>
@@ -136,7 +136,9 @@
                     {'val':'successfully','label':'成功','type':'success'},
                     {'val':'failed','label':'失败','type':'danger'},
                     {'val':'offline','label':'离线','type':'default'}
-                ]
+                ],
+                //权限细化按钮
+                btn:{},
             }
         },
         computed:{
@@ -245,6 +247,8 @@
         },
         mounted() {
             this.$nextTick(function () {
+                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.$store.state.login.auth_url);
+                console.log(this.btn);
                 this.getPushLists(this.page,this.limit)
             });
         }

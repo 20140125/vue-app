@@ -14,7 +14,7 @@
                 </template>
             </el-table-column>
             <el-table-column label="账号来源" prop="oauth_type"></el-table-column>
-            <el-table-column label="显示状态" v-if="username === 'admin'">
+            <el-table-column label="显示状态" v-if="btn.edit">
                 <template slot-scope="scope">
                     <Radio :item="scope.row" :url="cgi.status"></Radio>
                 </template>
@@ -26,8 +26,8 @@
                     <el-input v-model="search"  placeholder="请输入关键词查询"></el-input>
                 </template>
                 <template slot-scope="scope">
-                    <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updateOauth(scope.row)">修 改</el-button>
-                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="oauthLists" v-on:success="success"></Delete>
+                    <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updateOauth(scope.row)" v-if="btn.edit">修 改</el-button>
+                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="oauthLists" v-on:success="success" v-if="btn.del"></Delete>
                 </template>
             </el-table-column>
         </el-table>
@@ -136,6 +136,7 @@
                 },
                 headers:{},
                 onlineUser:[],
+                btn:{},
             }
         },
         computed:{
@@ -248,6 +249,7 @@
         },
         mounted() {
             this.$nextTick(function () {
+                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.$store.state.login.auth_url);
                 this.getOauthLists(this.page,this.limit);
             });
         }

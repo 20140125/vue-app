@@ -140,6 +140,75 @@ const get_scroll_top = function () {
     }
     return scroll_top;
 }
+/**
+ * TODO:细化权限按钮
+ * @param currUrl
+ * @param name
+ * @param authLists
+ * @returns {{add: boolean, edit: boolean, del: boolean}}
+ */
+const set_btn_status = function (currUrl,name,authLists) {
+    let btn = {add:false,edit:false,del:false};
+    let prefix = currUrl.substring(0,currUrl.lastIndexOf('/')+1);
+    authLists = JSON.parse(authLists);
+    if (authLists.indexOf(prefix+'save')>=0) {
+        btn.add = true;
+    }
+    if (authLists.indexOf(prefix+'update')>=0) {
+        btn.edit = true;
+    }
+    if (authLists.indexOf(prefix+'delete')>=0) {
+        btn.del = true;
+    }
+    switch (name) {
+        case 'SystemFile':
+            btn.chmod = false;
+            btn.gzip = false;
+            btn.unzip = false;
+            btn.download = false;
+            btn.rename = false;
+            btn.upload = false;
+            if (authLists.indexOf(prefix+'chmod')>=0) {
+                btn.chmod = true;
+            }
+            if (authLists.indexOf(prefix+'gzip')>=0) {
+                btn.gzip = true;
+            }
+            if (authLists.indexOf(prefix+'unzip')>=0) {
+                btn.unzip = true;
+            }
+            if (authLists.indexOf(prefix+'download')>=0) {
+                btn.download = true;
+            }
+            if (authLists.indexOf(prefix+'rename')>=0) {
+                btn.rename = true;
+            }
+            if (authLists.indexOf(prefix+'upload')>=0) {
+                btn.upload = true;
+            }
+            break;
+        case 'DatabaseLists':
+            btn.backup = false;
+            btn.repair = false;
+            btn.optimize = false;
+            btn.comment = false;
+            if (authLists.indexOf(prefix+'backup')>=0) {
+                btn.backup = true;
+            }
+            if (authLists.indexOf(prefix+'repair')>=0) {
+                btn.repair = true;
+            }
+            if (authLists.indexOf(prefix+'optimize')>=0) {
+                btn.optimize = true;
+            }
+            if (authLists.indexOf(prefix+'comment')>=0) {
+                btn.comment = true;
+            }
+            break;
+
+    }
+    return btn;
+}
 const func = {
     str_count:str_count,
     set_time:set_time,
@@ -149,6 +218,7 @@ const func = {
     set_random:set_random,
     str_shuffle:str_shuffle,
     set_password:set_password,
-    get_scroll_top:get_scroll_top
+    get_scroll_top:get_scroll_top,
+    set_btn_status:set_btn_status
 };
 module.exports = func;

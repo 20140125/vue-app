@@ -1,6 +1,6 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText">
-        <el-form :inline="true" style="margin-top: 10px">
+        <el-form :inline="true" style="margin-top: 10px" v-if="btn.add">
             <el-form-item style="float:right;">
                 <el-button icon="el-icon-plus" type="primary" size="medium" plain @click="addAuth">添 加</el-button>
             </el-form-item>
@@ -12,7 +12,7 @@
                   :tree-props="{children: '__child', hasChildren: 'hasChildren'}">
             <el-table-column label="权限名称" prop="name"></el-table-column>
             <el-table-column label="权限链接" prop="href"></el-table-column>
-            <el-table-column label="显示状态">
+            <el-table-column label="显示状态" v-if="btn.edit">
                 <template slot-scope="scope">
                     <Radio :item="scope.row" :url="cgi.status"></Radio>
                 </template>
@@ -22,8 +22,8 @@
                     <el-input v-model="search" @keyup.enter="searchAuth" placeholder="输入关键词查询"></el-input>
                 </template>
                 <template slot-scope="scope">
-                    <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updateAuth(scope.row)">修 改</el-button>
-                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="authLists" v-on:success="success"></Delete>
+                    <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updateAuth(scope.row)" v-if="btn.edit">修 改</el-button>
+                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="authLists" v-on:success="success" v-if="btn.del"></Delete>
                 </template>
             </el-table-column>
         </el-table>
@@ -66,6 +66,7 @@
     import apiLists from '../../api/api';
     import func from '../../api/func'
     import $url from '../../api/url';
+    import {mapGetters} from 'vuex'
     export default {
         name: "lists",
         components: {Delete, Radio, Submit},
@@ -106,8 +107,13 @@
                     href:[ { required:true,message:'权限链接不得为空',trigger:'blur' } ],
                     pid:[ { required:true,message:'权限上级不得为空',trigger:'change' } ],
                     status:[ { required:true,message:'权限状态不得为空',trigger:'change' } ]
-                }
+                },
+                //权限按钮细化
+                btn:{},
             }
+        },
+        computed:{
+            ...mapGetters(['username'])
         },
         methods:{
             /**
@@ -172,6 +178,7 @@
         },
         mounted() {
             this.$nextTick(function () {
+                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.$store.state.login.auth_url);
                 this.getAuthLists();
             });
         }
