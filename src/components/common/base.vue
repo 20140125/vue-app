@@ -121,7 +121,9 @@
                                     </el-tooltip>
                                 </el-upload>
                             </div>
-                            <div contentEditable="true" ref="message" id="content" @focus="showEmotion = false" @keydown="setMsg"></div>
+                            <div contentEditable="true" ref="message" id="content" @focus="showEmotion = false" @keydown="setMsg">
+
+                            </div>
                         </div>
                         <div class="input-button" style="text-align: right">
                             <el-button type="primary" round plain size="medium" @click="sendMsg">发 送</el-button>
@@ -383,9 +385,6 @@
                             break;
                         //聊天记录
                         case 'history':
-                            for (let i in data.message) {
-                                data.message[i]['content'] = __this.setContent(data.message[i]['content'],data.message[i]['msg_type'])
-                            }
                             __this.messageLists = data.message;
                             break;
                         case 'logout':
@@ -436,25 +435,19 @@
                 this.$refs.message.innerHTML = this.inputMsg;
             },
             /**
-             * TODO:设置文本内容
-             */
-            setContent:function(content,msg_type){
-                let msg='';
-                switch (msg_type) {
-                    case 'file': msg = '<img src="'+content+'" alt="" width="50px" height="50px"/>';break; //后期修改
-                    case 'text': msg = content;break;
-                    case 'video' : msg = '<video src="'+content+'" width="100px" height="100px"/>';break;
-                }
-                return msg;
-            },
-            /**
              * TODO：图片上传成功
              * @param response
              */
             uploadSuccess:function(response){
                 if (response && response.code === 200){
-                    this.msg_type = 'text';
-                    this.inputMsg+= "<img src='"+response.item.src+"' width='100px' height='100px' alt=''>"
+                    switch (this.msg_type) {
+                        case 'img':
+                            this.inputMsg+= "<img src='"+response.item.src+"' width='100px' height='100px' alt=''>"
+                            break;
+                        case 'video':
+                            this.inputMsg+= "<video src='"+response.item.src+"' width='200px' height='200px' controls='controls'>"
+                            break;
+                    }
                     this.$refs.message.innerHTML = this.inputMsg;
                     return ;
                 }
@@ -465,27 +458,37 @@
              * @param file
              */
             beforeUpload:function(file){
-                let typeArr = ['image/jpg','image/gif','image/png','image/jpeg'];
-                if (!typeArr.includes(file.type)){
-                    this.$message({type:'warning',message:'upload image format error'});
-                    return false;
+                let ext = file.name.split('.')[1];
+                switch (ext.toLocaleLowerCase()) {
+                    case 'jpg':
+                    case 'gif':
+                    case 'png':
+                    case 'jpeg':
+                        this.msg_type = 'img'
+                        if (file.size>2*1024*1024){
+                            this.$message({type:'warning',message:'upload image size error'});
+                        }
+                        break;
+                    case 'mp4':
+                        this.msg_type = 'video'
+                        if (file.size>5*1024*1024){
+                            this.$message({type:'warning',message:'upload video size error'});
+                        }
+                        break;
+                    default:
+                        this.$message({type:'warning',message:'Unsupported file format'});
+                        break;
                 }
-                if (file.size>2*1024*1024){
-                    this.$message({type:'warning',message:'upload image size error'});
-                    return false;
-                }
-                return true;
             },
             /**
              * TODO:发送消息
              * @param data from_client_id from_client_name content time msg_type to_client_name to_client_id
              */
             say:function(data){
-                let content = this.setContent(data['content'],data['msg_type']);
                 let msg = {
                     from_client_name:data['from_client_name'],
                     time:data['time'],
-                    content:content,
+                    content:data['content'],
                     msg_type:data['msg_type'],
                     avatar_url:data['avatar_url'],
                     room_id:data['room_id']
@@ -598,7 +601,7 @@
             //图片上传参数
             this.avatar_url = this.avatarUrl;
             this.fileData.token = this.token;
-            this.fileData.rand = true;
+            this.fileData.rand = false;
             this.headers.Authorization = `${func.set_password(func.set_random(32),func.set_random(12))}${this.token}${func.set_password(func.set_random(32),func.set_random(12))}`
             //客服系统初始化
             this.connect(this.websocketServer);
@@ -732,6 +735,7 @@
         height: 95px;
         border-radius: 10px;
         padding:10px;
+        overflow: scroll;
     }
     .input-msg{
         min-height: 100px;

@@ -85,6 +85,7 @@
             </el-upload>
         </el-dialog>
         <!--文件上传-->
+
         <!--图片预览-->
         <el-dialog :visible.sync="imgVisible">
             <img width="100%" :src="dialogImageUrl" alt="">
@@ -661,7 +662,6 @@
              */
             uploadFile:function(){
                 this.fileSyncVisible = true;
-                this.fileList = [];
                 this.fileData.token = this.token;
                 if (this.fileObject.fileType === 'file'){
                     this.fileData.path = this.fileObject.path.replace(this.fileObject.label,'');
@@ -688,23 +688,26 @@
              */
             handelSuccess:function(response){
                 if (response.code === 200){
-                    let ext = response.item.name.split(".")[1];
-                    let imgArr = ['png','jpeg','gif','jpg'];
-                    if (imgArr.includes(ext.toLowerCase())){
-                        this.$alert('是否预览图片?','图片预览').then(()=>{
-                            this.imgVisible = true;
-                            apiLists.ImagePreview({name:response.item.name}).then(response=>{
-                                if (response && response.data.code === 200){
-                                    this.dialogImageUrl = response.data.item.src;
-                                }
-                            })
-                        })
-                    }
                     this.$message({type:'success',message:response.msg});
                     let data = { msg:response.msg,result:response,href:$url.fileUpload };
                     this.saveSystemLog(data);
                     this.getFileLists(this.path);
                     this.fileSyncVisible = false;
+                }
+            },
+            /**
+             * TODO:图片/视频预览
+             */
+            imagePreview:function() {
+                let ext = this.fileObject.name.split(".")[1];
+                let imgArr = ['png','jpeg','gif','jpg'];
+                if (imgArr.includes(ext.toLowerCase())){
+                    this.imgVisible = true;
+                    apiLists.ImagePreview({name:response.item.name}).then(response=>{
+                        if (response && response.data.code === 200){
+                            this.dialogImageUrl = response.data.item.src;
+                        }
+                    })
                 }
             },
             /**
