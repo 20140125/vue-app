@@ -19,7 +19,7 @@
                 </el-main>
             </el-col>
             <el-dialog :visible.sync = 'oauthVisible' title="授权登录" :destroy-on-close="destroy_on_close" :center="center" :width="dialogWidth">
-                <el-button plain v-for="(oauth,index) in oauthConfig" type="primary" :key="index" v-if="oauth.status === 1" @click="goto(oauth.value)">{{oauth.name}}</el-button>
+                <el-button plain v-for="(oauth,index) in oauthConfig" type="primary" :key="index" v-if="oauth.status === 1" @click="goto(oauth.value)">{{oauth.name.toUpperCase()}}</el-button>
             </el-dialog>
         </el-row>
         <el-footer style="text-align: center">
@@ -48,13 +48,13 @@
                 bgStyle:{
                     'background':'url('+require('../assets/u0.jpg')+')',
                     'background-repeat':'no-repeat',
-                    'height':(window.innerHeight-16)+'px',
+                    'height':(window.innerHeight)+'px',
                 },
                 oauthVisible:false,
                 center:true,
                 destroy_on_close:true, //关闭销毁资源
                 innerWidth:window.innerWidth,
-                dialogWidth:'30%',
+                dialogWidth:'33%',
                 oauth:true,
             }
         },
@@ -99,23 +99,23 @@
             this.$nextTick(function () {
                 if (this.innerWidth>=1920){
                     this.oauth = true;
-                    this.dialogWidth = '30%';
+                    this.dialogWidth = '33%';
                 }
                 if (this.innerWidth>=1200 && this.innerWidth<1920){
                     this.oauth = true;
-                    this.dialogWidth = '50%';
+                    this.dialogWidth = '53%';
                 }
                 if (this.innerWidth>=992 && this.innerWidth<1200){
                     this.oauth = false;
-                    this.dialogWidth = '60%'
+                    this.dialogWidth = '63%'
                 }
                 if (this.innerWidth>=768 && this.innerWidth<992){
                     this.oauth = false;
-                    this.dialogWidth = '70%'
+                    this.dialogWidth = '73%'
                 }
                 if (this.innerWidth<768){
                     this.oauth = false;
-                    this.dialogWidth = '95%'
+                    this.dialogWidth = '98%'
                 }
             });
         }

@@ -250,7 +250,7 @@
              */
             addConfig:function () {
                 this.title='添加配置';
-                this.configModel = {
+                this.configValModel = {
                     name:'',
                     status:1,
                     value:'[]',

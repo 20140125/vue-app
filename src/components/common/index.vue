@@ -2,6 +2,13 @@
     <el-row :gutter="24">
         <el-col :span="12">
             <div id="charts" style="height: 500px"></div>
+            <el-calendar v-model="value">
+                <template  slot="dateCell" slot-scope="{date, data}">
+                    <p :class="data.isSelected ? 'is-selected' : ''">
+                       {{data.day.split('-').slice(2).join('-') }} {{ data.isSelected ? ' ✔️' : ''}}
+                    </p>
+                </template>
+            </el-calendar>
         </el-col>
         <el-col :span="12">
             <div class="block">
@@ -44,6 +51,7 @@
                 },
                 reverse: false,
                 activities:require('../../assets/timeline.json'),
+                value:new Date()
             }
         },
         computed:{
@@ -142,5 +150,8 @@
 <style scoped>
     .radio{
         margin-bottom: 30px;
+    }
+    .is-selected {
+        color: red;
     }
 </style>
