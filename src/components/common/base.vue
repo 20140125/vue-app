@@ -247,6 +247,7 @@
              * @param room
              */
             setRoomID:function(room) {
+                this.showEmotion = false;
                 this.room_id = room.id.toString();
                 this.chatTitle = room.value;
                 //加入房间
@@ -485,6 +486,14 @@
              * @param data from_client_id from_client_name content time msg_type to_client_name to_client_id
              */
             say:function(data){
+                let str = {
+                    type:'history',
+                    from_client_name:data['from_client_name'],
+                    to_client_name:data['to_client_name'],
+                    room_id:data['room_id']
+                };
+                //获取历史记录信息
+                this.websocketServer.send(JSON.stringify(str));
                 let msg = {
                     from_client_name:data['from_client_name'],
                     time:data['time'],
@@ -493,13 +502,6 @@
                     avatar_url:data['avatar_url'],
                     room_id:data['room_id']
                 };
-                let str = {
-                    type:'history',
-                    from_client_name:data['from_client_name'],
-                    to_client_name:data['to_client_name'],
-                    room_id:data['room_id']
-                };
-                this.websocketServer.send(JSON.stringify(str));
                 this.messageLists.push(msg);
                 if (this.username!==data['from_client_name']){
                     if (data['to_client_id']!=='all') {
@@ -589,6 +591,7 @@
                     try {
                         div.scrollTop = div.scrollHeight
                     } catch (e) {
+                        this.$message.error(JSON.stringify(e));
                     }
                 })
             }

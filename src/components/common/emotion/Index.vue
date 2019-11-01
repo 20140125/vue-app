@@ -84,20 +84,15 @@
 <style scoped>
     .emotion{
         position: absolute;
-        bottom: 208px;
+        bottom: 310px;
         width: 500px;
-        left: 285px;
+        left: 300px;
     }
     .emotion-box {
         margin: 0 auto;
         width: 100%;
         box-sizing: border-box;
-        padding: 0 0 10px 10px;
-        border-left: 1px solid rgba(226, 226, 226, 0.84);
-        border-bottom: 1px solid rgba(226, 226, 226, 0.84);
-        border-bottom-left-radius: 10px;
-        -moz-border-radius-bottomleft: 10px;
-        -webkit-border-bottom-left-radius:10px;
+        padding: 0 0 5px 10px;
         overflow-x: hidden;
         overflow-y: auto;
         position: initial;
