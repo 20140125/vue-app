@@ -11,7 +11,7 @@
                     <el-input v-model="search"  placeholder="请输入关键字查询"></el-input>
                 </template>
                 <template slot-scope="scope">
-                    <Delete :url="cgi.remove"  :item="scope.row" :index="scope.$index" :Lists="logLists" v-on:success="success"></Delete>
+                    <Delete v-if="btn.del" :url="cgi.remove"  :item="scope.row" :index="scope.$index" :Lists="logLists" v-on:success="success"></Delete>
                 </template>
             </el-table-column>
         </el-table>
@@ -34,6 +34,7 @@
     import apiLists from '../../api/api';
     import $url from '../../api/url';
     import Delete from "../common/Delete";
+    import func from '../../api/func'
     export default {
         name: "log",
         components: {Delete},
@@ -53,6 +54,7 @@
                     remove:$url.logDelete,
                 },
                 rules:{},
+                btn:{},
             }
         },
         methods:{
@@ -97,6 +99,7 @@
         },
         mounted() {
             this.$nextTick(function () {
+                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.$store.state.login.auth_url);
                 this.getLogLists(this.page,this.limit);
             });
         }

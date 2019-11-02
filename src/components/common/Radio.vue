@@ -1,10 +1,10 @@
 <template>
-    <div>
+    <el-tooltip content="三思而后行" placement="top">
         <el-radio-group v-model="item.status" size="mini" @change="setStatus(item)">
             <el-radio-button label="2">关闭</el-radio-button>
             <el-radio-button label="1">开启</el-radio-button>
         </el-radio-group>
-    </div>
+    </el-tooltip>
 </template>
 
 <script>

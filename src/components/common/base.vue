@@ -49,7 +49,7 @@
             </el-aside>
             <el-container direction="vertical">
                 <el-main>
-                    <el-carousel :interval="3500" arrow="never" height="50px" direction="vertical" indicator-position="none" v-if="noticeArr.length>0">
+                    <el-carousel :interval="2000" arrow="never" height="50px" direction="vertical" indicator-position="none" v-if="noticeArr.length>0">
                         <el-carousel-item v-for="(item,index) in noticeArr" :key="index">
                             <el-alert type="success" show-icon :title="item.message" effect="light" @close="closeNotice(item)"></el-alert>
                         </el-carousel-item>
@@ -72,7 +72,9 @@
             </el-container>
         </el-container>
         <!---chat message-->
-        <el-dialog :title="chatTitle" @close="chatVisible = false" :center="center" :show-close="closeModel" :close-on-press-escape="closeModel" :visible.sync="chatVisible">
+        <el-dialog :title="chatTitle" @close="chatVisible = false" top="5vh"
+                   :center="center" :show-close="closeModel"
+                   :close-on-press-escape="closeModel" :visible.sync="chatVisible">
             <el-row :gutter="24">
                 <el-col :span="6" class="user-list">
                     <el-aside>
@@ -98,6 +100,13 @@
                         <div class="input-msg">
                             <emotion @clickEmotion="getEmotion" v-show="showEmotion" :height="300"></emotion>
                             <div>
+                                <el-tooltip effect="dark" content="房间名称" placement="top-start">
+                                    <el-menu :default-active="room_id" mode="horizontal" style="margin-bottom: 10px;border: none">
+                                        <el-menu-item @click="setRoomID(room)" v-for="(room,index) in oauthConfig" :key="index" :index="room.id.toString()">
+                                            {{room.value}}
+                                        </el-menu-item>
+                                    </el-menu>
+                                </el-tooltip>
                                 <el-tooltip effect="dark" content="发送表情" placement="top-start">
                                     <i @click="showEmotion = !showEmotion" class="el-icon-picture-outline-round icon"></i>
                                 </el-tooltip>
@@ -112,7 +121,9 @@
                                     </el-tooltip>
                                 </el-upload>
                             </div>
-                            <div contentEditable="true" ref="message" id="content" @focus="showEmotion = false" @keydown="setMsg"></div>
+                            <div contentEditable="true" ref="message" id="content" @focus="showEmotion = false" @keydown="setMsg">
+
+                            </div>
                         </div>
                         <div class="input-button" style="text-align: right">
                             <el-button type="primary" round plain size="medium" @click="sendMsg">发 送</el-button>
@@ -153,7 +164,7 @@
                 cgi:{
                     uploadUrl:process.env.API_ROOT+$url.fileUpload
                 },
-                chatTitle:'ChatRoom',
+                chatTitle:'随心所欲',
                 fileData:{},
                 headers:{},
                 chatVisible:false,
@@ -170,10 +181,8 @@
                 avatar_url:'',
                 chatMsgClass:'el-icon-chat-dot-round',
                 msg_dot:false,
-                room_id:'1',
-                roomLists:[
-                    {room_id:'1',room_name:'谈笑风生'},
-                ],
+                room_id:'1200',
+                roomLists:[],
                 noticeArr:[],
             }
         },
@@ -181,10 +190,10 @@
             emotion
         },
         computed:{
-            ...mapGetters(['tabs','token','username','activeAuthName','menuLists','socketServer','avatarUrl','websocketServer']),
+            ...mapGetters(['tabs','token','username','activeAuthName','menuLists','socketServer','avatarUrl','websocketServer','oauthConfig']),
         },
         methods:{
-            ...mapActions(['addTabs','deleteTabs','addCurrTabs','logoutSystem','getAuthMenu']),
+            ...mapActions(['addTabs','deleteTabs','addCurrTabs','logoutSystem','getAuthMenu','getOauthConfig']),
             /**
              * TODO:字符串标签转换
              * @param html
@@ -195,6 +204,7 @@
                   .replace(/&lt;/g, "<")
                   .replace(/&gt;/g, ">")
                   .replace(/&quot;/g, "\"")
+                  .replace(/&amp;nbsp;/g," ")
                   .replace(/&#39;/g, "\'");
             },
             /**
@@ -221,9 +231,42 @@
                 } else {
                     this.chatMsgClass = 'el-icon-close';
                     //获取聊天记录
-                    this.websocketServer.send('{"type":"history","from_client_name":"'+this.username+'","to_client_name":"'+this.to_client_name+'"}');
+                    let str = {
+                        type:'history',
+                        from_client_name:this.username,
+                        to_client_name:this.to_client_name,
+                        room_id:this.room_id
+                    };
+                    this.websocketServer.send(JSON.stringify(str));
+                    this.getOauthConfig('RoomLists');
                     this.msg_dot = false;
                 }
+            },
+            /**
+             * TODO:设置群聊房间号
+             * @param room
+             */
+            setRoomID:function(room) {
+                this.showEmotion = false;
+                this.room_id = room.id.toString();
+                this.chatTitle = room.value;
+                //加入房间
+                let open = {
+                    type:'login',
+                    client_name:this.username,
+                    room_id:this.room_id,
+                    client_img:this.avatarUrl,
+                    uid:this.md5(this.username),
+                };
+                this.websocketServer.send(JSON.stringify(open))
+                //获取聊天记录
+                let str = {
+                    type:'history',
+                    from_client_name:this.username,
+                    to_client_name:this.to_client_name,
+                    room_id:this.room_id
+                };
+                this.websocketServer.send(JSON.stringify(str));
             },
             /**
              * TODO：路由追加
@@ -310,6 +353,7 @@
              */
             connect:function(ws){
                 let __this = this;
+                // 连接建立时发送登录信息
                 ws.onopen = function(){
                     let str = {
                         type:'login',
@@ -342,12 +386,10 @@
                             break;
                         //聊天记录
                         case 'history':
-                            for (let i in data.message) {
-                                data.message[i]['content'] = __this.setContent(data.message[i]['content'],data.message[i]['msg_type'])
-                            }
                             __this.messageLists = data.message;
                             break;
                         case 'logout':
+                            console.log(data);
                             break;
                     }
                 };
@@ -374,9 +416,13 @@
                     type:'history',
                     from_client_name:this.username,
                     to_client_name:this.to_client_name,
+                    room_id:this.room_id
                 };
                 this.websocketServer.send(JSON.stringify(str));
             },
+            /**
+             * TODO:获取发送内容
+             */
             setMsg:function(){
                 this.inputMsg = this.$refs.message.innerHTML;
             },
@@ -390,25 +436,19 @@
                 this.$refs.message.innerHTML = this.inputMsg;
             },
             /**
-             * TODO:设置文本内容
-             */
-            setContent:function(content,msg_type){
-                let msg='';
-                switch (msg_type) {
-                    case 'file': msg = '<img src="'+content+'" alt="" width="50px" height="50px"/>';break; //后期修改
-                    case 'text': msg = content;break;
-                    case 'video' : msg = '<video src="'+content+'" width="100px" height="100px"/>';break;
-                }
-                return msg;
-            },
-            /**
              * TODO：图片上传成功
              * @param response
              */
             uploadSuccess:function(response){
                 if (response && response.code === 200){
-                    this.msg_type = 'text';
-                    this.inputMsg+= "<img src='"+response.item.src+"' width='100px' height='100px' alt=''>"
+                    switch (this.msg_type) {
+                        case 'img':
+                            this.inputMsg+= "<img src='"+response.item.src+"' width='100px' height='100px' alt=''>"
+                            break;
+                        case 'video':
+                            this.inputMsg+= "<video src='"+response.item.src+"' width='200px' height='200px' controls='controls'>"
+                            break;
+                    }
                     this.$refs.message.innerHTML = this.inputMsg;
                     return ;
                 }
@@ -419,36 +459,49 @@
              * @param file
              */
             beforeUpload:function(file){
-                let typeArr = ['image/jpg','image/gif','image/png','image/jpeg'];
-                if (!typeArr.includes(file.type)){
-                    this.$message({type:'warning',message:'upload image format error'});
-                    return false;
+                let ext = file.name.split('.')[1];
+                switch (ext.toLocaleLowerCase()) {
+                    case 'jpg':
+                    case 'gif':
+                    case 'png':
+                    case 'jpeg':
+                        this.msg_type = 'img'
+                        if (file.size>2*1024*1024){
+                            this.$message({type:'warning',message:'upload image size error'});
+                        }
+                        break;
+                    case 'mp4':
+                        this.msg_type = 'video'
+                        if (file.size>5*1024*1024){
+                            this.$message({type:'warning',message:'upload video size error'});
+                        }
+                        break;
+                    default:
+                        this.$message({type:'warning',message:'Unsupported file format'});
+                        break;
                 }
-                if (file.size>2*1024*1024){
-                    this.$message({type:'warning',message:'upload image size error'});
-                    return false;
-                }
-                return true;
             },
             /**
              * TODO:发送消息
              * @param data from_client_id from_client_name content time msg_type to_client_name to_client_id
              */
             say:function(data){
-                let content = this.setContent(data['content'],data['msg_type']);
-                let msg = {
-                    "from_client_name":data['from_client_name'],
-                    "time":data['time'],
-                    "content":content,
-                    "msg_type":data['msg_type'],
-                    "avatar_url":data['avatar_url']
-                };
                 let str = {
                     type:'history',
                     from_client_name:data['from_client_name'],
                     to_client_name:data['to_client_name'],
+                    room_id:data['room_id']
                 };
+                //获取历史记录信息
                 this.websocketServer.send(JSON.stringify(str));
+                let msg = {
+                    from_client_name:data['from_client_name'],
+                    time:data['time'],
+                    content:data['content'],
+                    msg_type:data['msg_type'],
+                    avatar_url:data['avatar_url'],
+                    room_id:data['room_id']
+                };
                 this.messageLists.push(msg);
                 if (this.username!==data['from_client_name']){
                     if (data['to_client_id']!=='all') {
@@ -478,7 +531,8 @@
                         to_client_name:this.to_client_name,
                         msg_type:this.msg_type,
                         content:this.inputMsg,
-                        avatar_url:this.avatar_url
+                        avatar_url:this.avatar_url,
+                        room_id:this.room_id,
                     };
                     this.websocketServer.send(JSON.stringify(str));
                     this.$refs.message.innerHTML = '';
@@ -537,6 +591,7 @@
                     try {
                         div.scrollTop = div.scrollHeight
                     } catch (e) {
+                        this.$message.error(JSON.stringify(e));
                     }
                 })
             }
@@ -549,7 +604,7 @@
             //图片上传参数
             this.avatar_url = this.avatarUrl;
             this.fileData.token = this.token;
-            this.fileData.rand = true;
+            this.fileData.rand = false;
             this.headers.Authorization = `${func.set_password(func.set_random(32),func.set_random(12))}${this.token}${func.set_password(func.set_random(32),func.set_random(12))}`
             //客服系统初始化
             this.connect(this.websocketServer);
@@ -614,12 +669,12 @@
     }
     .user-list{
         box-shadow: 0 2px 12px #ffffff, 0 0 6px #F5F5F5;
-        min-height:650px;
+        min-height:715px;
         background-color:#393D49;
         border-radius:10px;
         -moz-border-radius:10px;
         -webkit-border-radius:10px;
-        max-height: 650px;
+        max-height: 715px;
         overflow: hidden;
         overflow-y: auto;
         padding: 0 !important;
@@ -683,6 +738,7 @@
         height: 95px;
         border-radius: 10px;
         padding:10px;
+        overflow: scroll;
     }
     .input-msg{
         min-height: 100px;

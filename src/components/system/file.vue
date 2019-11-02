@@ -25,21 +25,21 @@
                         </el-tabs>
                     </el-form-item>
                 </el-form>
-                <Submit style="text-align: center !important;" :reFrom="reFrom" :model="fileModel" :url="url" :refs="refs" v-on:success="success"></Submit>
+                <Submit style="text-align: center !important;" :reFrom="reFrom" :model="fileModel" :url="url" :refs="refs" v-on:success="success" v-if="btn.edit"></Submit>
             </el-col>
             <!--文件内容-->
         </el-row>
         <!--鼠标右键-->
         <div v-show="menuVisible" style="z-index:100">
             <el-menu id="menu" class="menu" mode="horizontal" style="border-bottom: solid 1px #393d49" background-color="#393d49" text-color="#cccccc" active-text-color="#ffd04b">
-                <el-menu-item @click="addFile" v-show="showRightBtn.add"><i class="el-icon-circle-plus-outline"></i>添 加</el-menu-item>
-                <el-menu-item @click="renameFile" v-show="showRightBtn.rename"><i class="el-icon-edit-outline"></i>重命名</el-menu-item>
-                <el-menu-item @click="authFile" v-show="showRightBtn.auth"><i class="el-icon-user-solid"></i>权 限</el-menu-item>
-                <el-menu-item @click="compressionFile" v-show="showRightBtn.compression"><i class="el-icon-collection"></i>压 缩</el-menu-item>
-                <el-menu-item @click="DecompressionFile" v-show="showRightBtn.DeCompression"><i class="el-icon-receiving"></i>解 压</el-menu-item>
-                <el-menu-item @click="downloadFile" v-show="showRightBtn.download"><i class="el-icon-download"></i>下 载</el-menu-item>
-                <el-menu-item @click="uploadFile" v-show="showRightBtn.upload"><i class="el-icon-upload"></i>上 传</el-menu-item>
-                <el-menu-item @click="deleteFile" v-show="showRightBtn.remove"><i class="el-icon-delete-solid"></i>删 除</el-menu-item>
+                <el-menu-item  @click="addFile" v-show="showRightBtn.add && btn.add"><i class="el-icon-circle-plus-outline"></i>添 加</el-menu-item>
+                <el-menu-item  @click="renameFile" v-show="showRightBtn.rename && btn.rename"><i class="el-icon-edit-outline"></i>重命名</el-menu-item>
+                <el-menu-item  @click="authFile" v-show="showRightBtn.auth && btn.chmod"><i class="el-icon-user-solid"></i>权 限</el-menu-item>
+                <el-menu-item  @click="compressionFile" v-show="showRightBtn.compression && btn.gzip"><i class="el-icon-collection"></i>压 缩</el-menu-item>
+                <el-menu-item  @click="DecompressionFile" v-show="showRightBtn.DeCompression && btn.unzip"><i class="el-icon-receiving"></i>解 压</el-menu-item>
+                <el-menu-item  @click="downloadFile" v-show="showRightBtn.download && btn.download"><i class="el-icon-download"></i>下 载</el-menu-item>
+                <el-menu-item  @click="uploadFile" v-show="showRightBtn.upload && btn.upload"><i class="el-icon-upload"></i>上 传</el-menu-item>
+                <el-menu-item  @click="deleteFile" v-show="showRightBtn.remove && btn.del"><i class="el-icon-delete-solid"></i>删 除</el-menu-item>
             </el-menu>
         </div>
         <!--鼠标右键-->
@@ -85,6 +85,7 @@
             </el-upload>
         </el-dialog>
         <!--文件上传-->
+
         <!--图片预览-->
         <el-dialog :visible.sync="imgVisible">
             <img width="100%" :src="dialogImageUrl" alt="">
@@ -249,7 +250,9 @@
                     ]
                 },
                 filterText:'',
-                scrollTop:0
+                scrollTop:0,
+
+                btn:{},
             }
         },
         watch: {
@@ -659,7 +662,6 @@
              */
             uploadFile:function(){
                 this.fileSyncVisible = true;
-                this.fileList = [];
                 this.fileData.token = this.token;
                 if (this.fileObject.fileType === 'file'){
                     this.fileData.path = this.fileObject.path.replace(this.fileObject.label,'');
@@ -686,23 +688,26 @@
              */
             handelSuccess:function(response){
                 if (response.code === 200){
-                    let ext = response.item.name.split(".")[1];
-                    let imgArr = ['png','jpeg','gif','jpg'];
-                    if (imgArr.includes(ext.toLowerCase())){
-                        this.$alert('是否预览图片?','图片预览').then(()=>{
-                            this.imgVisible = true;
-                            apiLists.ImagePreview({name:response.item.name}).then(response=>{
-                                if (response && response.data.code === 200){
-                                    this.dialogImageUrl = response.data.item.src;
-                                }
-                            })
-                        })
-                    }
                     this.$message({type:'success',message:response.msg});
                     let data = { msg:response.msg,result:response,href:$url.fileUpload };
                     this.saveSystemLog(data);
                     this.getFileLists(this.path);
                     this.fileSyncVisible = false;
+                }
+            },
+            /**
+             * TODO:图片/视频预览
+             */
+            imagePreview:function() {
+                let ext = this.fileObject.name.split(".")[1];
+                let imgArr = ['png','jpeg','gif','jpg'];
+                if (imgArr.includes(ext.toLowerCase())){
+                    this.imgVisible = true;
+                    apiLists.ImagePreview({name:response.item.name}).then(response=>{
+                        if (response && response.data.code === 200){
+                            this.dialogImageUrl = response.data.item.src;
+                        }
+                    })
                 }
             },
             /**
@@ -726,6 +731,7 @@
         },
         mounted() {
             this.$nextTick(function () {
+                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.$store.state.login.auth_url);
                 this.url = this.cgi.update;
                 this.getFileLists(this.path);
             });

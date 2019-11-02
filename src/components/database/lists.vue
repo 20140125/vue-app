@@ -21,12 +21,12 @@
                 <template slot-scope="scope">
                     <el-button-group>
                         <el-button round type="primary" plain size="small" @click="updateComment(scope.row)" icon="el-icon-edit-outline"
-                                   v-if="scope.row.name === name && edit">更 新</el-button>
+                                   v-if="scope.row.name === name && edit && btn.comment">更 新</el-button>
                         <el-button round type="primary" plain size="small" @click="setComment(scope.row)" icon="el-icon-edit"
-                                   v-else>修 改</el-button>
-                        <el-button round type="primary" plain size="small" @click="BACKUP(scope.row)">备 份</el-button>
-                        <el-button round type="primary" plain size="small" @click="REPAIR(scope.row)">修 复</el-button>
-                        <el-button round type="primary" plain size="small" @click="OPTIMIZE(scope.row)">优 化</el-button>
+                                   v-else-if="btn.comment">修 改</el-button>
+                        <el-button round type="primary" v-if="btn.backup" plain size="small" @click="BACKUP(scope.row)">备 份</el-button>
+                        <el-button round type="primary" v-if="btn.repair" plain size="small" @click="REPAIR(scope.row)">修 复</el-button>
+                        <el-button round type="primary" v-if="btn.optimize" plain size="small" @click="OPTIMIZE(scope.row)">优 化</el-button>
                     </el-button-group>
                 </template>
             </el-table-column>
@@ -36,6 +36,7 @@
 
 <script>
     import apiLists from '../../api/api';
+    import func from '../../api/func'
     export default {
         name: "lists",
         data(){
@@ -47,6 +48,8 @@
                 edit:false,
                 name:'',
                 search:'',
+                //细化权限按钮
+                btn:{}
             }
         },
         methods:{
@@ -139,6 +142,7 @@
         },
         mounted() {
             this.$nextTick(function () {
+                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.$store.state.login.auth_url);
                 this.getDatabaseLists()
             });
         }
