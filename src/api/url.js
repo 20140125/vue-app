@@ -71,8 +71,8 @@ let url={
     areaLists:'/v1/area/lists',
     areaWeather:'/v1/area/weather',
     //聊天记录
-    chatHistory:'/v1/chat/history',
     emotionLists:'/v1/emotion/index',
+    chatLists:'/v1/chat/index',
     //推送列表
     pushList:'/v1/push/index',
     pushSave:'/v1/push/save',
@@ -85,5 +85,6 @@ let url={
     logout:'/v1/logout',
     checkToken:'/v1/checkLogin',
     getConfig:'/v1/config',
+    getCountData:'/v1/total'
 };
 export default url

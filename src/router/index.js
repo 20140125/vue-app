@@ -17,6 +17,7 @@ import OauthLists from '../components/oauth/lists'
 import ReqRuleLists from '../components/req_rule/lists'
 import AreaLists from '../components/area/lists'
 import PushList from '../components/system/push'
+import ChatList from '../components/system/chat'
 import Empty from '../components/empty'
 
 Vue.use(Router);
@@ -38,6 +39,7 @@ export default new Router({
                 { path: 'req-rule/index', name:'ReqRuleLists', component:ReqRuleLists,meta:{ mode:'req_rule',title:'申请授权列表' }},
                 { path: 'log/index',  name:'LogLists',component:LogLists,meta:{ mode:'log',title:'日志列表' } },
                 { path: 'system/log',  name:'SystemLog',component:SystemLog,meta:{ mode:'log',title:'系统日志' } },
+                { path: 'chat/index',  name:'ChatList',component:ChatList,meta:{ mode:'chat',title:'聊天记录' } },
                 { path: 'file/index',  name:'SystemFile',component:SystemFile,meta:{ mode:'file',title:'文件列表' } },
                 { path: 'config/index',  name:'ConfigLists',component:ConfigLists,meta:{ mode:'config',title:'基础配置' } },
                 { path: 'category/index', name:'CategoryLists',component:ApiLists,meta:{ mode:'api_lists',title:'分类列表' } },
