@@ -18,6 +18,8 @@ import ReqRuleLists from '../components/req_rule/lists'
 import AreaLists from '../components/area/lists'
 import PushList from '../components/system/push'
 import ChatList from '../components/system/chat'
+import MarkDown from '../components/editor/markdown'
+import UEditor from '../components/editor/ueditor'
 import Empty from '../components/empty'
 
 Vue.use(Router);
@@ -45,7 +47,10 @@ export default new Router({
                 { path: 'category/index', name:'CategoryLists',component:ApiLists,meta:{ mode:'api_lists',title:'分类列表' } },
                 { path: 'database/index', name:'DatabaseLists',component:DatabaseLists,meta:{ mode:'',title:'数据表列表' } },
                 { path: 'area/index', name:'AreaLists',component:AreaLists,meta:{ mode:'china_area',title:'城市列表' } },
-                { path: 'push/index', name:'PushList',component:PushList,meta:{ mode:'push',title:'站内通知' }}
+                { path: 'push/index', name:'PushList',component:PushList,meta:{ mode:'push',title:'站内通知' }},
+                { path: 'editor/markdown', name:'MarkDown',component:MarkDown,meta:{ mode:'push',title:'MarkDown' }},
+                { path: 'editor/quill', name:'UEditor',component:UEditor,meta:{ mode:'push',title:'UEditor' }}
+
             ]
         },
         { path: '*',redirect:'/404'}
