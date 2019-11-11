@@ -6,7 +6,7 @@ const uploadConfig = {
     methods: 'POST',  // 必填参数 图片上传方式
     token:  localStorage.token,  // 可选参数 如果需要token验证，假设你的token有存放在sessionStorage
     name: 'file',  // 必填参数 文件的参数名
-    size: 500,  // 可选参数   图片大小，单位为Kb, 1M = 1024Kb
+    size: 2,  // 可选参数   图片大小，单位为Kb, 1M = 1024Kb
     rand:true,  //名字是否覆盖
     accept: 'image/png, image/gif, image/jpeg, image/bmp, image/x-icon',  // 可选 可上传的图片格式
 }
@@ -69,7 +69,7 @@ const handlers = {
                 // 开始上传数据
                 xhr.upload.onloadstart = function (e) {
                     fileInput.value = '';
-                    console.log('开始上传')
+                   // console.log('开始上传')
                 }
                 // 上传数据成功，会触发
                 xhr.onload = function (e) {
@@ -86,14 +86,14 @@ const handlers = {
                 }
                 // 上传数据完成（成功或者失败）时会触发
                 xhr.upload.onloadend = function (e) {
-                     console.log('上传结束')
+                    // console.log('上传结束')
                 }
                 xhr.send(formData)
             });
             this.container.appendChild(fileInput);
         }
         fileInput.click();
-    }
+    },
 }
 // 全部配置
 export const editorOption = {
