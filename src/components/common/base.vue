@@ -184,6 +184,8 @@
                 room_id:'1200',
                 roomLists:[],
                 noticeArr:[],
+                page:1,
+                limit:15
             }
         },
         components:{
@@ -235,7 +237,9 @@
                         type:'history',
                         from_client_name:this.username,
                         to_client_name:this.to_client_name,
-                        room_id:this.room_id
+                        room_id:this.room_id,
+                        page:this.page,
+                        limit:this.limit
                     };
                     this.websocketServer.send(JSON.stringify(str));
                     this.getOauthConfig('RoomLists');
@@ -264,7 +268,9 @@
                     type:'history',
                     from_client_name:this.username,
                     to_client_name:this.to_client_name,
-                    room_id:this.room_id
+                    room_id:this.room_id,
+                    page:this.page,
+                    limit:this.limit
                 };
                 this.websocketServer.send(JSON.stringify(str));
             },
@@ -416,7 +422,9 @@
                     type:'history',
                     from_client_name:this.username,
                     to_client_name:this.to_client_name,
-                    room_id:this.room_id
+                    room_id:'',
+                    page:this.page,
+                    limit:this.limit
                 };
                 this.websocketServer.send(JSON.stringify(str));
             },
@@ -490,7 +498,9 @@
                     type:'history',
                     from_client_name:data['from_client_name'],
                     to_client_name:data['to_client_name'],
-                    room_id:data['room_id']
+                    room_id:data['room_id'],
+                    page:this.page,
+                    limit:this.limit
                 };
                 //获取历史记录信息
                 this.websocketServer.send(JSON.stringify(str));
@@ -739,6 +749,7 @@
         border-radius: 10px;
         padding:10px;
         overflow: scroll;
+        overflow-x: hidden;
     }
     .input-msg{
         min-height: 100px;

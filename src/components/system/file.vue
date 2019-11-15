@@ -309,7 +309,7 @@
                 this.scrollTop = func.get_scroll_top();
                 document.addEventListener('click', this.foo);
                 menu.style.left = '360px';
-                menu.style.top = MouseEvent.clientY + this.scrollTop - 125 + 'px';
+                menu.style.top = MouseEvent.clientY + this.scrollTop - 135 + 'px';
                 this.fileObject = object;
                 switch (this.fileObject.fileType) {
                     case 'file':
@@ -599,12 +599,13 @@
              * todo：文件压缩
              */
             compressionFile:function(){
+                console.log(this.fileObject);
                 this.$prompt('请输入文件名', '压缩包名称', { confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
                     if (value === '' || value === null || value === 'null' || value === 'undefined') {
                         this.$message.warning('压缩包名称不得为空');
                         return false;
                     }
-                    this.compressionModel.resource = value;
+                    this.compressionModel.resource = value.indexOf('.')>=0 ? value.split(".")[0] : value;
                     this.compressionModel.docLists.push(this.fileObject.path);
                     this.compressionModel.path = this.fileObject.path.replace(this.fileObject.label,'');
                     apiLists.Compression(this.compressionModel).then(response=>{
@@ -630,7 +631,7 @@
                     }
                     let params = {
                         path : this.fileObject.path,
-                        resource:value
+                        resource:value.indexOf('.')>=0 ? value.split(".")[0] : value,
                     };
                     apiLists.Decompression(params).then(response=>{
                         if (response && response.data.code === 200){

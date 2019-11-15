@@ -3,8 +3,8 @@
         <el-col :span="12">
             <div id="charts" style="height: 400px"></div>
             <div id="total" style="height: 400px"></div>
-            <el-calendar v-model="value">
-                <template  slot="dateCell" slot-scope="{date, data}">
+            <el-calendar v-model="value" :first-day-of-week="7">
+                <template slot="dateCell" slot-scope="{date, data}">
                     <p :class="data.isSelected ? 'is-selected' : ''">
                        {{data.day.split('-').slice(2).join('-') }} {{ data.isSelected ? ' ✔️' : ''}}
                     </p>

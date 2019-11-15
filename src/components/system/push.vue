@@ -248,7 +248,6 @@
         mounted() {
             this.$nextTick(function () {
                 this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.$store.state.login.auth_url);
-                console.log(this.btn);
                 this.getPushLists(this.page,this.limit)
             });
         }
