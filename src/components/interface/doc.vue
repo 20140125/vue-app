@@ -22,7 +22,7 @@
 
             <!--接口详情-->
             <el-col :xl="{'span':19,'push':1}" :lg="{'span':19,'push':1}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}">
-                <el-tabs type="border-card" v-model="apiName">
+                <el-tabs type="border-card" v-model="apiName" v-if="apiVisible">
                     <el-tab-pane :label="apiName" :key="apiName" :name="apiName"></el-tab-pane>
                     <el-card shadow="always">
                         <el-form>
@@ -184,8 +184,10 @@
                     if (response && response.data.code === 200){
                         this.apiCategory = response.data.item.category;
                         this.categoryLists = response.data.item.category_tree;
-                        this.apiName = this.categoryLists[0].name;
-                        this.getApiDetail(this.categoryLists[0]);
+                        if (!this.apiModel) {
+                            this.apiName = this.categoryLists[0].name;
+                            this.getApiDetail(this.categoryLists[0]);
+                        }
                         this.loading = false;
                     }
                 });
@@ -275,6 +277,7 @@
                 })
             },
             /**
+             * todo:设置数据
              * @param data
              * @param render
              */
@@ -282,10 +285,14 @@
                 this.apiModel.markdown = data;
                 this.apiModel.html = render;
             },
+            /**
+             * todo:保存数据
+             */
             saveData:function() {
                 if (this.apiModel.id) {
                     apiLists.ApiDocUpdate(this.apiModel).then(response=>{
                         if (response && response.data.code===200){
+                            this.addApiModel(this.apiModel)
                             this.$message.success(response.data.msg);
                         }
                     })
@@ -293,21 +300,23 @@
                     apiLists.ApiDocSave(this.apiModel).then(response=>{
                         if (response && response.data.code===200){
                             this.$message.success(response.data.msg);
+                            this.addApiModel(this.apiModel)
                             this.getCategoryLists()
                         }
                     })
                 }
-                console.log(this.apiModel);
             },
             /**
              * TODO:获取接口详情
              * @param data
              */
             getApiDetail:function(data){
-                this.mavonBool = false;
-                this.$refs['md'].markdownIt.set({ breaks: false });
                 const obj = { 'apiVisible':true,'interfaceName':data.name };
                 this.addApiVisible(obj);
+                this.mavonBool = false;
+                if (this.$refs.md && this.$refs.md !== 'undefined') {
+                    this.$refs['md'].markdownIt.set({ breaks: false });
+                }
                 this.apiName = this.interfaceName;
                 apiLists.ApiDocLists( {type:data.id} ).then(response=>{
                     if (response && response.data.code===200){
