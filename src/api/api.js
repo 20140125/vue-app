@@ -101,6 +101,30 @@ const apiLists = function (params) {
     return request.post(url.apiLists,qs.stringify(Object.assign(access_token,params)))
 };
 /**
+ * TODO:接口详情 (markdown)
+ * @param params
+ * @returns {Promise<AxiosResponse<T>>}
+ */
+const apiDocLists = function (params) {
+    return request.post(url.apiDocLists,qs.stringify(Object.assign(access_token,params)))
+};
+/**
+ * TODO:接口保存 (markdown)
+ * @param params
+ * @returns {Promise<AxiosResponse<T>>}
+ */
+const apiDocSave = function (params) {
+    return request.post(url.apiDocSave,qs.stringify(Object.assign(access_token,params)))
+};
+/**
+ * TODO:接口更新 (markdown)
+ * @param params
+ * @returns {Promise<AxiosResponse<T>>}
+ */
+const apiDocUpdate = function (params) {
+    return request.post(url.apiDocUpdate,qs.stringify(Object.assign(access_token,params)))
+};
+/**
  * TODO:接口分类列表
  * @param params
  * @returns {Promise<AxiosResponse<T>>}
@@ -353,6 +377,9 @@ const interfaceLists = {
     UserCenter:userCenter,
     LogLists:logLists,
     ApiLists:apiLists,
+    ApiDocLists:apiDocLists,
+    ApiDocSave:apiDocSave,
+    ApiDocUpdate:apiDocUpdate,
     CategoryLists:categoryLists,
     FileLists:fileLists,
     FileRead:fileRead,

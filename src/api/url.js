@@ -30,6 +30,10 @@ let url={
     apiLists:'/v1/api/index',
     apiSave:'/v1/api/save',
     apiUpdate:'/v1/api/update',
+    //接口列表(markdown)
+    apiDocLists:'/v1/apidoc/index',
+    apiDocSave:'/v1/apidoc/save',
+    apiDocUpdate:'/v1/apidoc/update',
     //接口分类
     categoryLists:'/v1/category/index',
     categorySave:'/v1/category/save',

@@ -3,7 +3,9 @@
         <el-row :gutter="24">
             <!--分类列表-->
             <el-col :xl="{'span':4}" :lg="{'span':4}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" style="margin-bottom: 20px">
-                <el-input placeholder="输入关键字搜索" v-model="filterText" style="margin-bottom: 20px"></el-input>
+                <el-input placeholder="输入关键字搜索" v-model="filterText" style="margin-bottom: 20px">
+                    <el-button slot="append" icon="el-icon-plus" @click="addCategory"></el-button>
+                </el-input>
                 <el-tree :props="props"
                          @node-contextmenu="rightClick"
                          :filter-node-method="filterNode"
@@ -17,6 +19,7 @@
                 </el-tree>
             </el-col>
             <!--分类列表-->
+
             <!--接口详情-->
             <el-col :xl="{'span':19,'push':1}" :lg="{'span':19,'push':1}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" v-show="apiVisible">
                 <el-tabs type="border-card" v-model="apiName">
@@ -78,7 +81,9 @@
                 </el-tabs>
             </el-col>
             <!--接口详情-->
+
         </el-row>
+
         <!--右键弹框-->
         <div v-show="menuVisible">
             <el-menu id="menu" class="menu" style="border-bottom: solid 1px #393d49" background-color="#393d49" text-color="#cccccc" mode="horizontal" active-text-color="#ffd04b">
@@ -88,6 +93,7 @@
             </el-menu>
         </div>
         <!--右键弹框-->
+
         <!---接口分类弹框-->
         <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal"  :center="center">
             <el-form :label-width="labelWidth" :model="categoryModel" :ref="reFrom" :rules="rules">
@@ -96,6 +102,7 @@
                 </el-form-item>
                 <el-form-item label="接口上级" prop="pid">
                     <el-select placeholder="接口上级" v-model="categoryModel.pid" style="width: 100%">
+                        <el-option label="默认权限" value="0" v-if="categoryModel.pid === '0'" selected></el-option>
                         <el-option v-for="(category,index) in apiCategory"  :key="index" :label="setName(category)" :value="category.id"></el-option>
                     </el-select>
                 </el-form-item>
@@ -105,6 +112,7 @@
             </div>
         </el-dialog>
          <!---接口分类弹框-->
+
     </div>
 </template>
 
@@ -310,7 +318,7 @@
                 this.url = this.cgi.categoryInsert;
                 this.categoryModel = {
                     name:'',
-                    pid:this.categoryModel.id,
+                    pid:this.categoryModel.id === undefined ? '0':this.categoryModel.id,
                     path:'1',
                     level:1
                 };
@@ -324,12 +332,12 @@
                 this.url = this.cgi.categoryUpdate;
             },
             /**
-             * 删除API分类
+             * TODO:删除API分类
              */
             deleteCategory:function(){
-                apiLists.CategoryDelete({id:this.categoryModel.value}).then(response=>{
+                apiLists.CategoryDelete({id:this.categoryModel.id}).then(response=>{
                     if (response && response.data.code === 200){
-                        let data = { msg:JSON.stringify({url:this.cgi.remove, info:response.data.msg,result:response.data.result}),token:this.$store.state.login.token };
+                        let data = { msg:JSON.stringify({href:this.cgi.remove, info:response.data.msg,result:response.data.result}),token:this.$store.state.login.token };
                         this.saveSystemLog(data);
                         this.$message({type:'success',message:response.data.msg});
                         this.getCategoryLists()
@@ -341,7 +349,7 @@
              * @param data
              */
             getApiDetail:function(data){
-                if (data.level===0){
+                if (data.level<=1){
                     this.$notify({title: '通知', message: '该接口暂时不允许访问', type: 'success'});
                     return;
                 }

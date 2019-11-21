@@ -126,7 +126,9 @@
                             </div>
                         </div>
                         <div class="input-button" style="text-align: right">
-                            <el-button type="primary" round plain size="medium" @click="sendMsg">发 送</el-button>
+                            <el-tooltip effect="dark" content="Shift + Enter 快捷发送" placement="top-start">
+                                <el-button type="primary" round plain size="medium" @click="sendMsg">发 送</el-button>
+                            </el-tooltip>
                         </div>
                     </el-card>
                 </el-col>
@@ -533,8 +535,8 @@
              */
             sendMsg:function(){
                 this.showEmotion = false;
-                this.inputMsg= this.$refs.message.innerHTML;
-                if (this.inputMsg !== '') {
+                this.inputMsg= this.$refs.message !== undefined ? this.$refs.message.innerHTML : '';
+                if (this.inputMsg.trim() !== '') {
                     let str = {
                         type:'say',
                         to_client_id:this.to_client_id,
@@ -621,7 +623,7 @@
             let __this = this;
             //键盘事件
             document.onkeydown = function (e) {
-                if (e.code === 'Enter') {
+                if (e.code === 'Enter' && e.shiftKey) {
                     e.preventDefault();
                     __this.sendMsg();
                     return false;

@@ -1,5 +1,5 @@
 <template>
-    <mavon-editor @imgAdd="uploadFile" ref="md" @save="saveData" v-model="value" style="z-index:1"/>
+    <mavon-editor @imgAdd="uploadFile" ref="md" @change="getData" v-model="value" style="z-index:1"/>
 </template>
 
 <script>
@@ -92,8 +92,8 @@
                     this.$refs['md'].$img2Url(post, response.data.item.src);
                 })
             },
-            saveData:function (data) {
-                console.log(data);
+            getData:function (data,render) {
+                console.log(data,render);
             }
         },
     }

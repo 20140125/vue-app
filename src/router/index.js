@@ -12,6 +12,7 @@ import SystemLog from '../components/system/log'
 import SystemFile from '../components/system/file'
 import ConfigLists from '../components/system/config'
 import ApiLists from '../components/interface/api'
+import APIDoc from '../components/interface/doc'
 import DatabaseLists from '../components/database/lists'
 import OauthLists from '../components/oauth/lists'
 import ReqRuleLists from '../components/req_rule/lists'
@@ -44,7 +45,8 @@ export default new Router({
                 { path: 'chat/index',  name:'ChatList',component:ChatList,meta:{ mode:'chat',title:'聊天记录' } },
                 { path: 'file/index',  name:'SystemFile',component:SystemFile,meta:{ mode:'file',title:'文件列表' } },
                 { path: 'config/index',  name:'ConfigLists',component:ConfigLists,meta:{ mode:'config',title:'基础配置' } },
-                { path: 'category/index', name:'CategoryLists',component:ApiLists,meta:{ mode:'api_lists',title:'分类列表' } },
+                { path: 'category/index', name:'ApiLists',component:ApiLists,meta:{ mode:'api_lists',title:'项目列表' } },
+                { path: 'apidoc/index', name:'APIDoc',component:APIDoc,meta:{ mode:'api_lists',title:'APIDoc' } },
                 { path: 'database/index', name:'DatabaseLists',component:DatabaseLists,meta:{ mode:'',title:'数据表列表' } },
                 { path: 'area/index', name:'AreaLists',component:AreaLists,meta:{ mode:'china_area',title:'城市列表' } },
                 { path: 'push/index', name:'PushList',component:PushList,meta:{ mode:'push',title:'站内通知' }},
