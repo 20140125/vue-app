@@ -22,7 +22,7 @@
 
             <!--接口详情-->
             <el-col :xl="{'span':19,'push':1}" :lg="{'span':19,'push':1}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}">
-                <el-tabs type="border-card" v-model="apiName" v-if="apiVisible">
+                <el-tabs type="border-card" v-model="apiName" v-if="docVisible">
                     <el-tab-pane :label="apiName" :key="apiName" :name="apiName"></el-tab-pane>
                     <el-card shadow="always">
                         <el-form>
@@ -40,7 +40,7 @@
                                               :defaultOpen="open"
                                               :subfield="mavonBool"
                                               :toolbarsFlag="mavonBool"
-                                              v-model="apiModel.markdown"
+                                              v-model="docModel.markdown"
                                               :codeStyle="codeStyle"
                                               style="z-index:1;min-height: 500px">
                                 </mavon-editor>
@@ -148,10 +148,10 @@
             }
         },
         computed:{
-            ...mapGetters(['apiVisible','apiModel','interfaceName'])
+            ...mapGetters(['docVisible','docModel','docName'])
         },
         methods:{
-            ...mapActions(['addApiVisible','addApiModel','saveSystemLog']),
+            ...mapActions(['addDocVisible','addDocModel','saveSystemLog']),
             /**
              * todo：关闭弹框
              */
@@ -184,7 +184,7 @@
                     if (response && response.data.code === 200){
                         this.apiCategory = response.data.item.category;
                         this.categoryLists = response.data.item.category_tree;
-                        if (!this.apiModel) {
+                        if (!this.docModel) {
                             this.apiName = this.categoryLists[0].name;
                             this.getApiDetail(this.categoryLists[0]);
                         }
@@ -282,25 +282,25 @@
              * @param render
              */
             getData:function (data,render) {
-                this.apiModel.markdown = data;
-                this.apiModel.html = render;
+                this.docModel.markdown = data;
+                this.docModel.html = render;
             },
             /**
              * todo:保存数据
              */
             saveData:function() {
-                if (this.apiModel.id) {
-                    apiLists.ApiDocUpdate(this.apiModel).then(response=>{
+                if (this.docModel.id) {
+                    apiLists.ApiDocUpdate(this.docModel).then(response=>{
                         if (response && response.data.code===200){
-                            this.addApiModel(this.apiModel)
+                            this.addDocModel(this.docModel)
                             this.$message.success(response.data.msg);
                         }
                     })
                 } else {
-                    apiLists.ApiDocSave(this.apiModel).then(response=>{
+                    apiLists.ApiDocSave(this.docModel).then(response=>{
                         if (response && response.data.code===200){
                             this.$message.success(response.data.msg);
-                            this.addApiModel(this.apiModel)
+                            this.addDocModel(this.docModel)
                             this.getCategoryLists()
                         }
                     })
@@ -311,28 +311,28 @@
              * @param data
              */
             getApiDetail:function(data){
-                const obj = { 'apiVisible':true,'interfaceName':data.name };
-                this.addApiVisible(obj);
+                const obj = { 'docVisible':true,'docName':data.name };
+                this.addDocVisible(obj);
                 this.mavonBool = false;
                 if (this.$refs.md && this.$refs.md !== 'undefined') {
                     this.$refs['md'].markdownIt.set({ breaks: false });
                 }
-                this.apiName = this.interfaceName;
+                this.apiName = this.docName;
                 apiLists.ApiDocLists( {type:data.id} ).then(response=>{
                     if (response && response.data.code===200){
-                        this.addApiModel(response.data.item);
+                        this.addDocModel(response.data.item);
                     } else {
                         this.mavonBool = true;
-                        this.addApiModel({});
-                        this.apiModel.type = data.id;
+                        this.addDocModel({});
+                        this.docModel.type = data.id;
                     }
                 });
 
             }
         },
         created(){
-            if (this.interfaceName) {
-                this.apiName = this.interfaceName;
+            if (this.docName) {
+                this.apiName = this.docName;
             }
             this.token = this.$store.state.login.token;
         },
