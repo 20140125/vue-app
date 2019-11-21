@@ -25,18 +25,27 @@
                 <el-tabs type="border-card" v-model="apiName">
                     <el-tab-pane :label="apiName" :key="apiName" :name="apiName"></el-tab-pane>
                     <el-card shadow="always">
-                        <el-button plain type="primary" @click="mavonBool = !mavonBool" icon="el-icon-edit-outline" style="margin-bottom: 20px;margin-left: 92%">修 改</el-button>
-                        <mavon-editor @imgAdd="uploadFile"
-                                      @change="getData"
-                                      @save="saveData"
-                                      ref="md"
-                                      :defaultOpen="open"
-                                      :subfield="mavonBool"
-                                      :toolbarsFlag="mavonBool"
-                                      v-model="apiModel.markdown"
-                                      codeStyle="monokai"
-                                      style="z-index:1;min-height: 500px">
-                        </mavon-editor>
+                        <el-form>
+                            <el-form-item :inline="true">
+                                <el-select v-model="codeStyle" v-if="mavonBool">
+                                    <el-option v-for="(code,index) in codeStyleList" :label="index" :value="index" :key="index"></el-option>
+                                </el-select>
+                                <el-button plain type="primary" @click="mavonBool = !mavonBool" icon="el-icon-edit-outline" style="float: right">修 改</el-button>
+                            </el-form-item>
+                            <el-form-item>
+                                <mavon-editor @imgAdd="uploadFile"
+                                              @change="getData"
+                                              @save="saveData"
+                                              ref="md"
+                                              :defaultOpen="open"
+                                              :subfield="mavonBool"
+                                              :toolbarsFlag="mavonBool"
+                                              v-model="apiModel.markdown"
+                                              :codeStyle="codeStyle"
+                                              style="z-index:1;min-height: 500px">
+                                </mavon-editor>
+                            </el-form-item>
+                        </el-form>
                     </el-card>
                 </el-tabs>
             </el-col>
@@ -118,6 +127,7 @@
                 //是否展示编辑器
                 mavonBool:false,
                 open:'preview',
+                codeStyle:'monokai',
                 cgi:{
                     categoryInsert:$url.categorySave,
                     categoryUpdate:$url.categoryUpdate,
@@ -128,7 +138,8 @@
                 scrollTop:0,
                 //细化权限按钮
                 btn:{},
-                token:''
+                token:'',
+                codeStyleList:require('../../assets/theme.json')
             }
         },
         watch: {
