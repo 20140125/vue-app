@@ -65,7 +65,7 @@
         methods:{
             ...mapMutations(['setToken']),
             totalCharts:function () {
-                apiLists.GetCountData().then(response=>{
+                apiLists.GetCountData({}).then(response=>{
                     let totalCharts = echarts.init(document.getElementById('total'));
                     totalCharts.setOption({
                         title : {

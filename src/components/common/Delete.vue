@@ -39,7 +39,7 @@
                             this.Lists.splice(index,1);
                             let data = {
                                 href:this.url,
-                                msg:JSON.stringify({info:response.data.msg,result:response.data.result}),
+                                msg:response.data.msg,
                                 token:this.$store.state.login.token
                             };
                             this.saveSystemLog(data);

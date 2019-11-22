@@ -337,7 +337,7 @@
             deleteCategory:function(){
                 apiLists.CategoryDelete({id:this.categoryModel.id}).then(response=>{
                     if (response && response.data.code === 200){
-                        let data = { msg:JSON.stringify({href:this.cgi.remove, info:response.data.msg,result:response.data.result}),token:this.$store.state.login.token };
+                        let data = { href:this.cgi.remove, msg:response.data.msg,token:this.$store.state.login.token };
                         this.saveSystemLog(data);
                         this.$message({type:'success',message:response.data.msg});
                         this.getCategoryLists()

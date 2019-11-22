@@ -303,7 +303,7 @@
                     apiLists.ConfigValUpdate(item).then(response=>{
                         if (response && response.data.code === 200) {
                             this.getConfigLists(this.page,this.limit);
-                            let data = { url:this.cgi.updateVal,msg:JSON.stringify({info:response.data.msg,result:response.data.result}),token:this.$store.state.login.token };
+                            let data = { url:this.cgi.updateVal,msg:response.data.msg,token:this.$store.state.login.token };
                             this.saveSystemLog(data);
                             this.$message({type:'success',message:response.data.msg});
                             return false;

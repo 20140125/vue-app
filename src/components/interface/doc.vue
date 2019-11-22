@@ -180,7 +180,7 @@
              * todo：获取API分类列表
              */
             getCategoryLists:function () {
-                apiLists.CategoryLists().then(response=>{
+                apiLists.CategoryLists({}).then(response=>{
                     if (response && response.data.code === 200){
                         this.apiCategory = response.data.item.category;
                         this.categoryLists = response.data.item.category_tree;
@@ -244,7 +244,7 @@
             deleteCategory:function(){
                 apiLists.CategoryDelete({id:this.categoryModel.id}).then(response=>{
                     if (response && response.data.code === 200){
-                        let data = { msg:JSON.stringify({href:this.cgi.remove, info:response.data.msg,result:response.data.result}),token:this.$store.state.login.token };
+                        let data = { href:this.cgi.remove, msg:response.data.msg,token:this.$store.state.login.token };
                         this.saveSystemLog(data);
                         this.$message({type:'success',message:response.data.msg});
                         this.getCategoryLists()
@@ -292,7 +292,9 @@
                 if (this.docModel.id) {
                     apiLists.ApiDocUpdate(this.docModel).then(response=>{
                         if (response && response.data.code===200){
-                            this.addDocModel(this.docModel)
+                            this.addDocModel(this.docModel);
+                            let data = { href:$url.apiDocUpdate, msg:response.data.msg,token:this.$store.state.login.token };
+                            this.saveSystemLog(data);
                             this.$message.success(response.data.msg);
                         }
                     })
@@ -301,6 +303,8 @@
                         if (response && response.data.code===200){
                             this.$message.success(response.data.msg);
                             this.addDocModel(this.docModel)
+                            let data = { href:$url.apiDocSave, msg:response.data.msg,token:this.$store.state.login.token };
+                            this.saveSystemLog(data);
                             this.getCategoryLists()
                         }
                     })
@@ -318,7 +322,7 @@
                     this.$refs['md'].markdownIt.set({ breaks: false });
                 }
                 this.apiName = this.docName;
-                apiLists.ApiDocLists( {type:data.id} ).then(response=>{
+                apiLists.ApiDocLists({type:data.id}).then(response=>{
                     if (response && response.data.code===200){
                         this.addDocModel(response.data.item);
                     } else {

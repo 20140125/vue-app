@@ -442,8 +442,8 @@
                     apiLists.FileRename(params).then(response=>{
                         if (response && response.data.code === 200){
                             this.fileObject.name = value;
-                            this.$message({type: 'success', message: '你的新文件名: ' + value});
-                            let data = { msg:JSON.stringify({href:$url.fileSave, info:'你的新文件名: ' + value,result:response.data.result}) };
+                            this.$message({type: 'success', message: 'remove file successfully: ' + value});
+                            let data = { href:$url.fileSave, msg:'remove file successfully: ' + value};
                             this.saveSystemLog(data);
                             this.getFileLists(this.path);
                         }
@@ -464,7 +464,7 @@
                     let params = {path:this.fileObject.path};
                     apiLists.FileDelete(params).then(response=>{
                        if (response && response.data.code === 200){
-                           let data = { msg:'删除文件成功：'+params.path,result:response.data.result,href:$url.fileDelete };
+                           let data = { msg:'删除文件成功：'+params.path,href:$url.fileDelete };
                            this.saveSystemLog(data);
                            this.getFileLists(this.path);
                            this.$message({type:'success',message:'删除记录成功！：'+params.path});
@@ -492,10 +492,10 @@
                     }
                     apiLists.FileSave(params).then(response=>{
                         if (response && response.data.code === 200){
-                            let data = { msg:'你的新文件名: ' + params.path,result:response.data.result,href:$url.fileRename };
+                            let data = { msg:'你的新文件名: ' + params.path,href:$url.fileRename };
                             this.saveSystemLog(data);
                             this.getFileLists(this.path);
-                            this.$message({type: 'success', message: '你的新文件名: ' + params.path});
+                            this.$message({type: 'success', message: 'new filename: ' + params.path});
                         }
                     });
                 }).catch(() => {
@@ -611,7 +611,7 @@
                     apiLists.Compression(this.compressionModel).then(response=>{
                         if (response && response.data.code === 200){
                             this.$message({type:'success',message:response.data.msg});
-                            let data = { msg:'你的压缩包名: ' + this.compressionModel.type,result:response.data.result,href:$url.fileCompression };
+                            let data = { msg:': new compression data' + this.compressionModel.type,href:$url.fileCompression };
                             this.saveSystemLog(data);
                             this.getFileLists(this.path);
                         }
@@ -636,13 +636,13 @@
                     apiLists.Decompression(params).then(response=>{
                         if (response && response.data.code === 200){
                             this.$message({type:'success',message:response.data.msg});
-                            let data = { msg:'文件解压成功',result:response.data.result,href:$url.fileDecompression };
+                            let data = { msg:'Decompression successfully',href:$url.fileDecompression };
                             this.saveSystemLog(data);
                             this.getFileLists(this.path);
                         }
                     });
                 }).catch(() => {
-                    this.$message({type: 'info', message: '取消输入'});
+                    this.$message({type: 'info', message: 'cancel input'});
                 });
             },
             /**
@@ -651,11 +651,11 @@
             downloadFile:function(){
                 this.$alert('确定下载文件：'+this.fileObject.path,'文件下载').then(()=>{
                     window.open(process.env.API_ROOT+$url.fileDownload+"?token="+this.token+"&path="+this.fileObject.path,'__target');
-                    let data = { msg:'文件下载成功：'+this.fileObject.path,href:$url.fileDownload };
+                    let data = { msg:'file download successfully：'+this.fileObject.path,href:$url.fileDownload };
                     this.saveSystemLog(data);
                     this.$message({type:'success',message:'download file successfully'});
                 }).catch(() => {
-                    this.$message({type: 'info', message: '取消下载'});
+                    this.$message({type: 'info', message: 'cancel download'});
                 });
             },
             /**
@@ -682,7 +682,7 @@
              * @param file
              */
             handleRemove:function(file) {
-                this.$message({type:'warning',message:'取消文件上传：'+file.name});
+                this.$message({type:'warning',message:'cancel file upload：'+file.name});
             },
             /**
              * todo：文件上传成功回调
