@@ -7,7 +7,7 @@
 <script>
     import Table from './common/table'
     export default {
-        name: "empty",
+        name: "table-example",
         components: {Table},
         data(){
             return {
