@@ -5,7 +5,8 @@
                 <el-input :placeholder="search.tips" v-model="search.model"></el-input>
             </el-form-item>
             <el-form-item v-for="(search,index) in searchOptions" v-if="search.type === 'datetime'" :key="index" :label="search.label" :prop="search.prop">
-                <el-date-picker type="daterange"
+                <el-date-picker :type="search.datetype || 'daterange'"
+                                :value-format="search.format || 'yyyy-MM-dd'"
                                 :start-placeholder="search.tips.split('-')[0]"
                                 :end-placeholder="search.tips.split('-')[1]"
                                 v-model="search.model">
@@ -20,8 +21,12 @@
                 <el-button icon="el-icon-search" type="primary" plain="plain" @click="search">搜 索</el-button>
             </el-form-item>
         </el-form>
-        <el-table :data="data" :empty-text="empty">
+        <el-table :data="data" :empty-text="empty" border>
             <el-table-column v-for="(column,index) in columns" :label="column.label" :prop="column.prop" :key="index"></el-table-column>
+            <el-table-column label="Action">
+                <el-button type="danger" icon="el-icon-delete" plain></el-button>  <!--这可以封装成组件-->
+                <el-button type="primary" icon="el-icon-edit" plain></el-button>   <!--这可以封装成组件-->
+            </el-table-column>
         </el-table>
     </div>
 </template>

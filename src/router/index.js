@@ -22,6 +22,7 @@ import ChatList from '../components/system/chat'
 import MarkDown from '../components/editor/markdown'
 import UEditor from '../components/editor/ueditor'
 import Empty from '../components/empty'
+import TableExample from '../components/tables-example'
 
 Vue.use(Router);
 
@@ -30,6 +31,7 @@ export default new Router({
         { path: '/', name: '/', component: Login,meta:{ mode:'',title:'登录' } },
         { path: '/login', name: 'Login', component: Login,meta:{ mode:'',title:'登录' } },
         { path: '/404', name: 'Empty', component: Empty,meta:{ mode:'',title:'404' } },
+        { path: '/example/table', name: 'TableExample', component: TableExample,meta:{ mode:'',title:'表格组件封装' } },
         { path: '/admin', name: 'Admin', component: Index,meta:{ mode:'',title:'首页' } },
         { path:'/admin',component: Index,
             children:[

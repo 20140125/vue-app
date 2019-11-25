@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="margin: 40px !important;">
         <Table :data="data" :columns="columns" :search-options="searchOptions" :search-option="searchOption"></Table>
     </div>
 </template>
@@ -27,7 +27,7 @@
                     {
                         label: 'Date',
                         prop: 'date'
-                    }
+                    },
                 ],
                 data: [
                     {
@@ -61,6 +61,8 @@
                         label:'DateTime',
                         prop:'datetime',
                         model:[],
+                        datetype:'daterange',
+                        format:'yyyy-MM-dd',
                         tips:'开始时间-结束时间'
                     },
                     {
