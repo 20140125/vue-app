@@ -38,7 +38,7 @@ router.beforeEach((to,from,next)=>{
     if (to.params.access_token){
         store.commit('setToken',to.params.access_token);
     }
-    if (to.name === 'Login' || to.name === '/'  || to.name==='Empty') {
+    if (to.name === 'Login' || to.name === '/') {
         if (!store.state.login.token) {
             next();
             return ;
