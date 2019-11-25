@@ -42,7 +42,7 @@ const logSave = function (params = {}) {
  * @returns {Promise<AxiosResponse<T>>}
  */
 const checkToken = function (params = {}) {
-    return request.post(url.checkToken,qs.stringify(Object.assign(params,access_token)))
+    return request.post(url.checkToken,qs.stringify(Object.assign(access_token,params)))
 };
 /**
  * TODO:权限列表

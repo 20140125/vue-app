@@ -41,6 +41,7 @@
                         </template>
                         <el-menu-item :index="child.id.toString()"  v-for="(child,index) in menu.__child" @click="setAttr(child)" :key="index">
                            <template slot="title">
+                               <i class="el-icon-s-home"> </i>
                                <span v-html="child.name"></span>
                            </template>
                         </el-menu-item>
