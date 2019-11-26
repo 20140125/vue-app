@@ -184,7 +184,7 @@
                     if (response && response.data.code === 200){
                         this.apiCategory = response.data.item.category;
                         this.categoryLists = response.data.item.category_tree;
-                        if (!this.docModel) {
+                        if (!this.docModel.id) {
                             this.apiName = this.categoryLists[0].name;
                             this.getApiDetail(this.categoryLists[0]);
                         }
