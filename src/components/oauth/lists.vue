@@ -1,8 +1,8 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText">
         <el-table :data="oauthLists.filter(data=>(!search || data.username.toLowerCase().includes(search.toLowerCase()) || data.oauth_type.toLowerCase().includes(search.toLowerCase())))" border>
-            <el-table-column label="#" prop="id"></el-table-column>
-            <el-table-column label="用户名" prop="username"></el-table-column>
+            <el-table-column label="#" prop="id"/>
+            <el-table-column label="用户名" prop="username"/>
             <el-table-column label="头像">
                 <template slot-scope="scope">
                     <el-image :src="scope.row.avatar_url"
@@ -13,21 +13,22 @@
                     </el-image>
                 </template>
             </el-table-column>
-            <el-table-column label="账号来源" prop="oauth_type"></el-table-column>
+            <el-table-column label="账号来源" prop="oauth_type"/>
             <el-table-column label="显示状态" v-if="btn.edit">
                 <template slot-scope="scope">
-                    <Radio :item="scope.row" :url="cgi.status"></Radio>
+                    <Radio :item="scope.row" :url="cgi.status"/>
                 </template>
             </el-table-column>
-            <el-table-column label="创建时间" prop="created_at"> </el-table-column>
-            <el-table-column label="修改时间" prop="updated_at"></el-table-column>
+            <el-table-column label="创建时间" prop="created_at"/>
+            <el-table-column label="修改时间" prop="updated_at"/>
             <el-table-column label="操作" align="right">
                 <template slot="header" slot-scope="scope">
-                    <el-input v-model="search"  placeholder="请输入关键词查询"></el-input>
+                    <el-input v-model="search" placeholder="请输入关键词查询"/>
                 </template>
                 <template slot-scope="scope">
                     <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updateOauth(scope.row)" v-if="btn.edit">修 改</el-button>
-                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="oauthLists" v-on:success="success" v-if="btn.del"></Delete>
+                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="oauthLists"
+                            v-on:success="success" v-if="btn.del"/>
                 </template>
             </el-table-column>
         </el-table>
@@ -47,7 +48,7 @@
         <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
             <el-form :label-width="labelWidth" :model="OauthModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="用户名称" prop="username">
-                    <el-input v-model="OauthModel.username"></el-input>
+                    <el-input v-model="OauthModel.username"/>
                 </el-form-item>
                 <el-form-item label="邮箱账号" prop="email">
                     <el-input v-model="OauthModel.email" ref="bindEmail">
@@ -56,14 +57,16 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item label="验证码" prop="code" v-if="showCode">
-                    <el-input v-model="OauthModel.code" @blur="checkCode(OauthModel)" ref="bindCode"></el-input>
+                    <el-input v-model="OauthModel.code" @blur="checkCode(OauthModel)" ref="bindCode"/>
                 </el-form-item>
                 <el-form-item label="用户头像" prop="avatar_url">
-                    <Upload :avatar_url="OauthModel.avatar_url" :username="OauthModel.username" @uploadSuccess="uploadSuccess"></Upload>
+                    <Upload :avatar_url="OauthModel.avatar_url" :username="OauthModel.username"
+                            @uploadSuccess="uploadSuccess"/>
                 </el-form-item>
                 <el-form-item label="角色" prop="role_id" v-if="username === 'admin'">
                     <el-select v-model="OauthModel.role_id" style="width: 100%">
-                        <el-option v-for="(role,index) in roleLists" :key="index" :label="role.role_name" :value="role.id"></el-option>
+                        <el-option v-for="(role,index) in roleLists" :key="index" :label="role.role_name"
+                                   :value="role.id"/>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="用户状态" prop="status" v-if="username === 'admin'">
@@ -74,7 +77,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <Submit :reFrom="reFrom" :model="OauthModel" :url="url" :refs="refs" v-on:success="success"></Submit>
+                <Submit :reFrom="reFrom" :model="OauthModel" :url="url" :refs="refs" v-on:success="success"/>
             </div>
         </el-dialog>
         <!---弹框-->
@@ -184,12 +187,7 @@
                     this.$message.warning('Please Enter Email')
                     return ;
                 }
-                let params = {
-                    email:oauthObject.email,
-                    id:oauthObject.id,
-                    username:oauthObject.username,
-                    remember_token:oauthObject.remember_token
-                };
+                let params = {email:oauthObject.email, id:oauthObject.id, username:oauthObject.username, remember_token:oauthObject.remember_token};
                 apiLists.SendEmail(params).then(response=>{
                     if (response && response.data.code === 200) {
                         this.$message({type:'success',message:response.data.msg});
@@ -207,10 +205,7 @@
                     this.$message.warning('Please Enter Code')
                     return ;
                 }
-                let params = {
-                    code:oauthObject.code,
-                    id:oauthObject.id
-                };
+                let params = {code:oauthObject.code, id:oauthObject.id};
                 apiLists.VerifyCode(params).then(response=>{
                     if (response && response.data.code === 200) {
                         this.$message({type:'success',message:response.data.msg});

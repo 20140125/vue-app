@@ -65,7 +65,7 @@ let url={
     fileSave:'/v1/file/save',
     fileDelete:'/v1/file/delete',
     fileUpdate:'/v1/file/update',
-    fileUpload:'v1/file/upload',
+    fileUpload:'/v1/file/upload',
     fileDownload:'v1/file/download',
     fileCompression:'/v1/file/zip',
     fileDecompression:'/v1/file/unzip',
@@ -82,7 +82,10 @@ let url={
     pushSave:'/v1/push/save',
     pushUpdate:'/v1/push/update',
     pushRead:'/v1/push/see',
-    pushDelete:'v1/push/delete',
+    pushDelete:'/v1/push/delete',
+    //相关组件
+    tableComponent:'/v1/components/table',
+    componentAction:'/v1/components/actions',
     //公共操作接口
     tree:'/v1/menu',
     login:'/v1/login',

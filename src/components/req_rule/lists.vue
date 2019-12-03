@@ -6,12 +6,12 @@
             </el-form-item>
         </el-form>
         <el-table :data="reqRuleLists.filter(data=>(!search || data.username.toLowerCase().includes(search.toLowerCase()) || data.href.includes(search.toLowerCase())))" border>
-            <el-table-column label="#" prop="id" width="120px" sortable></el-table-column>
-            <el-table-column label="申请人" prop="username" width="150px"></el-table-column>
-            <el-table-column label="授权地址" prop="href"></el-table-column>
+            <el-table-column label="#" prop="id" width="120px" sortable/>
+            <el-table-column label="申请人" prop="username" width="150px"/>
+            <el-table-column label="授权地址" prop="href"/>
             <el-table-column label="授权状态" width="150px" v-if="username === 'admin'">
                 <template slot-scope="scope">
-                    <Radio :item="scope.row" :url="cgi.status" v-on:success="success"></Radio>
+                    <Radio :item="scope.row" :url="cgi.status" v-on:success="success"/>
                 </template>
             </el-table-column>
             <el-table-column label="授权状态" width="150px" v-if="username !== 'admin'">
@@ -20,16 +20,16 @@
                     <el-button v-if="scope.row.status === 2" type="info" size="mini">未授权</el-button>
                 </template>
             </el-table-column>
-            <el-table-column label="创建时间" prop="created_at" sortable></el-table-column>
-            <el-table-column label="修改时间" prop="updated_at" sortable></el-table-column>
-            <el-table-column label="权限时效" prop="expires" sortable></el-table-column>
+            <el-table-column label="创建时间" prop="created_at" sortable/>
+            <el-table-column label="修改时间" prop="updated_at" sortable/>
+            <el-table-column label="权限时效" prop="expires" sortable/>
             <el-table-column label="操作" width="200px" align="right">
                 <template slot="header" slot-scope="scope">
-                    <el-input v-model="search"  placeholder="请输入关键字查询"></el-input>
+                    <el-input v-model="search" placeholder="请输入关键字查询"/>
                 </template>
                 <template slot-scope="scope">
                     <el-button type="primary" v-if="scope.row.status === 1 && btn.edit" plain icon="el-icon-plus" size="mini" @click="updateReqRule(scope.row)">续 期</el-button>
-                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="reqRuleLists" v-on:success="success" v-if="btn.del"></Delete>
+                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="reqRuleLists" v-on:success="success" v-if="btn.del"/>
                 </template>
             </el-table-column>
         </el-table>
@@ -50,22 +50,24 @@
             <el-form :label-width="labelWidth" :model="reqRuleModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="申请人" prop="username">
                     <el-select filterable style="width: 100%" v-model="reqRuleModel.username" @change="getAuth">
-                        <el-option v-for="(user,index) in userLists" :label="user.username" :key="index" :value="user.id"></el-option>
+                        <el-option v-for="(user,index) in userLists" :label="user.username" :key="index"
+                                   :value="user.id"/>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="授权地址" prop="href">
+                <el-form-item label="授权地址" prop="href" v-if="href">
                     <el-select multiple="multiple" filterable style="width: 100%" v-model="reqRuleModel.href">
-                        <el-option v-for="(rule,index) in ruleLists" :label="setAuthName(rule)" :key="index" :value="rule.href" :disabled="rule.disable"></el-option>
+                        <el-option v-for="(rule,index) in ruleLists" :label="setAuthName(rule)" :key="index"
+                                   :value="rule.href" :disabled="rule.disable"/>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="授权时间" prop="expires">
-                    <el-date-picker v-model="reqRuleModel.expires" type="datetime"  value-format="yyyy-MM-dd HH:mm:ss"
+                    <el-date-picker v-model="reqRuleModel.expires" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
                                     placeholder="选择授权时间"
                                     :picker-options="pickerOptions"
-                                    style="width: 100%"></el-date-picker>
+                                    style="width: 100%"/>
                 </el-form-item>
                 <el-form-item label="授权说明" prop="desc">
-                    <el-input v-model="reqRuleModel.desc" type="textarea"></el-input>
+                    <el-input v-model="reqRuleModel.desc" type="textarea"/>
                 </el-form-item>
                 <el-form-item label="是否授权" prop="status" v-if="username==='admin'">
                     <el-radio-group v-model="reqRuleModel.status" size="small">
@@ -75,7 +77,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <Submit :reFrom="reFrom" :model="reqRuleModel" :url="url" :refs="refs" v-on:success="success"></Submit>
+                <Submit :reFrom="reFrom" :model="reqRuleModel" :url="url" :refs="refs" v-on:success="success"/>
             </div>
         </el-dialog>
         <!---弹框-->
@@ -131,6 +133,8 @@
                     desc:[{required:true,message:'申请理由不得为空',trigger:'blur'}],
                     status:[{required:true,message:'授权状态不得为空',trigger:'blur'}]
                 },
+                href:false,
+
                 //日期快捷键
                 pickerOptions: {
                     disabledDate(time) {
@@ -202,12 +206,13 @@
              */
             getReqRuleLists:function (page,limit) {
                 let params = { page:page,limit:limit };
+                this.loading = true;
                 apiLists.ReqRuleLists(params).then(response=>{
                     if (response && response.data.code === 200){
-                        this.loading = false;
                         this.reqRuleLists = response.data.item.data;
                         this.total = response.data.item.total;
                         this.userLists = response.data.item.userLists;
+                        this.loading = false;
                     }
                 });
             },
@@ -241,14 +246,9 @@
             addReqRule:function() {
                 this.title='权限申请';
                 this.syncVisible = true;
-                this.reqRuleModel = {
-                    username:'',
-                    href:'',
-                    desc:'',
-                    expires:'',
-                    status:1
-                };
+                this.reqRuleModel = { username:'', href:'', desc:'', expires:'', status:1 };
                 this.url = this.cgi.insert;
+                this.href = false;
             },
             /**
              * TODO:获取权限
@@ -258,6 +258,7 @@
                 apiLists.GetAuthByToken(params).then(response=>{
                     if (response && response.data.code === 200) {
                         this.ruleLists = response.data.item;
+                        this.href = true;
                     }
                 });
             },
@@ -272,6 +273,7 @@
                 this.reqRuleModel.href = [this.reqRuleModel.href];
                 this.ruleLists = this.reqRuleModel.ruleLists
                 this.url = this.cgi.update;
+                this.href = true;
             }
         },
         mounted() {

@@ -4,7 +4,7 @@
             <!--分类列表-->
             <el-col :xl="{'span':4}" :lg="{'span':4}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" style="margin-bottom: 20px">
                 <el-input placeholder="输入关键字搜索" v-model="filterText" style="margin-bottom: 20px">
-                    <el-button slot="append" icon="el-icon-plus" @click="addCategory"></el-button>
+                    <el-button slot="append" icon="el-icon-plus" @click="addCategory"/>
                 </el-input>
                 <el-tree :props="props"
                          @node-contextmenu="rightClick"
@@ -23,12 +23,13 @@
             <!--接口详情-->
             <el-col :xl="{'span':19,'push':1}" :lg="{'span':19,'push':1}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}">
                 <el-tabs type="border-card" v-model="apiName" v-if="docVisible">
-                    <el-tab-pane :label="apiName" :key="apiName" :name="apiName"></el-tab-pane>
+                    <el-tab-pane :label="apiName" :key="apiName" :name="apiName"/>
                     <el-card shadow="always">
                         <el-form>
                             <el-form-item :inline="true">
                                 <el-select v-model="codeStyle" v-if="mavonBool">
-                                    <el-option v-for="(code,index) in codeStyleList" :label="index" :value="index" :key="index"></el-option>
+                                    <el-option v-for="(code,index) in codeStyleList" :label="index" :value="index"
+                                               :key="index"/>
                                 </el-select>
                                 <el-button plain type="primary" @click="mavonBool = !mavonBool" icon="el-icon-edit-outline" style="float: right">修 改</el-button>
                             </el-form-item>
@@ -56,9 +57,9 @@
         <!--右键弹框-->
         <div v-show="menuVisible">
             <el-menu id="menu" class="menu" style="border-bottom: solid 1px #393d49" background-color="#393d49" text-color="#cccccc" mode="horizontal" active-text-color="#ffd04b">
-                <el-menu-item v-show="btn.add" @click="addCategory"><i class="el-icon-circle-plus-outline"></i>添 加</el-menu-item>
-                <el-menu-item v-show="btn.edit" @click="updateCategory"><i class="el-icon-edit-outline"></i>修 改</el-menu-item>
-                <el-menu-item v-show="btn.del" @click="deleteCategory"><i class="el-icon-delete-solid"></i>删 除</el-menu-item>
+                <el-menu-item v-show="btn.add" @click="addCategory"><i class="el-icon-circle-plus-outline"/>添 加</el-menu-item>
+                <el-menu-item v-show="btn.edit" @click="updateCategory"><i class="el-icon-edit-outline"/>修 改</el-menu-item>
+                <el-menu-item v-show="btn.del" @click="deleteCategory"><i class="el-icon-delete-solid"/>删 除</el-menu-item>
             </el-menu>
         </div>
         <!--右键弹框-->
@@ -67,17 +68,18 @@
         <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal"  :center="center">
             <el-form :label-width="labelWidth" :model="categoryModel" :ref="reFrom">
                 <el-form-item label="接口名称" prop="name" required>
-                    <el-input v-model="categoryModel.name" placeholder="分类名称"></el-input>
+                    <el-input v-model="categoryModel.name" placeholder="分类名称"/>
                 </el-form-item>
                 <el-form-item label="接口上级" prop="pid">
                     <el-select placeholder="接口上级" v-model="categoryModel.pid" style="width: 100%">
-                        <el-option label="默认权限" value="0" v-if="categoryModel.pid === '0'" selected></el-option>
-                        <el-option v-for="(category,index) in apiCategory"  :key="index" :label="setName(category)" :value="category.id"></el-option>
+                        <el-option label="默认权限" value="0" v-if="categoryModel.pid === '0'" selected/>
+                        <el-option v-for="(category,index) in apiCategory" :key="index" :label="setName(category)"
+                                   :value="category.id"/>
                     </el-select>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <Submit :reFrom="reFrom" :model="categoryModel" :url="url" :refs="refs" v-on:success="success"></Submit>
+                <Submit :reFrom="reFrom" :model="categoryModel" :url="url" :refs="refs" v-on:success="success"/>
             </div>
         </el-dialog>
          <!---接口分类弹框-->
@@ -223,12 +225,7 @@
                 this.title='添加接口';
                 this.syncVisible = true;
                 this.url = this.cgi.categoryInsert;
-                this.categoryModel = {
-                    name:'',
-                    pid:this.categoryModel.id === undefined ? '0':this.categoryModel.id,
-                    path:'1',
-                    level:1
-                };
+                this.categoryModel = {name:'', pid:this.categoryModel.id === undefined ? '0':this.categoryModel.id, path:'1', level:1};
             },
             /**
              * todo：修改API分类

@@ -6,7 +6,7 @@
                :index="index"
                :on-success="uploadSuccess"
                :before-upload="beforeUpload">
-        <el-avatar :src="avatar_url" :alt="username" fit="cover" :size="size"></el-avatar>
+        <el-avatar :src="avatar_url" :alt="username" fit="cover" :size="size"/>
     </el-upload>
 </template>
 
@@ -16,22 +16,28 @@
     export default {
         name: 'Upload',
         props:{
-            avatar_url:String,
-            username:String,
+            avatar_url:{
+                type:String,
+                default:()=>''
+            },
+            username:{
+                type:String,
+                default:()=>''
+            },
             size:{
                 type:[Number,String],
-                default:100
+                default:()=>100
             },
             index:{
                 type:[Number,String],
-                default:1
+                default:()=>1
             }
         },
         data(){
             return {
                 fileData:{},
                 headers:{},
-                uploadUrl:process.env.API_ROOT+$url.fileUpload
+                uploadUrl:process.env.API_ROOT+$url.fileUpload.replace('/','')
             }
         },
         methods:{

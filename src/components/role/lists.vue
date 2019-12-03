@@ -7,22 +7,23 @@
         </el-form>
         <!--table 表格-->
         <el-table :data="roleLists.filter(data=>(!search || data.role_name.includes(search)))" border>
-            <el-table-column label="#" prop='id' sortable></el-table-column>
-            <el-table-column label="角色名称" prop="role_name" ></el-table-column>
+            <el-table-column label="#" prop='id' sortable/>
+            <el-table-column label="角色名称" prop="role_name"/>
             <el-table-column label="显示状态" v-if="btn.edit">
                 <template slot-scope="scope">
-                    <Radio :item="scope.row" :url="cgi.status"></Radio>
+                    <Radio :item="scope.row" :url="cgi.status"/>
                 </template>
             </el-table-column>
-            <el-table-column label="创建时间" sortable prop="created_at"></el-table-column>
-            <el-table-column label="修改时间" sortable prop="updated_at"></el-table-column>
+            <el-table-column label="创建时间" sortable prop="created_at"/>
+            <el-table-column label="修改时间" sortable prop="updated_at"/>
             <el-table-column label="操作" align="right">
                 <template slot="header" slot-scope="scope">
-                    <el-input v-model="search"  placeholder="请输入关键词查询"></el-input>
+                    <el-input v-model="search" placeholder="请输入关键词查询"/>
                 </template>
                 <template slot-scope="scope">
                     <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updateRole(scope.row)">修 改</el-button>
-                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="roleLists" v-on:success="success" v-if="btn.del"></Delete>
+                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="roleLists"
+                            v-on:success="success" v-if="btn.del"/>
                 </template>
             </el-table-column>
         </el-table>
@@ -31,7 +32,7 @@
         <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal"  :center="center">
             <el-form :label-width="labelWidth" :model="roleModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="角色名称" prop="role_name">
-                    <el-input v-model="roleModel.role_name" placeholder="角色名称"></el-input>
+                    <el-input v-model="roleModel.role_name" placeholder="角色名称"/>
                 </el-form-item>
                 <el-form-item label="权限列表" prop="auth_ids">
                     <el-transfer
@@ -51,7 +52,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer" v-if="btn.edit">
-                <Submit :reFrom="reFrom" :model="roleModel" :url="url" :refs="refs" v-on:success="success"></Submit>
+                <Submit :reFrom="reFrom" :model="roleModel" :url="url" :refs="refs" v-on:success="success"/>
             </div>
         </el-dialog>
         <!---弹框-->
@@ -155,14 +156,7 @@
                 this.url = this.cgi.insert;
                 this.act = 'add';
                 this.defaultChecked = [];
-                this.roleModel={
-                    role_name:'',
-                    auth_ids:[],
-                    auth_url:[],
-                    status:'1',
-                    created_at:func.get_timestamp(),
-                    updated_at:func.get_timestamp()
-                }
+                this.roleModel={role_name:'', auth_ids:[], auth_url:[], status:'1', created_at:func.get_timestamp(), updated_at:func.get_timestamp()}
             },
             /**
              * @param value      当前值

@@ -59,7 +59,7 @@
                   '    }\n' +
                   '<\/script>\n'+
 '```',
-                uploadUrl:process.env.API_ROOT+$url.fileUpload,
+                uploadUrl:process.env.API_ROOT+$url.fileUpload.replace('/',''),
                 token:''
             }
         },

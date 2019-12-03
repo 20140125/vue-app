@@ -6,17 +6,17 @@
             </el-form-item>
         </el-form>
         <el-table :data="configLists" border row-key="id"  :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
-            <el-table-column label="#" prop="id" width="100px"></el-table-column>
+            <el-table-column label="#" prop="id" width="100px"/>
             <el-table-column label="配置名称" prop="name"> </el-table-column>
             <el-table-column label="显示状态">
                 <template slot-scope="scope">
                     <div v-if="scope.row.children">
-                        <Radio :item="scope.row" :url="cgi.status" v-on:success="success"></Radio>
+                        <Radio :item="scope.row" :url="cgi.status" v-on:success="success"/>
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column label="创建时间" prop="created_at"> </el-table-column>
-            <el-table-column label="修改时间" prop="updated_at"></el-table-column>
+            <el-table-column label="创建时间" prop="created_at"/>
+            <el-table-column label="修改时间" prop="updated_at"/>
             <el-table-column label="操作" width="200px">
                 <template slot-scope="scope" >
                     <div v-if="scope.row.children" style="text-align: center">
@@ -47,13 +47,13 @@
         <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
             <el-form :label-width="labelWidth" :model="configValModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="配置名称" prop="name" v-show="!show">
-                    <el-input v-model="configValModel.name" placeholder="配置名称"></el-input>
+                    <el-input v-model="configValModel.name" placeholder="配置名称"/>
                 </el-form-item>
                 <el-form-item label="配置健" v-show="show">
-                    <el-input v-model="configVal.name" placeholder="配置内容"></el-input>
+                    <el-input v-model="configVal.name" placeholder="配置内容"/>
                 </el-form-item>
                 <el-form-item label="配置值" v-show="show">
-                    <el-input v-model="configVal.value" placeholder="配置内容"></el-input>
+                    <el-input v-model="configVal.value" placeholder="配置内容"/>
                 </el-form-item>
                 <el-form-item label="配置状态" prop="status">
                     <el-radio-group v-model="configValModel.status" size="small">
@@ -63,7 +63,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer" v-show="showBtn">
-                <Submit :reFrom="reFrom" :model="configValModel" :url="url" :refs="refs" v-on:success="success"></Submit>
+                <Submit :reFrom="reFrom" :model="configValModel" :url="url" :refs="refs" v-on:success="success"/>
             </div>
         </el-dialog>
         <!---配置值弹框-->
@@ -72,10 +72,10 @@
         <el-dialog :title="title" :visible.sync="syncConfigVisible" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
             <el-form :label-width="labelWidth" :model="configModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="配置名称" prop="name">
-                    <el-input v-model="configModel.name" placeholder="配置名称"></el-input>
+                    <el-input v-model="configModel.name" placeholder="配置名称"/>
                 </el-form-item>
                 <el-form-item label="配置值" prop="value">
-                    <codemirror ref="edit" @change="updateContent" :value="configModel.value" :options="options" style="line-height: 20px"></codemirror>
+                    <codemirror ref="edit" @change="updateContent" :value="configModel.value" :options="options" style="line-height: 20px"/>
                 </el-form-item>
                 <el-form-item label="配置状态" prop="status">
                     <el-radio-group v-model="configModel.status" size="small">
@@ -85,7 +85,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <Submit :reFrom="reFrom" :model="configModel" :url="url" :refs="refs" v-on:success="success"></Submit>
+                <Submit :reFrom="reFrom" :model="configModel" :url="url" :refs="refs" v-on:success="success"/>
             </div>
         </el-dialog>
         <!---配置弹框-->
@@ -250,11 +250,7 @@
              */
             addConfig:function () {
                 this.title='添加配置';
-                this.configValModel = {
-                    name:'',
-                    status:1,
-                    value:'[]',
-                }
+                this.configValModel = {name:'', status:1, value:'[]'}
                 this.show = false;
                 this.showBtn = true;
                 this.syncVisible = true;

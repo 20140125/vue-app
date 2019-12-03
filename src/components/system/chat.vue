@@ -3,11 +3,11 @@
         <el-form :inline="true" style="margin-top: 10px">
         </el-form>
         <el-table :data="chatLists" border>
-            <el-table-column label="#" prop="id" width="100px"></el-table-column>
+            <el-table-column label="#" prop="id" width="100px"/>
             <el-table-column label="发送者" prop="from_client_name"> </el-table-column>
             <el-table-column label="用户头像">
                 <template slot-scope="scope">
-                    <el-avatar :src="scope.row.avatar_url"></el-avatar>
+                    <el-avatar :src="scope.row.avatar_url"/>
                 </template>
             </el-table-column>
             <el-table-column label="接收者" prop="to_client_name"> </el-table-column>
@@ -99,8 +99,7 @@
              * @param limit
              */
             getChatLists:function (page,limit) {
-                let params = { page:page,limit:limit };
-                apiLists.ChatLists(params).then(response=>{
+                apiLists.ChatLists({ page:page,limit:limit }).then(response=>{
                     this.loading = false;
                     this.chatLists = response.data.item.data;
                     this.total = response.data.item.total;

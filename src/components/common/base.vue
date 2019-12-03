@@ -6,7 +6,7 @@
                 <el-submenu index="2" style="float: right">
                     <template slot="title">
                         <el-avatar :src="avatarUrl" :alt="username" :size="35"/>
-                        <span v-html="username" style="margin-left: 10px"></span>
+                        <span v-html="username" style="margin-left: 10px"/>
                     </template>
                     <el-menu-item index="2-1"><i class="el-icon-user-solid"> </i> 个人中心</el-menu-item>
                     <el-menu-item index="2-2"><i class="el-icon-upload2"> </i> 退出系统</el-menu-item>
@@ -18,7 +18,7 @@
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item style="text-align: center;color: #66b1ff">站内通知</el-dropdown-item>
                             <el-dropdown-item :command="item" divided v-for="(item,index) in notice" :key="index" :disabled="item.disabled">
-                                <el-badge is-dot v-if="!item.disabled"></el-badge>【{{item.title}}】 {{item.info}}
+                                <el-badge is-dot v-if="!item.disabled"/>【{{item.title}}】 {{item.info}}
                             </el-dropdown-item>
                             <el-dropdown-item command="more" style="text-align: center;color: #66b1ff">查看更多</el-dropdown-item>
                         </el-dropdown-menu>
@@ -37,12 +37,12 @@
                     <el-submenu v-for="(menu,index) in menuLists" :key="index" :index="menu.id.toString()">
                         <template slot="title">
                             <i class="el-icon-menu" v-if="menu.id!==2"> </i>
-                            <span v-html="menu.name"></span>
+                            <span v-html="menu.name"/>
                         </template>
                         <el-menu-item :index="child.id.toString()"  v-for="(child,index) in menu.__child" @click="setAttr(child)" :key="index">
                            <template slot="title">
                                <i class="el-icon-s-home"> </i>
-                               <span v-html="child.name"></span>
+                               <span v-html="child.name"/>
                            </template>
                         </el-menu-item>
                     </el-submenu>
@@ -52,11 +52,12 @@
                 <el-main>
                     <el-carousel :interval="2000" arrow="never" height="50px" direction="vertical" indicator-position="none" v-if="noticeArr.length>0">
                         <el-carousel-item v-for="(item,index) in noticeArr" :key="index">
-                            <el-alert type="success" show-icon :title="item.message" effect="light" @close="closeNotice(item)"></el-alert>
+                            <el-alert type="success" show-icon :title="item.message" effect="light"
+                                      @close="closeNotice(item)"/>
                         </el-carousel-item>
                     </el-carousel>
                     <el-tabs type="border-card" closable lazy v-model="activeName" @tab-click="goto" @tab-remove="remove">
-                        <el-tab-pane v-for="item in tabs" :label="item.label" :key="item.name" :name="item.name"></el-tab-pane>
+                        <el-tab-pane v-for="item in tabs" :label="item.label" :key="item.name" :name="item.name"/>
                         <el-card shadow="always">
                             <router-view/>
                         </el-card>
@@ -67,7 +68,7 @@
                 </el-footer>
                 <i class="msg-icon" @click="getMsgDialog">
                     <i :class="chatMsgClass" style="margin:13px 15px;">
-                        <el-badge is-dot v-if="msg_dot" type="danger" class="msg-count"></el-badge>
+                        <el-badge is-dot v-if="msg_dot" type="danger" class="msg-count"/>
                     </i>
                 </i>
             </el-container>
@@ -82,7 +83,7 @@
                         <el-menu background-color="#393d49" text-color="#fff" active-text-color="#ffd04b">
                             <el-menu-item @click="sendUser(user,index)" v-for="(user,index) in client_list" :key="index" :index="index">
                                 <el-avatar :size="50" :src="user.client_img" style="cursor: pointer"/>
-                                <span slot="title" style="margin-left: 20px" v-html="user.client_name"></span>
+                                <span slot="title" style="margin-left: 20px" v-html="user.client_name"/>
                             </el-menu-item>
                         </el-menu>
                     </el-aside>
@@ -92,14 +93,14 @@
                         <div id="msg">
                             <div v-for="(message,index) in messageLists" :key="index">
                                 <div class="msg-img">
-                                    <el-avatar :size="50" :src="message.avatar_url" style="cursor: pointer"></el-avatar>
+                                    <el-avatar :size="50" :src="message.avatar_url" style="cursor: pointer"/>
                                     <i>{{message.from_client_name}}   {{message.time}}</i>
                                 </div>
                                 <div class="msg-list" v-html="unescape(message.content)"></div>
                             </div>
                         </div>
                         <div class="input-msg">
-                            <emotion @clickEmotion="getEmotion" v-show="showEmotion" :height="300"></emotion>
+                            <emotion @clickEmotion="getEmotion" v-show="showEmotion" :height="300"/>
                             <div>
                                 <el-tooltip effect="dark" content="房间名称" placement="top-start">
                                     <el-menu :default-active="room_id" mode="horizontal" style="margin-bottom: 10px;border: none">
@@ -109,7 +110,7 @@
                                     </el-menu>
                                 </el-tooltip>
                                 <el-tooltip effect="dark" content="发送表情" placement="top-start">
-                                    <i @click="showEmotion = !showEmotion" class="el-icon-picture-outline-round icon"></i>
+                                    <i @click="showEmotion = !showEmotion" class="el-icon-picture-outline-round icon"/>
                                 </el-tooltip>
                                 <el-upload :action="cgi.uploadUrl"
                                            :data="fileData"
@@ -118,7 +119,7 @@
                                            :on-success="uploadSuccess"
                                            :before-upload="beforeUpload" style="float: left">
                                     <el-tooltip effect="dark" content="发送文件和图片" placement="top-start">
-                                        <i class="el-icon-picture-outline icon"></i>
+                                        <i class="el-icon-picture-outline icon"/>
                                     </el-tooltip>
                                 </el-upload>
                             </div>
@@ -167,7 +168,7 @@
                 cgi:{
                     uploadUrl:process.env.API_ROOT+$url.fileUpload
                 },
-                chatTitle:'随心所欲',
+                chatTitle:'隨心所欲,隨性而行',
                 fileData:{},
                 headers:{},
                 chatVisible:false,
@@ -593,7 +594,12 @@
              * @param item
              */
             closeNotice:function(item){
-                this.noticeArr.splice(this.noticeArr.indexOf(item.time),1);
+                for (let i in this.noticeArr) {
+                    if (this.noticeArr[i].time === item.time) {
+                        this.noticeArr.splice(i,1);
+                    }
+                }
+                console.log(this.noticeArr);
             },
             /**
              * TODO:滚动条滚动到底部

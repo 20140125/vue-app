@@ -2,7 +2,7 @@ import func from './func';
 import $url from './url';
 // 图片上传参数配置
 const uploadConfig = {
-    action:  process.env.API_ROOT+$url.fileUpload,  // 必填参数 图片上传地址
+    action:  process.env.API_ROOT+$url.fileUpload.replace('/',''),  // 必填参数 图片上传地址
     methods: 'POST',  // 必填参数 图片上传方式
     token:  localStorage.token,  // 可选参数 如果需要token验证，假设你的token有存放在sessionStorage
     name: 'file',  // 必填参数 文件的参数名

@@ -365,6 +365,32 @@ const chatLists = function (params = {}) {
 const getCountData = function (params = {}) {
     return request.post(url.getCountData,qs.stringify(Object.assign(params,access_token)))
 }
+/**
+ * TODO:数据表组件
+ * @param params
+ * @returns {Promise<AxiosResponse<T>>}
+ */
+const tableComponents = function (params = {}) {
+    return request.post(url.tableComponent,qs.stringify(Object.assign(params,access_token)))
+}
+/**
+ * TODO:数据保存
+ * @param params
+ * @param url
+ * @returns {Promise<AxiosResponse<T>>}
+ */
+const saveData = function (params={},url='') {
+    return request.post(url,qs.stringify(Object.assign(params,access_token)))
+}
+/**
+ * TODO:删除
+ * @param params
+ * @param url
+ * @returns {Promise<AxiosResponse<T>>}
+ */
+const remove = function (params={},url='') {
+    return request.post(url,qs.stringify(Object.assign(params,access_token)))
+}
 const interfaceLists = {
     LoginSys:loginSys,
     LogoutSys:logoutSys,
@@ -410,6 +436,9 @@ const interfaceLists = {
     PushRead:pushRead,
     ChatLists:chatLists,
     EmotionLists:emotionLists,
-    GetCountData:getCountData
+    GetCountData:getCountData,
+    TableComponents:tableComponents,
+    SaveData:saveData,
+    Remove:remove
 };
 export default interfaceLists;

@@ -22,7 +22,8 @@ import ChatList from '../components/system/chat'
 import MarkDown from '../components/editor/markdown'
 import UEditor from '../components/editor/ueditor'
 import Empty from '../components/empty'
-import TableExample from '../components/tables-example'
+import TableExample from '../components/components/example/tables'
+import FormExample from '../components/components/example/forms'
 
 Vue.use(Router);
 
@@ -31,7 +32,6 @@ export default new Router({
         { path: '/', name: '/', component: Login,meta:{ mode:'',title:'登录' } },
         { path: '/login', name: 'Login', component: Login,meta:{ mode:'',title:'登录' } },
         { path: '/404', name: 'Empty', component: Empty,meta:{ mode:'',title:'404' } },
-        { path: '/example/table', name: 'TableExample', component: TableExample,meta:{ mode:'',title:'表格组件封装' } },
         { path: '/admin', name: 'Admin', component: Index,meta:{ mode:'',title:'首页' } },
         { path:'/admin',component: Index,
             children:[
@@ -53,7 +53,10 @@ export default new Router({
                 { path: 'area/index', name:'AreaLists',component:AreaLists,meta:{ mode:'china_area',title:'城市列表' } },
                 { path: 'push/index', name:'PushList',component:PushList,meta:{ mode:'push',title:'站内通知' }},
                 { path: 'editor/markdown', name:'MarkDown',component:MarkDown,meta:{ mode:'push',title:'MarkDown' }},
-                { path: 'editor/quill', name:'UEditor',component:UEditor,meta:{ mode:'push',title:'UEditor' }}
+                { path: 'editor/quill', name:'UEditor',component:UEditor,meta:{ mode:'push',title:'UEditor' }},
+
+                { path: 'example/table', name: 'TableExample', component: TableExample,meta:{ mode:'',title:'表格组件' } },
+                { path: 'example/form', name: 'FormExample', component: FormExample,meta:{ mode:'',title:'表单组件' } },
 
             ]
         },
