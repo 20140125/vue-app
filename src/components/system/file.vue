@@ -653,7 +653,7 @@
              */
             downloadFile:function(){
                 this.$alert('确定下载文件：'+this.fileObject.path,'文件下载').then(()=>{
-                    window.open(process.env.API_ROOT+$url.fileDownload+"?token="+this.token+"&path="+this.fileObject.path,'__target');
+                    window.open(process.env.API_ROOT+$url.fileDownload.replace('/','')+"?token="+this.token+"&path="+this.fileObject.path,'__target');
                     let data = { msg:'file download successfully：'+this.fileObject.path,href:$url.fileDownload };
                     this.saveSystemLog(data);
                     this.$message({type:'success',message:'download file successfully'});

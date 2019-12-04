@@ -20,6 +20,7 @@
             </el-form-item>
             <el-form-item>
                 <el-button icon="el-icon-search" type="primary" plain="plain" @click="search">Search</el-button>
+                <el-button icon="el-icon-download" type="primary" plain="plain" @click="ExcelExport">Excel Export</el-button>
             </el-form-item>
         </el-form>
         <el-table :data="tableData" :empty-text="empty" border>
@@ -40,6 +41,7 @@
     import $url from '../../api/url'
     import apiLists from '../../api/api'
     import {mapActions} from 'vuex'
+    import func from '../../api/func'
     export default {
         name: 'Table',
         components: {Delete},
@@ -87,6 +89,21 @@
                     this.searchOption[this.searchOptions[i].prop] = this.searchOptions[i].model
                 }
                 this.$emit("search",this.searchOption);
+            },
+            /**
+             * TODO：excelExport
+             */
+            ExcelExport:function() {
+                apiLists.ExcelExport(this.searchOption).then(response=>{
+                    if (response && response.data.code === 200) {
+                        let data = { href:$url.excelExport, msg:response.data.msg, token:this.$store.state.login.token };
+                        this.saveSystemLog(data);
+                        this.$message({type:'success',message:response.data.msg});
+                        window.open(process.env.API_ROOT+$url.fileDownload.replace('/','')+"?token="+this.$store.state.login.token+"&path="+response.data.item.href,'__target');
+                        return false;
+                    }
+                    this.$message({type:'warning',message:response.data.msg});
+                });
             },
             /**
              * todo：删除记录

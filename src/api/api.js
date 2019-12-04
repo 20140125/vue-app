@@ -391,6 +391,14 @@ const saveData = function (params={},url='') {
 const remove = function (params={},url='') {
     return request.post(url,qs.stringify(Object.assign(params,access_token)))
 }
+/**
+ * TODO:excelExport
+ * @param params
+ * @returns {Promise<AxiosResponse<T>>}
+ */
+const excelExport = function (params={}) {
+    return request.post(url.excelExport,qs.stringify(Object.assign(params,access_token)))
+}
 const interfaceLists = {
     LoginSys:loginSys,
     LogoutSys:logoutSys,
@@ -439,6 +447,7 @@ const interfaceLists = {
     GetCountData:getCountData,
     TableComponents:tableComponents,
     SaveData:saveData,
-    Remove:remove
+    Remove:remove,
+    ExcelExport:excelExport
 };
 export default interfaceLists;

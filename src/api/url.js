@@ -66,7 +66,7 @@ let url={
     fileDelete:'/v1/file/delete',
     fileUpdate:'/v1/file/update',
     fileUpload:'/v1/file/upload',
-    fileDownload:'v1/file/download',
+    fileDownload:'/v1/file/download',
     fileCompression:'/v1/file/zip',
     fileDecompression:'/v1/file/unzip',
     imagePreview:'/v1/image/preview',
@@ -86,6 +86,7 @@ let url={
     //相关组件
     tableComponent:'/v1/components/table',
     componentAction:'/v1/components/actions',
+    excelExport:'/v1/excel/export',
     //公共操作接口
     tree:'/v1/menu',
     login:'/v1/login',
