@@ -6,7 +6,7 @@
             <el-table-column label="执行人" prop="username" sortable width="150px"/>
             <el-table-column label="日志信息" :show-overflow-tooltip="true">
                 <template slot-scope="scope">
-                    {{scope.row.log}}　<el-link type="success" :href="scope.row.url" target="_blank">[{{scope.row.url}}]</el-link>
+                    <el-link type="success" :href="scope.row.url" target="_blank">[{{scope.row.url}}]</el-link>　{{scope.row.log}}　
                 </template>
             </el-table-column>
             <el-table-column label="地址" prop="ip_address" width="200px"/>
