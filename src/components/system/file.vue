@@ -605,7 +605,6 @@
              * todo：文件压缩
              */
             compressionFile:function(){
-                console.log(this.fileObject);
                 this.$prompt('请输入文件名', '压缩包名称', { confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
                     if (value === '' || value === null || value === 'null' || value === 'undefined') {
                         this.$message.warning('Archive name must not be empty');
@@ -617,7 +616,7 @@
                     apiLists.Compression(this.compressionModel).then(response=>{
                         if (response && response.data.code === 200){
                             this.$message({type:'success',message:response.data.msg});
-                            let data = { msg:': new compression data' + this.compressionModel.type,href:$url.fileCompression };
+                            let data = { msg:response.data.msg +'：'+ this.fileObject.label,href:$url.fileCompression };
                             this.saveSystemLog(data);
                             this.getFileLists(this.path);
                         }
@@ -639,7 +638,7 @@
                     apiLists.Decompression(params).then(response=>{
                         if (response && response.data.code === 200){
                             this.$message({type:'success',message:response.data.msg});
-                            let data = { msg:'Decompression successfully',href:$url.fileDecompression };
+                            let data = { msg:response.data.msg,href:$url.fileDecompression };
                             this.saveSystemLog(data);
                             this.getFileLists(this.path);
                         }
