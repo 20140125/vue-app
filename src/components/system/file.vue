@@ -82,13 +82,13 @@
                        :file-list="fileList"
                        :auto-upload="false"
                        list-type="picture-card">
-                <el-button slot="trigger" size="small" type="primary" plain>选取文件</el-button>
+                <i slot="trigger" class="el-icon-plus"/>
             </el-upload>
         </el-dialog>
         <!--文件上传-->
 
         <!--图片预览-->
-        <el-dialog :visible.sync="imgVisible" width="30%">
+        <el-dialog :visible.sync="imgVisible" width="30%" :title="dialogImageName" center>
             <el-image :src="dialogImageUrl" :alt="dialogImageName"/>
         </el-dialog>
         <!--图片预览-->
@@ -441,21 +441,21 @@
                 let params = {oldFile:this.fileObject.path};
                 this.$prompt('请输入文件名', '重命名', { confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
                     if (value === '' || value === null || value === 'null' || value === 'undefined') {
-                        this.$message.warning('文件名不得为空');
+                        this.$message.warning('File name cannot be empty');
                         return false;
                     }
                     params.newFile = params.oldFile.replace(this.fileObject.label,value);
                     apiLists.FileRename(params).then(response=>{
                         if (response && response.data.code === 200){
                             this.fileObject.name = value;
-                            this.$message({type: 'success', message: 'remove file successfully: ' + value});
-                            let data = { href:$url.fileSave, msg:'remove file successfully: ' + value};
+                            this.$message({type: 'success', message: response.data.msg+'：'+ value});
+                            let data = { href:$url.fileSave, msg:response.data.msg+'：'+ value};
                             this.saveSystemLog(data);
                             this.getFileLists(this.path);
                         }
                     });
                 }).catch(() => {
-                    this.$message({type: 'info', message: '取消输入'});
+                    this.$message({type: 'info', message: 'cancel entry'});
                 });
             },
             /**
@@ -470,14 +470,14 @@
                     let params = {path:this.fileObject.path};
                     apiLists.FileDelete(params).then(response=>{
                        if (response && response.data.code === 200){
-                           let data = { msg:'删除文件成功：'+params.path,href:$url.fileDelete };
+                           let data = { msg:response.data.msg+'：'+params.path,href:$url.fileDelete };
                            this.saveSystemLog(data);
                            this.getFileLists(this.path);
-                           this.$message({type:'success',message:'删除记录成功！：'+params.path});
+                           this.$message({type:'success',message:response.data.msg+'：'+params.path});
                        }
                     })
                 }).catch(()=>{
-                    this.$message({type:'info',message:'已取消删除！'});
+                    this.$message({type:'info',message:'cancel remove！'});
                 });
             },
             /**
@@ -487,7 +487,7 @@
                 let params = {};
                 this.$prompt('请输入文件名', '新建文件', { confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
                     if (value === '' || value === null || value === 'null' || value === 'undefined') {
-                        this.$message.warning('文件名不得为空');
+                        this.$message.warning('File name cannot be empty');
                         return false;
                     }
                     //这是一个文件
@@ -498,14 +498,14 @@
                     }
                     apiLists.FileSave(params).then(response=>{
                         if (response && response.data.code === 200){
-                            let data = { msg:'你的新文件名: ' + params.path,href:$url.fileRename };
+                            let data = { msg:response.data.msg+'：'+ params.path,href:$url.fileRename };
                             this.saveSystemLog(data);
                             this.getFileLists(this.path);
-                            this.$message({type: 'success', message: 'new filename: ' + params.path});
+                            this.$message({type: 'success', message: response.data.msg+'：'+ params.path});
                         }
                     });
                 }).catch(() => {
-                    this.$message({type: 'info', message: '取消输入'});
+                    this.$message({type: 'info', message: 'cancel entry'});
                 });
             },
             /**
@@ -547,7 +547,7 @@
             setChmodAuth:function(){
                 this.chmodModel.auth = parseInt(this.chmodModel.auth);
                 if (this.chmodModel.auth>666){
-                    this.$message({type:'warning',message:'权限设置失败'});
+                    this.$message({type:'warning',message:'Permission setting failed'});
                     this.chmodModel.auth = parseInt(this.fileObject.auth);
                 }
                 this.all_id = this.chmodModel.auth.toString().substr(0,1);
@@ -608,7 +608,7 @@
                 console.log(this.fileObject);
                 this.$prompt('请输入文件名', '压缩包名称', { confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
                     if (value === '' || value === null || value === 'null' || value === 'undefined') {
-                        this.$message.warning('压缩包名称不得为空');
+                        this.$message.warning('Archive name must not be empty');
                         return false;
                     }
                     this.compressionModel.resource = value.indexOf('.')>=0 ? value.split(".")[0] : value;
@@ -623,7 +623,7 @@
                         }
                     });
                 }).catch(() => {
-                    this.$message({type: 'info', message: '取消输入'});
+                    this.$message({type: 'info', message: 'cancel entry'});
                 });
             },
             /**
@@ -632,7 +632,7 @@
             DecompressionFile:function(){
                 this.$prompt('请输入文件名', '解压包名称', { confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
                     if (value === '' || value === null || value === 'null' || value === 'undefined') {
-                        this.$message.warning('解压包名称不得为空');
+                        this.$message.warning('Extract package name must not be empty');
                         return false;
                     }
                     let params = {path : this.fileObject.path, resource:value.indexOf('.')>=0 ? value.split(".")[0] : value};
