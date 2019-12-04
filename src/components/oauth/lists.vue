@@ -1,6 +1,6 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText">
-        <el-table :data="oauthLists.filter(data=>(!search || data.username.toLowerCase().includes(search.toLowerCase()) || data.oauth_type.toLowerCase().includes(search.toLowerCase())))" border>
+        <el-table :data="oauthLists.filter(data=>(!search || data.username.toLowerCase().includes(search.toLowerCase()) || data.oauth_type.toLowerCase().includes(search.toLowerCase())))">
             <el-table-column label="#" prop="id"/>
             <el-table-column label="用户名" prop="username"/>
             <el-table-column label="头像">

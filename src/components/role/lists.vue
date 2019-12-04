@@ -6,7 +6,7 @@
             </el-form-item>
         </el-form>
         <!--table 表格-->
-        <el-table :data="roleLists.filter(data=>(!search || data.role_name.includes(search)))" border>
+        <el-table :data="roleLists.filter(data=>(!search || data.role_name.includes(search)))">
             <el-table-column label="#" prop='id' sortable/>
             <el-table-column label="角色名称" prop="role_name"/>
             <el-table-column label="显示状态" v-if="btn.edit">

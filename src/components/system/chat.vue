@@ -2,7 +2,7 @@
     <div v-loading="loading" :element-loading-text="loadingText">
         <el-form :inline="true" style="margin-top: 10px">
         </el-form>
-        <el-table :data="chatLists" border>
+        <el-table :data="chatLists">
             <el-table-column label="#" prop="id" width="100px"/>
             <el-table-column label="发送者" prop="from_client_name"> </el-table-column>
             <el-table-column label="用户头像">

@@ -5,7 +5,7 @@
                 <el-button icon="el-icon-plus" type="primary" size="medium" plain @click="addConfig">添 加</el-button>
             </el-form-item>
         </el-form>
-        <el-table :data="configLists" border row-key="id"  :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+        <el-table :data="configLists" row-key="id"  :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
             <el-table-column label="#" prop="id" width="100px"/>
             <el-table-column label="配置名称" prop="name"> </el-table-column>
             <el-table-column label="显示状态">

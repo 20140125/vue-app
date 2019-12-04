@@ -5,25 +5,25 @@
                 <el-button icon="el-icon-plus" type="primary" size="medium" plain @click="addUser">添 加</el-button>
             </el-form-item>
         </el-form>
-        <el-table :data="userLists.filter(data=>(!search || data.username.toLowerCase().includes(search.toLowerCase()) || data.email.toLowerCase().includes(search.toLowerCase()) || data.phone_number.toLowerCase().includes(search.toLowerCase())))" border>
-            <el-table-column label="#" prop="id"></el-table-column>
-            <el-table-column label="管理员" prop="username"></el-table-column>
-            <el-table-column label="邮箱" prop="email" ></el-table-column>
-            <el-table-column label="手机号" prop="phone_number" ></el-table-column>
+        <el-table :data="userLists.filter(data=>(!search || data.username.toLowerCase().includes(search.toLowerCase()) || data.email.toLowerCase().includes(search.toLowerCase()) || data.phone_number.toLowerCase().includes(search.toLowerCase())))">
+            <el-table-column label="#" prop="id"/>
+            <el-table-column label="管理员" prop="username"/>
+            <el-table-column label="邮箱" prop="email"/>
+            <el-table-column label="手机号" prop="phone_number"/>
             <el-table-column label="显示状态" v-if="btn.edit">
                 <template slot-scope="scope">
-                    <Radio :item="scope.row" :url="cgi.status"></Radio>
+                    <Radio :item="scope.row" :url="cgi.status"/>
                 </template>
             </el-table-column>
-            <el-table-column label="创建时间" prop="created_at"> </el-table-column>
-            <el-table-column label="修改时间" prop="updated_at"></el-table-column>
+            <el-table-column label="创建时间" prop="created_at"/>
+            <el-table-column label="修改时间" prop="updated_at"/>
             <el-table-column label="操作" align="right">
                 <template slot="header" slot-scope="scope">
-                    <el-input v-model="search"  placeholder="请输入关键词查询"></el-input>
+                    <el-input v-model="search"  placeholder="请输入关键词查询"/>
                 </template>
                 <template slot-scope="scope">
                     <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updateUser(scope.row)" v-if="btn.edit">修 改</el-button>
-                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="userLists" v-on:success="success" v-if="btn.del"></Delete>
+                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="userLists" v-on:success="success" v-if="btn.del"/>
                 </template>
             </el-table-column>
         </el-table>
@@ -44,20 +44,20 @@
         <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal"  :center="center">
             <el-form :label-width="labelWidth" :model="userModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="管理员" prop="username">
-                    <el-input v-model="userModel.username" placeholder="管理员名称"></el-input>
+                    <el-input v-model="userModel.username" placeholder="管理员名称"/>
                 </el-form-item>
                 <el-form-item label="密码" prop="password">
-                    <el-input v-model="userModel.password" type="password" placeholder="密码"></el-input>
+                    <el-input v-model="userModel.password" type="password" placeholder="密码"/>
                 </el-form-item>
                 <el-form-item label="邮箱" prop="email">
-                    <el-input v-model="userModel.email" type="email" placeholder="邮箱"></el-input>
+                    <el-input v-model="userModel.email" type="email" placeholder="邮箱"/>
                 </el-form-item>
                 <el-form-item label="手机号" prop="phone_number" v-if="act === 'update'">
-                    <el-input v-model="userModel.phone_number" type="email" placeholder="手机号"></el-input>
+                    <el-input v-model="userModel.phone_number" type="email" placeholder="手机号"/>
                 </el-form-item>
                 <el-form-item label="角色" prop="role_id">
                     <el-select v-model="userModel.role_id" style="width: 100%">
-                        <el-option v-for="(role,index) in roleLists" :key="index" :label="role.role_name" :value="role.id"></el-option>
+                        <el-option v-for="(role,index) in roleLists" :key="index" :label="role.role_name" :value="role.id"/>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="显示状态" prop="status" v-if="act === 'add'">
@@ -68,7 +68,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <Submit :reFrom="reFrom" :model="userModel" :url="url" :refs="refs" v-on:success="success"></Submit>
+                <Submit :reFrom="reFrom" :model="userModel" :url="url" :refs="refs" v-on:success="success"/>
             </div>
         </el-dialog>
         <!---弹框-->
@@ -171,18 +171,7 @@
                 this.title='添加管理员';
                 this.syncVisible = true;
                 this.act = 'add';
-                this.userModel = {
-                    username:'',
-                    email:'',
-                    password:'',
-                    salt:func.set_random(),
-                    status:'1',
-                    role_id:1,
-                    phone_number:'',
-                    created_at:func.get_timestamp(),
-                    updated_at:func.get_timestamp(),
-                    access_token:''
-                };
+                this.userModel = {username:'', email:'', password:'', salt:func.set_random(), status:'1', role_id:1, phone_number:'', created_at:func.get_timestamp(), updated_at:func.get_timestamp(), access_token:''};
                 this.url = this.cgi.insert;
             },
             /**

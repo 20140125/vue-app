@@ -5,7 +5,7 @@
                 <el-button icon="el-icon-plus" type="primary" size="medium" plain @click="addReqRule">添 加</el-button>
             </el-form-item>
         </el-form>
-        <el-table :data="reqRuleLists.filter(data=>(!search || data.username.toLowerCase().includes(search.toLowerCase()) || data.href.includes(search.toLowerCase())))" border>
+        <el-table :data="reqRuleLists.filter(data=>(!search || data.username.toLowerCase().includes(search.toLowerCase()) || data.href.includes(search.toLowerCase())))">
             <el-table-column label="#" prop="id" width="120px" sortable/>
             <el-table-column label="申请人" prop="username" width="150px"/>
             <el-table-column label="授权地址" prop="href"/>
