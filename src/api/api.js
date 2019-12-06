@@ -332,7 +332,7 @@ const areaWeather = function (params = {}) {
  */
 const pushList = function (params = {}) {
     return request.post(url.pushList,qs.stringify(Object.assign(params,access_token)))
-}
+};
 /**
  * TODO:通知已查看
  * @param params
@@ -340,7 +340,7 @@ const pushList = function (params = {}) {
  */
 const pushRead = function (params = {}) {
     return request.post(url.pushRead,qs.stringify(Object.assign(params,access_token)))
-}
+};
 /**
  * TODO:表情列表
  * @param params
@@ -348,7 +348,7 @@ const pushRead = function (params = {}) {
  */
 const emotionLists = function (params = {}) {
     return request.post(url.emotionLists,qs.stringify(Object.assign(params,access_token)))
-}
+};
 /**
  * TODO:获取历史聊天记录
  * @param params
@@ -356,7 +356,7 @@ const emotionLists = function (params = {}) {
  */
 const chatLists = function (params = {}) {
     return request.post(url.chatLists,qs.stringify(Object.assign(params,access_token)))
-}
+};
 /**
  * TODO:获取记录总数
  * @param params
@@ -364,7 +364,7 @@ const chatLists = function (params = {}) {
  */
 const getCountData = function (params = {}) {
     return request.post(url.getCountData,qs.stringify(Object.assign(params,access_token)))
-}
+};
 /**
  * TODO:数据表组件
  * @param params
@@ -372,7 +372,7 @@ const getCountData = function (params = {}) {
  */
 const tableComponents = function (params = {}) {
     return request.post(url.tableComponent,qs.stringify(Object.assign(params,access_token)))
-}
+};
 /**
  * TODO:数据保存
  * @param params
@@ -381,7 +381,7 @@ const tableComponents = function (params = {}) {
  */
 const saveData = function (params={},url='') {
     return request.post(url,qs.stringify(Object.assign(params,access_token)))
-}
+};
 /**
  * TODO:删除
  * @param params
@@ -390,7 +390,7 @@ const saveData = function (params={},url='') {
  */
 const remove = function (params={},url='') {
     return request.post(url,qs.stringify(Object.assign(params,access_token)))
-}
+};
 /**
  * TODO:excelExport
  * @param params
@@ -398,7 +398,7 @@ const remove = function (params={},url='') {
  */
 const excelExport = function (params={}) {
     return request.post(url.excelExport,qs.stringify(Object.assign(params,access_token)))
-}
+};
 const interfaceLists = {
     LoginSys:loginSys,
     LogoutSys:logoutSys,
