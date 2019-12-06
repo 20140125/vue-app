@@ -10,20 +10,21 @@
                   row-key="id"
                   default-expand-all
                   :tree-props="{children: '__child', hasChildren: 'hasChildren'}">
-            <el-table-column label="权限名称" prop="name"></el-table-column>
-            <el-table-column label="权限链接" prop="href"></el-table-column>
+            <el-table-column label="权限名称" prop="name"/>
+            <el-table-column label="权限链接" prop="href"/>
             <el-table-column label="显示状态" v-if="btn.edit">
                 <template slot-scope="scope">
-                    <Radio :item="scope.row" :url="cgi.status"></Radio>
+                    <Radio :item="scope.row" :url="cgi.status"/>
                 </template>
             </el-table-column>
             <el-table-column align="right">
                 <template slot="header" slot-scope="scope">
-                    <el-input v-model="search" @keyup.enter="searchAuth" placeholder="输入关键词查询"></el-input>
+                    <el-input v-model="search" placeholder="输入关键词查询"/>
                 </template>
                 <template slot-scope="scope">
+                    <el-button icon="el-icon-plus" type="primary" size="mini" v-if="scope.row.level<=1" plain @click="addAuth(scope.row)">添 加</el-button>
                     <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updateAuth(scope.row)" v-if="btn.edit">修 改</el-button>
-                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="authLists" v-on:success="success" v-if="btn.del"></Delete>
+                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="authLists" v-on:success="success" v-if="btn.del"/>
                 </template>
             </el-table-column>
         </el-table>
@@ -33,16 +34,16 @@
         <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal" :center="center">
             <el-form :label-width="labelWidth" :model="authModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="权限名称" prop="name">
-                    <el-input v-model="authModel.name" placeholder="权限名称"></el-input>
+                    <el-input v-model="authModel.name" placeholder="权限名称"/>
                 </el-form-item>
                 <el-form-item label="权限链接" prop="href">
-                    <el-input v-model="authModel.href" placeholder="/admin/auth/lists"></el-input>
+                    <el-input v-model="authModel.href" placeholder="/admin/auth/lists"/>
                 </el-form-item>
                 <el-form-item label="权限上级" prop="pid">
-                   <el-select placeholder="权限上级" filterable style="width: 100%" v-model="authModel.pid">
-                       <el-option label="默认权限" value="0" v-if="authModel.pid === '0'" selected></el-option>
-                       <el-option v-for="(item,index) in authLevel" :key="index" :label="setAuthName(item)" :value="item.id.toString()"></el-option>
-                   </el-select>
+                    <el-select placeholder="权限上级" filterable style="width: 100%" v-model="authModel.pid">
+                        <el-option label="默认权限" value="0" v-if="authModel.pid === '0'" selected/>
+                        <el-option v-for="(item,index) in authLevel" :key="index" :label="setAuthName(item)" :value="item.id.toString()"/>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="权限状态" prop="status" v-if="act === 'add'">
                     <el-radio-group v-model="authModel.status" size="small">
@@ -52,7 +53,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <Submit :reFrom="reFrom" :model="authModel" :url="url" :refs="refs"  v-on:success="success"></Submit>
+                <Submit :reFrom="reFrom" :model="authModel" :url="url" :refs="refs" v-on:success="success"/>
             </div>
         </el-dialog>
         <!---弹框-->
@@ -135,11 +136,8 @@
                     }
                 });
             },
-            searchAuth:function(){
-                console.log('ss')
-            },
             /**
-             * 设置权限名称
+             * todo：设置权限名称
              * @param item
              * @return {String}
              */
@@ -148,20 +146,17 @@
             },
             /**
              * todo：权限添加
+             * @param scope
              */
-            addAuth:function () {
+            addAuth:function (scope = {}) {
                 this.syncVisible = true;
                 this.title = '添加权限';
                 this.url = this.cgi.insert;
                 this.act = 'add';
-                this.authModel = {
-                    name:'',
-                    href:'',
-                    status:'1',
-                    pid:'0',
-                    level:0,
-                    path:'1'
-                };
+                this.authModel = { name:'', href:'', status:'1', pid:'0', level:0, path:'1' };
+                if (scope.pid) {
+                    this.authModel.pid = scope.id.toString();
+                }
             },
             /**
              * todo：权限保存

@@ -3,14 +3,14 @@
         <el-row :gutter="24">
             <!--文件列表-->
             <el-col :xl="{'span':5}" :lg="{'span':5}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" style="margin-bottom: 20px">
-                <el-input placeholder="输入关键字搜索" v-model="filterText" style="margin-bottom: 20px"></el-input>
+                <el-input placeholder="输入关键字搜索" v-model="filterText" style="margin-bottom: 20px"/>
                 <el-tree :data="fileLists"  @node-contextmenu="rightClick"
                          :highlight-current="highlight"
                          :props="props"
                          :filter-node-method="filterNode"
                          :node-key="props.id" @node-click="getFileContent"
                          ref="tree"
-                         style="background-color: #393d49"></el-tree>
+                         style="background-color: #393d49"/>
             </el-col>
             <!--文件列表-->
             <!--文件内容-->
@@ -18,28 +18,28 @@
                 <el-form :model="fileModel" :ref="reFrom">
                     <el-form-item style="margin-left: -30px !important;">
                         <el-tabs type="border-card" closable v-model="activeFileTabName"  @tab-click="goto" @tab-remove="removeTabName" style="text-align: left!important;">
-                            <el-tab-pane v-for="item in fileTabs" :label="item.label" :key="item.name" :name="item.name"></el-tab-pane>
+                            <el-tab-pane v-for="item in fileTabs" :label="item.label" :key="item.name" :name="item.name"/>
                             <el-card shadow="always">
-                                <codemirror @change="updateContent" ref="edit" :value="fileModel.content" :options="options" style="line-height: 20px"></codemirror>
+                                <codemirror @change="updateContent" ref="edit" :value="fileModel.content" :options="options" style="line-height: 20px"/>
                             </el-card>
                         </el-tabs>
                     </el-form-item>
                 </el-form>
-                <Submit style="text-align: center !important;" :reFrom="reFrom" :model="fileModel" :url="url" :refs="refs" v-on:success="success" v-if="btn.edit"></Submit>
+                <Submit style="text-align: center !important;" :reFrom="reFrom" :model="fileModel" :url="url" :refs="refs" v-on:success="success" v-if="btn.edit"/>
             </el-col>
             <!--文件内容-->
         </el-row>
         <!--鼠标右键-->
         <div v-show="menuVisible" style="z-index:100">
             <el-menu id="menu" class="menu" mode="horizontal" style="border-bottom: solid 1px #393d49" background-color="#393d49" text-color="#cccccc" active-text-color="#ffd04b">
-                <el-menu-item  @click="addFile" v-show="showRightBtn.add && btn.add"><i class="el-icon-circle-plus-outline"></i>添 加</el-menu-item>
-                <el-menu-item  @click="renameFile" v-show="showRightBtn.rename && btn.rename"><i class="el-icon-edit-outline"></i>重命名</el-menu-item>
-                <el-menu-item  @click="authFile" v-show="showRightBtn.auth && btn.chmod"><i class="el-icon-user-solid"></i>权 限</el-menu-item>
-                <el-menu-item  @click="compressionFile" v-show="showRightBtn.compression && btn.gzip"><i class="el-icon-collection"></i>压 缩</el-menu-item>
-                <el-menu-item  @click="DecompressionFile" v-show="showRightBtn.DeCompression && btn.unzip"><i class="el-icon-receiving"></i>解 压</el-menu-item>
-                <el-menu-item  @click="downloadFile" v-show="showRightBtn.download && btn.download"><i class="el-icon-download"></i>下 载</el-menu-item>
-                <el-menu-item  @click="uploadFile" v-show="showRightBtn.upload && btn.upload"><i class="el-icon-upload"></i>上 传</el-menu-item>
-                <el-menu-item  @click="deleteFile" v-show="showRightBtn.remove && btn.del"><i class="el-icon-delete-solid"></i>删 除</el-menu-item>
+                <el-menu-item  @click="addFile" v-show="showRightBtn.add && btn.add"><i class="el-icon-circle-plus-outline"/>添 加</el-menu-item>
+                <el-menu-item  @click="renameFile" v-show="showRightBtn.rename && btn.rename"><i class="el-icon-edit-outline"/>重命名</el-menu-item>
+                <el-menu-item  @click="authFile" v-show="showRightBtn.auth && btn.chmod"><i class="el-icon-user-solid"/>权 限</el-menu-item>
+                <el-menu-item  @click="compressionFile" v-show="showRightBtn.compression && btn.gzip"><i class="el-icon-collection"/>压 缩</el-menu-item>
+                <el-menu-item  @click="DecompressionFile" v-show="showRightBtn.DeCompression && btn.unzip"><i class="el-icon-receiving"/>解 压</el-menu-item>
+                <el-menu-item  @click="downloadFile" v-show="showRightBtn.download && btn.download"><i class="el-icon-download"/>下 载</el-menu-item>
+                <el-menu-item  @click="uploadFile" v-show="showRightBtn.upload && btn.upload"><i class="el-icon-upload"/>上 传</el-menu-item>
+                <el-menu-item  @click="deleteFile" v-show="showRightBtn.remove && btn.del"><i class="el-icon-delete-solid"/>删 除</el-menu-item>
             </el-menu>
         </div>
         <!--鼠标右键-->
@@ -47,31 +47,32 @@
         <el-dialog :visible.sync="syncVisible" :modal="modal" :title="title" :center="center">
             <el-form :label-width="labelWidth" :model="chmodModel" :rules="rules" :ref="reFrom">
                 <el-form-item label="权限" prop="auth" required>
-                    <el-input placeholder="请输入内容" @change="setChmodAuth" v-model="chmodModel.auth"></el-input>
+                    <el-input placeholder="请输入内容" @change="setChmodAuth" v-model="chmodModel.auth"/>
                 </el-form-item>
                 <el-form-item label="所有者" required>
                     <el-checkbox-group v-model="all"  @change="allChange">
-                        <el-checkbox border size="small" v-for="checkBox in checkBoxArr" :label="checkBox.value" :key="checkBox.id"></el-checkbox>
+                        <el-checkbox border size="small" v-for="checkBox in checkBoxArr" :label="checkBox.value" :key="checkBox.id"/>
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="用户组" required>
                     <el-checkbox-group v-model="user"  @change="userChange">
-                        <el-checkbox border size="small" v-for="checkBox in checkBoxArr" :label="checkBox.value" :key="checkBox.id"></el-checkbox>
+                        <el-checkbox border size="small" v-for="checkBox in checkBoxArr" :label="checkBox.value" :key="checkBox.id"/>
                     </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="公共" required>
                     <el-checkbox-group v-model="common" @change="commonChange">
-                        <el-checkbox border size="small" v-for="checkBox in checkBoxArr" :label="checkBox.value" :key="checkBox.id"></el-checkbox>
+                        <el-checkbox border size="small" v-for="checkBox in checkBoxArr" :label="checkBox.value" :key="checkBox.id"/>
                     </el-checkbox-group>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <Submit :reFrom="reFrom" :model="chmodModel" :url="url" :refs="refs"  v-on:success="success"></Submit>
+                <Submit :reFrom="reFrom" :model="chmodModel" :url="url" :refs="refs"  v-on:success="success"/>
             </div>
         </el-dialog>
         <!--权限框-->
         <!--文件上传-->
         <el-dialog :visible.sync="fileSyncVisible" :modal="modal" title="文件上传" :center="center">
+            <el-button style="margin-left: 10px;margin-bottom: 20px" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
             <el-upload ref="upload"
                        :data="fileData"
                        :action="cgi.uploadUrl"
@@ -79,16 +80,16 @@
                        :on-remove="handleRemove"
                        :on-success="handelSuccess"
                        :file-list="fileList"
-                       :auto-upload="false">
-                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+                       :auto-upload="false"
+                       list-type="picture-card">
+                <i slot="trigger" class="el-icon-plus"/>
             </el-upload>
         </el-dialog>
         <!--文件上传-->
 
         <!--图片预览-->
-        <el-dialog :visible.sync="imgVisible">
-            <img width="100%" :src="dialogImageUrl" alt="">
+        <el-dialog :visible.sync="imgVisible" width="30%" :title="dialogImageName" center>
+            <el-image :src="dialogImageUrl" :alt="dialogImageName"/>
         </el-dialog>
         <!--图片预览-->
     </div>
@@ -144,11 +145,7 @@
                     path:''
                 },
                 //文件压缩
-                compressionModel:{
-                    docLists:[],
-                    resource:'',
-                    path:''
-                },
+                compressionModel:{docLists:[], resource:'', path:''},
                 mode:{
                     markdown:"text/markdown",
                     php:"text/x-php",
@@ -222,10 +219,7 @@
                     upload:true,
                 },
                 //文件
-                fileModel:{
-                    content:'',
-                    path:''
-                },
+                fileModel:{content:'', path:''},
                 //文件上传
                 fileList:[],
                 fileSyncVisible:false,
@@ -237,11 +231,12 @@
                 cgi:{
                     update:$url.fileUpdate,
                     chmod:$url.fileChmod,
-                    uploadUrl:process.env.API_ROOT+$url.fileUpload
+                    uploadUrl:process.env.API_ROOT+$url.fileUpload.replace('/','')
                 },
                 //图片弹框
                 imgVisible:false,
                 dialogImageUrl:'',
+                dialogImageName:'',
                 //规则
                 rules:{
                     auth:[
@@ -309,7 +304,7 @@
                 this.scrollTop = func.get_scroll_top();
                 document.addEventListener('click', this.foo);
                 menu.style.left = '360px';
-                menu.style.top = MouseEvent.clientY + this.scrollTop - 125 + 'px';
+                menu.style.top = MouseEvent.clientY + this.scrollTop - 135 + 'px';
                 this.fileObject = object;
                 switch (this.fileObject.fileType) {
                     case 'file':
@@ -391,6 +386,17 @@
                 if (compressionExt.includes(ext) || item.fileType!=='file'){
                     return false;
                 }
+                let imgExt = ['png','jpg','jpeg','gif','PNG','JPG','JPEG','GIF'];
+                if (imgExt.includes(ext)){
+                    this.dialogImageName = item.label;
+                    apiLists.ImagePreview({path:item.path}).then(response=>{
+                        if (response && response.data.code === 200) {
+                            this.dialogImageUrl = response.data.item.src;
+                            this.imgVisible = true;
+                        }
+                    })
+                    return ;
+                }
                 this.setOptionsMode(ext);
                 this.showIdea = true;
                 this.activeFileTabName = item.size.toString();
@@ -435,21 +441,21 @@
                 let params = {oldFile:this.fileObject.path};
                 this.$prompt('请输入文件名', '重命名', { confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
                     if (value === '' || value === null || value === 'null' || value === 'undefined') {
-                        this.$message.warning('文件名不得为空');
+                        this.$message.warning('File name cannot be empty');
                         return false;
                     }
                     params.newFile = params.oldFile.replace(this.fileObject.label,value);
                     apiLists.FileRename(params).then(response=>{
                         if (response && response.data.code === 200){
                             this.fileObject.name = value;
-                            this.$message({type: 'success', message: '你的新文件名: ' + value});
-                            let data = { msg:JSON.stringify({href:$url.fileSave, info:'你的新文件名: ' + value,result:response.data.result}) };
+                            this.$message({type: 'success', message: response.data.msg+'：'+ value});
+                            let data = { href:$url.fileSave, msg:response.data.msg+'：'+ value};
                             this.saveSystemLog(data);
                             this.getFileLists(this.path);
                         }
                     });
                 }).catch(() => {
-                    this.$message({type: 'info', message: '取消输入'});
+                    this.$message({type: 'info', message: 'cancel entry'});
                 });
             },
             /**
@@ -464,14 +470,14 @@
                     let params = {path:this.fileObject.path};
                     apiLists.FileDelete(params).then(response=>{
                        if (response && response.data.code === 200){
-                           let data = { msg:'删除文件成功：'+params.path,result:response.data.result,href:$url.fileDelete };
+                           let data = { msg:response.data.msg+'：'+params.path,href:$url.fileDelete };
                            this.saveSystemLog(data);
                            this.getFileLists(this.path);
-                           this.$message({type:'success',message:'删除记录成功！：'+params.path});
+                           this.$message({type:'success',message:response.data.msg+'：'+params.path});
                        }
                     })
                 }).catch(()=>{
-                    this.$message({type:'info',message:'已取消删除！'});
+                    this.$message({type:'info',message:'cancel remove！'});
                 });
             },
             /**
@@ -481,7 +487,7 @@
                 let params = {};
                 this.$prompt('请输入文件名', '新建文件', { confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
                     if (value === '' || value === null || value === 'null' || value === 'undefined') {
-                        this.$message.warning('文件名不得为空');
+                        this.$message.warning('File name cannot be empty');
                         return false;
                     }
                     //这是一个文件
@@ -492,14 +498,14 @@
                     }
                     apiLists.FileSave(params).then(response=>{
                         if (response && response.data.code === 200){
-                            let data = { msg:'你的新文件名: ' + params.path,result:response.data.result,href:$url.fileRename };
+                            let data = { msg:response.data.msg+'：'+ params.path,href:$url.fileRename };
                             this.saveSystemLog(data);
                             this.getFileLists(this.path);
-                            this.$message({type: 'success', message: '你的新文件名: ' + params.path});
+                            this.$message({type: 'success', message: response.data.msg+'：'+ params.path});
                         }
                     });
                 }).catch(() => {
-                    this.$message({type: 'info', message: '取消输入'});
+                    this.$message({type: 'info', message: 'cancel entry'});
                 });
             },
             /**
@@ -541,7 +547,7 @@
             setChmodAuth:function(){
                 this.chmodModel.auth = parseInt(this.chmodModel.auth);
                 if (this.chmodModel.auth>666){
-                    this.$message({type:'warning',message:'权限设置失败'});
+                    this.$message({type:'warning',message:'Permission setting failed'});
                     this.chmodModel.auth = parseInt(this.fileObject.auth);
                 }
                 this.all_id = this.chmodModel.auth.toString().substr(0,1);
@@ -601,22 +607,22 @@
             compressionFile:function(){
                 this.$prompt('请输入文件名', '压缩包名称', { confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
                     if (value === '' || value === null || value === 'null' || value === 'undefined') {
-                        this.$message.warning('压缩包名称不得为空');
+                        this.$message.warning('Archive name must not be empty');
                         return false;
                     }
-                    this.compressionModel.resource = value;
+                    this.compressionModel.resource = value.indexOf('.')>=0 ? value.split(".")[0] : value;
                     this.compressionModel.docLists.push(this.fileObject.path);
                     this.compressionModel.path = this.fileObject.path.replace(this.fileObject.label,'');
                     apiLists.Compression(this.compressionModel).then(response=>{
                         if (response && response.data.code === 200){
                             this.$message({type:'success',message:response.data.msg});
-                            let data = { msg:'你的压缩包名: ' + this.compressionModel.type,result:response.data.result,href:$url.fileCompression };
+                            let data = { msg:response.data.msg +'：'+ this.fileObject.label,href:$url.fileCompression };
                             this.saveSystemLog(data);
                             this.getFileLists(this.path);
                         }
                     });
                 }).catch(() => {
-                    this.$message({type: 'info', message: '取消输入'});
+                    this.$message({type: 'info', message: 'cancel entry'});
                 });
             },
             /**
@@ -625,23 +631,20 @@
             DecompressionFile:function(){
                 this.$prompt('请输入文件名', '解压包名称', { confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
                     if (value === '' || value === null || value === 'null' || value === 'undefined') {
-                        this.$message.warning('解压包名称不得为空');
+                        this.$message.warning('Extract package name must not be empty');
                         return false;
                     }
-                    let params = {
-                        path : this.fileObject.path,
-                        resource:value
-                    };
+                    let params = {path : this.fileObject.path, resource:value.indexOf('.')>=0 ? value.split(".")[0] : value};
                     apiLists.Decompression(params).then(response=>{
                         if (response && response.data.code === 200){
                             this.$message({type:'success',message:response.data.msg});
-                            let data = { msg:'文件解压成功',result:response.data.result,href:$url.fileDecompression };
+                            let data = { msg:response.data.msg,href:$url.fileDecompression };
                             this.saveSystemLog(data);
                             this.getFileLists(this.path);
                         }
                     });
                 }).catch(() => {
-                    this.$message({type: 'info', message: '取消输入'});
+                    this.$message({type: 'info', message: 'cancel input'});
                 });
             },
             /**
@@ -649,12 +652,12 @@
              */
             downloadFile:function(){
                 this.$alert('确定下载文件：'+this.fileObject.path,'文件下载').then(()=>{
-                    window.open(process.env.API_ROOT+$url.fileDownload+"?token="+this.token+"&path="+this.fileObject.path,'__target');
-                    let data = { msg:'文件下载成功：'+this.fileObject.path,href:$url.fileDownload };
+                    window.open(process.env.API_ROOT+$url.fileDownload.replace('/','')+"?token="+this.token+"&path="+this.fileObject.path,'__target');
+                    let data = { msg:'file download successfully：'+this.fileObject.path,href:$url.fileDownload };
                     this.saveSystemLog(data);
                     this.$message({type:'success',message:'download file successfully'});
                 }).catch(() => {
-                    this.$message({type: 'info', message: '取消下载'});
+                    this.$message({type: 'info', message: 'cancel download'});
                 });
             },
             /**
@@ -681,7 +684,7 @@
              * @param file
              */
             handleRemove:function(file) {
-                this.$message({type:'warning',message:'取消文件上传：'+file.name});
+                this.$message({type:'warning',message:'cancel file upload：'+file.name});
             },
             /**
              * todo：文件上传成功回调

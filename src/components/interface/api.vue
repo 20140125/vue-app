@@ -3,7 +3,9 @@
         <el-row :gutter="24">
             <!--分类列表-->
             <el-col :xl="{'span':4}" :lg="{'span':4}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" style="margin-bottom: 20px">
-                <el-input placeholder="输入关键字搜索" v-model="filterText" style="margin-bottom: 20px"></el-input>
+                <el-input placeholder="输入关键字搜索" v-model="filterText" style="margin-bottom: 20px">
+                    <el-button slot="append" icon="el-icon-plus" @click="addCategory"/>
+                </el-input>
                 <el-tree :props="props"
                          @node-contextmenu="rightClick"
                          :filter-node-method="filterNode"
@@ -17,94 +19,116 @@
                 </el-tree>
             </el-col>
             <!--分类列表-->
+
             <!--接口详情-->
             <el-col :xl="{'span':19,'push':1}" :lg="{'span':19,'push':1}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" v-show="apiVisible">
                 <el-tabs type="border-card" v-model="apiName">
-                    <el-tab-pane :label="apiName" :key="apiName" :name="apiName"></el-tab-pane>
+                    <el-tab-pane :label="apiName" :key="apiName" :name="apiName"/>
                     <el-card shadow="always">
                         <el-form :label-width="labelWidth" :model="apiModel" :ref="reFrom" :rules="rules">
                             <el-form-item label="接口名称" prop="type">
                                 <el-select v-model="apiModel.type"  auto-complete="true" style="width: 100%" placeholder="接口名称">
-                                    <el-option v-for="(category,index) in apiCategory"  :key="index" :label="setName(category)" :value="category.id"></el-option>
+                                    <el-option v-for="(category,index) in apiCategory" :key="index"
+                                               :label="setName(category)" :value="category.id"/>
                                 </el-select>
                             </el-form-item>
                             <el-form-item label="接口描述" prop="desc">
-                                <el-input v-model="apiModel.desc" placeholder="接口描述"></el-input>
+                                <el-input v-model="apiModel.desc" placeholder="接口描述"/>
                             </el-form-item>
                             <el-form-item label="接口地址" prop="href">
-                                <el-input v-model="apiModel.href" placeholder="接口地址"></el-input>
+                                <el-input v-model="apiModel.href" placeholder="接口地址"/>
                             </el-form-item>
                             <el-form-item label="接口方法" prop="method">
                                 <el-select v-model="apiModel.method" style="width: 100%" placeholder="接口方法">
-                                    <el-option v-for="(method,index) in methodLists"  :key="index" :label="method" :value="index"></el-option>
+                                    <el-option v-for="(method,index) in methodLists" :key="index" :label="method"
+                                               :value="index"/>
                                 </el-select>
                             </el-form-item>
                             <el-form-item label="请求字段" prop="request">
-                                <el-button type="primary" style="margin-bottom: 5px" plain icon="el-icon-plus" @click="requestAdd()" size="medium"></el-button>
+                                <el-button type="primary" style="margin-bottom: 5px" plain icon="el-icon-plus"
+                                           @click="requestAdd()" size="medium"/>
                                 <div v-for="(request,index) in apiModel.request" :key="index">
-                                    <el-input v-model="request.name"  auto-complete="true" style="width: 195px;margin-bottom: 5px" placeholder="参数名"></el-input>
+                                    <el-input v-model="request.name" auto-complete="true"
+                                              style="width: 195px;margin-bottom: 5px" placeholder="参数名"/>
                                     <el-select v-model="request.type"  auto-complete="true" style="width: 195px" placeholder="字段类型">
-                                        <el-option v-for="(type,index) in typeLists"  :key="index" :label="type" :value="index"></el-option>
+                                        <el-option v-for="(type,index) in typeLists" :key="index" :label="type"
+                                                   :value="index"/>
                                     </el-select>
                                     <el-select v-model="request.required" style="width: 195px" placeholder="是否必须">
-                                        <el-option label="是" value="1"></el-option>
-                                        <el-option label="否" value="0"></el-option>
+                                        <el-option label="是" value="1"/>
+                                        <el-option label="否" value="0"/>
                                     </el-select>
-                                    <el-input v-model="request.desc" auto-complete="true" style="width: 195px" placeholder="参数描述"></el-input>
-                                    <el-input v-model="request.val" auto-complete="true" style="width: 195px" placeholder="参数值"></el-input>
-                                    <el-button type="danger" plain icon="el-icon-delete"  @click="requestRemove(request,index)" size="medium"></el-button>
+                                    <el-input v-model="request.desc" auto-complete="true" style="width: 195px"
+                                              placeholder="参数描述"/>
+                                    <el-input v-model="request.val" auto-complete="true" style="width: 195px"
+                                              placeholder="参数值"/>
+                                    <el-button type="danger" plain icon="el-icon-delete"
+                                               @click="requestRemove(request,index)" size="medium"/>
                                 </div>
                             </el-form-item>
                             <el-form-item label="返回参数" prop="response_string">
-                                <codemirror ref="edit" @change="updateContent"  :value="apiModel.response_string" :options="options" style="line-height: 20px"></codemirror>
+                                <codemirror ref="edit" @change="updateContent" :value="apiModel.response_string"
+                                            :options="options" style="line-height: 20px"/>
                             </el-form-item>
                             <el-form-item label="返回字段" prop="response">
-                                <el-button type="primary" style="margin-bottom: 5px"  plain icon="el-icon-plus" @click="responseAdd()" size="medium"></el-button>
+                                <el-button type="primary" style="margin-bottom: 5px" plain icon="el-icon-plus"
+                                           @click="responseAdd()" size="medium"/>
                                 <div v-for="(response,index) in apiModel.response" :key="index">
-                                    <el-input v-model="response.name"   auto-complete="true" style="width: 195px;margin-bottom: 5px" placeholder="参数名"></el-input>
+                                    <el-input v-model="response.name" auto-complete="true"
+                                              style="width: 195px;margin-bottom: 5px" placeholder="参数名"/>
                                     <el-select v-model="response.type" auto-complete="true" style="width: 195px" placeholder="字段类型">
-                                        <el-option v-for="(type,index) in typeLists" :key="index" :label="type" :value="index"></el-option>
+                                        <el-option v-for="(type,index) in typeLists" :key="index" :label="type"
+                                                   :value="index"/>
                                     </el-select>
-                                    <el-input v-model="response.desc"  auto-complete="true" style="width: 200px" placeholder="参数描述"></el-input>
-                                    <el-button type="danger" icon="el-icon-delete" plain @click="responseRemove(response,index)" size="medium"></el-button>
+                                    <el-input v-model="response.desc" auto-complete="true" style="width: 200px"
+                                              placeholder="参数描述"/>
+                                    <el-button type="danger" icon="el-icon-delete" plain
+                                               @click="responseRemove(response,index)" size="medium"/>
                                 </div>
                             </el-form-item>
                             <el-form-item label="备注" prop="remark">
-                                <el-input v-model="apiModel.remark" placeholder="备注" type="textarea"></el-input>
+                                <el-input v-model="apiModel.remark" placeholder="备注" type="textarea"/>
                             </el-form-item>
-                            <Submit :reFrom="reFrom" :model="apiModel" :url="url" :refs="refs" v-on:success="success" style="text-align: center"></Submit>
+                            <Submit :reFrom="reFrom" :model="apiModel" :url="url" :refs="refs" v-on:success="success"
+                                    style="text-align: center"/>
                         </el-form>
                     </el-card>
                 </el-tabs>
             </el-col>
             <!--接口详情-->
+
         </el-row>
+
         <!--右键弹框-->
         <div v-show="menuVisible">
             <el-menu id="menu" class="menu" style="border-bottom: solid 1px #393d49" background-color="#393d49" text-color="#cccccc" mode="horizontal" active-text-color="#ffd04b">
-                <el-menu-item v-show="btn.add" @click="addCategory"><i class="el-icon-circle-plus-outline"></i>添 加</el-menu-item>
-                <el-menu-item v-show="btn.edit" @click="updateCategory"><i class="el-icon-edit-outline"></i>修 改</el-menu-item>
-                <el-menu-item v-show="btn.del" @click="deleteCategory"><i class="el-icon-delete-solid"></i>删 除</el-menu-item>
+                <el-menu-item v-show="btn.add" @click="addCategory"><i class="el-icon-circle-plus-outline"/>添 加</el-menu-item>
+                <el-menu-item v-show="btn.edit" @click="updateCategory"><i class="el-icon-edit-outline"/>修 改</el-menu-item>
+                <el-menu-item v-show="btn.del" @click="deleteCategory"><i class="el-icon-delete-solid"/>删 除</el-menu-item>
             </el-menu>
         </div>
         <!--右键弹框-->
+
         <!---接口分类弹框-->
         <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal"  :center="center">
             <el-form :label-width="labelWidth" :model="categoryModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="接口名称" prop="name" required>
-                    <el-input v-model="categoryModel.name" placeholder="分类名称"></el-input>
+                    <el-input v-model="categoryModel.name" placeholder="分类名称"/>
                 </el-form-item>
                 <el-form-item label="接口上级" prop="pid">
                     <el-select placeholder="接口上级" v-model="categoryModel.pid" style="width: 100%">
-                        <el-option v-for="(category,index) in apiCategory"  :key="index" :label="setName(category)" :value="category.id"></el-option>
+                        <el-option label="默认权限" value="0" v-if="categoryModel.pid === '0'" selected/>
+                        <el-option v-for="(category,index) in apiCategory" :key="index" :label="setName(category)"
+                                   :value="category.id"/>
                     </el-select>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <Submit :reFrom="reFrom" :model="categoryModel" :url="url" :refs="refs" v-on:success="success"></Submit>
+                <Submit :reFrom="reFrom" :model="categoryModel" :url="url" :refs="refs" v-on:success="success"/>
             </div>
         </el-dialog>
          <!---接口分类弹框-->
+
     </div>
 </template>
 
@@ -308,12 +332,7 @@
                 this.title='添加接口';
                 this.syncVisible = true;
                 this.url = this.cgi.categoryInsert;
-                this.categoryModel = {
-                    name:'',
-                    pid:this.categoryModel.id,
-                    path:'1',
-                    level:1
-                };
+                this.categoryModel = {name:'', pid:this.categoryModel.id === undefined ? '0':this.categoryModel.id, path:'1', level:1};
             },
             /**
              * todo：修改API分类
@@ -324,12 +343,12 @@
                 this.url = this.cgi.categoryUpdate;
             },
             /**
-             * 删除API分类
+             * TODO:删除API分类
              */
             deleteCategory:function(){
-                apiLists.CategoryDelete({id:this.categoryModel.value}).then(response=>{
+                apiLists.CategoryDelete({id:this.categoryModel.id}).then(response=>{
                     if (response && response.data.code === 200){
-                        let data = { msg:JSON.stringify({url:this.cgi.remove, info:response.data.msg,result:response.data.result}),token:this.$store.state.login.token };
+                        let data = { href:this.cgi.remove, msg:response.data.msg,token:this.$store.state.login.token };
                         this.saveSystemLog(data);
                         this.$message({type:'success',message:response.data.msg});
                         this.getCategoryLists()
@@ -341,7 +360,7 @@
              * @param data
              */
             getApiDetail:function(data){
-                if (data.level===0){
+                if (data.level<=1){
                     this.$notify({title: '通知', message: '该接口暂时不允许访问', type: 'success'});
                     return;
                 }

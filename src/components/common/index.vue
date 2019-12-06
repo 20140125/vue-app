@@ -1,15 +1,17 @@
 <template>
     <el-row :gutter="24">
         <el-col :span="12">
-            <div id="charts" style="height: 500px"></div>
-            <el-calendar v-model="value">
-                <template  slot="dateCell" slot-scope="{date, data}">
+            <div id="charts" style="height: 400px"></div>
+            <div id="total" style="height: 400px"></div>
+            <el-calendar v-model="value" :first-day-of-week="7">
+                <template slot="dateCell" slot-scope="{date, data}">
                     <p :class="data.isSelected ? 'is-selected' : ''">
                        {{data.day.split('-').slice(2).join('-') }} {{ data.isSelected ? ' ✔️' : ''}}
                     </p>
                 </template>
             </el-calendar>
         </el-col>
+
         <el-col :span="12">
             <div class="block">
                 <div class="radio">
@@ -36,12 +38,14 @@
 </template>
 <script>
     import echarts from 'echarts'
+    import apiLists from '../../api/api'
     import { mapMutations,mapGetters } from 'vuex'
     export default {
         name: "index",
         data(){
             return {
                 access_token:'',
+
                 charts:{},
                 xAxisData:[],
                 seriesData:{
@@ -49,6 +53,7 @@
                     notice:[],
                     oauth:[],
                 },
+
                 reverse: false,
                 activities:require('../../assets/timeline.json'),
                 value:new Date()
@@ -59,6 +64,67 @@
         },
         methods:{
             ...mapMutations(['setToken']),
+            totalCharts:function () {
+                apiLists.GetCountData({}).then(response=>{
+                    let totalCharts = echarts.init(document.getElementById('total'));
+                    totalCharts.setOption({
+                        title : {
+                            text: '数据统计总量',
+                            x:'center'
+                        },
+                        tooltip : {
+                            trigger: 'item',
+                            formatter: "{a} <br/>{b} : {c} ({d}%)"
+                        },
+                        toolbox: {
+                            feature: {
+                                saveAsImage: {}
+                            }
+                        },
+                        legend: {
+                            orient: 'vertical',
+                            left: 'left',
+                            data: ['授权用户','站内通知','日志记录']
+                        },
+                        series : [
+                            {
+                                name: '数据占比',
+                                type: 'pie',
+                                radius : '55%',
+                                center: ['50%', '60%'],
+                                data:this.setChartsData(response.data.item),
+                                itemStyle: {
+                                    emphasis: {
+                                        shadowBlur: 10,
+                                        shadowOffsetX: 0,
+                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                    }
+                                }
+                            }
+                        ]
+                    })
+                })
+            },
+            /**
+             * TODO:设置参数变量
+             * @param data
+             * @returns {[]}
+             */
+            setChartsData:function (data) {
+                let arr = [];
+                for (let i in data) {
+                    if (i === 'oauthUser') {
+                        arr.push({value:data[i],name:'授权用户'})
+                    }
+                    if (i === 'push') {
+                        arr.push({value:data[i],name:'站内通知'})
+                    }
+                    if (i === 'systemLog') {
+                        arr.push({value:data[i],name:'日志记录'})
+                    }
+                }
+                return arr;
+            }
         },
         created(){
             if (this.$route.params.access_token){
@@ -67,6 +133,7 @@
         },
         mounted() {
             this.$nextTick(function () {
+                this.totalCharts();
                 if (this.access_token){
                     this.setToken(this.access_token);
                 }

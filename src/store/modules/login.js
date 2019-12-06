@@ -25,21 +25,21 @@ const getters={
     websocketServer:state=>state.websocketServer
 };
 const mutations={
+    setMenuLists:function (state,menuLists) {
+        state.menuLists = menuLists;
+    },
+    setOauthConfig:function (state,oauthConfig) {
+        state.oauthConfig = oauthConfig;
+    },
+    setAuthUrl:function (state,auth_url) {
+        state.auth_url = auth_url;
+    },
     setToken:function (state,token) {
         state.token = token;
         localStorage.setItem('token',token)
     },
     setUserName:function (state,username) {
         state.username = username;
-    },
-    setMenuLists:function (state,menuLists) {
-        state.menuLists = menuLists;
-    },
-    setAuthUrl:function (state,auth_url) {
-        state.auth_url = auth_url;
-    },
-    setOauthConfig:function (state,oauthConfig) {
-        state.oauthConfig = oauthConfig;
     },
     setSocketServer:function (state,ip) {
         state.socketServer = io(ip);

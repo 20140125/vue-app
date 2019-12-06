@@ -5,7 +5,7 @@
                   :tree-props="{children: '__child', hasChildren: 'hasChildren'}"
                   lazy
                   :load="load">
-            <el-table-column label="地区名称" prop="name"></el-table-column>
+            <el-table-column label="地区名称" prop="name"/>
             <el-table-column label="天气">
 
             </el-table-column>

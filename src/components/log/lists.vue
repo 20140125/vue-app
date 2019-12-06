@@ -1,17 +1,23 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText">
-        <el-table :data="logLists.filter(data=>(!search || data.username.toLowerCase().includes(search.toLowerCase()) || data.ip_address.includes(search.toLowerCase())))" border>
-            <el-table-column label="#" prop="id" sortable width="100px"></el-table-column>
-            <el-table-column label="执行人" prop="username" sortable width="150px"></el-table-column>
-            <el-table-column label="日志信息" prop="log" :show-overflow-tooltip="true"></el-table-column>
-            <el-table-column label="地址" prop="ip_address" width="200px"></el-table-column>
-            <el-table-column label="创建时间" sortable prop="created_at" width="200px"></el-table-column>
+        <el-table :data="logLists.filter(data=>(!search || data.username.toLowerCase().includes(search.toLowerCase())
+        || data.ip_address.includes(search.toLowerCase()) || data.log.includes(search.toLowerCase()) ))">
+            <el-table-column label="#" prop="id" sortable width="100px"/>
+            <el-table-column label="执行人" prop="username" sortable width="150px"/>
+            <el-table-column label="日志信息" :show-overflow-tooltip="true">
+                <template slot-scope="scope">
+                    <el-link type="success" :href="scope.row.url" target="_blank">[{{scope.row.url}}]</el-link>　{{scope.row.log}}　
+                </template>
+            </el-table-column>
+            <el-table-column label="地址" prop="ip_address" width="200px"/>
+            <el-table-column label="创建时间" sortable prop="created_at" width="200px"/>
             <el-table-column label="操作" align="right" width="200px">
                 <template slot="header" slot-scope="scope">
-                    <el-input v-model="search"  placeholder="请输入关键字查询"></el-input>
+                    <el-input v-model="search" placeholder="请输入关键字查询"/>
                 </template>
                 <template slot-scope="scope">
-                    <Delete v-if="btn.del" :url="cgi.remove"  :item="scope.row" :index="scope.$index" :Lists="logLists" v-on:success="success"></Delete>
+                    <Delete v-if="btn.del" :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="logLists"
+                            v-on:success="success"/>
                 </template>
             </el-table-column>
         </el-table>
@@ -45,15 +51,11 @@
                 limit:15,
                 total:0,
                 search:'',
-
-                labelWidth:'80px',
                 loading:true,
                 loadingText:'玩命加载中。。。',
-
                 cgi:{
                     remove:$url.logDelete,
                 },
-                rules:{},
                 btn:{},
             }
         },
@@ -70,8 +72,7 @@
              * @param limit
              */
             getLogLists:function (page,limit) {
-                let params = { page:page, limit:limit };
-                apiLists.LogLists(params).then(response=>{
+                apiLists.LogLists({ page:page, limit:limit }).then(response=>{
                     if (response && response.data.code === 200){
                         this.logLists = response.data.item.data;
                         this.total = response.data.item.total;

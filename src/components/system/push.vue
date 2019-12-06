@@ -8,10 +8,10 @@
                 <el-button icon="el-icon-plus" type="primary" size="medium" plain @click="addPush">添 加</el-button>
             </el-form-item>
         </el-form>
-        <el-table :data="pushLists.filter(data=>(!search || data.username.toLowerCase().includes(search.toLowerCase()) || data.info.toLowerCase().includes(search.toLowerCase())))" border>
-            <el-table-column label="#" prop="id" width="100px"></el-table-column>
-            <el-table-column label="目标用户" prop="username" width="120px"> </el-table-column>
-            <el-table-column label="推送类型" prop="title" width="150px"> </el-table-column>
+        <el-table :data="pushLists.filter(data=>(!search || data.username.toLowerCase().includes(search.toLowerCase()) || data.info.toLowerCase().includes(search.toLowerCase())))">
+            <el-table-column label="#" prop="id" width="100px"/>
+            <el-table-column label="目标用户" prop="username" width="120px"/>
+            <el-table-column label="推送类型" prop="title" width="150px"/>
             <el-table-column label="推送内容" prop="info" :show-overflow-tooltip="true"> </el-table-column>
             <el-table-column label="实时" width="80px"  :filters="[{ text: '是', value: '1' }, { text: '否', value: '2' }]"
                              :filter-method="filterStatus">
@@ -25,14 +25,15 @@
                     <el-button plain :type="setType(scope.row.state)" size="mini">{{scope.row.state.toUpperCase()}}</el-button>
                 </template>
             </el-table-column>
-            <el-table-column label="时间" prop="created_at" width="200px"></el-table-column>
+            <el-table-column label="时间" prop="created_at" width="200px"/>
             <el-table-column width="200px" align="right">
                 <template slot="header" slot-scope="scope">
-                    <el-input v-model="search"  placeholder="请输入关键词查询"></el-input>
+                    <el-input v-model="search" placeholder="请输入关键词查询"/>
                 </template>
                 <template slot-scope="scope">
                     <el-button type="primary" v-if="scope.row.state!=='successfully' && btn.edit" plain icon="el-icon-edit" size="mini" @click="updatePush(scope.row)">执 行</el-button>
-                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="pushLists" v-on:success="success" v-if="btn.del"></Delete>
+                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="pushLists"
+                            v-on:success="success" v-if="btn.del"/>
                 </template>
             </el-table-column>
         </el-table>
@@ -53,21 +54,23 @@
             <el-form :label-width="labelWidth" :model="pushModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="用户名" prop="username">
                     <el-select v-model="pushModel.username" @change="changeOauthName" style="width: 100%">
-                        <el-option label="所有人" value="all"></el-option>
-                        <el-option v-for="(push,index) in oauthLists" :key="index" :label="push.username" :value="push.username"></el-option>
+                        <el-option label="所有人" value="all"/>
+                        <el-option v-for="(push,index) in oauthLists" :key="index" :label="push.username"
+                                   :value="push.username"/>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="UID" prop="uid">
-                    <el-input v-model="pushModel.uid" readonly placeholder="用户UID"></el-input>
+                    <el-input v-model="pushModel.uid" readonly placeholder="用户UID"/>
                 </el-form-item>
                 <el-form-item label="标题" prop="title">
-                    <el-input v-model="pushModel.title" placeholder="推送标题"></el-input>
+                    <el-input v-model="pushModel.title" placeholder="推送标题"/>
                 </el-form-item>
                 <el-form-item label="时间" prop="created_at">
-                    <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" v-model="pushModel.created_at" style="width: 100%"></el-date-picker>
+                    <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"  v-model="pushModel.created_at"
+                                    style="width: 100%"/>
                 </el-form-item>
                 <el-form-item label="消息" prop="info">
-                    <el-input v-model="pushModel.info" placeholder="推送消息" type="textarea" resize="none" rows="4"></el-input>
+                    <el-input v-model="pushModel.info" placeholder="推送消息" type="textarea" resize="none" rows="4"/>
                 </el-form-item>
                 <el-form-item label="实时推送" prop="status">
                     <el-radio-group v-model="pushModel.status" size="small">
@@ -77,7 +80,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <Submit :reFrom="reFrom" :model="pushModel" :url="url" :refs="refs" v-on:success="success"></Submit>
+                <Submit :reFrom="reFrom" :model="pushModel" :url="url" :refs="refs" v-on:success="success"/>
             </div>
         </el-dialog>
         <!---弹框-->
@@ -248,7 +251,6 @@
         mounted() {
             this.$nextTick(function () {
                 this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.$store.state.login.auth_url);
-                console.log(this.btn);
                 this.getPushLists(this.page,this.limit)
             });
         }

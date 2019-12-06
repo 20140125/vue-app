@@ -3,14 +3,14 @@
         <el-row :gutter="24">
             <!--文件列表-->
             <el-col :xl="{'span':5}" :lg="{'span':5}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" style="margin-bottom: 20px">
-                <el-input placeholder="输入关键字搜索" v-model="filterText" style="margin-bottom: 20px"></el-input>
+                <el-input placeholder="输入关键字搜索" v-model="filterText" style="margin-bottom: 20px"/>
                 <el-tree :data="fileLists"
                          :highlight-current="highlight"
                          :props="props"
                          :filter-node-method="filterNode"
                          :node-key="props.id" @node-click="getFileContent"
                          ref="tree"
-                         style="background-color: #393d49"></el-tree>
+                         style="background-color: #393d49"/>
             </el-col>
             <!--文件列表-->
             <!--文件内容-->
@@ -18,9 +18,9 @@
                 <el-form :model="fileModel">
                     <el-form-item style="margin-left: -30px !important;">
                         <el-tabs type="border-card" v-model="fileModel.name">
-                            <el-tab-pane :label="fileModel.name" :key="fileModel.name" :name="fileModel.name"></el-tab-pane>
+                            <el-tab-pane :label="fileModel.name" :key="fileModel.name" :name="fileModel.name"/>
                             <el-card shadow="always">
-                                <codemirror :value="fileModel.content" :options="options" style="line-height: 20px"></codemirror>
+                                <codemirror :value="fileModel.content" :options="options" style="line-height: 20px"/>
                             </el-card>
                         </el-tabs>
                     </el-form-item>

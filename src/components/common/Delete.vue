@@ -1,5 +1,5 @@
 <template>
-    <el-tooltip content="三思而后行" placement="top">
+    <el-tooltip content="look before you leap" placement="top">
         <el-button plain type="danger" icon="el-icon-delete" size="mini" @click="remove(item,index)">删 除</el-button>
     </el-tooltip>
 </template>
@@ -37,11 +37,7 @@
                     this.$http.post(this.url,params).then(response=>{
                         if (response && response.data.code === 200) {
                             this.Lists.splice(index,1);
-                            let data = {
-                                href:this.url,
-                                msg:JSON.stringify({info:response.data.msg,result:response.data.result}),
-                                token:this.$store.state.login.token
-                            };
+                            let data = { href:this.url, msg:response.data.msg, token:this.$store.state.login.token };
                             this.saveSystemLog(data);
                             this.$message({type:'success',message:response.data.msg});
                             this.$emit('success');
@@ -51,7 +47,7 @@
                         console.log(error);
                     })
                 }).catch(()=>{
-                    this.$message({type:'info',message:'已取消删除！'});
+                    this.$message({type:'info',message:'cancel delete！'});
                 })
             }
         }
