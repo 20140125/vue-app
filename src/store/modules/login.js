@@ -148,7 +148,7 @@ const actions={
                 apiLists.ReqRuleSave(req).then((res) => {
                     if (res && res.data.code === code.SUCCESS) {
                         let data = {
-                            href: params.url,
+                            href: params.url.replace('admin','v1'),
                             msg: JSON.stringify({info: info, result: res.data.result}),
                             token: state.token
                         };

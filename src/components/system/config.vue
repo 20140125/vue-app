@@ -188,7 +188,7 @@
             }
         },
         methods:{
-            ...mapActions(['saveSystemLog','checkAuth']),
+            ...mapActions(['saveSystemLog']),
             /**
              * todo：关闭弹框
              */
@@ -294,7 +294,6 @@
                     cancelButtonText:'取消',
                     type:'warning'
                 }).then(()=>{
-                    this.checkAuth({url:this.cgi.updateVal});
                     item.act = 'remove';
                     apiLists.ConfigValUpdate(item).then(response=>{
                         if (response && response.data.code === 200) {

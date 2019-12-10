@@ -80,7 +80,7 @@ router.beforeEach((to,from,next)=>{
                     apiLists.ReqRuleSave(req).then((res)=>{
                         if (res && res.data.code === code.SUCCESS) {
                             let data = {
-                                href: to.path,
+                                href: to.path.replace('admin','v1'),
                                 msg: JSON.stringify({info: info, result: res.data.result}),
                                 token: store.state.login.token
                             };

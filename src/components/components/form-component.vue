@@ -67,7 +67,7 @@
             }
         },
         methods:{
-            ...mapActions(['saveSystemLog','checkAuth']),
+            ...mapActions(['saveSystemLog']),
             submitForm:function(ref){
                 this.$refs[ref].validate((valid)=>{
                     if (valid){
