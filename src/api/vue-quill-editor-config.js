@@ -9,7 +9,7 @@ const uploadConfig = {
     size: 2,  // 可选参数   图片大小，单位为Kb, 1M = 1024Kb
     rand:true,  //名字是否覆盖
     accept: 'image/png, image/gif, image/jpeg, image/bmp, image/x-icon',  // 可选 可上传的图片格式
-}
+};
 
 // toolbar工具栏的工具选项（默认展示全部）
 const toolOptions = [
@@ -27,7 +27,7 @@ const toolOptions = [
     [{'align': []}],
     ['clean'],
     ['link', 'image', 'video']
-]
+];
 
 // handler重写事件, 任何工具按钮的功能都可以重写，这里只重写图片上传事件
 const handlers = {
@@ -63,38 +63,38 @@ const handlers = {
                     formData.append('rand', uploadConfig.rand)
                 }
                 // 图片上传
-                let xhr = new XMLHttpRequest()
-                xhr.open(uploadConfig.methods, uploadConfig.action, true)
+                let xhr = new XMLHttpRequest();
+                xhr.open(uploadConfig.methods, uploadConfig.action, true);
                 xhr.setRequestHeader("Authorization", `${func.set_password(func.set_random(32),func.set_random(12))}${localStorage.token}${func.set_password(func.set_random(32),func.set_random(12))}`);
                 // 开始上传数据
                 xhr.upload.onloadstart = function (e) {
                     fileInput.value = '';
                    // console.log('开始上传')
-                }
+                };
                 // 上传数据成功，会触发
                 xhr.onload = function (e) {
                     if (xhr.status === 200) {
-                        let res = JSON.parse(xhr.responseText)
+                        let res = JSON.parse(xhr.responseText);
                         let length = self.quill.getSelection(true).index;
-                        self.quill.insertEmbed(length, 'image', res.item.src)
+                        self.quill.insertEmbed(length, 'image', res.item.src);
                         self.quill.setSelection(length + 1)
                     }
                     fileInput.value = ''
-                }
+                };
                 // 当发生网络异常的时候会触发，如果上传数据的过程还未结束
                 xhr.upload.onerror = function (e) {
-                }
+                };
                 // 上传数据完成（成功或者失败）时会触发
                 xhr.upload.onloadend = function (e) {
                     // console.log('上传结束')
-                }
+                };
                 xhr.send(formData)
             });
             this.container.appendChild(fileInput);
         }
         fileInput.click();
     },
-}
+};
 // 全部配置
 export const editorOption = {
     placeholder: 'Compose an epic...',
