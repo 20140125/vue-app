@@ -6,18 +6,19 @@
             </el-form-item>
         </el-form>
         <el-table :data="roleLists" border>
-            <el-table-column label="#" prop="id"></el-table-column>
+            <el-table-column label="#" prop="id"/>
             <el-table-column label="显示状态">
                 <template slot-scope="scope">
-                    <Radio :item="scope.row" :url="cgi.status"></Radio>
+                    <Radio :item="scope.row" :url="cgi.status"/>
                 </template>
             </el-table-column>
             <el-table-column label="创建时间" prop="created_at"> </el-table-column>
-            <el-table-column label="修改时间" prop="updated_at"></el-table-column>
+            <el-table-column label="修改时间" prop="updated_at"/>
             <el-table-column label="操作">
                 <template slot-scope="scope">
                     <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updateAuth(scope.row)">修 改</el-button>
-                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="roleLists" v-on:success="success"></Delete>
+                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="roleLists"
+                            v-on:success="success"/>
                 </template>
             </el-table-column>
         </el-table>
@@ -38,7 +39,7 @@
             <el-form :label-width="labelWidth" :model="authModel" :ref="reFrom" :rules="rules">
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <Submit :reFrom="reFrom" :model="authModel" :url="url" :refs="refs" v-on:success="success"></Submit>
+                <Submit :reFrom="reFrom" :model="authModel" :url="url" :refs="refs" v-on:success="success"/>
             </div>
         </el-dialog>
         <!---弹框-->

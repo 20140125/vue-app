@@ -8,7 +8,7 @@ const uploadConfig = {
     name: 'file',  // 必填参数 文件的参数名
     size: 2,  // 可选参数   图片大小，单位为Kb, 1M = 1024Kb
     rand:true,  //名字是否覆盖
-    accept: 'image/png, image/gif, image/jpeg, image/bmp, image/x-icon',  // 可选 可上传的图片格式
+    accept: 'image/png, image/gif, image/jpeg, image/bmp, image/x-icon, image/jpg',  // 可选 可上传的图片格式
 };
 
 // toolbar工具栏的工具选项（默认展示全部）
@@ -48,12 +48,12 @@ const handlers = {
             fileInput.addEventListener('change', function () {
                 // 如果图片限制大小
                 if (uploadConfig.size && fileInput.files[0].size >= uploadConfig.size * 1024) {
-                    fileInput.value = ''
+                    fileInput.value = '';
                     return
                 }
                 // 创建formData
-                let formData = new FormData()
-                formData.append(uploadConfig.name, fileInput.files[0])
+                let formData = new FormData();
+                formData.append(uploadConfig.name, fileInput.files[0]);
                 // 如果需要token且存在token
                 if (uploadConfig.token) {
                     formData.append('token', uploadConfig.token)
@@ -105,4 +105,4 @@ export const editorOption = {
             handlers: handlers  // 事件重写
         }
     }
-}
+};

@@ -22,7 +22,7 @@
                     <el-input v-model="search" placeholder="输入关键词查询"/>
                 </template>
                 <template slot-scope="scope">
-                    <el-button icon="el-icon-plus" type="primary" size="mini" v-if="scope.row.level<=1" plain @click="addAuth(scope.row)">添 加</el-button>
+                    <el-button icon="el-icon-plus" type="primary" size="mini" v-if="scope.row.level<=1 && btn.add" plain @click="addAuth(scope.row)">添 加</el-button>
                     <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updateAuth(scope.row)" v-if="btn.edit">修 改</el-button>
                     <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="authLists" v-on:success="success" v-if="btn.del"/>
                 </template>
@@ -154,7 +154,7 @@
                 this.url = this.cgi.insert;
                 this.act = 'add';
                 this.authModel = { name:'', href:'', status:'1', pid:'0', level:0, path:'1' };
-                if (scope.pid) {
+                if (scope.name) {
                     this.authModel.pid = scope.id.toString();
                 }
             },
