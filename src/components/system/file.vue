@@ -439,7 +439,8 @@
              */
             renameFile:function(){
                 let params = {oldFile:this.fileObject.path};
-                this.$prompt('请输入文件名', '重命名', { confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
+                console.log(this.fileObject);
+                this.$prompt('请输入新的文件名', '['+this.fileObject.label+'] 重命名', { confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
                     if (value === '' || value === null || value === 'null' || value === 'undefined') {
                         this.$message.warning('File name cannot be empty');
                         return false;

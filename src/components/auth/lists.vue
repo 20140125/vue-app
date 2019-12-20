@@ -121,7 +121,7 @@
              * todo：关闭弹框
              */
             success:function(){
-                this.getAuthLists(this.page,this.limit)
+                this.getAuthLists(this.page,this.limit);
                 this.syncVisible = false;
             },
             /**
