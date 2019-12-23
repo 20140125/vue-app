@@ -1,6 +1,6 @@
 <template>
     <el-row :gutter="24">
-        <el-col :span="12">
+        <el-col :span="14">
             <div id="charts" style="height: 400px"></div>
             <div id="total" style="height: 400px"></div>
             <el-calendar v-model="value" :first-day-of-week="7">
@@ -12,7 +12,7 @@
             </el-calendar>
         </el-col>
 
-        <el-col :span="12">
+        <el-col :span="10">
             <div class="block">
                 <div class="radio">
                     <el-radio-group v-model="reverse">
@@ -28,6 +28,7 @@
                         :type="activity.type"
                         placement="top"
                         :color="activity.color"
+                        v-if="activity.timestamp > '2019-01-01'"
                         :timestamp="activity.timestamp">
                         <el-card>{{activity.content}}</el-card>
                     </el-timeline-item>
@@ -45,7 +46,7 @@
         data(){
             return {
                 access_token:'',
-
+                showTimestamp:'',
                 charts:{},
                 xAxisData:[],
                 seriesData:{
@@ -130,6 +131,9 @@
             if (this.$route.params.access_token){
                 this.access_token = this.$route.params.access_token;
             }
+            const date=new Date;
+            const year=date.getFullYear();
+            console.log();
         },
         mounted() {
             this.$nextTick(function () {

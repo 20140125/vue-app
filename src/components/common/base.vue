@@ -74,7 +74,7 @@
             </el-container>
         </el-container>
         <!---chat message-->
-        <el-dialog :title="chatTitle" @close="chatVisible = false" top="5vh"
+        <el-dialog :title="chatTitle" @close="chatVisible = false" top="5vh" width="957px"
                    :center="center" :show-close="closeModel"
                    :close-on-press-escape="closeModel" :visible.sync="chatVisible">
             <el-row :gutter="24">

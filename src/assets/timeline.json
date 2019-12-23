@@ -1,5 +1,10 @@
 [
     {
+        "content": "新增组件管理",
+        "timestamp": "2019-12-10",
+        "type": "success"
+    },
+    {
         "content": "新增项目管理markdown编辑接口文档",
         "timestamp": "2019-11-21",
         "type": "success"
