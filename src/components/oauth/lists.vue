@@ -57,7 +57,7 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item label="验证码" prop="code" v-if="showCode">
-                    <el-input v-model="OauthModel.code" @blur="checkCode(OauthModel)" ref="bindCode"/>
+                    <el-input v-model.number="OauthModel.code" @blur="checkCode(OauthModel)" ref="bindCode"/>
                 </el-form-item>
                 <el-form-item label="用户头像" prop="avatar_url">
                     <Upload :avatar_url="OauthModel.avatar_url" :username="OauthModel.username"
@@ -202,7 +202,17 @@
             checkCode:function(oauthObject) {
                 if (!oauthObject.code) {
                     this.$refs['bindCode'].focus();
-                    this.$message.warning('Please Enter Code')
+                    this.$message.warning('Please Enter Code');
+                    return ;
+                }
+                if (!Number.isInteger(oauthObject.code)) {
+                    this.$refs['bindCode'].focus();
+                    this.$message.warning('verification code format error');
+                    return ;
+                }
+                if ((oauthObject.code.toString()).length>6) {
+                    this.$refs['bindCode'].focus();
+                    this.$message.warning('Wrong verification code length');
                     return ;
                 }
                 let params = {code:oauthObject.code, id:oauthObject.id};
