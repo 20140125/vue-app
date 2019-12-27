@@ -4,48 +4,46 @@
             <el-col :xl="6" :lg="6">
                 <el-card shadow="always">
                     <div style="text-align: center">
-                        <el-avatar :src="avatarUrl" :size="100" :alt="username"></el-avatar>
-                        <div v-html="userCenter.u_name"></div>
+                        <el-avatar :src="avatarUrl" :size="100" :alt="username"/>
                     </div>
                     <div class="message">
-                        <p><i class="el-icon-message"> </i> {{userCenter.email}} </p>
-                        <p><i class="el-icon-location-information" > </i> {{setLocal(userCenter.local)}} </p>
-                        <p><i class="el-icon-aim" > </i> {{userCenter.desc}} </p>
-                        <p>个人标签：
-                            <el-tag style="margin-left: 10px" :key="tag" v-for="tag in userCenter.tags">
-                                {{tag}}
-                            </el-tag>
+                        <p><i class="el-icon-user"/> {{userCenter.u_name}}</p>
+                        <p><i class="el-icon-message"/> {{userCenter.email}}</p>
+                        <p><i class="el-icon-location-information"/> {{setLocal(userCenter.local)}}</p>
+                        <p><i class="el-icon-aim"/> {{userCenter.desc}}</p>
+                        <p><i class="el-icon-collection-tag"/>
+                            <el-button style="margin-bottom: 5px" :key="tag" v-for="tag in userCenter.tags" size="mini" plain type="primary">{{tag}}</el-button>
+                        </p>
+                        <p><i :class="userCenter.notice_status === '1' ? 'el-icon-microphone' : 'el-icon-turn-off-microphone'"/>
+                            <el-button size="mini"  :type="userCenter.notice_status === '1' ? 'primary' : 'info'" plain>{{userCenter.notice_status === '1' ? '启用站内通知' : '禁用站内通知'}}</el-button>
+                        </p>
+                        <p><i :class="userCenter.user_status === '1' ? 'el-icon-microphone' : 'el-icon-turn-off-microphone'"/>
+                            <el-button size="mini" :type="userCenter.user_status === '1' ? 'primary' : 'info'" plain>{{userCenter.user_status === '1' ? '启用账号通知' : '禁用账号通知'}}</el-button>
                         </p>
                     </div>
                 </el-card>
             </el-col>
             <el-col :xl="18" :lg="18">
                 <el-tabs type="border-card">
-                    <el-tab-pane label="基础设置"></el-tab-pane>
+                    <el-tab-pane label="基础设置"/>
                     <el-card shadow="always">
                         <el-form :model="userCenter" label-width="80px" label-position="left" ref="center" :rules="rules">
                             <el-form-item label="头像" prop="avatarUrl">
-                                <el-tooltip effect="dark" content="用户头像修改请移步至用户列表" placement="top-start">
-                                    <Upload :avatar_url="userCenter.avatarUrl" :username="username" @uploadSuccess="uploadSuccess"></Upload>
-                                </el-tooltip>
+                                <el-avatar :src="userCenter.avatarUrl" :size="100" :alt="username"/>
                             </el-form-item>
                             <el-form-item label="用户名" prop="u_name">
                                 <el-input v-model="userCenter.u_name" placeholder="用户名"/>
                             </el-form-item>
-                            <el-form-item label="账户类型" prop="u_type">
-                                <el-select v-model="userCenter.u_type.toString()" style="width: 100%">
-                                    <el-option label="授权用户" value="1"></el-option>
-                                    <el-option label="管理员" value="2"></el-option>
-                                </el-select>
-                            </el-form-item>
                             <el-form-item label="居住地址" prop="local">
-                                <el-cascader :props="props" :options="options" filterable v-model="userCenter.local" style="width: 100%"></el-cascader>
+                                <el-cascader :props="props" :options="options" filterable v-model="userCenter.local"
+                                             style="width: 100%"/>
                             </el-form-item>
                             <el-form-item label="所在地" prop="ip_address">
-                                <el-cascader :props="props" :options="options" filterable v-model="userCenter.ip_address" style="width: 100%"></el-cascader>
+                                <el-cascader :props="props" :options="options" filterable
+                                             v-model="userCenter.ip_address" style="width: 100%"/>
                             </el-form-item>
                             <el-form-item label="座右铭" prop="desc">
-                                <el-input type="textarea" resize="none" rows="4" show-word-limit maxlength="128" v-model="userCenter.desc" placeholder="这个人很懒，什么也没有留下"/>
+                                <el-input type="textarea" resize="none" rows="4" show-word-limit maxlength="32" v-model="userCenter.desc" placeholder="这个人很懒，什么也没有留下"/>
                             </el-form-item>
                             <el-form-item label="个人标签" prop="tags">
                                 <el-tag style="margin-left: 10px" :key="tag" v-for="tag in userCenter.tags" closable :disable-transitions="false" @close="handleClose(tag)">
@@ -60,16 +58,16 @@
                             </el-form-item>
                             <el-form-item label="站内通知" prop="notice_status">
                                 <el-tooltip effect="dark" content="系统性的通知或者更新消息" placement="top-start">
-                                    <el-switch active-value="1" inactive-value="2" v-model="userCenter.notice_status"></el-switch>
+                                    <el-switch active-value="1" inactive-value="2" v-model="userCenter.notice_status"/>
                                 </el-tooltip>
                             </el-form-item>
                             <el-form-item label="账号信息" prop="user_status">
                                 <el-tooltip effect="dark" content="帐号变更的通知消息" placement="top-start">
-                                    <el-switch active-value="1" inactive-value="2" v-model="userCenter.user_status"></el-switch>
+                                    <el-switch active-value="1" inactive-value="2" v-model="userCenter.user_status"/>
                                 </el-tooltip>
                             </el-form-item>
                             <el-form-item style="text-align: center">
-                                <Submit :reFrom="reFrom" :url="url" :model="userCenter" :refs="refs"></Submit>
+                                <Submit :reFrom="reFrom" :url="url" :model="userCenter" :refs="refs"/>
                             </el-form-item>
                         </el-form>
                     </el-card>
@@ -162,6 +160,9 @@
                     this.$refs.saveTagInput.focus();
                 });
             },
+            /**
+             * TODO:设置地址显示
+             */
             setLocal:function(item) {
                 if (item.length>0) {
                     let str = item.join(',');
@@ -175,6 +176,10 @@
             handleInputConfirm:function() {
                 let inputValue = this.inputValue;
                 if (inputValue && this.userCenter.tags.indexOf(inputValue)<0) {
+                    if ((this.userCenter.tags.length+1)>4) {
+                        this.$message.warning('User tags must not exceed four');
+                        return ;
+                    }
                     this.userCenter.tags.push(inputValue);
                 }
                 this.inputVisible = false;

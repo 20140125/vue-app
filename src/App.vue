@@ -1,5 +1,5 @@
 <template>
-    <router-view :class="ClassName"></router-view>
+    <router-view :class="ClassName"/>
 </template>
 
 <script>
@@ -28,6 +28,9 @@
 </script>
 
 <style>
+    .el-loading-mask {
+        z-index: 2!important;
+    }
     .clear_box{
         margin: 0 !important;
         padding: 0 !important;
