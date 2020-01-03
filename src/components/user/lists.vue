@@ -1,6 +1,6 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText">
-        <el-form :inline="true" style="margin-top: 10px" v-if="btn.add">
+        <el-form :inline="true" style="margin-top: 10px" v-if="btn.add && username === 'admin'">
             <el-form-item style="float:right;">
                 <el-button icon="el-icon-plus" type="primary" size="medium" plain @click="addUser">添 加</el-button>
             </el-form-item>
@@ -55,7 +55,7 @@
                 <el-form-item label="手机号" prop="phone_number" v-if="act === 'update'">
                     <el-input v-model="userModel.phone_number" type="email" placeholder="手机号"/>
                 </el-form-item>
-                <el-form-item label="角色" prop="role_id">
+                <el-form-item label="角色" prop="role_id" v-if="username === 'admin' ">
                     <el-select v-model="userModel.role_id" style="width: 100%">
                         <el-option v-for="(role,index) in roleLists" :key="index" :label="role.role_name" :value="role.id"/>
                     </el-select>
@@ -82,6 +82,7 @@
     import Radio from "../common/Radio";
     import Delete from "../common/Delete";
     import Submit from "../common/Submit";
+    import {mapGetters} from 'vuex';
     export default {
         name: "lists",
         components: {Submit, Delete, Radio},
@@ -124,6 +125,9 @@
                 btn:{}
             }
         },
+        computed:{
+            ...mapGetters(['username'])
+        },
         methods:{
             /**
              * todo：关闭弹框
@@ -141,7 +145,7 @@
                 let params = { offset:limit*(page-1), limit:limit,level:'1'};
                 apiLists.UserLists(params).then(response=>{
                     if (response && response.data.code===200){
-                        this.userLists = response.data.item.userLists;
+                        this.userLists = response.data.item.data;
                         this.total = response.data.item.total;
                         this.roleLists = response.data.item.roleLists;
                         this.loading = false;
@@ -171,7 +175,7 @@
                 this.title='添加管理员';
                 this.syncVisible = true;
                 this.act = 'add';
-                this.userModel = {username:'', email:'', password:'', salt:func.set_random(), status:'1', role_id:1, phone_number:'', created_at:func.get_timestamp(), updated_at:func.get_timestamp(), access_token:''};
+                this.userModel = {username:'', email:'', password:'', salt:func.set_random(), status:'1', role_id:2, phone_number:'', created_at:func.get_timestamp(), updated_at:func.get_timestamp(), remember_token:''};
                 this.url = this.cgi.insert;
             },
             /**

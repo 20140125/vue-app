@@ -28,8 +28,8 @@
                     <el-tab-pane label="基础设置"/>
                     <el-card shadow="always">
                         <el-form :model="userCenter" label-width="80px" label-position="left" ref="center" :rules="rules">
-                            <el-form-item label="头像" prop="avatarUrl">
-                                <el-avatar :src="userCenter.avatarUrl" :size="100" :alt="username"/>
+                            <el-form-item label="头像">
+                                <el-avatar :src="avatarUrl" :size="100" :alt="username"/>
                             </el-form-item>
                             <el-form-item label="用户名" prop="u_name">
                                 <el-input v-model="userCenter.u_name" placeholder="用户名"/>
@@ -43,7 +43,7 @@
                                              v-model="userCenter.ip_address" style="width: 100%"/>
                             </el-form-item>
                             <el-form-item label="座右铭" prop="desc">
-                                <el-input type="textarea" resize="none" rows="4" show-word-limit maxlength="32" v-model="userCenter.desc" placeholder="这个人很懒，什么也没有留下"/>
+                                <el-input type="textarea" resize="none" rows="3" show-word-limit maxlength="32" v-model="userCenter.desc" placeholder="这个人很懒，什么也没有留下"/>
                             </el-form-item>
                             <el-form-item label="个人标签" prop="tags">
                                 <el-tag style="margin-left: 10px" :key="tag" v-for="tag in userCenter.tags" closable :disable-transitions="false" @close="handleClose(tag)">
@@ -92,7 +92,6 @@
                 loadingText:'玩命加载中。。。',
 
                 userCenter:{
-                    avatarUrl:'',
                     u_name:'',
                     local:[],
                     ip_address:[],
@@ -137,13 +136,6 @@
             ...mapGetters(['username','avatarUrl'])
         },
         methods:{
-            /**
-             * TODO:图表上传成功
-             * @param src
-             */
-            uploadSuccess:function (src) {
-                this.userCenter.avatarUrl = src;
-            },
             /**
              * TODO:关闭标签
              * @param tag
@@ -218,7 +210,6 @@
                     if (response && response.data.code === 200) {
                         this.loading = false;
                         this.userCenter = response.data.item;
-                        this.userCenter.avatarUrl = this.avatarUrl;
                         this.userCenter.user_status = this.userCenter.user_status.toString();
                         this.userCenter.notice_status = this.userCenter.notice_status.toString();
                         this.getCity(this.pid);

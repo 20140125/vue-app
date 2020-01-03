@@ -16,6 +16,7 @@ let url={
     userDelete:'/v1/user/delete',
     userCenter:'/v1/user/center',
     saveUserCenter:'/v1/center/save',
+    userBind:'/v1/user/bind',
     //系统日志操作接口
     logLists:'/v1/log/index',
     logSave:'/v1/log/save',
@@ -49,6 +50,7 @@ let url={
     oauthLists:'/v1/oauth/index',
     oauthUpdate:'/v1/oauth/update',
     oauthDelete:'/v1/oauth/delete',
+    oauthBind:'/v1/oauth/bind',
     sendMail:'/v1/oauth/sendMail',
     verifyCode:'/v1/oauth/verifyCode',
     //请求授权

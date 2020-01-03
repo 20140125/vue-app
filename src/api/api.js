@@ -85,6 +85,14 @@ const userCenter = function(params = {}){
     return request.post(url.userCenter,qs.stringify(Object.assign(params,access_token)))
 };
 /**
+ * TODO:账户绑定
+ * @param params
+ * @returns {Promise<AxiosResponse<T>>}
+ */
+const userBind = function (params={}) {
+    return request.post(url.userBind,qs.stringify(Object.assign(params,access_token)))
+};
+/**
  * TODO:日志列表
  * @param params
  * @returns {Promise<AxiosResponse<T>>}
@@ -269,6 +277,14 @@ const oauthLists = function (params = {}) {
     return request.post(url.oauthLists,qs.stringify(Object.assign(params,access_token)))
 };
 /**
+ * TODO:授权账户绑定
+ * @param params
+ * @returns {Promise<AxiosResponse<T>>}
+ */
+const oauthBind = function (params = {}) {
+    return request.post(url.oauthBind,qs.stringify(Object.assign(params,access_token)))
+};
+/**
  * TODO:申请权限列表
  * @param params
  * @returns {Promise<AxiosResponse<T>>}
@@ -409,6 +425,7 @@ const interfaceLists = {
     AuthTree:authTree,
     UserLists:userLists,
     UserCenter:userCenter,
+    UserBind:userBind,
     LogLists:logLists,
     ApiLists:apiLists,
     ApiDocLists:apiDocLists,
@@ -433,6 +450,7 @@ const interfaceLists = {
     ConfigValUpdate:configValUpdate,
     GetConfig:getConfig,
     OauthLists:oauthLists,
+    OauthBind:oauthBind,
     ReqRuleLists:reqRuleLists,
     ReqRuleSave:reqRuleSave,
     GetAuthByToken:getAuthByToken,

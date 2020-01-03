@@ -71,7 +71,7 @@ router.beforeEach((to,from,next)=>{
             store.commit('setWebsocketServer',(response && response.data && response.data.item) ? response.data.item.websocket:code.Websocket);
             //用户权限验证 (admin  最高权限不做权限验证)
             if (store.state.login.auth_url.indexOf(to.path)===-1 && to.name !=='Welcome' && store.state.login.username!=='admin') {
-                let info = '你没有访问权限，请联系管理员【'+code.QQ+'】检验数据的正确性'
+                let info = '你没有访问权限，请联系管理员【'+code.QQ+'】检验数据的正确性';
                 ElementUI.MessageBox.alert(info).then(()=>{
                     let req = {
                         username:store.state.login.username,

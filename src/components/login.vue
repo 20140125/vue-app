@@ -5,14 +5,14 @@
                 <el-header style="text-align: center;font-size: 20px">登录系统</el-header>
                 <el-main>
                     <el-form :model="users" :ref="reFrom" :rules="rules">
-                        <el-form-item prop="username">
-                            <el-input v-model="users.username" placeholder="username" autocomplete="off">
-                                <template slot="prepend"><i class="el-icon-s-custom"></i></template>
+                        <el-form-item prop="email">
+                            <el-input v-model="users.email" type="email" placeholder="email" autocomplete="off">
+                                <template slot="prepend"><i class="el-icon-s-custom"/></template>
                             </el-input>
                         </el-form-item>
                         <el-form-item prop="password">
                             <el-input v-model="users.password" type="password" placeholder="password" autocomplete="off">
-                                <template slot="prepend"><i class="el-icon-user-solid"></i></template>
+                                <template slot="prepend"><i class="el-icon-user-solid"/></template>
                             </el-input>
                         </el-form-item>
                     </el-form>
@@ -37,11 +37,11 @@
         data(){
             return {
                 users:{
-                    username:'',
+                    email:'',
                     password:'',
                 },
                 rules:{
-                    username:[{required:true,message:'用户名必须',trigger:'blur'}],
+                    email:[{required:true,message:'用户名必须',trigger:'blur'}],
                     password:[{required:true,message:'用户密码必须',trigger:'blur'}],
                 },
                 reFrom:'login',

@@ -455,10 +455,10 @@
                 if (response && response.code === 200){
                     switch (this.msg_type) {
                         case 'img':
-                            this.inputMsg+= "<img src='"+response.item.src+"' width='100px' height='100px' alt=''>"
+                            this.inputMsg+= "<img src='"+response.item.src+"' width='100px' height='100px' alt=''>";
                             break;
                         case 'video':
-                            this.inputMsg+= "<video src='"+response.item.src+"' width='200px' height='200px' controls='controls'>"
+                            this.inputMsg+= "<video src='"+response.item.src+"' width='200px' height='200px' controls='controls'>";
                             break;
                     }
                     this.$refs.message.innerHTML = this.inputMsg;
@@ -477,13 +477,13 @@
                     case 'gif':
                     case 'png':
                     case 'jpeg':
-                        this.msg_type = 'img'
+                        this.msg_type = 'img';
                         if (file.size>2*1024*1024){
                             this.$message({type:'warning',message:'upload image size error'});
                         }
                         break;
                     case 'mp4':
-                        this.msg_type = 'video'
+                        this.msg_type = 'video';
                         if (file.size>5*1024*1024){
                             this.$message({type:'warning',message:'upload video size error'});
                         }
@@ -576,7 +576,7 @@
                     let j = 1;
                     this.noticeLength = 0;
                     for (let i in response) {
-                        response[i].disabled = true
+                        response[i].disabled = true;
                         if (response[i].status !== 'successfully' && response[i].see === 0) {
                             response[i].disabled = false
                             this.noticeLength = j++;

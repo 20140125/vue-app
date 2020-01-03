@@ -131,9 +131,6 @@
             if (this.$route.params.access_token){
                 this.access_token = this.$route.params.access_token;
             }
-            const date=new Date;
-            const year=date.getFullYear();
-            console.log();
         },
         mounted() {
             this.$nextTick(function () {
