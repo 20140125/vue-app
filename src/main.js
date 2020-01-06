@@ -22,14 +22,13 @@ import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 
-Vue.use(VueQuillEditor)
+Vue.use(VueQuillEditor);
 Vue.config.productionTip = false;
-Vue.use(mavonEditor)
+Vue.use(mavonEditor);
 Vue.use(ElementUI);
 Vue.use(VueRouter);
 Vue.prototype.$http = http;
 Vue.prototype.md5 = md5;
-
 // 登录验证拦截 （校验token）
 router.beforeEach((to,from,next)=>{
     if (to.meta.title){
@@ -52,6 +51,7 @@ router.beforeEach((to,from,next)=>{
                 store.commit('setSocketServer',response.data.item.socket);
                 store.commit('setAvatarUrl',response.data.item.avatar_url);
                 store.commit('setWebsocketServer',response.data.item.websocket);
+                store.commit('setRoleId',response.data.item.role_id);
                 return ;
             }
             next();
@@ -69,8 +69,9 @@ router.beforeEach((to,from,next)=>{
             store.commit('setSocketServer',(response && response.data && response.data.item) ? response.data.item.socket:code.Socket);
             store.commit('setAvatarUrl',(response && response.data && response.data.item) ? response.data.item.avatar_url:'');
             store.commit('setWebsocketServer',(response && response.data && response.data.item) ? response.data.item.websocket:code.Websocket);
+            store.commit('setRoleId',(response && response.data && response.data.item) ? response.data.item.role_id : 0);
             //用户权限验证 (admin  最高权限不做权限验证)
-            if (store.state.login.auth_url.indexOf(to.path)===-1 && to.name !=='Welcome' && store.state.login.username!=='admin') {
+            if (store.state.login.auth_url.indexOf(to.path)===-1 && to.name !=='Welcome' && to.name !=='UserBind') {
                 let info = '你没有访问权限，请联系管理员【'+code.QQ+'】检验数据的正确性';
                 ElementUI.MessageBox.alert(info).then(()=>{
                     let req = {

@@ -1,6 +1,6 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText">
-        <el-form :inline="true" style="margin-top: 10px" v-if="btn.add && username === 'admin'">
+        <el-form :inline="true" style="margin-top: 10px" v-if="btn.add && role_id === md5('1')">
             <el-form-item style="float:right;">
                 <el-button icon="el-icon-plus" type="primary" size="medium" plain @click="addUser">添 加</el-button>
             </el-form-item>
@@ -8,16 +8,26 @@
         <el-table :data="userLists.filter(data=>(!search || data.username.toLowerCase().includes(search.toLowerCase()) || data.email.toLowerCase().includes(search.toLowerCase()) || data.phone_number.toLowerCase().includes(search.toLowerCase())))">
             <el-table-column label="#" prop="id"/>
             <el-table-column label="管理员" prop="username"/>
-            <el-table-column label="邮箱" prop="email"/>
+            <el-table-column label="头像">
+                <template slot-scope="scope">
+                    <el-image :src="scope.row.avatar_url"
+                              style="width: 50px; height: 50px"
+                              fit="cover"
+                              :title="scope.row.username"
+                              :preview-src-list="[scope.row.avatar_url]">
+                    </el-image>
+                </template>
+            </el-table-column>
+            <el-table-column label="邮箱" prop="email" show-tooltip-when-overflow/>
             <el-table-column label="手机号" prop="phone_number"/>
-            <el-table-column label="显示状态" v-if="btn.edit">
+            <el-table-column label="允许登录" v-if="btn.edit">
                 <template slot-scope="scope">
                     <Radio :item="scope.row" :url="cgi.status"/>
                 </template>
             </el-table-column>
             <el-table-column label="创建时间" prop="created_at"/>
             <el-table-column label="修改时间" prop="updated_at"/>
-            <el-table-column label="操作" align="right">
+            <el-table-column label="操作" align="right" width="200px">
                 <template slot="header" slot-scope="scope">
                     <el-input v-model="search"  placeholder="请输入关键词查询"/>
                 </template>
@@ -30,13 +40,13 @@
         <!--table 分页-->
         <div style="margin: 25px 0">
             <el-pagination
-                    @size-change="sizeChange"
-                    @current-change="currentChange"
-                    :page-sizes="[15, 30, 50, 100]"
-                    :page-size="limit"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="total"
-                    :current-page="page">
+                @size-change="sizeChange"
+                @current-change="currentChange"
+                :page-sizes="[15, 30, 50, 100]"
+                :page-size="limit"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="total"
+                :current-page="page">
             </el-pagination>
         </div>
         <!--table 分页-->
@@ -45,6 +55,10 @@
             <el-form :label-width="labelWidth" :model="userModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="管理员" prop="username">
                     <el-input v-model="userModel.username" placeholder="管理员名称"/>
+                </el-form-item>
+                <el-form-item label="用户头像" prop="avatar_url">
+                    <Upload :avatar_url="userModel.avatar_url" :username="userModel.username"
+                            @uploadSuccess="uploadSuccess"/>
                 </el-form-item>
                 <el-form-item label="密码" prop="password">
                     <el-input v-model="userModel.password" type="password" placeholder="密码"/>
@@ -55,7 +69,7 @@
                 <el-form-item label="手机号" prop="phone_number" v-if="act === 'update'">
                     <el-input v-model="userModel.phone_number" type="email" placeholder="手机号"/>
                 </el-form-item>
-                <el-form-item label="角色" prop="role_id" v-if="username === 'admin' ">
+                <el-form-item label="角色" prop="role_id" v-if="role_id === md5('1') ">
                     <el-select v-model="userModel.role_id" style="width: 100%">
                         <el-option v-for="(role,index) in roleLists" :key="index" :label="role.role_name" :value="role.id"/>
                     </el-select>
@@ -82,10 +96,11 @@
     import Radio from "../common/Radio";
     import Delete from "../common/Delete";
     import Submit from "../common/Submit";
+    import Upload from '../common/Upload';
     import {mapGetters} from 'vuex';
     export default {
         name: "lists",
-        components: {Submit, Delete, Radio},
+        components: {Submit, Delete, Radio,Upload},
         data(){
             return {
                 userLists:[],
@@ -126,7 +141,7 @@
             }
         },
         computed:{
-            ...mapGetters(['username'])
+            ...mapGetters(['username','role_id'])
         },
         methods:{
             /**
@@ -137,12 +152,19 @@
                 this.syncVisible = false;
             },
             /**
+             * TODO:图片上传回调
+             * @param src
+             */
+            uploadSuccess:function(src) {
+                this.userModel.avatar_url = src;
+            },
+            /**
              * todo：获取角色列表
              * @param page
              * @param limit
              */
             getUserLists:function (page,limit) {
-                let params = { offset:limit*(page-1), limit:limit,level:'1'};
+                let params = {  page:page, limit:limit ,level:'1'};
                 apiLists.UserLists(params).then(response=>{
                     if (response && response.data.code===200){
                         this.userLists = response.data.item.data;
@@ -175,7 +197,7 @@
                 this.title='添加管理员';
                 this.syncVisible = true;
                 this.act = 'add';
-                this.userModel = {username:'', email:'', password:'', salt:func.set_random(), status:'1', role_id:2, phone_number:'', created_at:func.get_timestamp(), updated_at:func.get_timestamp(), remember_token:''};
+                this.userModel = {username:'', email:'', password:'', salt:func.set_random(), status:'1', role_id:1, phone_number:'', created_at:func.get_timestamp(), updated_at:func.get_timestamp(), remember_token:''};
                 this.url = this.cgi.insert;
             },
             /**

@@ -1,8 +1,8 @@
 <template>
     <el-tooltip content="look before you leap" placement="top">
         <el-radio-group v-model="item.status" size="mini" @change="setStatus(item)">
-            <el-radio-button label="2">关闭</el-radio-button>
-            <el-radio-button label="1">开启</el-radio-button>
+            <el-radio-button label="2">否</el-radio-button>
+            <el-radio-button label="1">是</el-radio-button>
         </el-radio-group>
     </el-tooltip>
 </template>

@@ -139,7 +139,7 @@ const get_scroll_top = function () {
         scroll_top = document.body.scrollTop;
     }
     return scroll_top;
-}
+};
 /**
  * TODO:细化权限按钮
  * @param currUrl
@@ -208,7 +208,7 @@ const set_btn_status = function (currUrl,name,authLists) {
 
     }
     return btn;
-}
+};
 const func = {
     str_count:str_count,
     set_time:set_time,

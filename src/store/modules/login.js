@@ -4,6 +4,7 @@ import code from '../../api/code'
 import router from '../../router'
 import func from '../../api/func'
 import io from 'socket.io-client'
+const md5 = require('js-md5');
 const state={
     token:localStorage.getItem('token'),
     socketServer:'',
@@ -12,7 +13,8 @@ const state={
     username:'',
     auth_url:'',
     menuLists:[],
-    oauthConfig:[]
+    oauthConfig:[],
+    role_id:0
 };
 const getters={
     token:state=>state.token,
@@ -22,33 +24,82 @@ const getters={
     oauthConfig:state=>state.oauthConfig,
     socketServer:state=>state.socketServer,
     avatarUrl:state=>state.avatarUrl,
-    websocketServer:state=>state.websocketServer
+    websocketServer:state=>state.websocketServer,
+    role_id:state=>state.role_id
 };
 const mutations={
+    /**
+     *
+     * @param state
+     * @param menuLists
+     */
     setMenuLists:function (state,menuLists) {
         state.menuLists = menuLists;
     },
+    /**
+     *
+     * @param state
+     * @param oauthConfig
+     */
     setOauthConfig:function (state,oauthConfig) {
         state.oauthConfig = oauthConfig;
     },
+    /**
+     *
+     * @param state
+     * @param auth_url
+     */
     setAuthUrl:function (state,auth_url) {
         state.auth_url = auth_url;
     },
+    /**
+     *
+     * @param state
+     * @param token
+     */
     setToken:function (state,token) {
         state.token = token;
-        localStorage.setItem('token',token)
+        localStorage.setItem('token',token);
     },
+    /**
+     *
+     * @param state
+     * @param username
+     */
     setUserName:function (state,username) {
         state.username = username;
     },
+    /**
+     *
+     * @param state
+     * @param ip
+     */
     setSocketServer:function (state,ip) {
         state.socketServer = io(ip);
     },
+    /**
+     *
+     * @param state
+     * @param avatarUrl
+     */
     setAvatarUrl:function (state,avatarUrl) {
         state.avatarUrl = avatarUrl;
     },
+    /**
+     *
+     * @param state
+     * @param websocketServer
+     */
     setWebsocketServer:function (state,websocketServer) {
         state.websocketServer = new WebSocket(websocketServer);
+    },
+    /**
+     *
+     * @param state
+     * @param role_id
+     */
+    setRoleId:function (state,role_id) {
+        state.role_id = role_id;
     }
 };
 const actions={
@@ -63,6 +114,7 @@ const actions={
             if (response && response.data.code === code.SUCCESS) {
                 commit('setToken',response.data.item.token);
                 commit('setUserName',response.data.item.username);
+                commit('setRoleId',response.data.item.role_id);
                 router.push({path:'/admin/index'});
             }
         });
@@ -138,8 +190,8 @@ const actions={
      */
     checkAuth:function ({state,commit},params) {
         params.url = params.url.replace('v1','admin');
-        if (state.auth_url.indexOf(params.url)===-1 && params.url !=='/admin/index' && state.username!=='admin') {
-            let info = '你没有访问权限，请联系管理员【' + code.QQ + '】检验数据的正确性！！'
+        if (state.auth_url.indexOf(params.url)===-1 && params.url !=='/admin/index' &&  state.username!=='admin') {
+            let info = '你没有访问权限，请联系管理员【' + code.QQ + '】检验数据的正确性！！';
             MessageBox.alert(info).then(() => {
                 let req = {
                     username:state.username,
