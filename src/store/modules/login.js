@@ -14,7 +14,8 @@ const state={
     auth_url:'',
     menuLists:[],
     oauthConfig:[],
-    role_id:0
+    role_id:0,
+    uuid:''
 };
 const getters={
     token:state=>state.token,
@@ -25,7 +26,8 @@ const getters={
     socketServer:state=>state.socketServer,
     avatarUrl:state=>state.avatarUrl,
     websocketServer:state=>state.websocketServer,
-    role_id:state=>state.role_id
+    role_id:state=>state.role_id,
+    uuid:state=>state.uuid
 };
 const mutations={
     /**
@@ -100,6 +102,14 @@ const mutations={
      */
     setRoleId:function (state,role_id) {
         state.role_id = role_id;
+    },
+    /**
+     *
+     * @param state
+     * @param uuid
+     */
+    setUUID:function (state,uuid) {
+        state.uuid = uuid;
     }
 };
 const actions={
@@ -115,6 +125,7 @@ const actions={
                 commit('setToken',response.data.item.token);
                 commit('setUserName',response.data.item.username);
                 commit('setRoleId',response.data.item.role_id);
+                commit('setUUID',response.data.item.uuid);
                 router.push({path:'/admin/index'});
             }
         });

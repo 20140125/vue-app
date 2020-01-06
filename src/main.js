@@ -52,6 +52,7 @@ router.beforeEach((to,from,next)=>{
                 store.commit('setAvatarUrl',response.data.item.avatar_url);
                 store.commit('setWebsocketServer',response.data.item.websocket);
                 store.commit('setRoleId',response.data.item.role_id);
+                store.commit('setUUID',response.data.item.uuid);
                 return ;
             }
             next();
@@ -70,6 +71,7 @@ router.beforeEach((to,from,next)=>{
             store.commit('setAvatarUrl',(response && response.data && response.data.item) ? response.data.item.avatar_url:'');
             store.commit('setWebsocketServer',(response && response.data && response.data.item) ? response.data.item.websocket:code.Websocket);
             store.commit('setRoleId',(response && response.data && response.data.item) ? response.data.item.role_id : 0);
+            store.commit('setUUID',(response && response.data && response.data.item) ? response.data.item.uuid : '');
             //用户权限验证 (admin  最高权限不做权限验证)
             if (store.state.login.auth_url.indexOf(to.path)===-1 && to.name !=='Welcome' && to.name !=='UserBind') {
                 let info = '你没有访问权限，请联系管理员【'+code.QQ+'】检验数据的正确性';

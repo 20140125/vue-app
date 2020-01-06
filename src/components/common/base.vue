@@ -196,7 +196,7 @@
             emotion
         },
         computed:{
-            ...mapGetters(['tabs','token','username','activeAuthName','menuLists','socketServer','avatarUrl','websocketServer','oauthConfig']),
+            ...mapGetters(['tabs','token','username','activeAuthName','menuLists','socketServer','avatarUrl','websocketServer','oauthConfig','uuid']),
         },
         methods:{
             ...mapActions(['addTabs','deleteTabs','addCurrTabs','logoutSystem','getAuthMenu','getOauthConfig']),
@@ -565,7 +565,7 @@
                 //站内消息推送
                 this.socketServer.on('connect', ()=>{
                     // 连接后登录
-                    this.socketServer.emit('login', this.md5(this.username));
+                    this.socketServer.emit('login', this.uuid);
                 });
                 // 服务端（http）推送站内通知信息
                 this.socketServer.on('new_msg', (msg)=>{
