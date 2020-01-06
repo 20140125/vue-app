@@ -53,14 +53,14 @@
         <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
             <el-form :label-width="labelWidth" :model="pushModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="用户名" prop="username">
-                    <el-select v-model="pushModel.username" @change="changeOauthName" style="width: 100%">
+                    <el-select v-model="pushModel.username" filterable @change="changeOauthName" style="width: 100%">
                         <el-option label="所有人" value="all"/>
                         <el-option v-for="(push,index) in oauthLists" :key="index" :label="push.username"
-                                   :value="push.username"/>
+                                   :value="push.uuid"/>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="UID" prop="uid">
-                    <el-input v-model="pushModel.uid" readonly placeholder="用户UID"/>
+                <el-form-item label="UUID" prop="uid">
+                    <el-input v-model="pushModel.uid" readonly placeholder="用户UUID"/>
                 </el-form-item>
                 <el-form-item label="标题" prop="title">
                     <el-input v-model="pushModel.title" placeholder="推送标题"/>
@@ -195,7 +195,7 @@
              * @param item
              */
             changeOauthName:function(item) {
-                this.pushModel.uid = item!=='all' ? this.md5(item) : ''
+                this.pushModel.uid = item!=='all' ? item : ''
             },
             /**
              * TODO：推送状态查询
