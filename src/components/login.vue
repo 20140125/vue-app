@@ -130,7 +130,7 @@
              * TODO:获取验证码
              */
             getEmailCode:function() {
-                if (!this.users.email) {
+                if (!this.mailLogin.email) {
                     this.$refs['email'].focus();
                     this.$message.warning('Please Enter Email')
                     return ;
@@ -139,7 +139,7 @@
                     this.codeValue = this.times-- +' s';
                     return;
                 }
-                let params = {email:this.users.email};
+                let params = {email:this.mailLogin.email};
                 apiLists.SendEmail(params,$url.sendEmail).then(response=>{
                     if (response && response.data.code === 200) {
                         this.$message({type:'success',message:response.data.msg});
@@ -151,28 +151,28 @@
              * TODO：校验邮箱验证码
              */
             checkCode:function() {
-                if (!this.users.verify_code) {
+                if (!this.mailLogin.verify_code) {
                     this.$refs['code'].focus();
                     this.$message.warning('Please Enter Code');
                     return ;
                 }
-                if (!Number.isInteger(this.users.verify_code)) {
+                if (!Number.isInteger(this.mailLogin.verify_code)) {
                     this.$refs['code'].focus();
                     this.$message.warning('verification code format error');
                     return ;
                 }
-                if (this.users.verify_code.length>6) {
+                if (this.mailLogin.verify_code.length>6) {
                     this.$refs['code'].focus();
                     this.$message.warning('Wrong verification code length');
                     return ;
                 }
-                let params = {verify_code:this.users.verify_code,email:this.users.email};
+                let params = {verify_code:this.mailLogin.verify_code,email:this.mailLogin.email};
                 apiLists.VerifyCode(params,$url.checkCode).then(response=>{
                     if (response && response.data.code === 200) {
                         this.$message({type:'success',message:response.data.msg});
                         return ;
                     }
-                    this.users.code = '';
+                    this.mailLogin.verify_code = '';
                 });
             },
             /**
