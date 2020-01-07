@@ -6,41 +6,41 @@
                 <el-tabs type="border-card" @tab-click="getTabs" v-model="activeModel">
                     <el-tab-pane label="账号密码登录" name="password">
                         <el-main>
-                            <el-form :model="users" :ref="reFrom" :rules="rules">
+                            <el-form :model="passwordLogin" ref="password" :rules="passwordRules">
                                 <el-form-item prop="email">
-                                    <el-input v-model.trim="users.email" type="email" placeholder="email" autocomplete="off">
+                                    <el-input v-model.trim="passwordLogin.email" type="email" placeholder="email" autocomplete="off">
                                         <template slot="prepend"><i class="el-icon-s-custom"/></template>
                                     </el-input>
                                 </el-form-item>
                                 <el-form-item prop="password">
-                                    <el-input v-model.trim="users.password" type="password" placeholder="password" autocomplete="off">
+                                    <el-input v-model.trim="passwordLogin.password" type="password" placeholder="password" autocomplete="off">
                                         <template slot="prepend"><i class="el-icon-user-solid"/></template>
                                     </el-input>
                                 </el-form-item>
                             </el-form>
                             <el-footer style="text-align: center">
-                                <el-button @click="resetForm(reFrom)" plain>取 消</el-button>
-                                <el-button type="primary" @click="onSubmit(reFrom)" plain>确 定</el-button>
+                                <el-button @click="resetForm('password')" plain>取 消</el-button>
+                                <el-button type="primary" @click="onSubmit('password')" plain>确 定</el-button>
                             </el-footer>
                         </el-main>
                     </el-tab-pane>
                     <el-tab-pane label="邮箱验证登录" name="email">
                         <el-main>
-                            <el-form :model="users" :ref="reFrom" :rules="rules">
+                            <el-form :model="mailLogin" ref="mail" :rules="mailRules">
                                 <el-form-item prop="email">
-                                    <el-input v-model.trim="users.email" ref="email" type="email" placeholder="email" autocomplete="off">
+                                    <el-input v-model.trim="mailLogin.email" ref="email" type="email" placeholder="email" autocomplete="off">
                                         <template slot="prepend"><i class="el-icon-s-custom"/></template>
                                     </el-input>
                                 </el-form-item>
                                 <el-form-item prop="verify_code">
-                                    <el-input v-model.number="users.verify_code" :disabled="!disabled" maxlength="8" @blur="checkCode" ref="code" type="text" placeholder="verify code" autocomplete="off">
+                                    <el-input v-model.number="mailLogin.verify_code" maxlength="8" @blur="checkCode" ref="code" type="text" placeholder="verify code" autocomplete="off">
                                         <el-button slot="append" :disabled="disabled" @click="getEmailCode">{{codeValue}}</el-button>
                                     </el-input>
                                 </el-form-item>
                             </el-form>
                             <el-footer style="text-align: center">
-                                <el-button @click="resetForm(reFrom)" plain>取 消</el-button>
-                                <el-button type="primary" @click="onSubmit(reFrom)" plain>确 定</el-button>
+                                <el-button @click="resetForm('mail')" plain>取 消</el-button>
+                                <el-button type="primary" @click="onSubmit('mail')" plain>确 定</el-button>
                             </el-footer>
                         </el-main>
                     </el-tab-pane>
@@ -64,18 +64,25 @@
         name: "login",
         data(){
             return {
-                users:{
+                passwordLogin:{
                     email:'',
                     password:'',
-                    verify_code:'',
                     loginType:'password'
                 },
-                rules:{
+                passwordRules:{
                     email:[{required:true,message:'用户名必须',trigger:'blur'}],
                     password:[{required:true,message:'用户密码必须',trigger:'blur'}],
+                },
+
+                mailLogin:{
+                    email:'',
+                    verify_code:'',
+                    loginType:'mail'
+                },
+                mailRules:{
+                    email:[{required:true,message:'用户名必须',trigger:'blur'}],
                     verify_code:[{required:true,message:'验证码必须',trigger:'blur'}],
                 },
-                reFrom:'login',
                 bgStyle:{
                     'background':'url('+require('../assets/u0.jpg')+')',
                     'background-repeat':'no-repeat',
@@ -99,7 +106,14 @@
             onSubmit:function (formName) {
                 this.$refs[formName].validate((valid)=>{
                     if (valid){
-                        this.loginSystem(this.users);
+                        switch (formName) {
+                            case 'password':
+                                this.loginSystem(this.passwordLogin);
+                                break;
+                            case 'mail':
+                                this.loginSystem(this.mailLogin);
+                                break
+                        }
                     }
                 })
             },
@@ -111,7 +125,6 @@
                 if (row.name === 'oauth') {
                     this.getOauthConfig('oauth');
                 }
-                this.users.loginType = row.name;
             },
             /**
              * TODO:获取验证码
