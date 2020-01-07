@@ -1,5 +1,10 @@
 [
     {
+        "content": "新增邮箱验证码登录，支持注册",
+        "timestamp": "2020-01-07",
+        "type": "success"
+    },
+    {
         "content": "增加用户绑定，支持账号密码登录",
         "timestamp": "2020-01-06",
         "type": "success"

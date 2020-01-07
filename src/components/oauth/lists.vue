@@ -69,7 +69,7 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item label="验证码" prop="code" v-if="showCode">
-                    <el-input v-model.number="OauthModel.code" @blur="checkCode(OauthModel)" ref="bindCode"/>
+                    <el-input v-model.number="OauthModel.code" maxlength="6" @blur="checkCode(OauthModel)" ref="bindCode"/>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">

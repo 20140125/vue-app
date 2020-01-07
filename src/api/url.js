@@ -95,6 +95,8 @@ let url={
     logout:'/v1/logout',
     checkToken:'/v1/checkLogin',
     getConfig:'/v1/config',
-    getCountData:'/v1/total'
+    getCountData:'/v1/total',
+    sendEmail:'/v1/sendEmail',
+    checkCode:'/v1/checkCode',
 };
 export default url

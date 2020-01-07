@@ -193,7 +193,7 @@ const fileDelete = function (params = {}) {
  * @param params
  * @returns {Promise<AxiosResponse<T>>}
  */
-const databaseLists = function (params) {
+const databaseLists = function (params={}) {
     return request.post(url.databaseLists,qs.stringify(Object.assign(params,access_token)))
 };
 /**
@@ -311,18 +311,20 @@ const getAuthByToken = function (params = {}) {
 /**
  * TODO:邮件发送
  * @param params
+ * @param href
  * @returns {Promise<AxiosResponse<T>>}
  */
-const sendEmail = function (params = {}) {
-    return request.post(url.sendMail,qs.stringify(Object.assign(params,access_token)))
+const sendEmail = function (params = {},href = url.sendMail ) {
+    return request.post(href,qs.stringify(Object.assign(params,access_token)))
 };
 /**
  * TODO:校验验证码
  * @param params
+ * @param href
  * @returns {Promise<AxiosResponse<T>>}
  */
-const verifyCode = function (params = {}) {
-    return request.post(url.verifyCode,qs.stringify(Object.assign(params,access_token)))
+const verifyCode = function (params = {},href= url.verifyCode) {
+    return request.post(href,qs.stringify(Object.assign(params,access_token)))
 };
 /**
  * TODO:城市列表
