@@ -20,7 +20,7 @@
             </el-table-column>
             <el-table-column label="邮箱" prop="email" show-tooltip-when-overflow/>
             <el-table-column label="手机号" prop="phone_number"/>
-            <el-table-column label="允许登录" v-if="btn.edit">
+            <el-table-column label="允许登录" v-if="role_id === md5('1')">
                 <template slot-scope="scope">
                     <Radio :item="scope.row" :url="cgi.status"/>
                 </template>
@@ -69,7 +69,7 @@
                 <el-form-item label="手机号" prop="phone_number" v-if="act === 'update'">
                     <el-input v-model="userModel.phone_number" type="email" placeholder="手机号"/>
                 </el-form-item>
-                <el-form-item label="角色" prop="role_id" v-if="role_id === md5('1') ">
+                <el-form-item label="角色" prop="role_id" v-if="role_id === md5('1')">
                     <el-select v-model="userModel.role_id" style="width: 100%">
                         <el-option v-for="(role,index) in roleLists" :key="index" :label="role.role_name" :value="role.id"/>
                     </el-select>
