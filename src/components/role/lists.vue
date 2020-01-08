@@ -28,6 +28,19 @@
             </el-table-column>
         </el-table>
         <!--table 表格-->
+        <!--table 分页-->
+        <div style="margin: 25px 0">
+            <el-pagination
+                @size-change="sizeChange"
+                @current-change="currentChange"
+                :page-sizes="[15, 30, 50, 100]"
+                :page-size="limit"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="total"
+                :current-page="page">
+            </el-pagination>
+        </div>
+        <!--table 分页-->
         <!---弹框-->
         <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal"  :center="center">
             <el-form :label-width="labelWidth" :model="roleModel" :ref="reFrom" :rules="rules">
@@ -77,6 +90,9 @@
                 authLists:[],
                 defaultChecked:[],
                 search:'',
+                limit:15,
+                page:1,
+                total:0,
 
                 title:'',
                 syncVisible:false, //是否显示弹框
@@ -122,11 +138,12 @@
              * @param limit
              */
             getRoleLists:function (page,limit) {
-                let params = { offset:limit*(page-1), limit:limit,level:4 };
+                let params = { page:page, limit:limit};
                 apiLists.RoleLists(params).then(response=>{
                     if (response && response.data.code===200){
-                        this.roleLists = response.data.item.role;
-                        this.authLists = response.data.item.auth
+                        this.roleLists = response.data.item.role.data;
+                        this.total = response.data.item.role.total
+                        this.authLists = response.data.item.auth;
                         this.loading = false;
                     }
                 })
