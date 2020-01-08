@@ -8,7 +8,8 @@
         <!--table 表格-->
         <el-table :data="authLists.filter(data=>(!search || data.name.toLowerCase().includes(search.toLowerCase()) || data.href.includes(search.toLowerCase())))"
                   row-key="id"
-                  default-expand-all
+                  lazy
+                  :load="load"
                   :tree-props="{children: '__child', hasChildren: 'hasChildren'}">
             <el-table-column label="权限名称" prop="name"/>
             <el-table-column label="权限链接" prop="href"/>
@@ -127,14 +128,23 @@
             /**
              * todo：获取权限
              */
-            getAuthLists:function () {
-                apiLists.AuthLists([]).then(response=>{
+            getAuthLists:function (id) {
+                apiLists.AuthLists({id:id}).then(response=>{
                     if (response && response.data.code===200){
-                        this.authLists = func.set_tree(response.data.item.authLists);
+                        this.authLists = response.data.item.authLists;
                         this.authLevel = response.data.item.selectAuth;
                         this.loading = false;
                     }
                 });
+            },
+            load:function (tree, treeNode, resolve) {
+                apiLists.AuthLists({id:tree.id}).then(response=>{
+                    if (response && response.data.code === 200) {
+                        setTimeout(()=>{
+                            resolve(response.data.item.authLists);
+                        },500)
+                    }
+                })
             },
             /**
              * todo：设置权限名称
@@ -174,7 +184,7 @@
         mounted() {
             this.$nextTick(function () {
                 this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.$store.state.login.auth_url);
-                this.getAuthLists();
+                this.getAuthLists(0);
             });
         }
     }
