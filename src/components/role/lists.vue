@@ -21,7 +21,7 @@
                     <el-input v-model="search" placeholder="请输入关键词查询"/>
                 </template>
                 <template slot-scope="scope">
-                    <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updateRole(scope.row)">修 改</el-button>
+                    <el-button type="primary" plain icon="el-icon-edit" v-if="btn.edit" size="mini" @click="updateRole(scope.row)">修 改</el-button>
                     <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="roleLists"
                             v-on:success="success" v-if="btn.del"/>
                 </template>
@@ -64,7 +64,7 @@
                     </el-radio-group>
                 </el-form-item>
             </el-form>
-            <div slot="footer" class="dialog-footer" v-if="btn.edit">
+            <div slot="footer" class="dialog-footer">
                 <Submit :reFrom="reFrom" :model="roleModel" :url="url" :refs="refs" v-on:success="success"/>
             </div>
         </el-dialog>
@@ -142,7 +142,7 @@
                 apiLists.RoleLists(params).then(response=>{
                     if (response && response.data.code===200){
                         this.roleLists = response.data.item.role.data;
-                        this.total = response.data.item.role.total
+                        this.total = response.data.item.role.total;
                         this.authLists = response.data.item.auth;
                         this.loading = false;
                     }
