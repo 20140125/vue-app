@@ -201,8 +201,8 @@ const actions={
      */
     checkAuth:function ({state,commit},params) {
         params.url = params.url.replace('v1','admin');
-        if (state.auth_url.indexOf(params.url)===-1 && params.url !=='/admin/index' &&  state.username!=='admin') {
-            let info = '你没有访问权限，请联系管理员【' + code.QQ + '】检验数据的正确性！！';
+        if (state.auth_url.indexOf(params.url)===-1 && params.url !=='/admin/index') {
+            let info = '你没有访问权限，请联系管理员【' + code.QQ + '】检验数据的正确性！';
             MessageBox.alert(info).then(() => {
                 let req = {
                     username:state.username,

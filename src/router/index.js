@@ -22,6 +22,7 @@ import PushList from '../components/system/push'
 import ChatList from '../components/system/chat'
 import MarkDown from '../components/editor/markdown'
 import UEditor from '../components/editor/ueditor'
+import TimeLine from '../components/system/timeline'
 import Empty from '../components/empty'
 import TableExample from '../components/components/example/tables'
 import FormExample from '../components/components/example/forms'
@@ -56,6 +57,7 @@ export default new Router({
                 { path: 'push/index', name:'PushList',component:PushList,meta:{ mode:'push',title:'站内通知' }},
                 { path: 'editor/markdown', name:'MarkDown',component:MarkDown,meta:{ mode:'push',title:'MarkDown' }},
                 { path: 'editor/quill', name:'UEditor',component:UEditor,meta:{ mode:'push',title:'UEditor' }},
+                { path: 'timeline/index', name:'TimeLine',component:TimeLine,meta:{ mode:'timeline',title:'时间线' }},
 
                 { path: 'example/table', name: 'TableExample', component: TableExample,meta:{ mode:'',title:'表格组件' } },
                 { path: 'example/form', name: 'FormExample', component: FormExample,meta:{ mode:'',title:'表单组件' } },

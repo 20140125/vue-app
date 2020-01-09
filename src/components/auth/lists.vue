@@ -112,6 +112,7 @@
                 },
                 //权限按钮细化
                 btn:{},
+                id:0
             }
         },
         computed:{
@@ -122,7 +123,7 @@
              * todo：关闭弹框
              */
             success:function(){
-                this.getAuthLists(this.page,this.limit);
+                this.getAuthLists(this.id);
                 this.syncVisible = false;
             },
             /**
@@ -184,7 +185,7 @@
         mounted() {
             this.$nextTick(function () {
                 this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.$store.state.login.auth_url);
-                this.getAuthLists(0);
+                this.getAuthLists(this.id);
             });
         }
     }

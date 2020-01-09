@@ -89,6 +89,9 @@ let url={
     tableComponent:'/v1/components/table',
     componentAction:'/v1/components/actions',
     excelExport:'/v1/excel/export',
+    timeLineLists:'/v1/timeline/index',
+    timeLineSave:'/v1/timeline/save',
+    timeLineUpdate:'/v1/timeline/update',
     //公共操作接口
     tree:'/v1/menu',
     login:'/v1/login',

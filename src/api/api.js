@@ -417,6 +417,14 @@ const remove = function (params={},url='') {
 const excelExport = function (params={}) {
     return request.post(url.excelExport,qs.stringify(Object.assign(params,access_token)))
 };
+/**
+ * TODO:获取历史聊天记录
+ * @param params
+ * @returns {Promise<AxiosResponse<T>>}
+ */
+const timeLineLists = function (params = {}) {
+    return request.post(url.timeLineLists,qs.stringify(Object.assign(params,access_token)))
+};
 const interfaceLists = {
     LoginSys:loginSys,
     LogoutSys:logoutSys,
@@ -468,6 +476,7 @@ const interfaceLists = {
     TableComponents:tableComponents,
     SaveData:saveData,
     Remove:remove,
-    ExcelExport:excelExport
+    ExcelExport:excelExport,
+    TimeLineLists:timeLineLists
 };
 export default interfaceLists;

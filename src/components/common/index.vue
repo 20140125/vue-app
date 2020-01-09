@@ -27,8 +27,6 @@
                         :key="index"
                         :type="activity.type"
                         placement="top"
-                        :color="activity.color"
-                        v-if="activity.timestamp > '2019-01-01'"
                         :timestamp="activity.timestamp">
                         <el-card>{{activity.content}}</el-card>
                     </el-timeline-item>
@@ -56,7 +54,7 @@
                 },
 
                 reverse: false,
-                activities:require('../../assets/timeline.json'),
+                activities:'',
                 value:new Date()
             }
         },
@@ -67,6 +65,7 @@
             ...mapMutations(['setToken']),
             totalCharts:function () {
                 apiLists.GetCountData({}).then(response=>{
+                    this.activities = response.data.item.timeline.data;
                     let totalCharts = echarts.init(document.getElementById('total'));
                     totalCharts.setOption({
                         title : {
