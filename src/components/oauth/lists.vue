@@ -56,7 +56,7 @@
                             @uploadSuccess="uploadSuccess"/>
                 </el-form-item>
                 <el-form-item label="授权标识" prop="remember_token">
-                    <el-input :type="!showPassword ? 'password' : ''" v-model="OauthModel.remember_token">
+                    <el-input :type="!showPassword ? 'password' : ''" v-model="OauthModel.remember_token" readonly>
                         <el-button slot="append" :icon="showPassword ? 'el-icon-open' : 'el-icon-turn-off'" @click="showPassword = !showPassword">
                             {{showPassword ? '显 示' : '隐 藏'}}
                         </el-button>
