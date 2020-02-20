@@ -31,7 +31,7 @@ const getters={
 };
 const mutations={
     /**
-     *
+     * todo:设置导航栏
      * @param state
      * @param menuLists
      */
@@ -39,7 +39,7 @@ const mutations={
         state.menuLists = menuLists;
     },
     /**
-     *
+     * todo:设置第三方配置
      * @param state
      * @param oauthConfig
      */
@@ -47,7 +47,7 @@ const mutations={
         state.oauthConfig = oauthConfig;
     },
     /**
-     *
+     * todo:权限地址
      * @param state
      * @param auth_url
      */
@@ -55,7 +55,7 @@ const mutations={
         state.auth_url = auth_url;
     },
     /**
-     *
+     * todo：用户token
      * @param state
      * @param token
      */
@@ -64,7 +64,7 @@ const mutations={
         localStorage.setItem('token',token);
     },
     /**
-     *
+     * todo：用户名称
      * @param state
      * @param username
      */
@@ -72,7 +72,7 @@ const mutations={
         state.username = username;
     },
     /**
-     *
+     * todo：即时通讯服务
      * @param state
      * @param ip
      */
@@ -80,7 +80,7 @@ const mutations={
         state.socketServer = io(ip);
     },
     /**
-     *
+     * todo：用户头像
      * @param state
      * @param avatarUrl
      */
@@ -88,7 +88,7 @@ const mutations={
         state.avatarUrl = avatarUrl;
     },
     /**
-     *
+     * todo：websocketServer
      * @param state
      * @param websocketServer
      */
@@ -96,7 +96,7 @@ const mutations={
         state.websocketServer = new WebSocket(websocketServer);
     },
     /**
-     *
+     * todo：角色ID
      * @param state
      * @param role_id
      */
@@ -104,7 +104,7 @@ const mutations={
         state.role_id = role_id;
     },
     /**
-     *
+     * todo：用户ID
      * @param state
      * @param uuid
      */
