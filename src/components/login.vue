@@ -1,14 +1,14 @@
 <template>
     <div :style="bgStyle">
-        <el-row :gutter="24" style="padding-top: 8%">
+        <el-row :gutter="24" style="padding-top: 10%">
             <el-col :xl="{'span':8,'offset':8}" :lg="{'span':12,'offset':6}" :md="{'span':16,'offset':4}" :sm="{'span':20,'offset':'2'}" :xs="{'span':24}">
-                <el-header style="text-align: center;font-size: 20px">登录系统</el-header>
-                <el-tabs type="border-card" @tab-click="getTabs" v-model="activeModel">
+                <el-header style="text-align: center;font-size: 20px;font-weight: 800">{{headerTitle}}</el-header>
+                <el-tabs type="border-card" @tab-click="getTabs" v-model="activeModel" style="margin: 0 5px">
                     <el-tab-pane label="账号密码登录" name="password">
                         <el-main>
                             <el-form :model="passwordLogin" ref="password" :rules="passwordRules">
                                 <el-form-item prop="email">
-                                    <el-input v-model.trim="passwordLogin.email" type="email" placeholder="email" autocomplete="off">
+                                    <el-input v-model.trim="passwordLogin.email" type="text" placeholder="email" autocomplete="off">
                                         <template slot="prepend"><i class="el-icon-s-custom"/></template>
                                     </el-input>
                                 </el-form-item>
@@ -28,12 +28,12 @@
                         <el-main>
                             <el-form :model="mailLogin" ref="mail" :rules="mailRules">
                                 <el-form-item prop="email">
-                                    <el-input v-model.trim="mailLogin.email" ref="email" type="email" placeholder="email" autocomplete="off">
+                                    <el-input v-model.trim="mailLogin.email" type="text" placeholder="email" autocomplete="off">
                                         <template slot="prepend"><i class="el-icon-s-custom"/></template>
                                     </el-input>
                                 </el-form-item>
                                 <el-form-item prop="verify_code">
-                                    <el-input v-model.number="mailLogin.verify_code" maxlength="8" @blur="checkCode" ref="code" type="text" placeholder="verify code" autocomplete="off">
+                                    <el-input v-model.number="mailLogin.verify_code" maxlength="8" ref="code" type="text" placeholder="verify code" autocomplete="off">
                                         <el-button slot="append" :disabled="disabled" @click="getEmailCode">{{codeValue}}</el-button>
                                     </el-input>
                                 </el-form-item>
@@ -44,7 +44,7 @@
                             </el-footer>
                         </el-main>
                     </el-tab-pane>
-                    <el-tab-pane label="账户授权登录" name="oauth">
+                    <el-tab-pane label="账户授权登录" name="oauth" style="text-align: center">
                         <el-button style="margin-bottom: 10px" plain v-for="(oauth,index) in oauthConfig" type="primary" :key="index" v-if="oauth.status === 1" @click="oauthLogin(oauth.value)">
                             {{oauth.name.toUpperCase()}}
                         </el-button>
@@ -63,6 +63,19 @@
     export default {
         name: "login",
         data(){
+            let verifyCode =  (rule,value,callback) => {
+                try {
+                    if (!Number.isInteger(value)) {
+                        callback(new Error('验证码格式错误'));
+                    }
+                    if (value.toString().length!==8) {
+                        callback(new Error('请输入八位长度的验证码'));
+                    }
+                    callback();
+                }catch (e) {
+                    callback(new Error('验证码格式错误'))
+                }
+            }
             return {
                 passwordLogin:{
                     email:'',
@@ -70,18 +83,17 @@
                     loginType:'password'
                 },
                 passwordRules:{
-                    email:[{required:true,message:'用户名必须',trigger:'blur'}],
-                    password:[{required:true,message:'用户密码必须',trigger:'blur'}],
+                    email:[{required:true,message:'请输入用户名',trigger:'blur'},{type:'email',message: '用户名格式不正确'}],
+                    password:[{required:true,message:'请输入密码',trigger:'blur'}],
                 },
-
                 mailLogin:{
                     email:'',
                     verify_code:'',
                     loginType:'mail'
                 },
                 mailRules:{
-                    email:[{required:true,message:'用户名必须',trigger:'blur'}],
-                    verify_code:[{required:true,message:'验证码必须',trigger:'blur'}],
+                    email:[{required:true,message:'请输入邮箱',trigger:'blur'},{type:'email',message: '邮箱格式不正确'}],
+                    verify_code:[{required:true,message:'请输入验证码',trigger:'blur'},{validator:verifyCode,trigger: 'blur'}],
                 },
                 bgStyle:{
                     'background':'url('+require('../assets/u0.jpg')+')',
@@ -92,6 +104,7 @@
                 codeValue:'获取验证码',
                 times:60,
                 disabled:false,
+                headerTitle:'账号密码登录'
             }
         },
         computed:{
@@ -111,7 +124,14 @@
                                 this.loginSystem(this.passwordLogin);
                                 break;
                             case 'mail':
-                                this.loginSystem(this.mailLogin);
+                                let params = {verify_code:this.mailLogin.verify_code,email:this.mailLogin.email};
+                                apiLists.VerifyCode(params,$url.checkCode).then(response=>{
+                                    if (response && response.data.code === 200) {
+                                        this.loginSystem(this.mailLogin);
+                                        return ;
+                                    }
+                                    this.mailLogin.verify_code = '';
+                                });
                                 break
                         }
                     }
@@ -122,6 +142,7 @@
              * @param row
              */
             getTabs:function(row){
+                this.headerTitle = row.label;
                 if (row.name === 'oauth') {
                     this.getOauthConfig('oauth');
                 }
@@ -130,11 +151,6 @@
              * TODO:获取验证码
              */
             getEmailCode:function() {
-                if (!this.mailLogin.email) {
-                    this.$refs['email'].focus();
-                    this.$message.warning('Please Enter Email')
-                    return ;
-                }
                 if (this.disabled) {
                     this.codeValue = this.times-- +' s';
                     return;
@@ -145,34 +161,6 @@
                         this.$message({type:'success',message:response.data.msg});
                         this.disabled = true;
                     }
-                });
-            },
-            /**
-             * TODO：校验邮箱验证码
-             */
-            checkCode:function() {
-                if (!this.mailLogin.verify_code) {
-                    this.$refs['code'].focus();
-                    this.$message.warning('Please Enter Code');
-                    return ;
-                }
-                if (!Number.isInteger(this.mailLogin.verify_code)) {
-                    this.$refs['code'].focus();
-                    this.$message.warning('verification code format error');
-                    return ;
-                }
-                if (this.mailLogin.verify_code.length>6) {
-                    this.$refs['code'].focus();
-                    this.$message.warning('Wrong verification code length');
-                    return ;
-                }
-                let params = {verify_code:this.mailLogin.verify_code,email:this.mailLogin.email};
-                apiLists.VerifyCode(params,$url.checkCode).then(response=>{
-                    if (response && response.data.code === 200) {
-                        this.$message({type:'success',message:response.data.msg});
-                        return ;
-                    }
-                    this.mailLogin.verify_code = '';
                 });
             },
             /**

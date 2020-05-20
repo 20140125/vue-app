@@ -115,7 +115,7 @@
             }
         },
         computed:{
-            ...mapGetters(['currSystemLogObj','token']),
+            ...mapGetters(['currSystemLogObj']),
         },
         methods:{
             ...mapActions(['addCurrSystemLogObj']),
@@ -133,8 +133,8 @@
              * @param path
              */
             getFileLists:function (path) {
-                let params = {path:path,basename:'/logs//'};
-                apiLists.FileLists(params).then(response=>{
+                let params = {path:path,basename:'/logs//',sort:'time'};
+                apiLists.FileLists(params).then((response)=>{
                     if (response && response.data.code === 200){
                         this.fileLists = response.data.item;
                         this.getFileContent(this.fileLists[this.fileLists.length-1])
@@ -153,7 +153,7 @@
             getFileContent:function (item) {
                 let params = {path:item.path};
                 this.fileModel.name = item.label;
-                apiLists.FileRead(params).then(response=>{
+                apiLists.FileRead(params).then((response)=>{
                     if (response && response.data.code === 200){
                         this.fileModel.content = response.data.item.content;
                         this.addCurrSystemLogObj(this.fileModel);

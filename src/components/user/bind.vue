@@ -9,7 +9,7 @@
                         @uploadSuccess="uploadSuccess"/>
             </el-form-item>
             <el-form-item label="用户密码" prop="password">
-                <el-input :type="!showPassword ? 'password' : ''" v-model="userModel.password">
+                <el-input :type="!showPassword ? 'password' : 'text'" v-model="userModel.password">
                     <el-button slot="append" :icon="showPassword ? 'el-icon-open' : 'el-icon-turn-off'" @click="showPassword = !showPassword">
                         {{showPassword ? '显 示' : '隐 藏'}}
                     </el-button>
@@ -109,7 +109,6 @@
             this.userModel.username = this.username;
             this.userModel.avatar_url = this.avatarUrl;
             this.userModel.remember_token = this.token;
-            console.log(this.userModel)
         },
     }
 </script>

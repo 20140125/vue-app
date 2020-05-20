@@ -6,9 +6,9 @@
             </el-form-item>
         </el-form>
         <el-table :data="oauthLists.filter(data=>(!search || data.username.toLowerCase().includes(search.toLowerCase()) || data.oauth_type.toLowerCase().includes(search.toLowerCase())))">
-            <el-table-column label="#" prop="id"/>
-            <el-table-column label="用户名" prop="username"/>
-            <el-table-column label="头像">
+            <el-table-column label="#ID" prop="id" align="center" width="100px"/>
+            <el-table-column label="用户名" prop="username" align="center"/>
+            <el-table-column label="头像" align="center">
                 <template slot-scope="scope">
                     <el-image :src="scope.row.avatar_url"
                               style="width: 50px; height: 50px"
@@ -18,11 +18,11 @@
                     </el-image>
                 </template>
             </el-table-column>
-            <el-table-column label="用户邮箱" prop="email" show-tooltip-when-overflow/>
-            <el-table-column label="账号来源" prop="oauth_type"/>
-            <el-table-column label="创建时间" prop="created_at"/>
-            <el-table-column label="修改时间" prop="updated_at"/>
-            <el-table-column label="操作" align="right">
+            <el-table-column label="用户邮箱" prop="email" align="center" show-tooltip-when-overflow/>
+            <el-table-column label="账号来源" prop="oauth_type" align="center"/>
+            <el-table-column label="创建时间" prop="created_at" width="160px" align="center"/>
+            <el-table-column label="修改时间" prop="updated_at" width="160px" align="center"/>
+            <el-table-column label="操作" align="right" width="200px">
                 <template slot="header" slot-scope="scope">
                     <el-input v-model="search" placeholder="请输入关键词查询"/>
                 </template>
@@ -64,8 +64,8 @@
                 </el-form-item>
                 <el-form-item label="邮箱账号" prop="email">
                     <el-input v-model="OauthModel.email" ref="bindEmail">
-                        <el-button slot="append" plain type="primary" v-if="!OauthModel.code" @click="sendMail(OauthModel)" icon="el-icon-circle-plus">绑 定</el-button>
-                        <el-button slot="append" plain type="primary" v-else @click="sendMail(OauthModel)" icon="el-icon-edit">修 改</el-button>
+                        <el-button slot="append" v-if="!OauthModel.code" @click="sendMail(OauthModel)" icon="el-icon-circle-plus">绑 定</el-button>
+                        <el-button slot="append" v-else @click="sendMail(OauthModel)" icon="el-icon-edit">修 改</el-button>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="验证码" prop="code" v-if="showCode">
@@ -79,7 +79,7 @@
         <!---弹框-->
 
         <!---账号授权绑定-->
-        <el-dialog :visible.sync = 'oauthVisible' title="授权登录" :destroy-on-close="destroy_on_close" :center="center" :width="dialogWidth">
+        <el-dialog :visible.sync = 'oauthVisible' title="账户授权登录" :destroy-on-close="destroy_on_close" :center="center" :width="dialogWidth">
             <el-button plain v-for="(oauth,index) in oauthConfig" type="primary" :key="index" v-if="oauth.status === 1" @click="goto(oauth.name)">{{oauth.name.toUpperCase()}}</el-button>
         </el-dialog>
         <!---账号授权绑定-->
@@ -100,6 +100,19 @@
         name: "lists",
         components: {Submit, Delete, Radio,Upload},
         data(){
+            let verifyCode =  (rule,value,callback) => {
+                try {
+                    if (!Number.isInteger(value)) {
+                        callback(new Error('验证码格式错误'));
+                    }
+                    if (value.toString().length!==6) {
+                        callback(new Error('请输入6位长度的验证码'));
+                    }
+                    callback();
+                }catch (e) {
+                    callback(new Error('验证码格式错误'))
+                }
+            }
             return {
                 oauthLists:[],
                 roleLists:[],
@@ -127,7 +140,7 @@
                 showCode:false,
                 showPassword:false,
                 oauthVisible:false,
-                dialogWidth:'33%',
+                dialogWidth:'50%',
 
                 cgi:{
                     remove:$url.oauthDelete,
@@ -136,11 +149,11 @@
                     uploadUrl:process.env.API_ROOT+$url.fileUpload
                 },
                 rules:{
-                    username:[{required:true,message:'用户名不得为空',trigger:'blur'}],
-                    avatar_url:[{required:true,message:'用户头像不得为空',trigger:'blur'}],
-                    email:[{required:true,message:'邮箱不得为空',trigger:'blur'}],
-                    code:[{required:true,message:'验证码不得为空',trigger:'blur'}],
-                    remember_token:[{required:true,message:'授权TOKEN不得为空',trigger:'blur'}],
+                    username:[{required:true,message:'请输入用户名',trigger:'blur'}],
+                    avatar_url:[{required:true,message:'请上传用户头像',trigger:'blur'}],
+                    email:[{required:true,message:'请输入邮箱',trigger:'blur'},{type:'email',message: '邮箱格式不正确'}],
+                    code:[{required:true,message:'请输入验证码',trigger:'blur'},{validator:verifyCode,trigger: 'blur'}],
+                    remember_token:[{required:true,message:'请输入用户标识',trigger:'blur'}],
                 },
                 headers:{},
                 onlineUser:[],
@@ -148,7 +161,7 @@
             }
         },
         computed:{
-            ...mapGetters(['token','username','oauthConfig']),
+            ...mapGetters(['userInfo','oauthConfig']),
         },
         methods:{
             ...mapActions(['getOauthConfig','addTabs','addCurrTabs']),
@@ -163,7 +176,7 @@
              * TODO:页面跳转
              */
             goto:function(href) {
-                apiLists.OauthBind({oauth_type:href,remember_token:this.token}).then(response=>{
+                apiLists.OauthBind({oauth_type:href,remember_token:this.userInfo.token}).then(response=>{
                     if (response && response.data.code === 200) {
                         if (response.data.item.oauth_url) {
                             window.open(response.data.item.oauth_url);
@@ -212,16 +225,15 @@
              * @param oauthObject
              */
             sendMail:function(oauthObject){
-                if (!oauthObject.email) {
-                    this.$refs['bindEmail'].focus();
-                    this.$message.warning('Please Enter Email')
-                    return ;
-                }
-                let params = {email:oauthObject.email, id:oauthObject.id, username:oauthObject.username, remember_token:oauthObject.remember_token};
-                apiLists.SendEmail(params).then(response=>{
-                    if (response && response.data.code === 200) {
-                        this.$message({type:'success',message:response.data.msg});
-                        this.showCode = true;
+                this.$refs[this.reFrom].validate((valid)=>{
+                    if (valid) {
+                        let params = {email:oauthObject.email, id:oauthObject.id, username:oauthObject.username, remember_token:oauthObject.remember_token};
+                        apiLists.SendEmail(params).then(response=>{
+                            if (response && response.data.code === 200) {
+                                this.$message({type:'success',message:response.data.msg});
+                                this.showCode = true;
+                            }
+                        });
                     }
                 });
             },
@@ -230,21 +242,6 @@
              * @param oauthObject
              */
             checkCode:function(oauthObject) {
-                if (!oauthObject.code) {
-                    this.$refs['bindCode'].focus();
-                    this.$message.warning('Please Enter Code');
-                    return ;
-                }
-                if (!Number.isInteger(oauthObject.code)) {
-                    this.$refs['bindCode'].focus();
-                    this.$message.warning('verification code format error');
-                    return ;
-                }
-                if (oauthObject.code.length>6) {
-                    this.$refs['bindCode'].focus();
-                    this.$message.warning('Wrong verification code length');
-                    return ;
-                }
                 let params = {code:oauthObject.code, id:oauthObject.id};
                 apiLists.VerifyCode(params).then(response=>{
                     if (response && response.data.code === 200) {
@@ -284,7 +281,7 @@
         },
         mounted() {
             this.$nextTick(function () {
-                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.$store.state.login.auth_url);
+                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.userInfo.auth);
                 this.getOauthLists(this.page,this.limit);
             });
         }

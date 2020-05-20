@@ -6,9 +6,7 @@
                   lazy
                   :load="load">
             <el-table-column label="地区名称" prop="name"/>
-            <el-table-column label="天气">
-
-            </el-table-column>
+            <el-table-column label="天气" prop="info" :show-overflow-tooltip="true"></el-table-column>
             <el-table-column align="right">
                 <template slot="header" slot-scope="scope">
                     <el-input v-model="search" placeholder="输入关键词查询"/>
@@ -71,7 +69,7 @@
                 let params = { code:areaObj.code,id:areaObj.id };
                 apiLists.AreaWeather(params).then(response=>{
                     if (response && response.data.code === 200) {
-                        console.log(response);
+                        this.$confirm(JSON.stringify(response.data.item));
                     }
                 })
             }

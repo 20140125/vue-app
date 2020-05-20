@@ -6,23 +6,23 @@
             </el-form-item>
         </el-form>
         <el-table :data="reqRuleLists.filter(data=>(!search || data.username.toLowerCase().includes(search.toLowerCase()) || data.href.includes(search.toLowerCase())))">
-            <el-table-column label="#" prop="id" width="120px" sortable/>
-            <el-table-column label="申请人" prop="username" width="150px"/>
-            <el-table-column label="授权地址" prop="href"/>
-            <el-table-column label="授权状态" width="150px" v-if="username === 'admin'">
+            <el-table-column label="#ID" prop="id" width="70px" align="center" sortable/>
+            <el-table-column label="申请人" prop="username" width="130px" :show-tooltip-when-overflow="true" align="center"/>
+            <el-table-column label="授权地址" prop="href" align="center" :show-tooltip-when-overflow="true"/>
+            <el-table-column label="授权状态" align="center" v-if="userInfo.username === 'admin'">
                 <template slot-scope="scope">
                     <Radio :item="scope.row" :url="cgi.status" v-on:success="success"/>
                 </template>
             </el-table-column>
-            <el-table-column label="授权状态" width="150px" v-if="username !== 'admin'">
+            <el-table-column label="授权状态" align="center" v-if="userInfo.username !== 'admin'">
                 <template slot-scope="scope">
                     <el-button v-if="scope.row.status === 1" type="success" size="mini">已授权</el-button>
                     <el-button v-if="scope.row.status === 2" type="info" size="mini">未授权</el-button>
                 </template>
             </el-table-column>
-            <el-table-column label="创建时间" prop="created_at" sortable/>
-            <el-table-column label="修改时间" prop="updated_at" sortable/>
-            <el-table-column label="权限时效" prop="expires" sortable/>
+            <el-table-column label="创建时间" prop="created_at"  align="center" width="160px" sortable/>
+            <el-table-column label="修改时间" prop="updated_at" align="center" width="160px" sortable/>
+            <el-table-column label="权限时效" prop="expires" align="center" width="160px" sortable/>
             <el-table-column label="操作" width="200px" align="right">
                 <template slot="header" slot-scope="scope">
                     <el-input v-model="search" placeholder="请输入关键字查询"/>
@@ -69,7 +69,7 @@
                 <el-form-item label="授权说明" prop="desc">
                     <el-input v-model="reqRuleModel.desc" type="textarea"/>
                 </el-form-item>
-                <el-form-item label="是否授权" prop="status" v-if="username==='admin'">
+                <el-form-item label="是否授权" prop="status" v-if="userInfo.username==='admin'">
                     <el-radio-group v-model="reqRuleModel.status" size="small">
                         <el-radio-button label="2">否</el-radio-button>
                         <el-radio-button label="1">是</el-radio-button>
@@ -182,7 +182,7 @@
             }
         },
         computed:{
-            ...mapGetters(['username','token'])
+            ...mapGetters(['userInfo'])
         },
         methods:{
             /**
@@ -278,7 +278,7 @@
         },
         mounted() {
             this.$nextTick(function () {
-                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.$store.state.login.auth_url);
+                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.userInfo.auth);
                 this.getReqRuleLists(this.page,this.limit)
             });
         }

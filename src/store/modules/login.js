@@ -4,30 +4,27 @@ import code from '../../api/code'
 import router from '../../router'
 import func from '../../api/func'
 import io from 'socket.io-client'
-const md5 = require('js-md5');
 const state={
+    //登录标识
     token:localStorage.getItem('token'),
-    socketServer:'',
-    avatarUrl:'',
-    websocketServer:'',
-    username:'',
-    auth_url:'',
+    //用户详细信息
+    userInfo:{
+        socketServer:'',
+        websocketServer:'',
+        username:'',
+        auth_url:'',
+        role_id:0,
+        uuid:'',
+        token:''
+    },
     menuLists:[],
     oauthConfig:[],
-    role_id:0,
-    uuid:''
 };
 const getters={
-    token:state=>state.token,
-    username:state=>state.username,
-    auth_url:state=>state.auth_url,
     menuLists:state=>state.menuLists,
     oauthConfig:state=>state.oauthConfig,
-    socketServer:state=>state.socketServer,
-    avatarUrl:state=>state.avatarUrl,
-    websocketServer:state=>state.websocketServer,
-    role_id:state=>state.role_id,
-    uuid:state=>state.uuid
+    userInfo: state=>state.userInfo,
+    token:state=>state.token
 };
 const mutations={
     /**
@@ -47,69 +44,25 @@ const mutations={
         state.oauthConfig = oauthConfig;
     },
     /**
-     * todo:权限地址
+     * todo:设置用户信息
      * @param state
-     * @param auth_url
+     * @param userInfo
      */
-    setAuthUrl:function (state,auth_url) {
-        state.auth_url = auth_url;
+    setUserInfo:function(state,userInfo) {
+        state.userInfo = userInfo;
+        state.userInfo.socketServer = io(userInfo.socket);
+        state.userInfo.websocketServer = new WebSocket(userInfo.websocket);
+        localStorage.setItem('token',userInfo.token);
     },
     /**
-     * todo：用户token
+     * todo:设置token
      * @param state
      * @param token
      */
     setToken:function (state,token) {
         state.token = token;
+        state.userInfo.token = token
         localStorage.setItem('token',token);
-    },
-    /**
-     * todo：用户名称
-     * @param state
-     * @param username
-     */
-    setUserName:function (state,username) {
-        state.username = username;
-    },
-    /**
-     * todo：即时通讯服务
-     * @param state
-     * @param ip
-     */
-    setSocketServer:function (state,ip) {
-        state.socketServer = io(ip);
-    },
-    /**
-     * todo：用户头像
-     * @param state
-     * @param avatarUrl
-     */
-    setAvatarUrl:function (state,avatarUrl) {
-        state.avatarUrl = avatarUrl;
-    },
-    /**
-     * todo：websocketServer
-     * @param state
-     * @param websocketServer
-     */
-    setWebsocketServer:function (state,websocketServer) {
-        state.websocketServer = new WebSocket(websocketServer);
-    },
-    /**
-     * todo：角色ID
-     * @param state
-     * @param role_id
-     */
-    setRoleId:function (state,role_id) {
-        state.role_id = role_id;
-    },
-    /**
-     * todo：用户ID
-     * @param state
-     * @param uuid
-     */
-    setUUID:function (state,uuid) {
-        state.uuid = uuid;
     }
 };
 const actions={
@@ -120,12 +73,9 @@ const actions={
      * @param users
      */
     loginSystem:function ({state,commit},users) {
-        apiLists.LoginSys(users).then(response=>{
+        apiLists.LoginSys(users).then((response)=>{
             if (response && response.data.code === code.SUCCESS) {
-                commit('setToken',response.data.item.token);
-                commit('setUserName',response.data.item.username);
-                commit('setRoleId',response.data.item.role_id);
-                commit('setUUID',response.data.item.uuid);
+                commit('setUserInfo',response.data.item);
                 router.push({path:'/admin/index'});
             }
         });
@@ -137,7 +87,7 @@ const actions={
      * @param name
      */
     getOauthConfig:function({state,commit},name) {
-        apiLists.GetConfig({name:name}).then(response=>{
+        apiLists.GetConfig({name:name}).then((response)=>{
             if (response && response.data.code === code.SUCCESS) {
                 commit('setOauthConfig',response.data.item);
             }
@@ -150,12 +100,11 @@ const actions={
      * @param username
      */
     getAuthMenu:function({state,commit}) {
-        if (state.menuLists.length>0){
+        if (state.menuLists.length>0) {
             commit('setMenuLists',state.menuLists);
-            return ;
         }
-        if (state.username) {
-            apiLists.AuthTree([]).then(response=>{
+        if (state.userInfo.username) {
+            apiLists.AuthTree([]).then((response)=> {
                 if (response && response.data.code === code.SUCCESS) {
                     commit('setMenuLists',func.set_tree(response.data.item));
                 }
@@ -171,10 +120,9 @@ const actions={
      * @param token
      */
     logoutSystem:function ({state,commit},token) {
-        apiLists.LogoutSys({token:token}).then(response=>{
+        apiLists.LogoutSys({token:token}).then((response)=>{
             if (response && response.data.code === code.SUCCESS) {
                 commit('setToken','');
-                commit('setUserName','');
                 router.push({path:'/login'});
             }
         })
@@ -187,7 +135,7 @@ const actions={
      */
     saveSystemLog:function ({state,commit},params) {
         params.username = state.username;
-        apiLists.LogSave(params).then(response=>{
+        apiLists.LogSave(params).then((response)=>{
             if (response && response.data.code === code.SUCCESS) {
                 Message.success(response.data.msg);
             }
@@ -201,7 +149,7 @@ const actions={
      */
     checkAuth:function ({state,commit},params) {
         params.url = params.url.replace('v1','admin');
-        if (state.auth_url.indexOf(params.url)===-1 && params.url !=='/admin/index') {
+        if (state.userInfo.auth.indexOf(params.url)===-1 && params.url !=='/admin/index') {
             let info = '你没有访问权限，请联系管理员【' + code.QQ + '】检验数据的正确性！';
             MessageBox.alert(info).then(() => {
                 let req = {

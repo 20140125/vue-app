@@ -1,10 +1,10 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText">
         <el-row :gutter="24">
-            <el-col :xl="6" :lg="6">
+            <el-col :xl="8" :lg="8">
                 <el-card shadow="always">
                     <div style="text-align: center">
-                        <el-avatar :src="avatarUrl" :size="100" :alt="username"/>
+                        <el-avatar :src="userInfo.avatar_url" :size="100" :alt="userInfo.username"/>
                     </div>
                     <div class="message">
                         <p><i class="el-icon-user"/> {{userCenter.u_name}}</p>
@@ -23,13 +23,13 @@
                     </div>
                 </el-card>
             </el-col>
-            <el-col :xl="18" :lg="18">
+            <el-col :xl="16" :lg="16">
                 <el-tabs type="border-card">
                     <el-tab-pane label="基础设置"/>
                     <el-card shadow="always">
                         <el-form :model="userCenter" label-width="80px" label-position="left" ref="center" :rules="rules">
                             <el-form-item label="头像">
-                                <el-avatar :src="avatarUrl" :size="100" :alt="username"/>
+                                <el-avatar :src="userInfo.avatar_url" :size="100" :alt="userInfo.username"/>
                             </el-form-item>
                             <el-form-item label="用户名" prop="u_name">
                                 <el-input v-model="userCenter.u_name" placeholder="用户名"/>
@@ -133,7 +133,7 @@
             }
         },
         computed:{
-            ...mapGetters(['username','avatarUrl'])
+            ...mapGetters(['userInfo'])
         },
         methods:{
             /**
@@ -182,7 +182,7 @@
              * @param pid
              */
             getCity:function(pid) {
-                apiLists.AreaLists({parent_id:pid},$url.areaLists).then(response=>{
+                apiLists.AreaLists({parent_id:pid},$url.areaLists).then((response)=>{
                     if (response && response.data.code === 200) {
                         this.setOptions(response.data.item);
                     }

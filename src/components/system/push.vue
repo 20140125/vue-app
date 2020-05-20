@@ -145,7 +145,7 @@
             }
         },
         computed:{
-            ...mapGetters(['username']),
+            ...mapGetters(['userInfo']),
         },
         methods:{
             /**
@@ -244,13 +244,14 @@
             updatePush:function (item) {
                 this.title='修改站内通知';
                 this.syncVisible = true;
+                console.log(item);
                 this.pushModel = item;
                 this.url = this.cgi.update;
             }
         },
         mounted() {
             this.$nextTick(function () {
-                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.$store.state.login.auth_url);
+                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.userInfo.auth);
                 this.getPushLists(this.page,this.limit)
             });
         }

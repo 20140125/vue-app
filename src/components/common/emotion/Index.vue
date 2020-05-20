@@ -86,7 +86,7 @@
         position: absolute;
         bottom: 310px;
         width: 500px;
-        left: 300px;
+        /*left: 300px;px*/
     }
     .emotion-box {
         margin: 0 auto;

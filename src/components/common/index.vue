@@ -59,7 +59,7 @@
             }
         },
         computed:{
-            ...mapGetters(['socketServer']),
+            ...mapGetters(['userInfo']),
         },
         methods:{
             ...mapMutations(['setToken']),
@@ -140,7 +140,7 @@
                 //图表初始化
                 this.echarts = echarts.init(document.getElementById('charts'));
                 //用户通知
-                this.socketServer.on('charts',(response)=>{
+                this.userInfo.socketServer.on('charts',(response)=>{
                     //日期
                     this.xAxisData = response.day;
                     //系统日志总量

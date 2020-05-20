@@ -8,6 +8,7 @@
 </template>
 
 <script>
+    import apiLists from '../../api/api'
     import {mapActions} from 'vuex'
     export default {
         name: "Radio",
@@ -29,8 +30,8 @@
             setStatus:function (item) {
                 this.checkAuth({url:this.url});
                 let params = {status:item.status,id:item.id,token:this.$store.state.login.token,'act':'status'};
-                this.$http.post(this.url,params).then(response=>{
-                    if (response && response.data.code === 200){
+                apiLists.SaveData(params,this.url).then((response)=> {
+                    if (response && response.data.code === 200) {
                         let data = {href:this.url, msg:response.data.msg, token:this.$store.state.login.token};
                         this.saveSystemLog(data);
                         this.$message({type:'success',message:response.data.msg});

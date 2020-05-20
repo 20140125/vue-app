@@ -6,6 +6,7 @@
 </template>
 
 <script>
+    import apiLists from '../../api/api'
     import {mapActions} from 'vuex'
     export default {
         name: "Submit",
@@ -22,12 +23,16 @@
         },
         methods:{
             ...mapActions(['saveSystemLog','checkAuth']),
+            /**
+             * todo:表单提交
+             * @param ref
+             */
             submitForm:function(ref){
                 this.refs[ref].validate((valid)=>{
-                    if (valid){
+                    if (valid) {
                         this.checkAuth({url:this.url});
                         this.model.token = this.$store.state.login.token;
-                        this.$http.post(this.url,this.model).then(response=>{
+                        apiLists.SaveData(this.model,this.url).then((response)=> {
                             if (response && response.data.code === 200) {
                                 let data = {href:this.url, msg:response.data.msg, token:this.$store.state.login.token};
                                 this.saveSystemLog(data);
@@ -35,14 +40,16 @@
                                 this.$emit('success');
                                 return false;
                             }
-                        },error=>{
-                            console.log(error);
-                        });
+                        })
                         return true;
                     }
                     this.$message({type:'warning',message:'请检查字段完整性~'});
                 });
             },
+            /**
+             * todo:表单重置
+             * @param ref
+             */
             resetForm:function (ref) {
                 this.refs[ref].resetFields();
             }

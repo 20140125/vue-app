@@ -2,7 +2,7 @@
     <div v-loading="loading" :element-loading-text="loadingText">
         <el-row :gutter="24">
             <!--分类列表-->
-            <el-col :xl="{'span':4}" :lg="{'span':4}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" style="margin-bottom: 20px">
+            <el-col :xl="{'span':5}" :lg="{'span':5}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" style="margin-bottom: 20px">
                 <el-input placeholder="输入关键字搜索" v-model="filterText" style="margin-bottom: 20px">
                     <el-button slot="append" icon="el-icon-plus" @click="addCategory"/>
                 </el-input>
@@ -14,6 +14,7 @@
                          @node-click="getApiDetail"
                          default-expand-all
                          ref="tree"
+                         id="tree"
                          :node-key="props.id"
                          style="background-color: #393d49">
                 </el-tree>
@@ -21,15 +22,14 @@
             <!--分类列表-->
 
             <!--接口详情-->
-            <el-col :xl="{'span':19,'push':1}" :lg="{'span':19,'push':1}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}">
+            <el-col :xl="{'span':18,'push':1}" :lg="{'span':18,'push':1}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}">
                 <el-tabs type="border-card" v-model="apiName" v-if="docVisible">
                     <el-tab-pane :label="apiName" :key="apiName" :name="apiName"/>
                     <el-card shadow="always">
                         <el-form>
                             <el-form-item :inline="true">
                                 <el-select v-model="codeStyle" v-if="mavonBool">
-                                    <el-option v-for="(code,index) in codeStyleList" :label="index" :value="index"
-                                               :key="index"/>
+                                    <el-option v-for="(code,index) in codeStyleList" :label="index" :value="index" :key="index"/>
                                 </el-select>
                                 <el-button plain type="primary" @click="mavonBool = !mavonBool" icon="el-icon-edit-outline" style="float: right">修 改</el-button>
                             </el-form-item>
@@ -150,7 +150,7 @@
             }
         },
         computed:{
-            ...mapGetters(['docVisible','docModel','docName'])
+            ...mapGetters(['docVisible','docModel','docName','userInfo'])
         },
         methods:{
             ...mapActions(['addDocVisible','addDocModel','saveSystemLog']),
@@ -205,9 +205,10 @@
                 this.menuVisible = false;
                 this.menuVisible = true;
                 const menu = document.querySelector('#menu');
+                const tree = document.getElementById('tree');
                 this.scrollTop = func.get_scroll_top();
                 document.addEventListener('click', this.foo);
-                menu.style.left = '290px';
+                menu.style.left = tree.offsetWidth + 50 + 'px';
                 menu.style.top = MouseEvent.clientY + this.scrollTop - 125 + 'px';
                 this.categoryModel = object;
             },
@@ -260,15 +261,15 @@
                     this.$message({type:'warning',message:'upload image format error'});
                     return false;
                 }
-                if (file.size>2*1024*1024){
+                if (file.size>2*1024*1024) {
                     this.$message({type:'warning',message:'upload image size error'});
                     return false;
                 }
                 let params = new FormData();
                 params.append("file",file);
-                params.append("token",this.token);
+                params.append("token",this.userInfo.token);
                 params.append("rand",true);
-                let config = {headers: {"Content-Type": "multipart/form-data","Authorization":`${func.set_password(func.set_random(32),func.set_random(12))}${this.token}${func.set_password(func.set_random(32),func.set_random(12))}`}}
+                let config = {headers: {"Content-Type": "multipart/form-data","Authorization":`${func.set_password(func.set_random(32),func.set_random(12))}${this.userInfo.token}${func.set_password(func.set_random(32),func.set_random(12))}`}}
                 this.$http.post(this.cgi.uploadUrl,params,config).then(response=>{
                     this.$refs['md'].$img2Url(post, response.data.item.src);
                 })
@@ -339,7 +340,7 @@
         },
         mounted() {
             this.$nextTick(function () {
-                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.$store.state.login.auth_url);
+                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.userInfo.auth);
                 this.getCategoryLists();
             });
         }

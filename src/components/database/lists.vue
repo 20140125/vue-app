@@ -1,21 +1,21 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText">
-        <el-table :data="databaseLists.filter(data=>(!search || data.name.toLowerCase().includes(search.toLowerCase())))">
-            <el-table-column label="表名" prop="name" width="150"/>
-            <el-table-column label="版本号" prop="version" width="100"/>
-            <el-table-column label="引擎" prop="engine" width="100"/>
-            <el-table-column label="数据表大小" prop="data_length" sortable width="120"/>
-            <el-table-column label="自增量" prop="auto_increment" sortable width="100"/>
-            <el-table-column label="字符集编码" prop="collation"/>
-            <el-table-column label="备注">
+        <el-table :data="databaseLists.filter(data=>(!search || data.name.toLowerCase().includes(search.toLowerCase())))" width="100%">
+            <el-table-column label="表名" prop="name" :show-tooltip-when-overflow="true" min-width="100" align="center"/>
+            <el-table-column label="版本号" prop="version" min-width="100" align="center"/>
+            <el-table-column label="引擎" prop="engine" min-width="100" align="center"/>
+            <el-table-column label="数据表大小" prop="data_length" align="center" sortable min-width="120"/>
+            <el-table-column label="自增量" prop="auto_increment" align="center" sortable min-width="100"/>
+            <el-table-column label="字符集编码" prop="collation" :show-tooltip-when-overflow="true" min-width="120" align="center"/>
+            <el-table-column label="备注" align="center" min-width="150" :show-tooltip-when-overflow="true">
                 <template slot-scope="scope">
                     <el-input v-model="scope.row.comment" :id="scope.row.name" ref="comment"
                               v-if="scope.row.name === name && edit" placeholder="请输入数据表备注"/>
                     <div v-html="scope.row.comment" v-else></div>
                 </template>
             </el-table-column>
-            <el-table-column label="创建时间" sortable prop="create_time"/>
-            <el-table-column width="350px" align="right">
+            <el-table-column label="创建时间" sortable prop="create_time" align="center" min-width="160"/>
+            <el-table-column min-width="350" align="right">
                 <template slot="header" slot-scope="scope">
                     <el-input v-model="search" placeholder="输入关键词查询"/>
                 </template>
@@ -38,7 +38,7 @@
 <script>
     import apiLists from '../../api/api';
     import func from '../../api/func'
-    import {mapActions} from 'vuex'
+    import {mapActions, mapGetters} from 'vuex'
     export default {
         name: "lists",
         data(){
@@ -53,6 +53,9 @@
                 //细化权限按钮
                 btn:{}
             }
+        },
+        computed:{
+            ...mapGetters(['userInfo'])
         },
         methods:{
             ...mapActions(['saveSystemLog']),
@@ -150,7 +153,7 @@
         },
         mounted() {
             this.$nextTick(function () {
-                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.$store.state.login.auth_url);
+                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.userInfo.auth);
                 this.getDatabaseLists()
             });
         }

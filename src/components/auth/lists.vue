@@ -116,7 +116,7 @@
             }
         },
         computed:{
-            ...mapGetters(['username'])
+            ...mapGetters(['userInfo'])
         },
         methods:{
             /**
@@ -184,7 +184,7 @@
         },
         mounted() {
             this.$nextTick(function () {
-                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.$store.state.login.auth_url);
+                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.userInfo.auth);
                 this.getAuthLists(this.id);
             });
         }

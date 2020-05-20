@@ -1,14 +1,14 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText">
-        <el-form :inline="true" style="margin-top: 10px" v-if="btn.add && role_id === md5('1')">
+        <el-form :inline="true" style="margin-top: 10px" v-if="btn.add && userInfo.role_id === md5('1')">
             <el-form-item style="float:right;">
                 <el-button icon="el-icon-plus" type="primary" size="medium" plain @click="addUser">添 加</el-button>
             </el-form-item>
         </el-form>
         <el-table :data="userLists.filter(data=>(!search || data.username.toLowerCase().includes(search.toLowerCase()) || data.email.toLowerCase().includes(search.toLowerCase()) || data.phone_number.toLowerCase().includes(search.toLowerCase())))">
-            <el-table-column label="#" prop="id"/>
-            <el-table-column label="管理员" prop="username"/>
-            <el-table-column label="头像">
+            <el-table-column label="#" prop="id" width="80" align="center"/>
+            <el-table-column label="管理员" prop="username" align="center"/>
+            <el-table-column label="头像" align="center">
                 <template slot-scope="scope">
                     <el-image :src="scope.row.avatar_url"
                               style="width: 50px; height: 50px"
@@ -18,16 +18,16 @@
                     </el-image>
                 </template>
             </el-table-column>
-            <el-table-column label="邮箱" prop="email" show-tooltip-when-overflow/>
-            <el-table-column label="手机号" prop="phone_number"/>
-            <el-table-column label="允许登录" v-if="role_id === md5('1')">
+            <el-table-column label="邮箱" prop="email" align="center" :show-tooltip-when-overflow="true"/>
+            <el-table-column label="手机号" prop="phone_number" align="center" :show-tooltip-when-overflow="true"/>
+            <el-table-column label="允许登录" v-if="userInfo.role_id === md5('1')" align="center" width="120">
                 <template slot-scope="scope">
                     <Radio :item="scope.row" :url="cgi.status"/>
                 </template>
             </el-table-column>
-            <el-table-column label="创建时间" prop="created_at"/>
-            <el-table-column label="修改时间" prop="updated_at"/>
-            <el-table-column label="操作" align="right" width="200px">
+            <el-table-column label="创建时间" prop="created_at" width="160" align="center"/>
+            <el-table-column label="修改时间" prop="updated_at" width="160" align="center"/>
+            <el-table-column label="操作" align="right" width="260">
                 <template slot="header" slot-scope="scope">
                     <el-input v-model="search"  placeholder="请输入关键词查询"/>
                 </template>
@@ -54,7 +54,7 @@
         <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal"  :center="center">
             <el-form :label-width="labelWidth" :model="userModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="管理员" prop="username">
-                    <el-input v-model="userModel.username" placeholder="管理员名称"/>
+                    <el-input v-model="userModel.username" :readonly="act === 'add'" placeholder="管理员名称"/>
                 </el-form-item>
                 <el-form-item label="用户头像" prop="avatar_url">
                     <Upload :avatar_url="userModel.avatar_url" :username="userModel.username"
@@ -69,7 +69,7 @@
                 <el-form-item label="手机号" prop="phone_number" v-if="act === 'update'">
                     <el-input v-model="userModel.phone_number" type="email" placeholder="手机号"/>
                 </el-form-item>
-                <el-form-item label="角色" prop="role_id" v-if="role_id === md5('1')">
+                <el-form-item label="角色" prop="role_id" v-if="userInfo.role_id === md5('1')">
                     <el-select v-model="userModel.role_id" style="width: 100%">
                         <el-option v-for="(role,index) in roleLists" :key="index" :label="role.role_name" :value="role.id"/>
                     </el-select>
@@ -141,7 +141,7 @@
             }
         },
         computed:{
-            ...mapGetters(['username','role_id'])
+            ...mapGetters(['userInfo'])
         },
         methods:{
             /**
@@ -214,7 +214,7 @@
         },
         mounted() {
             this.$nextTick(function () {
-                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.$store.state.login.auth_url);
+                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.userInfo.auth);
                 this.getUserLists(this.page,this.limit);
             });
         }

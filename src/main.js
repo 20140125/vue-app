@@ -45,14 +45,7 @@ router.beforeEach((to,from,next)=>{
         apiLists.CheckToken({token:store.state.login.token}).then(response=>{
             if (response && response.data.code === code.SUCCESS) {
                 next({path:'/admin/index',redirect:to.path});
-                store.commit('setAuthUrl',response.data.item.auth);
-                store.commit('setToken',response.data.item.token);
-                store.commit('setUserName',response.data.item.username);
-                store.commit('setSocketServer',response.data.item.socket);
-                store.commit('setAvatarUrl',response.data.item.avatar_url);
-                store.commit('setWebsocketServer',response.data.item.websocket);
-                store.commit('setRoleId',response.data.item.role_id);
-                store.commit('setUUID',response.data.item.uuid);
+                store.commit('setUserInfo',response.data.item);
                 return ;
             }
             next();
@@ -60,21 +53,14 @@ router.beforeEach((to,from,next)=>{
     }  else {
         apiLists.CheckToken({token:store.state.login.token}).then(response=>{
             if (response && response.data.code !== code.SUCCESS){
-                store.commit('setToken','');
                 next({path:'/login',redirect:to.path});
+                store.commit('setToken','');
                 return ;
             }
-            store.commit('setAuthUrl',(response && response.data && response.data.item) ? response.data.item.auth:'');
-            store.commit('setToken',(response && response.data && response.data.item) ? response.data.item.token:'');
-            store.commit('setUserName',(response && response.data && response.data.item) ? response.data.item.username:'');
-            store.commit('setSocketServer',(response && response.data && response.data.item) ? response.data.item.socket:code.Socket);
-            store.commit('setAvatarUrl',(response && response.data && response.data.item) ? response.data.item.avatar_url:'');
-            store.commit('setWebsocketServer',(response && response.data && response.data.item) ? response.data.item.websocket:code.Websocket);
-            store.commit('setRoleId',(response && response.data && response.data.item) ? response.data.item.role_id : 0);
-            store.commit('setUUID',(response && response.data && response.data.item) ? response.data.item.uuid : '');
+            store.commit('setUserInfo',response.data.item);
             //用户权限验证 (admin  最高权限不做权限验证)
-            let commonAuth = ['Welcome','UserBind','Empty'];
-            if (store.state.login.auth_url.indexOf(to.path)===-1 && !commonAuth.includes(to.name)) {
+            let commonAuth = ['Welcome','UserBind','Empty','chatDemo'];
+            if (store.state.login.userInfo.auth.indexOf(to.path)===-1 && !commonAuth.includes(to.name)) {
                 let info = '你没有访问权限，请联系管理员【'+code.QQ+'】检验数据的正确性';
                 ElementUI.MessageBox.alert(info).then(()=>{
                     let req = {

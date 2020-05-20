@@ -45,8 +45,8 @@
              * TODO：图片上传成功
              * @param response
              */
-            uploadSuccess:function(response){
-                if (response && response.code === 200){
+            uploadSuccess:function(response) {
+                if (response && response.code === 200) {
                     this.$message({type:'success',message:response.msg});
                     this.$emit('uploadSuccess',response.item.src)
                     return ;
@@ -57,21 +57,21 @@
              * TODO：图片上传前
              * @param file
              */
-            beforeUpload:function(file){
+            beforeUpload:function(file) {
                 let type = file.type;
                 let typeArr = ['image/jpg','image/gif','image/png','image/jpeg'];
-                if (!typeArr.includes(type)){
+                if (!typeArr.includes(type)) {
                     this.$message({type:'warning',message:'upload image format error'});
                     return false;
                 }
-                if (file.size>2*1024*1024){
+                if (file.size>2*1024*1024) {
                     this.$message({type:'warning',message:'upload image size error'});
                     return false;
                 }
                 return true;
             },
         },
-        created(){
+        created() {
             this.fileData.token = this.$store.state.login.token;
             this.fileData.rand = true;
             this.headers.Authorization = `${func.set_password(func.set_random(32),func.set_random(12))}${this.fileData.token}${func.set_password(func.set_random(32),func.set_random(12))}`

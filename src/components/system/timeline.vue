@@ -9,7 +9,7 @@
         </el-form>
         <el-table :data="timeLineList">
             <el-table-column label="#" prop="id" width="100px"/>
-            <el-table-column label="文案" prop="content"/>
+            <el-table-column label="文案" prop="content" :show-tooltip-when-overflow="true"/>
             <el-table-column label="时间" prop="timestamp"/>
             <el-table-column label="类型">
                 <template slot-scope="scope">
@@ -68,6 +68,7 @@
     import func from '../../api/func'
     import Delete from "../common/Delete";
     import Submit from "../common/Submit";
+    import {mapGetters} from 'vuex'
     export default {
         name: "timeline",
         components: {Delete,Submit},
@@ -110,6 +111,9 @@
                     {'key':'WARNING','val':'warning'},
                 ],
             }
+        },
+        computed:{
+            ...mapGetters(['userInfo'])
         },
         methods:{
             /**
@@ -173,7 +177,7 @@
         },
         mounted() {
             this.$nextTick(function () {
-                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.$store.state.login.auth_url);
+                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.userInfo.auth);
                 this.getTimeLineList(this.page,this.limit);
             });
         }

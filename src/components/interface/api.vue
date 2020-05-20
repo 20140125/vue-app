@@ -2,7 +2,7 @@
     <div v-loading="loading" :element-loading-text="loadingText">
         <el-row :gutter="24">
             <!--分类列表-->
-            <el-col :xl="{'span':4}" :lg="{'span':4}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" style="margin-bottom: 20px">
+            <el-col :xl="{'span':5}" :lg="{'span':5}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" style="margin-bottom: 20px">
                 <el-input placeholder="输入关键字搜索" v-model="filterText" style="margin-bottom: 20px">
                     <el-button slot="append" icon="el-icon-plus" @click="addCategory"/>
                 </el-input>
@@ -14,6 +14,7 @@
                          @node-click="getApiDetail"
                          default-expand-all
                          ref="tree"
+                         id="tree"
                          :node-key="props.id"
                          style="background-color: #393d49">
                 </el-tree>
@@ -21,7 +22,7 @@
             <!--分类列表-->
 
             <!--接口详情-->
-            <el-col :xl="{'span':19,'push':1}" :lg="{'span':19,'push':1}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" v-show="apiVisible">
+            <el-col :xl="{'span':18,'push':1}" :lg="{'span':18,'push':1}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" v-show="apiVisible">
                 <el-tabs type="border-card" v-model="apiName">
                     <el-tab-pane :label="apiName" :key="apiName" :name="apiName"/>
                     <el-card shadow="always">
@@ -156,6 +157,7 @@
     //括号匹配
     require('codemirror/addon/edit/matchbrackets.js');
     import {mapGetters,mapActions} from 'vuex'
+    import doc from "./doc";
     export default {
         name: "lists",
         components: {Submit, Delete, Radio,codemirror},
@@ -261,7 +263,7 @@
             }
         },
         computed:{
-            ...mapGetters(['apiVisible','apiModel','interfaceName'])
+            ...mapGetters(['apiVisible','apiModel','interfaceName','userInfo'])
         },
         methods:{
             ...mapActions(['addApiVisible','addApiModel','saveSystemLog']),
@@ -312,9 +314,10 @@
                 this.menuVisible = false;
                 this.menuVisible = true;
                 const menu = document.querySelector('#menu');
+                const tree = document.getElementById('tree');
                 this.scrollTop = func.get_scroll_top();
                 document.addEventListener('click', this.foo);
-                menu.style.left = '290px';
+                menu.style.left = tree.offsetWidth + 50 +'px';
                 menu.style.top = MouseEvent.clientY + this.scrollTop - 125 + 'px';
                 this.categoryModel = object;
             },
@@ -439,7 +442,7 @@
         },
         mounted() {
             this.$nextTick(function () {
-                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.$store.state.login.auth_url);
+                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.userInfo.auth);
                 this.getCategoryLists();
             });
         }

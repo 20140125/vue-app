@@ -60,7 +60,7 @@
     }
     .CodeMirror-hscrollbar{
         left: 0 !important;
-        height:9px !important;
+        height:2px !important;
     }
     .el-dialog{
         border-radius: 10px;
@@ -100,19 +100,19 @@
     ::-webkit-scrollbar-track {
         -webkit-box-shadow:inset 0 0 0 rgb(255, 255, 255);
         opacity:0.3;
-        border-radius:5px;
+        border-radius:1px;
     }
     /* 滚动条滑块 */
     ::-webkit-scrollbar-thumb {
-        border-radius:5px;
-        background: rgb(255, 211, 224);
+        border-radius:1px;
+        background: #fff;
         opacity:0.3;
-        -webkit-box-shadow:inset 0 0 5px rgb(255, 211, 224);
+        -webkit-box-shadow:inset 0 0 0 #fff;
     }
     /* 滚动条滑块 */
     ::-webkit-scrollbar-thumb:window-inactive {
-        background: rgb(255, 211, 224);
+        background: #fff;
         opacity:0.3;
-        border-radius:5px;
+        border-radius:1px;
     }
 </style>

@@ -29,7 +29,7 @@ const errorHandle = (status,msg) => {
             Message.warning(msg);
             break;
         default:
-            Message.warning('network error');
+            Message.warning('network error, please try again later');
             break;
     }
 };

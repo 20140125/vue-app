@@ -7,15 +7,15 @@
         </el-form>
         <!--table 表格-->
         <el-table :data="roleLists.filter(data=>(!search || data.role_name.includes(search)))">
-            <el-table-column label="#" prop='id' sortable/>
-            <el-table-column label="角色名称" prop="role_name"/>
-            <el-table-column label="显示状态" v-if="btn.edit">
+            <el-table-column label="#ID" prop='id' sortable align="center" width="100px"/>
+            <el-table-column label="角色名称" prop="role_name" align="center"/>
+            <el-table-column label="显示状态" v-if="btn.edit" align="center">
                 <template slot-scope="scope">
                     <Radio :item="scope.row" :url="cgi.status"/>
                 </template>
             </el-table-column>
-            <el-table-column label="创建时间" sortable prop="created_at"/>
-            <el-table-column label="修改时间" sortable prop="updated_at"/>
+            <el-table-column label="创建时间" sortable prop="created_at" align="center"/>
+            <el-table-column label="修改时间" sortable prop="updated_at" align="center"/>
             <el-table-column label="操作" align="right">
                 <template slot="header" slot-scope="scope">
                     <el-input v-model="search" placeholder="请输入关键词查询"/>
@@ -79,6 +79,7 @@
     import Radio from "../common/Radio";
     import Delete from "../common/Delete";
     import Submit from "../common/Submit";
+    import {mapGetters} from "vuex";
     export default {
         name: "lists",
         components: {Submit, Delete, Radio},
@@ -123,6 +124,9 @@
                 //细化权限按钮
                 btn:{},
             }
+        },
+        computed:{
+            ...mapGetters(['userInfo']),
         },
         methods:{
             /**
@@ -219,7 +223,7 @@
         },
         mounted() {
             this.$nextTick(function () {
-                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.$store.state.login.auth_url);
+                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.userInfo.auth);
                 this.getRoleLists(this.page,this.limit)
             });
         }

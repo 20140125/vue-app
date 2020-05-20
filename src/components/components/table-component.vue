@@ -112,7 +112,7 @@
              */
             removeResource:function (item,index) {
                 this.$confirm('This operation will always delete the record, whether to continue？','Delete Record',{confirmButtonText:'Confirm', cancelButtonText:'Cancel', type:'warning'}).then(()=>{
-                    apiLists.Remove({id:item.id},this.remove).then(response=>{
+                    apiLists.RemoveData({id:item.id},this.remove).then(response=>{
                         if (response && response.data.code === 200) {
                             this.tableData.splice(index,1);
                             let data = { href:this.remove, msg:response.data.msg, token:this.$store.state.login.token };

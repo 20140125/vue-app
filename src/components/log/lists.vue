@@ -9,7 +9,11 @@
                     <el-link type="success" :href="scope.row.url" target="_blank">[{{scope.row.url}}]</el-link>　{{scope.row.log}}　
                 </template>
             </el-table-column>
-            <el-table-column label="地址" prop="ip_address" width="200px"/>
+            <el-table-column label="地址" width="200px" :show-overflow-tooltip="true">
+                <template slot-scope="scope">
+                    {{scope.row.local}}【{{scope.row.ip_address}}】
+                </template>
+            </el-table-column>
             <el-table-column label="创建时间" sortable prop="created_at" width="200px"/>
             <el-table-column label="操作" align="right" width="200px">
                 <template slot="header" slot-scope="scope">
@@ -40,7 +44,8 @@
     import apiLists from '../../api/api';
     import $url from '../../api/url';
     import Delete from "../common/Delete";
-    import func from '../../api/func'
+    import func from '../../api/func';
+    import {mapGetters} from 'vuex';
     export default {
         name: "log",
         components: {Delete},
@@ -58,6 +63,9 @@
                 },
                 btn:{},
             }
+        },
+        computed:{
+            ...mapGetters(['userInfo'])
         },
         methods:{
             /**
@@ -100,7 +108,7 @@
         },
         mounted() {
             this.$nextTick(function () {
-                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.$store.state.login.auth_url);
+                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.userInfo.auth);
                 this.getLogLists(this.page,this.limit);
             });
         }

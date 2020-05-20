@@ -19,10 +19,10 @@ import OauthLists from '../components/oauth/lists'
 import ReqRuleLists from '../components/req_rule/lists'
 import AreaLists from '../components/area/lists'
 import PushList from '../components/system/push'
-import ChatList from '../components/system/chat'
 import MarkDown from '../components/editor/markdown'
 import UEditor from '../components/editor/ueditor'
 import TimeLine from '../components/system/timeline'
+import chatDemo from '../components/system/chatDemo'
 import Empty from '../components/empty'
 import TableExample from '../components/components/example/tables'
 import FormExample from '../components/components/example/forms'
@@ -47,7 +47,6 @@ export default new Router({
                 { path: 'req-rule/index', name:'ReqRuleLists', component:ReqRuleLists,meta:{ mode:'req_rule',title:'申请授权列表' }},
                 { path: 'log/index',  name:'LogLists',component:LogLists,meta:{ mode:'log',title:'日志列表' } },
                 { path: 'system/log',  name:'SystemLog',component:SystemLog,meta:{ mode:'log',title:'系统日志' } },
-                { path: 'chat/index',  name:'ChatList',component:ChatList,meta:{ mode:'chat',title:'聊天记录' } },
                 { path: 'file/index',  name:'SystemFile',component:SystemFile,meta:{ mode:'file',title:'文件列表' } },
                 { path: 'config/index',  name:'ConfigLists',component:ConfigLists,meta:{ mode:'config',title:'基础配置' } },
                 { path: 'category/index', name:'ApiLists',component:ApiLists,meta:{ mode:'api_lists',title:'项目列表' } },
@@ -58,12 +57,12 @@ export default new Router({
                 { path: 'editor/markdown', name:'MarkDown',component:MarkDown,meta:{ mode:'push',title:'MarkDown' }},
                 { path: 'editor/quill', name:'UEditor',component:UEditor,meta:{ mode:'push',title:'UEditor' }},
                 { path: 'timeline/index', name:'TimeLine',component:TimeLine,meta:{ mode:'timeline',title:'时间线' }},
-
                 { path: 'example/table', name: 'TableExample', component: TableExample,meta:{ mode:'',title:'表格组件' } },
                 { path: 'example/form', name: 'FormExample', component: FormExample,meta:{ mode:'',title:'表单组件' } },
 
             ]
         },
-        { path: '*',redirect:'/404'}
+        { path: '*',redirect:'/404'},
+        { path: '/chat', name:'chatDemo',component:chatDemo,meta:{ mode:'chat',title:'聊天室' }},
     ]
 })

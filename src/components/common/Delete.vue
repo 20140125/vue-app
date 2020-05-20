@@ -5,6 +5,7 @@
 </template>
 
 <script>
+    import apiLists from '../../api/api'
     import { mapActions } from 'vuex'
     export default {
         name: "Delete",
@@ -34,7 +35,7 @@
                 }).then(()=>{
                     this.checkAuth({url:this.url});
                     let params = {id:item.id,token : this.$store.state.login.token};
-                    this.$http.post(this.url,params).then(response=>{
+                    apiLists.RemoveData(params,this.url).then((response)=>{
                         if (response && response.data.code === 200) {
                             this.Lists.splice(index,1);
                             let data = { href:this.url, msg:response.data.msg, token:this.$store.state.login.token };
@@ -43,8 +44,6 @@
                             this.$emit('success');
                             return false;
                         }
-                    },error=>{
-                        console.log(error);
                     })
                 }).catch(()=>{
                     this.$message({type:'info',message:'cancel delete！'});
