@@ -66,7 +66,7 @@
                     </el-tabs>
                 </el-main>
                 <el-footer>
-                    ©fl140125@gmail.com 在线人数：{{online}}
+                    <el-link href="mailto:fl140125@gmail.com">fl140125@gmail.com</el-link>
                 </el-footer>
                 <i class="msg-icon" @click="getMsgDialog">
                     <i :class="chatMsgClass" style="margin:13px 15px;">
