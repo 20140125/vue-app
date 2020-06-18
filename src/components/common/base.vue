@@ -77,7 +77,7 @@
             </el-container>
         </el-container>
         <!---chat message-->
-        <el-dialog :title="chatTitle" @close="chatVisible = false" top="5vh" width="80%"
+        <el-dialog :title="chatTitle" @close="chatVisible = false" top="5vh" width="60%"
                    :center="center" :show-close="closeModel"
                    :close-on-press-escape="closeModel" :visible.sync="chatVisible">
             <el-row :gutter="24">
@@ -97,7 +97,7 @@
                         </el-menu>
                     </div>
                 </el-col>
-                <el-col :offset="1" :span="17">
+                <el-col :span="18">
                     <el-card shadow="always">
                         <div id="msg">
                             <div v-for="(message,index) in messageLists" :key="index">
@@ -203,10 +203,10 @@
             emotion
         },
         computed:{
-            ...mapGetters(['tabs','activeAuthName','menuLists','oauthConfig','userInfo']),
+            ...mapGetters(['tabs','activeAuthName','menuLists','oauthConfig','userInfo','weather']),
         },
         methods:{
-            ...mapActions(['addTabs','deleteTabs','addCurrTabs','logoutSystem','getAuthMenu','getOauthConfig']),
+            ...mapActions(['addTabs','deleteTabs','addCurrTabs','logoutSystem','getAuthMenu','getOauthConfig','saveWeather']),
             /**
              * TODO:字符串标签转换
              * @param html
@@ -327,6 +327,7 @@
                         room_id:__this.room_id,
                         client_img:__this.userInfo.avatar_url,
                         uid:__this.userInfo.uuid,
+                        adcode:__this.userInfo.adcode
                     };
                     ws.send(JSON.stringify(str))
                 };
@@ -339,6 +340,7 @@
                             break;
                         //登陆
                         case 'login':
+                            __this.saveWeather(data.weather);
                             let unreadArr = [];
                             __this.client_list = data.client_list;
                             //展示单个用户未读消息数
@@ -417,6 +419,7 @@
                     room_id:this.room_id,
                     client_img:this.userInfo.avatar_url,
                     uid:this.userInfo.uuid,
+                    adcode:this.userInfo.adcode
                 };
                 this.userInfo.websocketServer.send(JSON.stringify(login))
                 //获取聊天记录
@@ -677,7 +680,10 @@
             },
             inputMsg:function () {
                 this.inputMsg = this.$refs.message.innerHTML;
-            }
+            },
+            weather:function () {
+                this.noticeArr.push({time:func.get_timestamp(),message:this.weather})
+            },
         },
         /**
          * TODO:Vue生命周期

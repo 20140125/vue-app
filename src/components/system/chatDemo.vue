@@ -22,7 +22,7 @@
                     </el-menu>
                 </div>
             </el-col>
-            <el-col :offset="1" :span="17">
+            <el-col :span="18">
                 <el-card shadow="always">
                     <div id="msg">
                         <div v-for="(message,index) in messageLists" :key="index">
@@ -101,8 +101,6 @@
                 msg_type:'text',
                 to_client_name:'all',
                 to_client_id:'all',
-                chatMsgClass:'el-icon-chat-dot-round',
-                msg_dot:false,
                 room_id:'1200',
                 noticeArr:[],
                 uid:'',
@@ -194,29 +192,6 @@
                 ws.onerror = function() {
                     console.log("出现错误");
                 };
-            },
-            /**
-             * TODO:弹出框展示
-             */
-            getMsgDialog:function(){
-                this.chatVisible = !this.chatVisible;
-                if (!this.chatVisible) {
-                    this.chatMsgClass = 'el-icon-chat-dot-round';
-                } else {
-                    this.chatMsgClass = 'el-icon-close';
-                    //获取聊天记录
-                    let str = {
-                        type:'history',
-                        from_client_name:this.userInfo.username,
-                        to_client_name:this.to_client_name,
-                        room_id:this.to_client_name === 'all' ? this.room_id : '',
-                        uid:this.userInfo.uuid,
-                    };
-                    this.userInfo.websocketServer.send(JSON.stringify(str));
-                    this.getOauthConfig('RoomLists');
-                    this.scrollToBottom();
-                    this.msg_dot = false;
-                }
             },
             /**
              * TODO:设置群聊房间号
@@ -351,7 +326,6 @@
                         this.to_client_name = data['from_client_name'];
                         this.to_client_id = data['from_client_id'];
                     }
-                    this.msg_dot = true;
                 }
                 if (this.chatVisible && this.username===data['from_client_name']) {
                     if (data['to_client_id']!=='all') {
@@ -442,11 +416,6 @@
          * todo：生命周期
          */
         watch:{
-            chatVisible:function () {
-                if (!this.chatVisible) {
-                    this.chatMsgClass = 'el-icon-chat-dot-round';
-                }
-            },
             inputMsg:function () {
                 this.inputMsg = this.$refs.message.innerHTML;
             }

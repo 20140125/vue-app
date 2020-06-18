@@ -15,8 +15,10 @@ const state={
         auth_url:'',
         role_id:0,
         uuid:'',
-        token:''
+        token:'',
+        adcode:''
     },
+    weather:{},
     menuLists:[],
     oauthConfig:[],
 };
@@ -24,7 +26,8 @@ const getters={
     menuLists:state=>state.menuLists,
     oauthConfig:state=>state.oauthConfig,
     userInfo: state=>state.userInfo,
-    token:state=>state.token
+    token:state=>state.token,
+    weather:state=>state.weather
 };
 const mutations={
     /**
@@ -63,6 +66,14 @@ const mutations={
         state.token = token;
         state.userInfo.token = token
         localStorage.setItem('token',token);
+    },
+    /**
+     * todo:设置城市天气
+     * @param state
+     * @param weather
+     */
+    setWeather:function (state,weather) {
+        state.weather = weather;
     }
 };
 const actions={
@@ -126,6 +137,15 @@ const actions={
                 router.push({path:'/login'});
             }
         })
+    },
+    /**
+     * todo:保存城市天气
+     * @param state
+     * @param commit
+     * @param weather
+     */
+    saveWeather:function ({state,commit},weather) {
+        commit('setWeather',weather);
     },
     /**
      * todo：保存日志
