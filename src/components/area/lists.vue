@@ -66,10 +66,10 @@
              * @param areaObj
              */
             getWeather:function (areaObj) {
-                let params = { code:areaObj.code,id:areaObj.id };
+                let params = { code:areaObj.code,id:areaObj.id,parent_id:areaObj.parent_id };
                 apiLists.AreaWeather(params).then(response=>{
                     if (response && response.data.code === 200) {
-                        this.$confirm(JSON.stringify(response.data.item));
+                        this.$message.success(response.data.msg)
                     }
                 })
             }

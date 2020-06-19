@@ -682,7 +682,7 @@
                 this.inputMsg = this.$refs.message.innerHTML;
             },
             weather:function () {
-                this.noticeArr.push({time:func.get_timestamp(),message:this.weather['info']})
+                this.noticeArr.push({time:func.get_timestamp(),message:JSON.stringify(this.weather['info'])})
             },
         },
         /**
