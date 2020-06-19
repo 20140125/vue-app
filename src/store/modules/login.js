@@ -16,7 +16,8 @@ const state={
         role_id:0,
         uuid:'',
         token:'',
-        adcode:''
+        adcode:'',
+        city:''
     },
     weather:{},
     menuLists:[],
@@ -146,6 +147,15 @@ const actions={
      */
     saveWeather:function ({state,commit},weather) {
         commit('setWeather',weather);
+    },
+    /**
+     * todo:设置用户信息
+     * @param state
+     * @param commit
+     * @param userInfo
+     */
+    saveUserInfo:function ({state,commit},userInfo) {
+        commit('setUserInfo',userInfo);
     },
     /**
      * todo：保存日志

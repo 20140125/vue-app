@@ -425,6 +425,14 @@ const excelExport = async function (params={}) {
 const timeLineLists = async function (params = {}) {
     return await request.post(url.timeLineLists,qs.stringify(Object.assign(params,access_token)))
 };
+/**
+ * todo:获取当前用户地址
+ * @param params
+ * @returns {Promise<AxiosResponse<any>>}
+ */
+const getCityName = async function (params={}) {
+    return await request.post(url.getCityName,qs.stringify(Object.assign(params,access_token)))
+}
 const interfaceLists = {
     LoginSys:loginSys,
     LogoutSys:logoutSys,
@@ -477,6 +485,7 @@ const interfaceLists = {
     SaveData:saveData,
     RemoveData:removeData,
     ExcelExport:excelExport,
-    TimeLineLists:timeLineLists
+    TimeLineLists:timeLineLists,
+    GetCityName:getCityName
 };
 export default interfaceLists;

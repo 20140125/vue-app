@@ -4,6 +4,7 @@
         <el-header>
             <el-menu :default-active="activeIndex" mode="horizontal" background-color="#393d49" text-color="#fff" active-text-color="#ffd04b" @select="handleSelect" :style="headerStyle">
                 <el-menu-item index="1" @click="hideMenu"> <i :class="menuClass" style="color: #fff;font-size: 25px"> </i></el-menu-item>
+                <el-menu-item index="5" @click="showCity = !showCity"><template slot="title"><i class="el-icon-location"></i>{{userInfo.city}}</template></el-menu-item>
                 <el-submenu index="2" style="float: right">
                     <template slot="title">
                         <el-avatar :src="userInfo.avatar_url" :alt="userInfo.username" :size="35"/>
@@ -146,6 +147,9 @@
             </el-row>
         </el-dialog>
         <!---chat message-->
+        <el-dialog :visible.sync="showCity" title="选择城市" center>
+            <city @saveCityNode="saveCityNode"></city>
+        </el-dialog>
     </el-container>
 </template>
 
@@ -155,6 +159,7 @@
     import $url from '../../api/url'
     import func from '../../api/func'
     import emotion from '../common/emotion/Index'
+    import City from "./city/city";
     export default {
         name: "baseModule",
         inject:['reload'],
@@ -162,21 +167,17 @@
             return {
                 isCollapse:false,
                 activeName:null,
+                showCity:false,
                 activeIndex:'1',
                 menuClass:'el-icon-s-unfold',
                 asideWidth:"200px",
                 asideHeight:{},
-                headerStyle:{
-                    'margin-left':'200px',
-                },
+                headerStyle:{'margin-left':'200px'},
                 noticeLength:0,
                 notice:[],
                 online:0,
-
                 //workerManChat
-                cgi:{
-                    uploadUrl:process.env.API_ROOT+$url.fileUpload.replace('/','')
-                },
+                cgi:{uploadUrl:process.env.API_ROOT+$url.fileUpload.replace('/','')},
                 chatTitle:'隨心所欲,隨性而行',
                 fileData:{},
                 headers:{},
@@ -200,13 +201,14 @@
             }
         },
         components:{
+            City,
             emotion
         },
         computed:{
             ...mapGetters(['tabs','activeAuthName','menuLists','oauthConfig','userInfo','weather']),
         },
         methods:{
-            ...mapActions(['addTabs','deleteTabs','addCurrTabs','logoutSystem','getAuthMenu','getOauthConfig','saveWeather']),
+            ...mapActions(['addTabs','deleteTabs','addCurrTabs','logoutSystem','getAuthMenu','getOauthConfig','saveWeather','saveUserInfo']),
             /**
              * TODO:字符串标签转换
              * @param html
@@ -643,6 +645,23 @@
                         this.$message.error(JSON.stringify(e));
                     }
                 })
+            },
+            /**
+             * todo:保存城市天气
+             * @param node
+             */
+            saveCityNode:function (node) {
+                if (node.length === 1) {
+                    let weather = {info:JSON.parse(node[0]['data']['info']),forecast:JSON.parse(node[0]['data']['forecast'])};
+                    apiLists.GetCityName({adcode:node[0]['data']['code']}).then(response=> {
+                        if (response && response.data.code === 200) {
+                            this.userInfo.city = response.data.item.city;
+                            this.saveUserInfo(this.userInfo);
+                            this.noticeArr = [];
+                            this.saveWeather(JSON.stringify(weather))
+                        }
+                    })
+                }
             }
         },
         /**
@@ -682,7 +701,9 @@
                 this.inputMsg = this.$refs.message.innerHTML;
             },
             weather:function () {
-                this.noticeArr.push({time:func.get_timestamp(),message:JSON.stringify(this.weather['info'])})
+                if (this.weather) {
+                    this.noticeArr.push({time:func.get_timestamp(),message:this.weather['info'] ? JSON.stringify(this.weather['info']) : 'Welcome'})
+                }
             },
         },
         /**
