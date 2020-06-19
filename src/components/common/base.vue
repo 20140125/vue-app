@@ -652,7 +652,7 @@
              */
             saveCityNode:function (node) {
                 if (node.length === 1) {
-                    let weather = {info:JSON.parse(node[0]['data']['info']),forecast:JSON.parse(node[0]['data']['forecast'])};
+                    let weather = {info:JSON.parse(node[0]['data']['info']),forecast:JSON.parse(node[0]['data']['info'])};
                     apiLists.GetCityName({adcode:node[0]['data']['code']}).then(response=> {
                         if (response && response.data.code === 200) {
                             this.userInfo.city = response.data.item.city;

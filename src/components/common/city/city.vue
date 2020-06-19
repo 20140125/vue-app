@@ -30,7 +30,7 @@
              * @param pid
              */
             getCity:function(pid) {
-                apiLists.AreaLists({parent_id:pid},$url.areaLists).then((response)=>{
+                apiLists.AreaLists({parent_id:pid,type:'weather'},$url.areaLists).then((response)=>{
                     if (response && response.data.code === 200) {
                         this.setOptions(response.data.item);
                     }
