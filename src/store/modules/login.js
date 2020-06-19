@@ -73,7 +73,7 @@ const mutations={
      * @param weather
      */
     setWeather:function (state,weather) {
-        state.weather = weather;
+        state.weather = JSON.parse(weather);
     }
 };
 const actions={
