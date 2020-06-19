@@ -4,7 +4,7 @@
         <el-header>
             <el-menu :default-active="activeIndex" mode="horizontal" background-color="#393d49" text-color="#fff" active-text-color="#ffd04b" @select="handleSelect" :style="headerStyle">
                 <el-menu-item index="1" @click="hideMenu"> <i :class="menuClass" style="color: #fff;font-size: 25px"> </i></el-menu-item>
-                <el-menu-item index="5" @click="showCity = !showCity"><template slot="title"><i class="el-icon-location"></i>{{userInfo.city}}</template></el-menu-item>
+                <el-menu-item index="5"><template slot="title"><i class="el-icon-location"></i>{{userInfo.city}}</template></el-menu-item>
                 <el-submenu index="2" style="float: right">
                     <template slot="title">
                         <el-avatar :src="userInfo.avatar_url" :alt="userInfo.username" :size="35"/>
