@@ -37,8 +37,9 @@ const instance = axios.create({ timeout:0 });
 instance.defaults.baseURL = process.env.API_ROOT;
 // http request 拦截器
 instance.interceptors.request.use(config=>{
-    if (store.state.login.token){
-        config.headers.Authorization = `${func.set_password(func.set_random(32),func.set_random(12))}${store.state.login.token}${func.set_password(func.set_random(32),func.set_random(12))}`
+    let token = store.state.login.token ? store.state.login.token : localStorage.getItem('token');
+    if (token){
+        config.headers.Authorization = `${func.set_password(func.set_random(32),func.set_random(12))}${token}${func.set_password(func.set_random(32),func.set_random(12))}`
     }
     return config
 },error=>{
