@@ -42,7 +42,7 @@ router.beforeEach((to,from,next)=>{
             next();
             return ;
         }
-        apiLists.CheckToken({token:store.state.login.token}).then(response=>{
+        apiLists.CheckToken({token:(store.state.login.token ? store.state.login.token : localStorage.getItem('token'))}).then(response=>{
             if (response && response.data.code === code.SUCCESS) {
                 next({path:'/admin/index',redirect:to.path});
                 store.commit('setUserInfo',response.data.item);
@@ -51,7 +51,7 @@ router.beforeEach((to,from,next)=>{
             next();
         });
     }  else {
-        apiLists.CheckToken({token:store.state.login.token}).then(response=>{
+        apiLists.CheckToken({token:(store.state.login.token ? store.state.login.token : localStorage.getItem('token'))}).then(response=>{
             if (response && response.data.code !== code.SUCCESS){
                 next({path:'/login',redirect:to.path});
                 store.commit('setToken','');

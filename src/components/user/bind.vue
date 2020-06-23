@@ -50,7 +50,7 @@
                 loading:false,
                 loadingText:'玩命加载中。。。',
 
-                url:$url.userSave,
+                url:$url.userUpdate,
                 refs:this.$refs,
                 reFrom:'user',
                 showPassword:false,

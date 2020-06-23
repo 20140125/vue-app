@@ -43,7 +43,7 @@ export default new Router({
                 { path: 'user/index', name:'UserLists',component:UserLists,meta:{ mode:'user',title:'管理员列表' } },
                 { path: 'user/center', name:'UserCenter',component:UserCenter,meta:{ mode:'user_center',title:'个人中心' }},
                 { path: 'user/bind/:access_token?', name:'UserBind',component:UserBind,meta:{ mode:'user_bind',title:'账户绑定' }},
-                { path: 'oauth/index', name:'OauthLists', component:OauthLists,meta:{ mode:'oauth',title:'授权列表' }},
+                { path: 'oauth/index', name:'OauthLists', component:OauthLists,meta:{ mode:'oauth',title:'授权用户' }},
                 { path: 'req-rule/index', name:'ReqRuleLists', component:ReqRuleLists,meta:{ mode:'req_rule',title:'申请授权列表' }},
                 { path: 'log/index',  name:'LogLists',component:LogLists,meta:{ mode:'log',title:'日志列表' } },
                 { path: 'system/log',  name:'SystemLog',component:SystemLog,meta:{ mode:'log',title:'系统日志' } },
