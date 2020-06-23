@@ -244,7 +244,6 @@
             updatePush:function (item) {
                 this.title='修改站内通知';
                 this.syncVisible = true;
-                console.log(item);
                 this.pushModel = item;
                 this.url = this.cgi.update;
             }
