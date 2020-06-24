@@ -77,24 +77,19 @@
                 authLists:[],
                 authLevel:[],
                 search:'',
-
                 syncVisible:false, //是否显示弹框
                 modal:true, //遮盖层是否需要
                 center:true,
                 labelWidth:'80px',
                 title:'',
-
                 loading:true,
                 loadingText:'玩命加载中。。。',
-
                 url:'',
                 refs:this.$refs,
                 reFrom:'auth',
                 act:'',
-
                 //权限默认数据
                 authModel:{},
-
                 //URL
                 cgi:{
                     insert:$url.authSave,
@@ -102,7 +97,6 @@
                     remove:$url.authDelete,
                     status:$url.authUpdate,
                 },
-
                 //表单验证规则
                 rules:{
                     name:[ { required:true,message:'权限名称不得为空',trigger:'blur' } ],

@@ -52,15 +52,7 @@
                     <el-input v-model="OauthModel.username"/>
                 </el-form-item>
                 <el-form-item label="用户头像" prop="avatar_url">
-                    <Upload :avatar_url="OauthModel.avatar_url" :username="OauthModel.username"
-                            @uploadSuccess="uploadSuccess"/>
-                </el-form-item>
-                <el-form-item label="授权标识" prop="remember_token">
-                    <el-input :type="!showPassword ? 'password' : ''" v-model="OauthModel.remember_token" readonly>
-                        <el-button slot="append" :icon="showPassword ? 'el-icon-open' : 'el-icon-turn-off'" @click="showPassword = !showPassword">
-                            {{showPassword ? '显 示' : '隐 藏'}}
-                        </el-button>
-                    </el-input>
+                    <Upload :avatar_url="OauthModel.avatar_url" :username="OauthModel.username" @uploadSuccess="uploadSuccess"/>
                 </el-form-item>
                 <el-form-item label="邮箱账号" prop="email">
                     <el-input v-model="OauthModel.email" ref="bindEmail">
@@ -77,13 +69,11 @@
             </div>
         </el-dialog>
         <!---弹框-->
-
         <!---账号授权绑定-->
         <el-dialog :visible.sync = 'oauthVisible' title="账户授权登录" :destroy-on-close="destroy_on_close" :center="center" :width="dialogWidth">
             <el-button plain v-for="(oauth,index) in oauthConfig" type="primary" :key="index" v-if="oauth.status === 1" @click="goto(oauth.name)">{{oauth.name.toUpperCase()}}</el-button>
         </el-dialog>
         <!---账号授权绑定-->
-
     </div>
 </template>
 
@@ -115,12 +105,10 @@
             }
             return {
                 oauthLists:[],
-                roleLists:[],
                 page:1,
                 limit:15,
                 total:0,
                 search:'',
-
                 title:'',
                 syncVisible:false, //是否显示弹框
                 modal:true, //遮盖层是否需要
@@ -129,19 +117,14 @@
                 destroy_on_close:true,
                 center:true,
                 loadingText:'玩命加载中。。。',
-
                 url:'',
                 refs:this.$refs,
                 reFrom:'role',
-
                 OauthModel:{},
-                oauthImageLists:[],
-                fileData:{},
                 showCode:false,
                 showPassword:false,
                 oauthVisible:false,
                 dialogWidth:'50%',
-
                 cgi:{
                     remove:$url.oauthDelete,
                     status:$url.oauthUpdate,
@@ -155,9 +138,7 @@
                     code:[{required:true,message:'请输入验证码',trigger:'blur'},{validator:verifyCode,trigger: 'blur'}],
                     remember_token:[{required:true,message:'请输入用户标识',trigger:'blur'}],
                 },
-                headers:{},
-                onlineUser:[],
-                btn:{},
+                btn:{}
             }
         },
         computed:{
@@ -179,15 +160,14 @@
                 apiLists.OauthBind({oauth_type:href,remember_token:this.userInfo.token}).then(response=>{
                     if (response && response.data.code === 200) {
                         if (response.data.item.oauth_url) {
-                            window.open(response.data.item.oauth_url);
-                        } else {
-                            let pushParams = {label:'账户绑定',name:response.data.item.local};
-                            console.log(pushParams);
-                            this.activeName = pushParams.name;
-                            this.addCurrTabs(pushParams);
-                            this.addTabs(pushParams);
-                            this.$router.push({path:pushParams.name});
+                            window.open(response.data.item.oauth_url,'_self');
+                            return false;
                         }
+                        let pushParams = {label:'账户绑定',name:response.data.item.local};
+                        this.activeName = pushParams.name;
+                        this.addCurrTabs(pushParams);
+                        this.addTabs(pushParams);
+                        this.$router.push({path:pushParams.name});
                     }
                 })
             },

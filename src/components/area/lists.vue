@@ -29,7 +29,6 @@
                 areaLists:[],
                 loading:true,
                 loadingText:'玩命加载中。。。',
-
                 search:'',
                 pid:1,
             }
