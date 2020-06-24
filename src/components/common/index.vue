@@ -38,7 +38,7 @@
 <script>
     import echarts from 'echarts'
     import apiLists from '../../api/api'
-    import { mapMutations,mapGetters } from 'vuex'
+    import {mapMutations, mapGetters} from 'vuex'
     export default {
         name: "index",
         data(){
@@ -59,10 +59,10 @@
             }
         },
         computed:{
-            ...mapGetters(['userInfo']),
+            ...mapGetters(['userInfo','tabs']),
         },
         methods:{
-            ...mapMutations(['setToken']),
+            ...mapMutations(['setToken','defaultTabs','setActiveAuthName']),
             totalCharts:function () {
                 apiLists.GetCountData({}).then(response=>{
                     this.activities = response.data.item.timeline.data;
@@ -136,6 +136,9 @@
                 this.totalCharts();
                 if (this.access_token){
                     this.setToken(this.access_token);
+                    //删除tabs，避免token暴露在连接中。
+                    this.defaultTabs([{label:'欢迎页',name:'/admin/index'}]);
+                    this.$router.push({path:'/admin/index'});
                 }
                 //图表初始化
                 this.echarts = echarts.init(document.getElementById('charts'));

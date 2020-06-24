@@ -712,9 +712,11 @@
         mounted() {
             this.$nextTick(function () {
                 let params = {label:this.$route.meta.title,name:this.$route.path};
-                this.activeName = params.name;
-                this.addCurrTabs(params);
-                this.addTabs(params)
+                if (params.label !== '欢迎页' || func.str_count(params.name,'/') !== 3) {
+                    this.activeName = params.name;
+                    this.addCurrTabs(params);
+                    this.addTabs(params);
+                }
                 this.getAuthMenu();
                 this.webPush();
             });

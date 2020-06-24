@@ -18,6 +18,15 @@ const mutations={
         state.tabs.push(tabs);
     },
     /**
+     * todo:默认的tabs
+     * @param state
+     * @param tabs
+     */
+    defaultTabs(state,tabs) {
+        console.log(tabs);
+        state.tabs = tabs;
+    },
+    /**
      * todo：设置当前tabs Obj
      * @param state
      * @param currTabs
