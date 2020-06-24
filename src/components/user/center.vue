@@ -90,7 +90,6 @@
             return {
                 loading:true,
                 loadingText:'玩命加载中。。。',
-
                 userCenter:{
                     u_name:'',
                     local:[],
@@ -104,7 +103,6 @@
                 reFrom:'center',
                 refs:this.$refs,
                 url:$url.saveUserCenter,
-
                 fileData:{},
                 headers:{},
                 cgi:{
@@ -123,13 +121,9 @@
                 },
                 inputVisible: false,
                 inputValue: '',
-
                 pid:1,
                 options:[],
-                props:{
-                    value:'name',
-                    label:'name'
-                }
+                props:{ value:'name', label:'name' }
             }
         },
         computed:{

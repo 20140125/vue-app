@@ -56,12 +56,11 @@
                 </el-form-item>
                 <el-form-item label="邮箱账号" prop="email">
                     <el-input v-model="OauthModel.email" ref="bindEmail">
-                        <el-button slot="append" v-if="!OauthModel.code" @click="sendMail(OauthModel)" icon="el-icon-circle-plus">绑 定</el-button>
-                        <el-button slot="append" v-else @click="sendMail(OauthModel)" icon="el-icon-edit">修 改</el-button>
+                        <el-button slot="append" @click="sendMail(OauthModel)" icon="el-icon-edit">绑定邮箱</el-button>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="验证码" prop="code" v-if="showCode">
-                    <el-input v-model.number="OauthModel.code" maxlength="6" @blur="checkCode(OauthModel)" ref="bindCode"/>
+                    <el-input v-model.number="OauthModel.code" maxlength="8" @blur="checkCode(OauthModel)"/>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -222,7 +221,7 @@
              * @param oauthObject
              */
             checkCode:function(oauthObject) {
-                let params = {code:oauthObject.code, id:oauthObject.id};
+                let params = {code:oauthObject.code, email:oauthObject.email};
                 apiLists.VerifyCode(params).then(response=>{
                     if (response && response.data.code === 200) {
                         this.$message({type:'success',message:response.data.msg});

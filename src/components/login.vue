@@ -8,32 +8,33 @@
                         <el-main>
                             <el-form :model="passwordLogin" ref="password" :rules="passwordRules">
                                 <el-form-item prop="email">
-                                    <el-input v-model.trim="passwordLogin.email" type="text" placeholder="email" autocomplete="off">
+                                    <el-input v-model.trim="passwordLogin.email" clearable type="text" placeholder="email" autocomplete="off" show-icon>
                                         <template slot="prepend"><i class="el-icon-s-custom"/></template>
                                     </el-input>
                                 </el-form-item>
                                 <el-form-item prop="password">
-                                    <el-input v-model.trim="passwordLogin.password" type="password" placeholder="password" autocomplete="off">
+                                    <el-input v-model.trim="passwordLogin.password" type="password" show-password placeholder="password" autocomplete="off">
                                         <template slot="prepend"><i class="el-icon-user-solid"/></template>
                                     </el-input>
                                 </el-form-item>
                             </el-form>
+                            <el-button type="text" @click="emailSendVisible = !emailSendVisible">忘记密码</el-button>
                             <el-footer style="text-align: center">
                                 <el-button @click="resetForm('password')" plain>取 消</el-button>
                                 <el-button type="primary" @click="onSubmit('password')" plain>确 定</el-button>
                             </el-footer>
                         </el-main>
                     </el-tab-pane>
-                    <el-tab-pane label="邮箱验证登录" name="email">
+                    <el-tab-pane label="邮箱验证码登录/注册" name="email">
                         <el-main>
                             <el-form :model="mailLogin" ref="mail" :rules="mailRules">
                                 <el-form-item prop="email">
-                                    <el-input v-model.trim="mailLogin.email" type="text" placeholder="email" autocomplete="off">
+                                    <el-input v-model.trim="mailLogin.email" clearable type="text" placeholder="email" autocomplete="off">
                                         <template slot="prepend"><i class="el-icon-s-custom"/></template>
                                     </el-input>
                                 </el-form-item>
                                 <el-form-item prop="verify_code">
-                                    <el-input v-model.number="mailLogin.verify_code" maxlength="8" ref="code" type="text" placeholder="verify code" autocomplete="off">
+                                    <el-input v-model.number="mailLogin.verify_code" clearable maxlength="8" ref="code" type="text" placeholder="verify code" autocomplete="off">
                                         <el-button slot="append" :disabled="disabled" @click="getEmailCode">{{codeValue}}</el-button>
                                     </el-input>
                                 </el-form-item>
@@ -44,7 +45,7 @@
                             </el-footer>
                         </el-main>
                     </el-tab-pane>
-                    <el-tab-pane label="账户授权登录" name="oauth" style="text-align: center">
+                    <el-tab-pane label="账户授权登录/注册" name="oauth" style="text-align: center">
                         <el-button style="margin-bottom: 10px" plain v-for="(oauth,index) in oauthConfig" type="primary" :key="index" v-if="oauth.status === 1" @click="oauthLogin(oauth.value)">
                             {{oauth.name.toUpperCase()}}
                         </el-button>
@@ -52,7 +53,11 @@
                 </el-tabs>
             </el-col>
         </el-row>
-
+        <!---忘记密码-->
+        <el-dialog :visible.sync="emailSendVisible" title="忘记密码" center width="30%" :close-on-click-modal="false" :show-close="false">
+            <SendEmail v-on:close="emailSendVisible = false"></SendEmail>
+        </el-dialog>
+        <!---忘记密码-->
     </div>
 </template>
 
@@ -60,8 +65,10 @@
     import apiLists from '../api/api';
     import $url from '../api/url'
     import { mapActions,mapGetters } from 'vuex'
+    import SendEmail from "./sendEmail";
     export default {
         name: "login",
+        components: {SendEmail},
         data(){
             let verifyCode =  (rule,value,callback) => {
                 try {
@@ -104,7 +111,8 @@
                 codeValue:'获取验证码',
                 times:60,
                 disabled:false,
-                headerTitle:'账号密码登录'
+                headerTitle:'账号密码登录',
+                emailSendVisible:false
             }
         },
         computed:{

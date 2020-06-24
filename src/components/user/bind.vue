@@ -9,7 +9,7 @@
                         @uploadSuccess="uploadSuccess"/>
             </el-form-item>
             <el-form-item label="用户密码" prop="password">
-                <el-input :type="!showPassword ? 'password' : 'text'" v-model="userModel.password">
+                <el-input :type="!showPassword ? 'password' : 'text'" placeholder="请输入你的密码（当前展示密码为加密后的密码）" v-model="userModel.password" :readonly="!showPassword">
                     <el-button slot="append" :icon="showPassword ? 'el-icon-open' : 'el-icon-turn-off'" @click="showPassword = !showPassword">
                         {{showPassword ? '显 示' : '隐 藏'}}
                     </el-button>
@@ -21,14 +21,14 @@
             <el-form-item label="用户手机" prop="phone_number">
                 <el-input v-model.number="userModel.phone_number" placeholder="手机号（请填写正确的手机号，便于后期密码修改，密码找回）"/>
             </el-form-item>
-            <el-form-item label="显示状态" prop="status">
+            <el-form-item label="允许登录" prop="status">
                 <el-radio-group  v-model="userModel.status" size="small">
                     <el-radio-button label="2">关闭</el-radio-button>
                     <el-radio-button label="1">开启</el-radio-button>
                 </el-radio-group>
             </el-form-item>
             <el-form-item style="text-align: center">
-                <Submit :reFrom="reFrom" :model="userModel" :url="url" :refs="refs" v-on:success="success"/>
+                <Submit :reFrom="reFrom" :model="userModel" :url="url" :refs="refs"/>
             </el-form-item>
         </el-form>
     </div>
@@ -76,14 +76,14 @@
             }
         },
         computed:{
-            ...mapGetters(['username','token',"avatarUrl"]),
+            ...mapGetters(['userInfo']),
         },
         methods:{
             /**
              * TODO:获取用户绑定信息
              */
             userBind:function() {
-                apiLists.UserBind({'remember_token':this.token}).then(response=>{
+                apiLists.UserBind({'remember_token':this.userInfo.token}).then(response=>{
                     if (response && response.data.code===200){
                         this.userModel = response.data.item;
                     }
@@ -96,9 +96,6 @@
             uploadSuccess:function(src) {
                 this.userModel.avatar_url = src;
             },
-            success:function () {
-
-            }
         },
         mounted() {
             this.$nextTick(function () {
@@ -106,9 +103,9 @@
             })
         },
         created(){
-            this.userModel.username = this.username;
-            this.userModel.avatar_url = this.avatarUrl;
-            this.userModel.remember_token = this.token;
+            this.userModel.username = this.userInfo.username;
+            this.userModel.avatar_url = this.userInfo.avatar_url;
+            this.userModel.remember_token = this.userInfo.token;
         },
     }
 </script>
