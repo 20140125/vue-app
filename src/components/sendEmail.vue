@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-form :model="users" label-width="100px" ref="userForm" :rules="rules">
+        <el-form :model="users" label-width="90px" ref="userForm" :rules="rules">
             <el-form-item label="邮件发送:" prop="email">
                 <el-input placeholder="请输入你的邮箱账号" v-model="users.email"></el-input>
             </el-form-item>
@@ -17,6 +17,9 @@
     import apiLists from '../api/api'
     export default {
         name: "sendEmail",
+        props:{
+            userEmail:String
+        },
         data() {
             return {
                 users:{ email:'' },
@@ -24,6 +27,9 @@
                     email:[{required:true,type:'email',message:'请输入正确的邮箱账号',trigger:'blur'}]
                 },
             }
+        },
+        created() {
+            this.users.email = this.userEmail ? this.userEmail : this.users.email;
         },
         methods:{
             /**
@@ -43,6 +49,12 @@
                    if (!valid) {
                        return false;
                    }
+                   apiLists.SendEmail(this.users,$url.confirmMail).then(response=>{
+                       if (response && response.data.code === 200) {
+                           this.$message.success(response.data.msg);
+                           this.$emit('resetPassword',response.data.item);
+                       }
+                   });
                 })
             }
         }

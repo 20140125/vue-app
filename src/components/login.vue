@@ -18,10 +18,10 @@
                                     </el-input>
                                 </el-form-item>
                             </el-form>
-                            <el-button type="text" @click="emailSendVisible = !emailSendVisible">忘记密码</el-button>
-                            <el-footer style="text-align: center">
+                            <el-button type="text" @click="emailSendVisible = !emailSendVisible" style="margin-bottom: -10px">忘记密码?</el-button>
+                            <el-footer style="text-align: center;height: 30px !important;">
                                 <el-button @click="resetForm('password')" plain>取 消</el-button>
-                                <el-button type="primary" @click="onSubmit('password')" plain>确 定</el-button>
+                                <el-button type="primary" @click="onSubmit('password')" ref="login" plain>确 定</el-button>
                             </el-footer>
                         </el-main>
                     </el-tab-pane>
@@ -39,7 +39,7 @@
                                     </el-input>
                                 </el-form-item>
                             </el-form>
-                            <el-footer style="text-align: center">
+                            <el-footer style="text-align: center;height: 30px !important;">
                                 <el-button @click="resetForm('mail')" plain>取 消</el-button>
                                 <el-button type="primary" @click="onSubmit('mail')" plain>确 定</el-button>
                             </el-footer>
@@ -53,11 +53,16 @@
                 </el-tabs>
             </el-col>
         </el-row>
-        <!---忘记密码-->
-        <el-dialog :visible.sync="emailSendVisible" title="忘记密码" center width="30%" :close-on-click-modal="false" :show-close="false">
-            <SendEmail v-on:close="emailSendVisible = false"></SendEmail>
+        <!---邮箱确认-->
+        <el-dialog :visible.sync="emailSendVisible" title="邮箱确认" center width="30%" :close-on-click-modal="false" :show-close="false">
+            <SendEmail v-on:close="emailSendVisible = false" @resetPassword="resetPassword" :user-email="passwordLogin.email"></SendEmail>
         </el-dialog>
-        <!---忘记密码-->
+        <!---邮箱确认-->
+        <!---修改密码-->
+        <el-dialog :visible.sync="resetPasswordVisible" title="修改密码" center width="30%" :close-on-click-modal="false" :show-close="false">
+            <ResetPassword v-on:close="resetPasswordVisible = false;emailSendVisible = true" @autoLoginSys="autoLoginSys" :user-email="passwordLogin.email" :user-uuid="passwordLogin.uuid"></ResetPassword>
+        </el-dialog>
+        <!---修改密码-->
     </div>
 </template>
 
@@ -66,9 +71,10 @@
     import $url from '../api/url'
     import { mapActions,mapGetters } from 'vuex'
     import SendEmail from "./sendEmail";
+    import ResetPassword from "./resetPassword";
     export default {
         name: "login",
-        components: {SendEmail},
+        components: {ResetPassword, SendEmail},
         data(){
             let verifyCode =  (rule,value,callback) => {
                 try {
@@ -87,6 +93,7 @@
                 passwordLogin:{
                     email:'',
                     password:'',
+                    uuid:'',
                     loginType:'password'
                 },
                 passwordRules:{
@@ -112,7 +119,8 @@
                 times:60,
                 disabled:false,
                 headerTitle:'账号密码登录',
-                emailSendVisible:false
+                emailSendVisible:false,
+                resetPasswordVisible:false
             }
         },
         computed:{
@@ -185,6 +193,27 @@
             resetForm(formName) {
                 this.$refs[formName].resetFields();
             },
+            /**
+             * todo:修改密码
+             * @param item
+             */
+            resetPassword:function (item) {
+                this.emailSendVisible = false;
+                this.resetPasswordVisible = true;
+                this.passwordLogin.email = item.email;
+                this.passwordLogin.uuid = item.uuid;
+                console.log(this.passwordLogin);
+            },
+            /**
+             * todo:系统登录
+             * @param item
+             */
+            autoLoginSys:function (item) {
+                this.passwordLogin.email = item.email;
+                this.passwordLogin.password = item.password;
+                this.passwordLogin.uuid = item.uuid;
+                this.resetPasswordVisible = false;
+            }
         },
         created() {
             setInterval(()=>{

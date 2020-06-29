@@ -101,6 +101,8 @@ let url={
     getCountData:'/v1/total',
     sendEmail:'/v1/sendEmail',
     checkCode:'/v1/checkCode',
-    getCityName:'/v1/getCityName'
+    getCityName:'/v1/getCityName',
+    confirmMail:'/v1/confirmMail',
+    resetPass: '/v1/resetPass'
 };
 export default url
