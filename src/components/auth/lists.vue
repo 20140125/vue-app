@@ -25,7 +25,7 @@
                 <template slot-scope="scope">
                     <el-button icon="el-icon-plus" type="primary" size="mini" v-if="scope.row.level<=1 && btn.add" plain @click="addAuth(scope.row)">添 加</el-button>
                     <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updateAuth(scope.row)" v-if="btn.edit">修 改</el-button>
-                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="authLists" v-on:success="success" v-if="btn.del"/>
+                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="authLists" v-on:success="success" v-if="scope.row.level>0 && btn.del"/>
                 </template>
             </el-table-column>
         </el-table>
@@ -43,7 +43,7 @@
                 <el-form-item label="权限上级" prop="pid">
                     <el-select placeholder="权限上级" filterable style="width: 100%" v-model="authModel.pid">
                         <el-option label="默认权限" value="0" v-if="authModel.pid === '0'" selected/>
-                        <el-option v-for="(item,index) in authLevel" :key="index" :label="setAuthName(item)" :value="item.id.toString()"/>
+                        <el-option v-for="(item,index) in authLevel" :key="index" :disabled="item.id === authModel.id" :label="setAuthName(item)" :value="item.id.toString()"/>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="权限状态" prop="status" v-if="act === 'add'">

@@ -54,7 +54,7 @@
         <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal"  :center="center">
             <el-form :label-width="labelWidth" :model="userModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="管理员" prop="username">
-                    <el-input v-model="userModel.username" :readonly="act === 'add'" placeholder="管理员名称"/>
+                    <el-input v-model="userModel.username" :readonly="act === 'edit'" placeholder="管理员名称"/>
                 </el-form-item>
                 <el-form-item label="用户头像" prop="avatar_url">
                     <Upload :avatar_url="userModel.avatar_url" :username="userModel.username"
