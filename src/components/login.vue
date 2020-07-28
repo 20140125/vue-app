@@ -54,12 +54,12 @@
             </el-col>
         </el-row>
         <!---邮箱确认-->
-        <el-dialog :visible.sync="emailSendVisible" title="邮箱确认" center width="30%" :close-on-click-modal="false" :show-close="false">
+        <el-dialog :visible.sync="emailSendVisible" title="邮箱确认" center :width="dialogWidth" top="25vh" :close-on-click-modal="false" :show-close="false">
             <SendEmail v-on:close="emailSendVisible = false" @resetPassword="resetPassword" :user-email="passwordLogin.email"></SendEmail>
         </el-dialog>
         <!---邮箱确认-->
         <!---修改密码-->
-        <el-dialog :visible.sync="resetPasswordVisible" title="修改密码" center width="30%" :close-on-click-modal="false" :show-close="false">
+        <el-dialog :visible.sync="resetPasswordVisible" title="修改密码" center :width="dialogWidth" top="25vh" :close-on-click-modal="false" :show-close="false">
             <ResetPassword v-on:close="resetPasswordVisible = false;emailSendVisible = true" @autoLoginSys="autoLoginSys" :user-email="passwordLogin.email" :user-uuid="passwordLogin.uuid"></ResetPassword>
         </el-dialog>
         <!---修改密码-->
@@ -114,6 +114,8 @@
                     'background-repeat':'no-repeat',
                     'height':(window.innerHeight)+'px',
                 },
+                dialogWidth:'32%',
+                innerWidth:window.innerWidth,
                 activeModel:'password',
                 codeValue:'获取验证码',
                 times:60,
@@ -125,6 +127,21 @@
         },
         computed:{
             ...mapGetters(['oauthConfig'])
+        },
+        mounted() {
+            this.$nextTick(function () {
+                if (this.innerWidth<768) {
+                    this.dialogWidth = '100%';
+                } else if (this.innerWidth>=768 && this.innerWidth<992) {
+                    this.dialogWidth = '83.3333%';
+                } else if (this.innerWidth>=992 && this.innerWidth<1200) {
+                    this.dialogWidth = '65.3333%';
+                } else if (this.innerWidth>=1200 && this.innerWidth<1920) {
+                    this.dialogWidth = '49.3333%';
+                } else if (this.innerWidth>=1920) {
+                    this.dialogWidth = '32.3333%';
+                }
+            })
         },
         methods:{
             ...mapActions(['loginSystem','getOauthConfig']),
