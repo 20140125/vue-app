@@ -95,6 +95,7 @@ let url={
     //公共操作接口
     tree:'/v1/menu',
     login:'/v1/login',
+    reportCode:'/v1/report/verifyCode',
     logout:'/v1/logout',
     checkToken:'/v1/checkLogin',
     getConfig:'/v1/config',

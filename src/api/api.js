@@ -5,6 +5,15 @@ const access_token = {
     "token":localStorage.getItem('token'),
 };
 /**
+ * TODO:数据上报
+ * @param url
+ * @param params
+ * @returns {Promise<AxiosResponse<T>>}
+ */
+const reportSys = async function (url,params = {}) {
+    return await request.post(url,qs.stringify(Object.assign(params,access_token)))
+};
+/**
  * TODO:登录系统
  * @param params
  * @returns {Promise<AxiosResponse<T>>}
@@ -434,6 +443,7 @@ const getCityName = async function (params={}) {
     return await request.post(url.getCityName,qs.stringify(Object.assign(params,access_token)))
 }
 const interfaceLists = {
+    ReportSys:reportSys,
     LoginSys:loginSys,
     LogoutSys:logoutSys,
     LogSave:logSave,

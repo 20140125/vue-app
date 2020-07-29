@@ -14,8 +14,16 @@
                                 </el-form-item>
                                 <el-form-item prop="password">
                                     <el-input v-model.trim="passwordLogin.password" type="password" show-password placeholder="password" autocomplete="off">
-                                        <template slot="prepend"><i class="el-icon-user-solid"/></template>
+                                        <template slot="prepend"><i class="el-icon-key"/></template>
                                     </el-input>
+                                </el-form-item>
+                                <el-form-item prop="verify_code" id="login">
+                                    <el-input v-model.trim="passwordLogin.verify_code" clearable style="width:61%" maxlength="6" type="text" placeholder="verify code" autocomplete="off">
+                                        <template slot="prepend"><i class="el-icon-picture"/></template>
+                                    </el-input>
+                                    <div class="verify_code" @click="refreshCode">
+                                        <s-identify :identify-code="verifyCode"></s-identify>
+                                    </div>
                                 </el-form-item>
                             </el-form>
                             <el-button type="text" @click="emailSendVisible = !emailSendVisible" style="margin-bottom: -10px">忘记密码?</el-button>
@@ -68,37 +76,28 @@
 
 <script>
     import apiLists from '../api/api';
+    import {set_random} from '../api/func'
     import $url from '../api/url'
     import { mapActions,mapGetters } from 'vuex'
     import SendEmail from "./sendEmail";
     import ResetPassword from "./resetPassword";
+    import SIdentify from "./identify";
     export default {
         name: "login",
-        components: {ResetPassword, SendEmail},
+        components: {SIdentify, ResetPassword, SendEmail},
         data(){
-            let verifyCode =  (rule,value,callback) => {
-                try {
-                    if (!Number.isInteger(value)) {
-                        callback(new Error('验证码格式错误'));
-                    }
-                    if (value.toString().length!==8) {
-                        callback(new Error('请输入八位长度的验证码'));
-                    }
-                    callback();
-                }catch (e) {
-                    callback(new Error('验证码格式错误'))
-                }
-            }
             return {
                 passwordLogin:{
                     email:'',
                     password:'',
+                    verify_code:'',
                     uuid:'',
                     loginType:'password'
                 },
                 passwordRules:{
                     email:[{required:true,message:'请输入用户名',trigger:'blur'},{type:'email',message: '用户名格式不正确'}],
                     password:[{required:true,message:'请输入密码',trigger:'blur'}],
+                    verify_code:[{required:true,message:'请输入验证码',trigger:'blur'}],
                 },
                 mailLogin:{
                     email:'',
@@ -107,7 +106,7 @@
                 },
                 mailRules:{
                     email:[{required:true,message:'请输入邮箱',trigger:'blur'},{type:'email',message: '邮箱格式不正确'}],
-                    verify_code:[{required:true,message:'请输入验证码',trigger:'blur'},{validator:verifyCode,trigger: 'blur'}],
+                    verify_code:[{required:true,message:'请输入验证码',trigger:'blur'}],
                 },
                 bgStyle:{
                     'background':'url('+require('../assets/u0.jpg')+')',
@@ -117,9 +116,12 @@
                 dialogWidth:'32%',
                 innerWidth:window.innerWidth,
                 activeModel:'password',
+                //邮箱验证码
                 codeValue:'获取验证码',
                 times:60,
                 disabled:false,
+                //登录验证码
+                verifyCode:'',
                 headerTitle:'账号密码登录',
                 emailSendVisible:false,
                 resetPasswordVisible:false
@@ -130,6 +132,7 @@
         },
         mounted() {
             this.$nextTick(function () {
+                this.refreshCode();
                 if (this.innerWidth<768) {
                     this.dialogWidth = '100%';
                 } else if (this.innerWidth>=768 && this.innerWidth<992) {
@@ -181,6 +184,14 @@
                 }
             },
             /**
+             * todo:验证码刷新
+             */
+            refreshCode:function () {
+                this.verifyCode = set_random(6,'number');
+                //验证码上报
+                apiLists.ReportSys($url.reportCode,{verify_code:this.verifyCode})
+            },
+                /**
              * TODO:获取验证码
              */
             getEmailCode:function() {
@@ -233,8 +244,11 @@
             }
         },
         created() {
+            /**
+             * todo:邮箱验证码定时器
+             */
             setInterval(()=>{
-                 if (this.times>=0 && this.disabled === true) {
+                 if (this.times>=0 && this.disabled) {
                      this.getEmailCode();
                  } else {
                      this.codeValue = '获取验证码';
@@ -245,6 +259,8 @@
         }
     }
 </script>
-<style scoped>
-
+<style>
+    #login .verify_code {
+        float: right;
+    }
 </style>
