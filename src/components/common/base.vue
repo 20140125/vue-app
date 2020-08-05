@@ -366,14 +366,17 @@
                                     }
                                 }
                             }
+                            console.log(data);
                             break;
                         //发送消息
                         case 'say':
                             __this.say(data);
+                            console.log(data);
                             break;
                         //聊天记录
                         case 'history':
                             __this.messageLists = data.message;
+                            console.log(data);
                             break;
                         case 'logout':
                             console.log(data);
@@ -419,20 +422,22 @@
              * @param room
              */
             setRoomID:function(room) {
-                this.showEmotion = false;
-                this.chat.room_id = room.id.toString();
-                this.chatTitle = room.value;
-                //加入房间
-                let login = {
-                    type:'login',
-                    from_client_id:this.userInfo.uuid,
-                    client_name:this.userInfo.username,
-                    room_id:this.chat.room_id,
-                    client_img:this.userInfo.avatar_url,
-                    uid:this.userInfo.uuid,
-                    adcode:this.userInfo.adcode
-                };
-                this.userInfo.websocketServer.send(JSON.stringify(login))
+                if (this.chat.room_id !== room.id.toString()) {
+                    this.showEmotion = false;
+                    this.chat.room_id = room.id.toString();
+                    this.chatTitle = room.value;
+                    //加入房间
+                    let login = {
+                        type:'login',
+                        from_client_id:this.userInfo.uuid,
+                        client_name:this.userInfo.username,
+                        room_id:this.chat.room_id,
+                        client_img:this.userInfo.avatar_url,
+                        uid:this.userInfo.uuid,
+                        adcode:this.userInfo.adcode
+                    };
+                    this.userInfo.websocketServer.send(JSON.stringify(login))
+                }
                 //获取聊天记录
                 let str = {
                     type:'history',
@@ -537,18 +542,6 @@
              * @param data from_client_id from_client_name content time msg_type to_client_name to_client_id
              */
             say:function(data){
-                let str = {
-                    type:'history',
-                    from_client_id:data['from_client_id'],
-                    from_client_name:data['from_client_name'],
-                    to_client_id:data['to_client_id'],
-                    to_client_name:data['to_client_name'],
-                    room_id:data['room_id'],
-                    uid:data['uid'],
-                };
-                //获取历史记录信息
-                this.userInfo.websocketServer.send(JSON.stringify(str));
-                this.messageLists.push(data);
                 if (this.userInfo.username!==data['from_client_name']){
                     if (data['to_client_id']!=='all') {
                         this.chatTitle = data['from_client_name'];
