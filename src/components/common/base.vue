@@ -190,15 +190,7 @@
                 center:true,
                 messageLists:[],
                 msg_type:'text',
-                chat:{
-                    to_client_name:'',
-                    to_client_id:'',
-                    from_client_id: '',
-                    from_client_name:'',
-                    uid:'',
-                    room_id:'1200',
-                    msgCount:0,
-                },
+                chat:{},
                 chatMsgClass:'el-icon-chat-dot-round',
                 msg_dot:false,
                 noticeArr:[],
@@ -441,14 +433,17 @@
                     };
                     this.userInfo.websocketServer.send(JSON.stringify(login))
                 }
+                //群聊时，接收方为所有用户
+                this.chat.to_client_id = 'all';
+                this.chat.to_client_name = 'all'
                 //获取聊天记录
                 let str = {
                     type:'history',
                     from_client_name:this.userInfo.username,
                     from_client_id:this.chat.from_client_id,
-                    to_client_name:'all',
+                    to_client_name:this.chat.to_client_name,
                     to_client_id:this.chat.to_client_id,
-                    room_id:this.chat.room_id,
+                    room_id:this.chat.to_client_name === 'all' ? this.chat.room_id : '',
                     uid:this.userInfo.uuid
                 };
                 this.userInfo.websocketServer.send(JSON.stringify(str));
@@ -465,7 +460,8 @@
                 this.chat.from_client_id = user.uid;
                 this.chat.uid = this.chat.to_client_id;
                 user.total = 0;
-                this.chatTitle = user.client_name === 'all' ? 'ChatRoom' : user.client_name;
+                this.chatTitle = user.client_name;
+                this.chat.room_id = '';
                 //获取聊天记录
                 let str = {
                     type:'history',
@@ -473,7 +469,7 @@
                     from_client_id:this.userInfo.uuid,
                     to_client_name:this.chat.to_client_name,
                     to_client_id:this.chat.to_client_id,
-                    room_id:'',
+                    room_id:this.chat.to_client_name === 'all' ? this.chat.room_id : '',
                     uid:this.userInfo.uuid
                 };
                 this.userInfo.websocketServer.send(JSON.stringify(str));
@@ -590,7 +586,7 @@
                         from_client_id:this.userInfo.uuid,
                         to_client_name:this.chat.to_client_name,
                         to_client_id:this.chat.to_client_id,
-                        room_id:'',
+                        room_id:this.chat.to_client_name === 'all' ? this.chat.room_id : '',
                         uid:this.userInfo.uuid
                     };
                     this.userInfo.websocketServer.send(JSON.stringify(his));
@@ -683,12 +679,13 @@
          */
         created(){
             this.chat = {
-                to_client_name:'',
-                to_client_id:'',
+                to_client_name:'all',
+                to_client_id:'all',
                 from_client_id: this.userInfo.uuid,
                 from_client_name:this.userInfo.username,
                 uid:this.userInfo.uuid,
                 room_id:'1200',
+                msgCount:0,
             };
             this.activeName = this.activeAuthName;
             this.asideHeight = {

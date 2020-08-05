@@ -91,7 +91,7 @@
         <!--图片预览-->
         <el-dialog :visible.sync="imgVisible" width="30%" :title="dialogTitle" center :show-close="false">
             <el-image v-if="dialogImageUrl" :src="dialogImageUrl" :alt="dialogTitle" fit="cover" :preview-src-list="[dialogImageUrl]" style="width: 300px;height: 300px"/>
-            <video v-if="dialogVideoUrl" :src="dialogVideoUrl" autoplay width="300px" height="300px"></video>
+            <video v-if="dialogVideoUrl" :src="dialogVideoUrl" autoplay controls width="300px" height="300px">您的浏览器不支持 video 标签。</video>
         </el-dialog>
         <!--图片预览-->
     </div>
