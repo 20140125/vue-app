@@ -1,7 +1,7 @@
 <template>
     <el-container>
         <!--header-->
-        <el-header>
+        <el-header id="header">
             <el-menu :default-active="activeIndex" mode="horizontal" background-color="#393d49" text-color="#fff" active-text-color="#ffd04b" @select="handleSelect" :style="headerStyle">
                 <el-menu-item index="1" @click="hideMenu"> <i :class="menuClass" style="color: #fff;font-size: 25px"> </i></el-menu-item>
                 <el-menu-item index="5"><template slot="title"><i class="el-icon-location"></i>{{userInfo.city}}</template></el-menu-item>
@@ -52,7 +52,7 @@
                 </el-menu>
             </el-aside>
             <el-container direction="vertical">
-                <el-main>
+                <el-main :style="mainStyle">
                     <el-carousel :interval="2000" arrow="never" height="65px" direction="vertical" indicator-position="none" v-if="noticeArr.length>0">
                         <el-carousel-item v-for="(item,index) in noticeArr" :key="index">
                             <el-alert type="success" show-icon :title="item.message" effect="light"
@@ -71,7 +71,7 @@
                 </el-footer>
                 <i class="msg-icon" @click="getMsgDialog">
                     <i :class="chatMsgClass" style="margin:13px 15px;">
-                        <el-badge :value="msgCount" v-if="msgCount" type="danger" class="msg-count"/>
+                        <el-badge :value="chat.msgCount" v-if="chat.msgCount" type="danger" class="msg-count"/>
                         <el-badge is-dot v-else-if="msg_dot" type="danger" class="msg-count"/>
                     </i>
                 </i>
@@ -197,11 +197,12 @@
                     from_client_name:'',
                     uid:'',
                     room_id:'1200',
+                    msgCount:0,
                 },
                 chatMsgClass:'el-icon-chat-dot-round',
                 msg_dot:false,
                 noticeArr:[],
-                msgCount:0
+                mainStyle:{margin:'60px 0 60px 200px'}
             }
         },
         components:{
@@ -313,10 +314,12 @@
                     this.menuClass ='el-icon-s-unfold';
                     this.asideWidth = "200px";
                     this.headerStyle = {'margin-left':'200px'};
+                    this. mainStyle = {margin:'60px 0 60px 200px'}
                 } else {
                     this.menuClass = 'el-icon-s-fold';
                     this.asideWidth = "65px";
                     this.headerStyle = {'margin-left':'65px'};
+                    this. mainStyle = {margin:'60px 0 60px 60px'}
                 }
             },
             /**
@@ -354,7 +357,7 @@
                             for (let i in __this.client_list) {
                                 if (__this.userInfo.username === __this.client_list[i]['client_name']) {
                                     unreadArr = __this.client_list[i]['unread'];
-                                    __this.msgCount = __this.client_list[i]['unreadCount']
+                                    __this.chat.msgCount = __this.client_list[i]['unreadCount']
                                 }
                             }
                             if (unreadArr.length>0) {
@@ -410,7 +413,7 @@
                         room_id:this.chat.to_client_name === 'all' ? this.chat.room_id : '',
                         uid:this.userInfo.uuid,
                     };
-                    this.msgCount = 0;
+                    this.chat.msgCount = 0;
                     this.userInfo.websocketServer.send(JSON.stringify(str));
                     this.getOauthConfig('RoomLists');
                     this.scrollToBottom();
@@ -748,6 +751,10 @@
         color: #333;
         text-align: center;
         line-height: 60px;
+        height: 64px;
+        position: fixed;
+        width: 100%;
+        z-index: 4
     }
     .el-footer {
         background-color: #cccccc;
@@ -765,9 +772,9 @@
         background-color: #393d49;
         color: #333;
         line-height: 200px;
-    }
-    .el-main{
-        margin-bottom: 60px;
+        position: fixed;
+        z-index: 3;
+        margin-top: 60px;
     }
     .user-list{
         box-shadow: 0 2px 12px #ffffff, 0 0 6px #F5F5F5;
