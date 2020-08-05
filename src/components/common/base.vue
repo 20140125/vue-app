@@ -407,7 +407,7 @@
                         room_id:this.chat.to_client_name === 'all' ? this.chat.room_id : '',
                         uid:this.userInfo.uuid,
                     };
-
+                    this.msgCount = 0;
                     this.userInfo.websocketServer.send(JSON.stringify(str));
                     this.getOauthConfig('RoomLists');
                     this.scrollToBottom();
