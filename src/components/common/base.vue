@@ -113,7 +113,7 @@
                             <emotion @clickEmotion="getEmotion" v-show="showEmotion" :height="300"/>
                             <div>
                                 <el-tooltip effect="dark" content="房间名称" placement="top-start">
-                                    <el-menu :default-active="room_id" mode="horizontal" style="margin-bottom: 10px;border: none">
+                                    <el-menu :default-active="chat.room_id" mode="horizontal" style="margin-bottom: 10px;border: none">
                                         <el-menu-item @click="setRoomID(room)" v-for="(room,index) in oauthConfig" :key="index" :index="room.id.toString()">
                                             {{room.value}}
                                         </el-menu-item>
@@ -190,13 +190,17 @@
                 center:true,
                 messageLists:[],
                 msg_type:'text',
-                to_client_name:'all',
-                to_client_id:'all',
+                chat:{
+                    to_client_name:'',
+                    to_client_id:'',
+                    from_client_id: '',
+                    from_client_name:'',
+                    uid:'',
+                    room_id:'1200',
+                },
                 chatMsgClass:'el-icon-chat-dot-round',
                 msg_dot:false,
-                room_id:'1200',
                 noticeArr:[],
-                uid:'',
                 msgCount:0
             }
         },
@@ -325,8 +329,9 @@
                 ws.onopen = function(){
                     let str = {
                         type:'login',
+                        from_client_id:__this.userInfo.uuid,
                         client_name:__this.userInfo.username,
-                        room_id:__this.room_id,
+                        room_id:__this.chat.room_id,
                         client_img:__this.userInfo.avatar_url,
                         uid:__this.userInfo.uuid,
                         adcode:__this.userInfo.adcode
@@ -396,10 +401,13 @@
                     let str = {
                         type:'history',
                         from_client_name:this.userInfo.username,
-                        to_client_name:this.to_client_name,
-                        room_id:this.to_client_name === 'all' ? this.room_id : '',
+                        from_client_id:this.chat.from_client_id,
+                        to_client_name:this.chat.to_client_name,
+                        to_client_id:this.chat.to_client_id,
+                        room_id:this.chat.to_client_name === 'all' ? this.chat.room_id : '',
                         uid:this.userInfo.uuid,
                     };
+
                     this.userInfo.websocketServer.send(JSON.stringify(str));
                     this.getOauthConfig('RoomLists');
                     this.scrollToBottom();
@@ -412,13 +420,14 @@
              */
             setRoomID:function(room) {
                 this.showEmotion = false;
-                this.room_id = room.id.toString();
+                this.chat.room_id = room.id.toString();
                 this.chatTitle = room.value;
                 //加入房间
                 let login = {
                     type:'login',
+                    from_client_id:this.userInfo.uuid,
                     client_name:this.userInfo.username,
-                    room_id:this.room_id,
+                    room_id:this.chat.room_id,
                     client_img:this.userInfo.avatar_url,
                     uid:this.userInfo.uuid,
                     adcode:this.userInfo.adcode
@@ -428,8 +437,10 @@
                 let str = {
                     type:'history',
                     from_client_name:this.userInfo.username,
+                    from_client_id:this.chat.from_client_id,
                     to_client_name:'all',
-                    room_id:this.room_id,
+                    to_client_id:this.chat.to_client_id,
+                    room_id:this.chat.room_id,
                     uid:this.userInfo.uuid
                 };
                 this.userInfo.websocketServer.send(JSON.stringify(str));
@@ -441,18 +452,21 @@
              * @param client_id
              */
             sendUser:function(user,client_id) {
-                this.to_client_name = user.client_name;
-                this.to_client_id = client_id === '0' ? 'all' : client_id;
-                this.uid = this.to_client_id;
+                this.chat.to_client_name = user.client_name;
+                this.chat.to_client_id = client_id === '0' ? 'all' : client_id;
+                this.chat.from_client_id = user.uid;
+                this.chat.uid = this.chat.to_client_id;
                 user.total = 0;
                 this.chatTitle = user.client_name === 'all' ? 'ChatRoom' : user.client_name;
                 //获取聊天记录
                 let str = {
                     type:'history',
                     from_client_name:this.userInfo.username,
-                    to_client_name:this.to_client_name,
+                    from_client_id:this.userInfo.uuid,
+                    to_client_name:this.chat.to_client_name,
+                    to_client_id:this.chat.to_client_id,
                     room_id:'',
-                    uid:this.uid
+                    uid:this.userInfo.uuid
                 };
                 this.userInfo.websocketServer.send(JSON.stringify(str));
                 this.scrollToBottom();
@@ -525,7 +539,9 @@
             say:function(data){
                 let str = {
                     type:'history',
+                    from_client_id:data['from_client_id'],
                     from_client_name:data['from_client_name'],
+                    to_client_id:data['to_client_id'],
                     to_client_name:data['to_client_name'],
                     room_id:data['room_id'],
                     uid:data['uid'],
@@ -536,16 +552,16 @@
                 if (this.userInfo.username!==data['from_client_name']){
                     if (data['to_client_id']!=='all') {
                         this.chatTitle = data['from_client_name'];
-                        this.to_client_name = data['from_client_name'];
-                        this.to_client_id = data['from_client_id'];
+                        this.chat.to_client_name = data['from_client_name'];
+                        this.chat.to_client_id = data['from_client_id'];
                     }
                     this.msg_dot = true;
                 }
                 if (this.chatVisible && this.userInfo.username===data['from_client_name']) {
                     if (data['to_client_id']!=='all') {
                         this.chatTitle = data['to_client_name'];
-                        this.to_client_name = data['to_client_name'];
-                        this.to_client_id = data['to_client_id'];
+                        this.chat.to_client_name = data['to_client_name'];
+                        this.chat.to_client_id = data['to_client_id'];
                     }
                     this.scrollToBottom();
                 }
@@ -560,25 +576,28 @@
                     //发送消息
                     let str = {
                         type:'say',
-                        to_client_id:this.to_client_id,
-                        to_client_name:this.to_client_name,
+                        to_client_id:this.chat.to_client_id,
+                        to_client_name:this.chat.to_client_name,
                         from_client_name:this.userInfo.username,
+                        from_client_id:this.userInfo.uuid,
                         msg_type:this.msg_type,
                         content:this.inputMsg,
                         avatar_url:this.userInfo.avatar_url,
-                        room_id:this.to_client_name === 'all' ? this.room_id : '',
-                        uid:this.uid,
+                        room_id:this.chat.to_client_name === 'all' ? this.chat.room_id : '',
+                        uid:this.chat.uid,
                     };
                     this.userInfo.websocketServer.send(JSON.stringify(str));
-                    //获取历史记录信息
-                    let history = {
+                    //获取聊天记录
+                    let his = {
                         type:'history',
                         from_client_name:this.userInfo.username,
-                        to_client_name:this.to_client_name,
-                        room_id:this.to_client_name === 'all' ? this.room_id : '',
-                        uid:this.uid,
+                        from_client_id:this.userInfo.uuid,
+                        to_client_name:this.chat.to_client_name,
+                        to_client_id:this.chat.to_client_id,
+                        room_id:'',
+                        uid:this.userInfo.uuid
                     };
-                    this.userInfo.websocketServer.send(JSON.stringify(history));
+                    this.userInfo.websocketServer.send(JSON.stringify(his));
                     this.messageLists.push(str);
                     this.scrollToBottom();
                     this.$refs.message.innerHTML = '';
@@ -631,7 +650,6 @@
                         this.noticeArr.splice(i,1);
                     }
                 }
-                console.log(this.noticeArr);
             },
             /**
              * TODO:滚动条滚动到底部
@@ -668,6 +686,14 @@
          * TODO:Vue生命周期
          */
         created(){
+            this.chat = {
+                to_client_name:'',
+                to_client_id:'',
+                from_client_id: this.userInfo.uuid,
+                from_client_name:this.userInfo.username,
+                uid:this.userInfo.uuid,
+                room_id:'1200',
+            };
             this.activeName = this.activeAuthName;
             this.asideHeight = {
                 'min-height':(window.innerHeight - 60)+'px'

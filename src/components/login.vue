@@ -18,7 +18,7 @@
                                     </el-input>
                                 </el-form-item>
                                 <el-form-item prop="verify_code" id="login">
-                                    <el-input v-model.trim="passwordLogin.verify_code" clearable style="width:61%" maxlength="6" type="text" placeholder="verify code" autocomplete="off">
+                                    <el-input v-model.trim="passwordLogin.verify_code" clearable :style="styleWidth" maxlength="6" type="text" placeholder="verify code" autocomplete="off">
                                         <template slot="prepend"><i class="el-icon-picture"/></template>
                                     </el-input>
                                     <div class="verify_code" @click="refreshCode">
@@ -114,6 +114,7 @@
                     'height':(window.innerHeight)+'px',
                 },
                 dialogWidth:'32%',
+                styleWidth:{width:'76%'},
                 innerWidth:window.innerWidth,
                 activeModel:'password',
                 //邮箱验证码
@@ -134,15 +135,20 @@
             this.$nextTick(function () {
                 this.refreshCode();
                 if (this.innerWidth<768) {
+                    this.styleWidth = {width: '55%'};
                     this.dialogWidth = '100%';
                 } else if (this.innerWidth>=768 && this.innerWidth<992) {
                     this.dialogWidth = '83.3333%';
+                    this.styleWidth = {width: '79%'};
                 } else if (this.innerWidth>=992 && this.innerWidth<1200) {
                     this.dialogWidth = '65.3333%';
+                    this.styleWidth = {width: '78%'};
                 } else if (this.innerWidth>=1200 && this.innerWidth<1920) {
                     this.dialogWidth = '49.3333%';
+                    this.styleWidth = {width: '79%'};
                 } else if (this.innerWidth>=1920) {
                     this.dialogWidth = '32.3333%';
+                    this.styleWidth = {width: '76%'};
                 }
             })
         },

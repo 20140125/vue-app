@@ -1,17 +1,25 @@
 <template>
     <div>
-        <el-form :model="resetPass" ref="resetPass" :rules="rules" label-width="90px" label-position="left">
-            <el-form-item label="用户邮箱:" prop="email">
-                <span v-html="userEmail"/>
+        <el-form :model="resetPass" ref="resetPass" :rules="rules" label-position="left">
+            <el-form-item prop="email">
+                <el-input v-model="userEmail" readonly>
+                    <template slot="prepend"><i class="el-icon-user-solid"/></template>
+                </el-input>
             </el-form-item>
-            <el-form-item label="新密码:" prop="password">
-                <el-input placeholder="请输入用户密码" maxlength="16" v-model="resetPass.password" show-password></el-input>
+            <el-form-item prop="password">
+                <el-input placeholder="请输入用户密码" maxlength="16" v-model="resetPass.password" show-password>
+                    <template slot="prepend"><i class="el-icon-lock"/></template>
+                </el-input>
             </el-form-item>
-            <el-form-item label="确认密码:" prop="confirmPassword">
-                <el-input placeholder="请输入用户密码" maxlength="16" v-model="resetPass.confirmPassword" show-password></el-input>
+            <el-form-item prop="confirmPassword">
+                <el-input placeholder="请输入用户密码" maxlength="16" v-model="resetPass.confirmPassword" show-password>
+                    <template slot="prepend"><i class="el-icon-lock"/></template>
+                </el-input>
             </el-form-item>
-            <el-form-item label="验证码:" prop="verify_code">
-                <el-input placeholder="请输入邮箱验证码" maxlength="8" v-model.number="resetPass.verify_code"></el-input>
+            <el-form-item prop="verify_code">
+                <el-input placeholder="请输入邮箱验证码" maxlength="8" v-model.number="resetPass.verify_code">
+                    <template slot="prepend"><i class="el-icon-picture"/></template>
+                </el-input>
             </el-form-item>
         </el-form>
         <el-footer style="text-align: center">

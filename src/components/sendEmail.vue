@@ -1,8 +1,10 @@
 <template>
     <div>
-        <el-form :model="users" label-width="90px" ref="userForm" :rules="rules">
-            <el-form-item label="邮件发送:" prop="email">
-                <el-input placeholder="请输入你的邮箱账号" v-model="users.email"></el-input>
+        <el-form :model="users" ref="userForm" :rules="rules">
+            <el-form-item prop="email">
+                <el-input placeholder="请输入你的邮箱账号" v-model="users.email">
+                    <template slot="prepend"><i class="el-icon-s-custom"/></template>
+                </el-input>
             </el-form-item>
         </el-form>
         <el-footer style="text-align: center">
