@@ -380,7 +380,7 @@
                     } else {
                         this.url = this.cgi.insert;
                         let apiModel = {desc:'', type:data.id, href:'', method:'POST', request:[{"name":"token","desc":"用户token","required":"1","type":"String","val":""}],
-                            response:[{"name":"code","desc":"200 成功","type":"number"},{"name":"msg","desc":"Success","type":"string"}],
+                            response:[{"name":"code","desc":"200 成功","type":"Number"},{"name":"msg","desc":"Success","type":"String"}],
                             response_string:'', remark:''};
                         this.addApiModel(apiModel);
                     }
