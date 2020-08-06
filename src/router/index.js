@@ -62,7 +62,7 @@ export default new Router({
 
             ]
         },
-        { path: '*',redirect:'/404'},
         { path: '/chat', name:'chatDemo',component:chatDemo,meta:{ mode:'chat',title:'聊天室' }},
+        { path: '*',redirect:'/404'},
     ]
 })

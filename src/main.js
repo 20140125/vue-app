@@ -37,6 +37,16 @@ router.beforeEach((to,from,next)=>{
     if (to.params.access_token){
         store.commit('setToken',to.params.access_token);
     }
+    //404页面
+    if (to.name === 'Empty') {
+        next();
+        return
+    }
+    if (to.name === 'chatDemo' && !localStorage.getItem('token')) {
+        next('/login');
+        return
+    }
+    //登录页
     if (to.name === 'Login' || to.name === '/') {
         if (!store.state.login.token) {
             next();
