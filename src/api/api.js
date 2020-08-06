@@ -427,6 +427,14 @@ const excelExport = async function (params={}) {
     return await request.post(url.excelExport,qs.stringify(Object.assign(params,access_token)))
 };
 /**
+ * TODO:excelImport
+ * @param params
+ * @returns {Promise<AxiosResponse<T>>}
+ */
+const excelImport = async function (params={}) {
+    return await request.post(url.excelImport,qs.stringify(Object.assign(params,access_token)))
+};
+/**
  * TODO:获取历史聊天记录
  * @param params
  * @returns {Promise<AxiosResponse<T>>}
@@ -495,6 +503,7 @@ const interfaceLists = {
     SaveData:saveData,
     RemoveData:removeData,
     ExcelExport:excelExport,
+    ExcelImport:excelImport,
     TimeLineLists:timeLineLists,
     GetCityName:getCityName
 };

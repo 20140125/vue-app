@@ -89,6 +89,7 @@ let url={
     tableComponent:'/v1/components/table',
     componentAction:'/v1/components/actions',
     excelExport:'/v1/excel/export',
+    excelImport:'/v1/excel/import',
     timeLineLists:'/v1/timeline/index',
     timeLineSave:'/v1/timeline/save',
     timeLineUpdate:'/v1/timeline/update',

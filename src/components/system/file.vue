@@ -1,5 +1,5 @@
 <template>
-    <div v-loading="loading" :element-loading-text="loadingText" id="file">
+    <div v-loading="loading" :element-loading-text="loadingText">
         <el-row :gutter="24">
             <!--文件列表-->
             <el-col :xl="{'span':5}" :lg="{'span':5}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" style="margin-bottom: 20px">
@@ -79,7 +79,7 @@
                        :action="cgi.uploadUrl"
                        :headers="headers"
                        :on-remove="handleRemove"
-                       :on-success="handelSuccess"
+                       :on-success="handleSuccess"
                        :file-list="fileList"
                        :auto-upload="false"
                        list-type="picture-card">
@@ -89,7 +89,7 @@
         <!--文件上传-->
 
         <!--图片预览-->
-        <el-dialog :visible.sync="imgVisible" width="30%" :title="dialogTitle" center :show-close="false">
+        <el-dialog id="file" :visible.sync="imgVisible" width="30%" :title="dialogTitle" center :show-close="false">
             <el-image v-if="dialogImageUrl" :src="dialogImageUrl" :alt="dialogTitle" fit="cover" :preview-src-list="[dialogImageUrl]" style="width: 300px;height: 300px"/>
             <video v-if="dialogVideoUrl" :src="dialogVideoUrl" autoplay controls width="300px" height="300px">您的浏览器不支持 video 标签。</video>
         </el-dialog>
@@ -106,6 +106,9 @@
     import { codemirror } from 'vue-codemirror-lite'
     //编辑器代码 php
     require('codemirror/mode/php/php.js');
+    require('codemirror/mode/sql/sql.js')
+    require('codemirror/addon/hint/sql-hint.js')
+    require('codemirror/addon/hint/show-hint.js')
     require('codemirror/mode/markdown/markdown.js');
     require('codemirror/mode/xml/xml.js');
     require('codemirror/addon/hint/javascript-hint.js');
@@ -129,11 +132,7 @@
         data(){
             return {
                 //树组件
-                props:{
-                    label:'label',
-                    children:'children',
-                    isLeaf:false
-                },
+                props:{ label:'label', children:'children', isLeaf:false },
                 //文件授权
                 checkBoxArr:[{'id':4,'value':'读取'},{'id':2,'value':'写入'},{'id':1,'value':'执行'}],
                 all:[],
@@ -142,17 +141,15 @@
                 all_id:0,
                 user_id:0,
                 common_id:0,
-                chmodModel:{
-                    auth:parseInt(this.all_id +''+ this.user_id +''+ this.common_id),
-                    path:''
-                },
+                chmodModel:{ auth:parseInt(this.all_id +''+ this.user_id +''+ this.common_id), path:'' },
                 //文件压缩
                 compressionModel:{docLists:[], resource:'', path:''},
                 mode:{
                     markdown:"text/markdown",
                     php:"text/x-php",
                     xml:"text/xml",
-                    json:"application/ld+json"
+                    json:"application/ld+json",
+                    sql:"text/x-mysql"
                 },
                 //代码编辑器配置
                 options:{
@@ -195,7 +192,6 @@
                 path:'base_path',
                 //默认显示tabs
                 activeFileTabName:null,
-
                 title:'default',
                 syncVisible:false, //是否显示弹框
                 modal:true, //遮盖层是否需要
@@ -210,16 +206,7 @@
                 //文件对象
                 fileObject:{},
                 //是否显示按钮
-                showRightBtn:{
-                    add:true,
-                    rename:true,
-                    remove:true,
-                    compression:true,
-                    DeCompression:false,
-                    auth:true,
-                    download:true,
-                    upload:true,
-                },
+                showRightBtn:{ add:true, rename:true, remove:true, compression:true, DeCompression:false, auth:true, download:true, upload:true },
                 //文件
                 fileModel:{content:'', path:''},
                 //文件上传
@@ -249,7 +236,6 @@
                 },
                 filterText:'',
                 scrollTop:0,
-
                 btn:{},
             }
         },
@@ -342,8 +328,6 @@
              * @val content tabs 标签下的内容
              */
             goto:function(tab){
-                let ext = tab.label.split(".")[1];
-                this.setOptionsMode(ext);
                 let item = this.fileTabs;
                 for (const i in item){
                     if (item[i].label === tab.label) {
@@ -391,11 +375,13 @@
                     return false;
                 }
                 this.dialogTitle = item.label;
+                //文件地址
+                let commUrl = this.userInfo.local+'storage'+item.path.substr(item.path.indexOf('public')+6,item.path.length-item.path.indexOf('public'));
                 //图片浏览
                 let imgExt = ['png','jpg','jpeg','gif','PNG','JPG','JPEG','GIF'];
                 if (imgExt.includes(ext)) {
                     this.dialogVideoUrl = '';
-                    this.dialogImageUrl = this.userInfo.local+'storage'+item.path.substr(item.path.indexOf('public')+6,item.path.length-item.path.indexOf('public'));
+                    this.dialogImageUrl = commUrl
                     this.imgVisible = true;
                     return false;
                 }
@@ -403,9 +389,17 @@
                 let videoExt = ['mp4','flv'];
                 if (videoExt.includes(ext)) {
                     this.dialogImageUrl = '';
-                    this.dialogVideoUrl = this.userInfo.local+'storage'+item.path.substr(item.path.indexOf('public')+6,item.path.length-item.path.indexOf('public'));
+                    this.dialogVideoUrl = commUrl
                     this.imgVisible = true;
                     return false;
+                }
+                //excel文件下载
+                let xlsExt = ['xls','csv'];
+                if (xlsExt.includes(ext)) {
+                    this.$confirm('是否下载文件【'+item.label+'】到本地',{showClose:false,center:true}).then(response=>{
+                        window.location.href=commUrl
+                    }).catch(()=>{})
+                    return false
                 }
                 this.setOptionsMode(ext);
                 this.showIdea = true;
@@ -438,6 +432,9 @@
                     case 'json':
                     case 'lock':
                         this.options.mode = this.mode.json;
+                        break;
+                    case 'sql':
+                        this.options.mode = this.mode.sql;
                         break;
                     default:
                         this.options.mode = this.mode.php;
@@ -699,28 +696,13 @@
             /**
              * todo：文件上传成功回调
              */
-            handelSuccess:function(response){
+            handleSuccess:function(response){
                 if (response.code === 200){
                     this.$message({type:'success',message:response.msg});
                     let data = { msg:response.msg,result:response,href:$url.fileUpload };
                     this.saveSystemLog(data);
                     this.getFileLists(this.path);
                     this.fileSyncVisible = false;
-                }
-            },
-            /**
-             * TODO:图片/视频预览
-             */
-            imagePreview:function() {
-                let ext = this.fileObject.name.split(".")[1];
-                let imgArr = ['png','jpeg','gif','jpg'];
-                if (imgArr.includes(ext.toLowerCase())){
-                    this.imgVisible = true;
-                    apiLists.ImagePreview({name:response.item.name}).then(response=>{
-                        if (response && response.data.code === 200){
-                            this.dialogImageUrl = response.data.item.src;
-                        }
-                    })
                 }
             },
             /**

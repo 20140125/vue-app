@@ -20,7 +20,7 @@
             </el-form-item>
             <el-form-item>
                 <el-button icon="el-icon-search" type="primary" plain="plain" @click="search">Search</el-button>
-                <el-button icon="el-icon-download" type="primary" plain="plain" @click="ExcelExport">Excel Export</el-button>
+                <el-button icon="el-icon-download" type="primary" plain="plain" @click="ExcelExport">Excel Export To Server</el-button>
             </el-form-item>
         </el-form>
         <el-table :data="tableData" :empty-text="empty" border>
@@ -99,7 +99,7 @@
                         let data = { href:$url.excelExport, msg:response.data.msg, token:this.$store.state.login.token };
                         this.saveSystemLog(data);
                         this.$message({type:'success',message:response.data.msg});
-                        window.open(process.env.API_ROOT+$url.fileDownload.replace('/','')+"?token="+this.$store.state.login.token+"&path="+response.data.item.href,'__target');
+                        window.open(process.env.API_ROOT+$url.fileDownload.replace('/','')+"?token="+this.$store.state.login.token+"&path="+response.data.item.href+"&name="+response.data.item.name,'__target');
                         return false;
                     }
                     this.$message({type:'warning',message:response.data.msg});
