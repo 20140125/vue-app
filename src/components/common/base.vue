@@ -78,14 +78,14 @@
             </el-container>
         </el-container>
         <!---chat message-->
-        <el-dialog :title="chatTitle" @close="chatVisible = false" top="5vh" width="60%"
+        <el-dialog :title="chat.chatTitle" @close="chatVisible = false" top="5vh" width="60%"
                    :center="center" :show-close="closeModel"
                    :close-on-press-escape="closeModel" :visible.sync="chatVisible">
             <el-row :gutter="24">
                 <el-col :span="6" class="user-list">
                     <div class="aside">
                         <el-menu background-color="#393d49" text-color="#fff" active-text-color="#ffd04b">
-                            <el-menu-item @click="sendUser(user,index)" v-for="(user,index) in client_list" :key="index" :index="index.toString()">
+                            <el-menu-item @click="sendUser(user,index)" v-for="(user,index) in chat.client_list" :key="index" :index="index.toString()">
                                 <el-avatar :size="50" :src="user.client_img" style="cursor: pointer"/>
                                 <span slot="title" style="margin-left: 20px" v-html="user.client_name"/>
                                 <!--未读消息数-->
@@ -101,7 +101,7 @@
                 <el-col :span="18">
                     <el-card shadow="always">
                         <div id="msg">
-                            <div v-for="(message,index) in messageLists" :key="index">
+                            <div v-for="(message,index) in chat.messageLists" :key="index">
                                 <div class="msg-img">
                                     <el-avatar :size="50" :src="message.avatar_url" style="cursor: pointer"/>
                                     <i>{{message.from_client_name}}   {{message.time}}</i>
@@ -178,18 +178,14 @@
                 online:0,
                 //workerManChat
                 cgi:{uploadUrl:process.env.API_ROOT+$url.fileUpload.replace('/','')},
-                chatTitle:'隨心所欲,隨性而行',
                 fileData:{},
                 headers:{},
                 chatVisible:false,
-                client_list:[],
                 inputMsg:'',
                 emotionLists:[],
                 showEmotion:false,
                 closeModel:false,
                 center:true,
-                messageLists:[],
-                msg_type:'text',
                 chat:{},
                 chatMsgClass:'el-icon-chat-dot-round',
                 msg_dot:false,
@@ -344,19 +340,19 @@
                         case 'login':
                             __this.saveWeather(data.weather);
                             let unreadArr = [];
-                            __this.client_list = data.client_list;
+                            __this.chat.client_list = data.client_list;
                             //展示单个用户未读消息数
-                            for (let i in __this.client_list) {
-                                if (__this.userInfo.username === __this.client_list[i]['client_name']) {
-                                    unreadArr = __this.client_list[i]['unread'];
-                                    __this.chat.msgCount = __this.client_list[i]['unreadCount']
+                            for (let i in __this.chat.client_list) {
+                                if (__this.userInfo.username === __this.chat.client_list[i]['client_name']) {
+                                    unreadArr = __this.chat.client_list[i]['unread'];
+                                    __this.chat.msgCount = __this.chat.client_list[i]['unreadCount']
                                 }
                             }
                             if (unreadArr.length>0) {
                                 for (let i in unreadArr) {
-                                    for (let j in __this.client_list) {
-                                        if (unreadArr[i]['form'] === __this.client_list[j]['client_name']) {
-                                            __this.client_list[j]['total'] = unreadArr[i]['total'];
+                                    for (let j in __this.chat.client_list) {
+                                        if (unreadArr[i]['form'] === __this.chat.client_list[j]['client_name']) {
+                                            __this.chat.client_list[j]['total'] = unreadArr[i]['total'];
                                         }
                                     }
                                 }
@@ -370,7 +366,7 @@
                             break;
                         //聊天记录
                         case 'history':
-                            __this.messageLists = data.message;
+                            __this.chat.messageLists = data.message;
                             console.log(data);
                             break;
                         case 'logout':
@@ -420,7 +416,7 @@
                 if (this.chat.room_id !== room.id.toString()) {
                     this.showEmotion = false;
                     this.chat.room_id = room.id.toString();
-                    this.chatTitle = room.value;
+                    this.chat.chatTitle = room.value;
                     //加入房间
                     let login = {
                         type:'login',
@@ -460,7 +456,7 @@
                 this.chat.from_client_id = user.uid;
                 this.chat.uid = this.chat.to_client_id;
                 user.total = 0;
-                this.chatTitle = user.client_name;
+                this.chat.chatTitle = user.client_name;
                 this.chat.room_id = '';
                 //获取聊天记录
                 let str = {
@@ -486,7 +482,7 @@
              * @param emotion
              */
             getEmotion:function (emotion) {
-                this.msg_type = 'text';
+                this.chat.msg_type = 'text';
                 this.inputMsg+= "<img src='"+emotion.icon+"' width='50px' height='50px' alt='"+emotion.emoji+"' title='"+emotion.title+"'>"
                 this.$refs.message.innerHTML = this.inputMsg;
             },
@@ -496,7 +492,7 @@
              */
             uploadSuccess:function(response){
                 if (response && response.code === 200){
-                    switch (this.msg_type) {
+                    switch (this.chat.msg_type) {
                         case 'img':
                             this.inputMsg+= "<img src='"+response.item.src+"' width='100px' height='100px' alt=''>";
                             break;
@@ -520,13 +516,13 @@
                     case 'gif':
                     case 'png':
                     case 'jpeg':
-                        this.msg_type = 'img';
+                        this.chat.msg_type = 'img';
                         if (file.size>2*1024*1024){
                             this.$message({type:'warning',message:'upload image size error'});
                         }
                         break;
                     case 'mp4':
-                        this.msg_type = 'video';
+                        this.chat.msg_type = 'video';
                         if (file.size>5*1024*1024){
                             this.$message({type:'warning',message:'upload video size error'});
                         }
@@ -538,12 +534,12 @@
             },
             /**
              * TODO:发送消息
-             * @param data from_client_id from_client_name content time msg_type to_client_name to_client_id
+             * @param data
              */
             say:function(data){
                 if (this.userInfo.username!==data['from_client_name']){
                     if (data['to_client_id']!=='all') {
-                        this.chatTitle = data['from_client_name'];
+                        this.chat.chatTitle = data['from_client_name'];
                         this.chat.to_client_name = data['from_client_name'];
                         this.chat.to_client_id = data['from_client_id'];
                     }
@@ -551,7 +547,7 @@
                 }
                 if (this.chatVisible && this.userInfo.username===data['from_client_name']) {
                     if (data['to_client_id']!=='all') {
-                        this.chatTitle = data['to_client_name'];
+                        this.chat.chatTitle = data['to_client_name'];
                         this.chat.to_client_name = data['to_client_name'];
                         this.chat.to_client_id = data['to_client_id'];
                     }
@@ -572,7 +568,7 @@
                         to_client_name:this.chat.to_client_name,
                         from_client_name:this.userInfo.username,
                         from_client_id:this.userInfo.uuid,
-                        msg_type:this.msg_type,
+                        msg_type:this.chat.msg_type,
                         content:this.inputMsg,
                         avatar_url:this.userInfo.avatar_url,
                         room_id:this.chat.to_client_name === 'all' ? this.chat.room_id : '',
@@ -590,7 +586,7 @@
                         uid:this.userInfo.uuid
                     };
                     this.userInfo.websocketServer.send(JSON.stringify(his));
-                    this.messageLists.push(str);
+                    this.chat.messageLists.push(str);
                     this.scrollToBottom();
                     this.$refs.message.innerHTML = '';
                     this.inputMsg = '';
@@ -678,6 +674,7 @@
          * TODO:Vue生命周期
          */
         created(){
+            //初始化聊天系统参数
             this.chat = {
                 to_client_name:'all',
                 to_client_id:'all',
@@ -686,7 +683,14 @@
                 uid:this.userInfo.uuid,
                 room_id:'1200',
                 msgCount:0,
+                client_list:[],
+                chatTitle:'隨心所欲,隨性而行',
+                messageLists:[],
+                msg_type:'text',
             };
+            //客服系统初始化
+            this.connect(this.userInfo.websocketServer);
+
             this.activeName = this.activeAuthName;
             this.asideHeight = {
                 'min-height':(window.innerHeight - 60)+'px'
@@ -695,10 +699,8 @@
             this.fileData.token = this.userInfo.token;
             this.fileData.rand = false;
             this.headers.Authorization = `${func.set_password(func.set_random(32),func.set_random(12))}${this.userInfo.token}${func.set_password(func.set_random(32),func.set_random(12))}`
-            //客服系统初始化
-            this.connect(this.userInfo.websocketServer);
-            let __this = this;
             //键盘事件
+            let __this = this;
             document.onkeydown = function (e) {
                 if (e.code === 'Enter' && e.shiftKey) {
                     e.preventDefault();
