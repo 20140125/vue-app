@@ -106,7 +106,7 @@
                                     <el-avatar :size="50" :src="message.avatar_url" style="cursor: pointer"/>
                                     <i>{{message.from_client_name}}   {{message.time}}</i>
                                 </div>
-                                <div class="msg-list" v-html="unescape(message.content)"></div>
+                                <div class="msg-list" v-html="unescape(message.content)"/>
                             </div>
                         </div>
                         <div class="input-msg">

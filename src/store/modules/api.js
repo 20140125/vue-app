@@ -120,7 +120,6 @@ const actions= {
      * @param dialogWidth
      */
     addDialogWidth({state, commit}, dialogWidth) {
-        console.log('aaaa'+dialogWidth);
         commit('setDialogWidth', dialogWidth);
     }
 };
