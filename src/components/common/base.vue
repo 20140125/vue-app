@@ -72,7 +72,7 @@
                 <i class="msg-icon" @click="getMsgDialog">
                     <i :class="chatMsgClass" style="margin:13px 15px;">
                         <el-badge :value="chat.msgCount" v-if="chat.msgCount" type="danger" class="msg-count"/>
-                        <el-badge is-dot v-else-if="msg_dot" type="danger" class="msg-count"/>
+                        <el-badge v-if="msg_dot" is-dot type="danger" class="msg-count"/>
                     </i>
                 </i>
             </el-container>
@@ -188,9 +188,9 @@
                 center:true,
                 chat:{},
                 chatMsgClass:'el-icon-chat-dot-round',
-                msg_dot:false,
                 noticeArr:[],
-                mainStyle:{margin:'60px 0 60px 200px'}
+                mainStyle:{margin:'60px 0 60px 200px'},
+                msg_dot:false
             }
         },
         components:{
@@ -339,33 +339,22 @@
                         //登陆
                         case 'login':
                             __this.saveWeather(data.weather);
-                            let unreadArr = [];
                             __this.chat.client_list = data.client_list;
-                            //展示单个用户未读消息数
-                            for (let i in __this.chat.client_list) {
-                                if (__this.userInfo.username === __this.chat.client_list[i]['client_name']) {
-                                    unreadArr = __this.chat.client_list[i]['unread'];
-                                    __this.chat.msgCount = __this.chat.client_list[i]['unreadCount']
-                                }
-                            }
-                            if (unreadArr.length>0) {
-                                for (let i in unreadArr) {
-                                    for (let j in __this.chat.client_list) {
-                                        if (unreadArr[i]['form'] === __this.chat.client_list[j]['client_name']) {
-                                            __this.chat.client_list[j]['total'] = unreadArr[i]['total'];
-                                        }
-                                    }
-                                }
-                            }
+                            __this.setUsersLists();
                             console.log(data);
                             break;
                         //发送消息
                         case 'say':
                             __this.say(data);
+                            console.log(data);
                             break;
                         //聊天记录
                         case 'history':
                             __this.chat.messageLists = data.message;
+                            if (data.client_list.length>0) {
+                                __this.chat.client_list = data.client_list;
+                                __this.setUsersLists();
+                            }
                             console.log(data);
                             break;
                         case 'logout':
@@ -380,6 +369,28 @@
                 ws.onerror = function() {
                     console.log("出现错误");
                 };
+            },
+            /**
+             * todo:设置未读消息数
+             */
+            setUsersLists:function () {
+                //展示单个用户未读消息数
+                let unreadMessage = [];
+                for (let i in this.chat.client_list) {
+                    if (this.userInfo.username === this.chat.client_list[i]['client_name']) {
+                        unreadMessage = this.chat.client_list[i]['unread'];
+                        this.chat.msgCount = this.chat.client_list[i]['unreadCount']
+                    }
+                }
+                if (unreadMessage.length>0) {
+                    for (let i in unreadMessage) {
+                        for (let j in this.chat.client_list) {
+                            if (unreadMessage[i]['form'] === j) {
+                                this.chat.client_list[j]['total'] = parseInt(unreadMessage[i]['total']);
+                            }
+                        }
+                    }
+                }
             },
             /**
              * TODO:弹出框展示
@@ -399,11 +410,10 @@
                         to_client_id:this.chat.to_client_id,
                         room_id:this.chat.to_client_name === 'all' ? this.chat.room_id : '',
                         uid:this.userInfo.uuid,
+                        source:'dialog',
                     };
                     this.chat.msgCount = 0;
-                    if (!this.msg_dot) {
-                        this.userInfo.websocketServer.send(JSON.stringify(str));
-                    }
+                    this.userInfo.websocketServer.send(JSON.stringify(str));
                     this.getOauthConfig('RoomLists');
                     this.scrollToBottom();
                     this.msg_dot = false;
@@ -441,7 +451,8 @@
                     to_client_name:this.chat.to_client_name,
                     to_client_id:this.chat.to_client_id,
                     room_id:this.chat.to_client_name === 'all' ? this.chat.room_id : '',
-                    uid:this.userInfo.uuid
+                    uid:this.userInfo.uuid,
+                    source:'room',
                 };
                 this.userInfo.websocketServer.send(JSON.stringify(str));
                 this.scrollToBottom();
@@ -456,7 +467,6 @@
                 this.chat.to_client_id = client_id === '0' ? 'all' : client_id;
                 this.chat.from_client_id = user.uid;
                 this.chat.uid = this.chat.to_client_id;
-                user.total = 0;
                 this.chat.chatTitle = user.client_name;
                 this.chat.room_id = '';
                 //获取聊天记录
@@ -467,7 +477,8 @@
                     to_client_name:this.chat.to_client_name,
                     to_client_id:this.chat.to_client_id,
                     room_id:this.chat.to_client_name === 'all' ? this.chat.room_id : '',
-                    uid:this.userInfo.uuid
+                    uid:this.userInfo.uuid,
+                    source:'user',
                 };
                 this.userInfo.websocketServer.send(JSON.stringify(str));
                 this.scrollToBottom();
@@ -546,7 +557,9 @@
                         this.chat.to_client_name = data['from_client_name'];
                         this.chat.to_client_id = data['from_client_id'];
                     }
-                    this.msg_dot = true;
+                    if (!this.chatVisible) {
+                        this.msg_dot = true;
+                    }
                 }
                 if (this.chatVisible && this.userInfo.username===data['from_client_name']) {
                     if (data['to_client_id']!=='all') {
