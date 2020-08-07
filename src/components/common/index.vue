@@ -1,17 +1,19 @@
 <template>
     <el-row :gutter="24">
         <el-col :span="chartsNum">
-            <div id="charts" :style="chartsStyle"/>
-            <el-calendar :style="innerWidth>=1920 ? 'margin-top:70px' : ''" v-model="value" :first-day-of-week="7">
-                <template slot="dateCell" slot-scope="{date, data}">
-                    <p :class="data.isSelected ? 'is-selected' : ''">
-                       {{data.day.split('-').slice(2).join('-') }} {{ data.isSelected ? ' ✔️' : ''}}
-                    </p>
-                </template>
-            </el-calendar>
+            <el-card shadow="hover" :style="chartsStyle"><div id="charts"/></el-card>
+            <el-card shadow="hover" :style="innerWidth>=1920 ? 'margin-top:30px' : 'margin-bottom:20px'">
+                <el-calendar v-model="value" :first-day-of-week="7">
+                    <template slot="dateCell" slot-scope="{date, data}">
+                        <p :class="data.isSelected ? 'is-selected' : ''">
+                            {{data.day.split('-').slice(2).join('-') }} {{ data.isSelected ? ' ✔️' : ''}}
+                        </p>
+                    </template>
+                </el-calendar>
+            </el-card>
         </el-col>
         <el-col :span="timestampNum">
-            <div class="block">
+            <el-card shadow="hover">
                 <div class="radio">
                     <el-radio-group v-model="reverse">
                         <el-radio :label="true">倒序</el-radio>
@@ -28,7 +30,7 @@
                         <el-card>{{activity.content}}</el-card>
                     </el-timeline-item>
                 </el-timeline>
-            </div>
+            </el-card>
         </el-col>
     </el-row>
 </template>

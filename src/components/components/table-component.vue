@@ -41,7 +41,6 @@
     import $url from '../../api/url'
     import apiLists from '../../api/api'
     import {mapActions} from 'vuex'
-    import func from '../../api/func'
     export default {
         name: 'Table',
         components: {Delete},
