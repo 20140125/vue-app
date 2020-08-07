@@ -45,7 +45,7 @@
         </div>
         <!--鼠标右键-->
         <!--权限框-->
-        <el-dialog :visible.sync="syncVisible" :modal="modal" :title="title" :center="center">
+        <el-dialog :visible.sync="syncVisible" :width="dialogWidth" :modal="modal" :title="title" :center="center">
             <el-form :label-width="labelWidth" :model="chmodModel" :rules="rules" :ref="reFrom">
                 <el-form-item label="权限" prop="auth" required>
                     <el-input placeholder="请输入内容" @change="setChmodAuth" v-model="chmodModel.auth"/>
@@ -72,7 +72,7 @@
         </el-dialog>
         <!--权限框-->
         <!--文件上传-->
-        <el-dialog :visible.sync="fileSyncVisible" :modal="modal" title="文件上传" :center="center">
+        <el-dialog :visible.sync="fileSyncVisible" :width="dialogWidth" :modal="modal" title="文件上传" :center="center">
             <el-button style="margin-left: 10px;margin-bottom: 20px" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
             <el-upload ref="upload"
                        :data="fileData"
@@ -245,7 +245,7 @@
             }
         },
         computed:{
-            ...mapGetters(['fileTabs','currFileObj','userInfo']),
+            ...mapGetters(['fileTabs','currFileObj','userInfo','dialogWidth']),
         },
         methods:{
             ...mapActions(['addFileTabs','deleteFileTabs','addCurrFileObj','saveSystemLog']),

@@ -1,9 +1,8 @@
 <template>
     <el-row :gutter="24">
-        <el-col :span="14">
-            <div id="charts" style="height: 400px"></div>
-            <div id="total" style="height: 400px"></div>
-            <el-calendar v-model="value" :first-day-of-week="7">
+        <el-col :span="chartsNum">
+            <div id="charts" :style="chartsStyle"/>
+            <el-calendar :style="innerWidth>=1920 ? 'margin-top:70px' : ''" v-model="value" :first-day-of-week="7">
                 <template slot="dateCell" slot-scope="{date, data}">
                     <p :class="data.isSelected ? 'is-selected' : ''">
                        {{data.day.split('-').slice(2).join('-') }} {{ data.isSelected ? ' ✔️' : ''}}
@@ -11,8 +10,7 @@
                 </template>
             </el-calendar>
         </el-col>
-
-        <el-col :span="10">
+        <el-col :span="timestampNum">
             <div class="block">
                 <div class="radio">
                     <el-radio-group v-model="reverse">
@@ -20,7 +18,6 @@
                         <el-radio :label="false">正序</el-radio>
                     </el-radio-group>
                 </div>
-
                 <el-timeline :reverse="reverse">
                     <el-timeline-item
                         v-for="(activity, index) in activities"
@@ -52,84 +49,17 @@
                     notice:[],
                     oauth:[],
                 },
-
+                innerWidth:window.innerWidth,
                 reverse: false,
                 activities:'',
-                value:new Date()
+                value:new Date(),
+                chartsNum:14,
+                timestampNum:10,
+                chartsStyle:'',
             }
         },
         computed:{
             ...mapGetters(['userInfo','tabs']),
-        },
-        methods:{
-            ...mapMutations(['setToken','defaultTabs','setActiveAuthName']),
-            totalCharts:function () {
-                apiLists.GetCountData({}).then(response=>{
-                    this.activities = response.data.item.timeline.data;
-                    let totalCharts = echarts.init(document.getElementById('total'));
-                    totalCharts.setOption({
-                        title : {
-                            text: '数据统计总量',
-                            x:'center'
-                        },
-                        tooltip : {
-                            trigger: 'item',
-                            formatter: "{a} <br/>{b} : {c} ({d}%)"
-                        },
-                        toolbox: {
-                            feature: {
-                                saveAsImage: {}
-                            }
-                        },
-                        legend: {
-                            orient: 'vertical',
-                            left: 'left',
-                            data: ['授权用户','站内通知','日志记录']
-                        },
-                        series : [
-                            {
-                                name: '数据占比',
-                                type: 'pie',
-                                radius : '55%',
-                                center: ['50%', '60%'],
-                                data:this.setChartsData(response.data.item),
-                                itemStyle: {
-                                    emphasis: {
-                                        shadowBlur: 10,
-                                        shadowOffsetX: 0,
-                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                                    }
-                                }
-                            }
-                        ]
-                    })
-                })
-            },
-            /**
-             * TODO:设置参数变量
-             * @param data
-             * @returns {[]}
-             */
-            setChartsData:function (data) {
-                let arr = [];
-                for (let i in data) {
-                    if (i === 'oauthUser') {
-                        arr.push({value:data[i],name:'授权用户'})
-                    }
-                    if (i === 'push') {
-                        arr.push({value:data[i],name:'站内通知'})
-                    }
-                    if (i === 'systemLog') {
-                        arr.push({value:data[i],name:'日志记录'})
-                    }
-                }
-                return arr;
-            }
-        },
-        created(){
-            if (this.$route.params.access_token){
-                this.access_token = this.$route.params.access_token;
-            }
         },
         mounted() {
             this.$nextTick(function () {
@@ -154,7 +84,7 @@
                     this.seriesData.oauth = response.total.oauth;
                     this.echarts.setOption({
                         title: {
-                            text: '数据统计'
+                            text: ''
                         },
                         tooltip: {
                             trigger: 'axis',
@@ -212,16 +142,45 @@
                         ]
                     });
                 });
+                //窗口适应
+                if (this.innerWidth>=1920) {
+                    this.chartsNum = 14;
+                    this.timestampNum = 10
+                    this.chartsStyle = {display:'block'};
+                } else {
+                    this.chartsNum = 24;
+                    this.timestampNum = 24
+                    this.chartsStyle = {display:'none'};
+                }
             })
-        }
+        },
+        methods:{
+            ...mapMutations(['setToken','defaultTabs','setActiveAuthName']),
+            /**
+             * todo:数据总量
+             */
+            totalCharts:function () {
+                apiLists.GetCountData({}).then(response=>{
+                    this.activities = response.data.item.timeline.data;
+                })
+            },
+        },
+        created(){
+            if (this.$route.params.access_token){
+                this.access_token = this.$route.params.access_token;
+            }
+        },
     }
 </script>
 
 <style scoped>
-    .radio{
-        margin-bottom: 30px;
-    }
-    .is-selected {
-        color: red;
-    }
+#charts {
+    height: 400px;
+}
+.radio{
+    margin-bottom: 30px;
+}
+.is-selected {
+    color: red;
+}
 </style>

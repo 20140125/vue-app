@@ -46,7 +46,7 @@
         </div>
         <!--table 分页-->
         <!---弹框-->
-        <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
+        <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal" :width="dialogWidth" :center="center" :destroy-on-close="destroy_on_close">
             <el-form :label-width="labelWidth" :model="reqRuleModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="申请人" prop="username">
                     <el-select filterable style="width: 100%" v-model="reqRuleModel.username" @change="getAuth">
@@ -67,7 +67,7 @@
                                     style="width: 100%"/>
                 </el-form-item>
                 <el-form-item label="授权说明" prop="desc">
-                    <el-input v-model="reqRuleModel.desc" type="textarea"/>
+                    <el-input v-model="reqRuleModel.desc" maxlength="200" show-word-limit resize="none" :autosize="{ minRows: 4}" type="textarea"/>
                 </el-form-item>
                 <el-form-item label="是否授权" prop="status" v-if="userInfo.username==='admin'">
                     <el-radio-group v-model="reqRuleModel.status" size="small">
@@ -130,7 +130,7 @@
                     username:[{required:true,message:'申请人不得为空',trigger:'blur'}],
                     href:[{required:true,message:'授权地址不得为空',trigger:'change'}],
                     expires: [{required:true,message:'授权时效不得为空',trigger:'change'}],
-                    desc:[{required:true,message:'申请理由不得为空',trigger:'blur'}],
+                    desc:[{required:true,message:'授权说明不得为空',trigger:'blur'}],
                     status:[{required:true,message:'授权状态不得为空',trigger:'blur'}]
                 },
                 href:false,
@@ -182,7 +182,7 @@
             }
         },
         computed:{
-            ...mapGetters(['userInfo'])
+            ...mapGetters(['userInfo','dialogWidth'])
         },
         methods:{
             /**

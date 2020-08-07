@@ -40,7 +40,7 @@
         </div>
         <!--table 分页-->
         <!---弹框-->
-        <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
+        <el-dialog :title="title" :width="dialogWidth" :visible.sync="syncVisible" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
             <el-form :label-width="labelWidth" :model="timeLineModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="文案" prop="content">
                     <el-input v-model="timeLineModel.content" placeholder="文案"/>
@@ -113,7 +113,7 @@
             }
         },
         computed:{
-            ...mapGetters(['userInfo'])
+            ...mapGetters(['userInfo','dialogWidth'])
         },
         methods:{
             /**

@@ -35,7 +35,7 @@
         </div>
         <!--table 分页-->
         <!---弹框-->
-        <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
+        <el-dialog :title="title"  :width="dialogWidth":visible.sync="syncVisible" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
             <el-form :label-width="labelWidth" :model="authModel" :ref="reFrom" :rules="rules">
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -53,6 +53,7 @@
     import Radio from "../common/Radio";
     import Delete from "../common/Delete";
     import Submit from "../common/Submit";
+    import {mapGetters} from 'vuex'
     export default {
         name: "lists",
         components: {Submit, Delete, Radio},
@@ -84,6 +85,9 @@
                 },
                 rules:{},
             }
+        },
+        computed:{
+            ...mapGetters(['dialogWidth'])
         },
         methods:{
             /**

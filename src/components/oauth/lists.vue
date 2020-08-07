@@ -46,7 +46,7 @@
         </div>
         <!--table 分页-->
         <!---弹框-->
-        <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
+        <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal" :width="dialogWidth" :center="center" :destroy-on-close="destroy_on_close">
             <el-form :label-width="labelWidth" :model="OauthModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="用户名称" prop="username">
                     <el-input v-model="OauthModel.username"/>
@@ -123,7 +123,6 @@
                 showCode:false,
                 showPassword:false,
                 oauthVisible:false,
-                dialogWidth:'50%',
                 cgi:{
                     remove:$url.oauthDelete,
                     status:$url.oauthUpdate,
@@ -141,7 +140,7 @@
             }
         },
         computed:{
-            ...mapGetters(['userInfo','oauthConfig']),
+            ...mapGetters(['userInfo','oauthConfig','dialogWidth']),
         },
         methods:{
             ...mapActions(['getOauthConfig','addTabs','addCurrTabs']),

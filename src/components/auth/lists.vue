@@ -32,7 +32,7 @@
         <!--table 表格-->
 
         <!---弹框-->
-        <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal" :center="center">
+        <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal" :center="center" :width="dialogWidth">
             <el-form :label-width="labelWidth" :model="authModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="权限名称" prop="name">
                     <el-input v-model="authModel.name" placeholder="权限名称"/>
@@ -110,7 +110,7 @@
             }
         },
         computed:{
-            ...mapGetters(['userInfo'])
+            ...mapGetters(['userInfo','dialogWidth'])
         },
         methods:{
             /**

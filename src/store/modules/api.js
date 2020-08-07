@@ -4,7 +4,8 @@ const state={
     apiModel:{},
     docVisible:false,
     docModel:{},
-    docName:''
+    docName:'',
+    dialogWidth:''
 };
 const getters={
     apiVisible:state=>state.apiVisible,
@@ -12,7 +13,8 @@ const getters={
     apiModel:state=>state.apiModel,
     docVisible:state=>state.docVisible,
     docModel:state=>state.docModel,
-    docName:state=>state.docName
+    docName:state=>state.docName,
+    dialogWidth:state=>state.dialogWidth
 };
 const mutations={
     /**
@@ -62,18 +64,26 @@ const mutations={
      */
     setDocModel(state,docModel){
         state.docModel = docModel
+    },
+    /**
+     * todo:设置弹框的宽度
+     * @param state
+     * @param dialogWidth
+     */
+    setDialogWidth(state,dialogWidth) {
+        state.dialogWidth = dialogWidth
     }
 };
-const actions={
+const actions= {
     /**
      * todo：api接口显示
      * @param state
      * @param commit
      * @param obj
      */
-    addApiVisible({state,commit},obj) {
+    addApiVisible({state, commit}, obj) {
         commit('setApiVisible', obj.apiVisible);
-        commit('setInterfaceName',obj.interfaceName)
+        commit('setInterfaceName', obj.interfaceName)
     },
     /**
      * todo：api接口显示(markdown)
@@ -81,9 +91,9 @@ const actions={
      * @param commit
      * @param obj
      */
-    addDocVisible({state,commit},obj) {
+    addDocVisible({state, commit}, obj) {
         commit('setDocVisible', obj.docVisible);
-        commit('setDocName',obj.docName)
+        commit('setDocName', obj.docName)
     },
     /**
      * todo：保存当前的apiModel
@@ -91,7 +101,7 @@ const actions={
      * @param commit
      * @param apiModel
      */
-    addApiModel({state,commit},apiModel) {
+    addApiModel({state, commit}, apiModel) {
         commit('setApiModel', apiModel);
     },
     /**
@@ -100,9 +110,19 @@ const actions={
      * @param commit
      * @param docModel
      */
-    addDocModel({state,commit},docModel) {
+    addDocModel({state, commit}, docModel) {
         commit('setDocModel', docModel);
     },
+    /**
+     * todo:设置弹框宽度
+     * @param state
+     * @param commit
+     * @param dialogWidth
+     */
+    addDialogWidth({state, commit}, dialogWidth) {
+        console.log('aaaa'+dialogWidth);
+        commit('setDialogWidth', dialogWidth);
+    }
 };
 export default {
     state,

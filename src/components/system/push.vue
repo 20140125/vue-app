@@ -50,7 +50,7 @@
         </div>
         <!--table 分页-->
         <!---弹框-->
-        <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
+        <el-dialog :title="title" :width="dialogWidth" :visible.sync="syncVisible" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
             <el-form :label-width="labelWidth" :model="pushModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="用户名" prop="username">
                     <el-select v-model="pushModel.username" filterable @change="changeOauthName" style="width: 100%">
@@ -145,7 +145,7 @@
             }
         },
         computed:{
-            ...mapGetters(['userInfo']),
+            ...mapGetters(['userInfo','dialogWidth']),
         },
         methods:{
             /**

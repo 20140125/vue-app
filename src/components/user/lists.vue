@@ -51,7 +51,7 @@
         </div>
         <!--table 分页-->
         <!---弹框-->
-        <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal"  :center="center">
+        <el-dialog :title="title" :width="dialogWidth" :visible.sync="syncVisible" :modal="modal"  :center="center">
             <el-form :label-width="labelWidth" :model="userModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="管理员" prop="username">
                     <el-input v-model="userModel.username" :readonly="act === 'edit'" placeholder="管理员名称"/>
@@ -141,7 +141,7 @@
             }
         },
         computed:{
-            ...mapGetters(['userInfo'])
+            ...mapGetters(['userInfo','dialogWidth'])
         },
         methods:{
             /**

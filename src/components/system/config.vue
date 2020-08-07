@@ -44,7 +44,7 @@
         <!--table 分页-->
 
         <!---配置值弹框-->
-        <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
+        <el-dialog :title="title" :visible.sync="syncVisible" :width="dialogWidth" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
             <el-form :label-width="labelWidth" :model="configValModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="配置名称" prop="name" v-show="!show">
                     <el-input v-model="configValModel.name" placeholder="配置名称"/>
@@ -69,7 +69,7 @@
         <!---配置值弹框-->
 
         <!---配置弹框-->
-        <el-dialog :title="title" :visible.sync="syncConfigVisible" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
+        <el-dialog :title="title" :width="dialogWidth" :visible.sync="syncConfigVisible" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
             <el-form :label-width="labelWidth" :model="configModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="配置名称" prop="name">
                     <el-input v-model="configModel.name" placeholder="配置名称"/>
@@ -99,7 +99,7 @@
     import Radio from "../common/Radio";
     import Delete from "../common/Delete";
     import Submit from "../common/Submit";
-    import { mapActions } from 'vuex'
+    import { mapActions,mapGetters } from 'vuex'
     import { codemirror } from 'vue-codemirror-lite'
     //编辑器
     require('codemirror/addon/hint/javascript-hint.js');
@@ -186,6 +186,9 @@
                     styleActiveLine:true,
                 },
             }
+        },
+        computed:{
+            ...mapGetters(['dialogWidth'])
         },
         methods:{
             ...mapActions(['saveSystemLog']),

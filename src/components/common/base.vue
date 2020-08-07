@@ -78,7 +78,7 @@
             </el-container>
         </el-container>
         <!---chat message-->
-        <el-dialog :title="chat.chatTitle" @close="chatVisible = false" top="5vh" width="60%"
+        <el-dialog :title="chat.chatTitle" @close="chatVisible = false" top="5vh" :width="chatDialogWidth"
                    :center="center" :show-close="closeModel"
                    :close-on-press-escape="closeModel" :visible.sync="chatVisible">
             <el-row :gutter="24">
@@ -147,14 +147,14 @@
             </el-row>
         </el-dialog>
         <!---chat message-->
-        <el-dialog :visible.sync="showCity" title="选择城市" center>
+        <el-dialog :visible.sync="showCity" :width="dialogWidth" title="选择城市" center>
             <city @saveCityNode="saveCityNode"></city>
         </el-dialog>
     </el-container>
 </template>
 
 <script>
-    import { mapGetters,mapActions } from 'vuex'
+    import { mapGetters,mapActions} from 'vuex'
     import apiLists from '../../api/api'
     import $url from '../../api/url'
     import func from '../../api/func'
@@ -190,7 +190,9 @@
                 chatMsgClass:'el-icon-chat-dot-round',
                 noticeArr:[],
                 mainStyle:{margin:'60px 0 60px 200px'},
-                msg_dot:false
+                msg_dot:false,
+                innerWidth:window.innerWidth,
+                chatDialogWidth:'65%'
             }
         },
         components:{
@@ -198,10 +200,10 @@
             emotion
         },
         computed:{
-            ...mapGetters(['tabs','activeAuthName','menuLists','oauthConfig','userInfo','weather']),
+            ...mapGetters(['tabs','activeAuthName','menuLists','oauthConfig','userInfo','weather','dialogWidth']),
         },
         methods:{
-            ...mapActions(['addTabs','deleteTabs','addCurrTabs','logoutSystem','getAuthMenu','getOauthConfig','saveWeather','saveUserInfo']),
+            ...mapActions(['addTabs','deleteTabs','addCurrTabs','logoutSystem','getAuthMenu','getOauthConfig','saveWeather','saveUserInfo','addDialogWidth']),
             /**
              * TODO:字符串标签转换
              * @param html
@@ -673,6 +675,28 @@
                         }
                     })
                 }
+            },
+            /**
+             * todo:设置弹框大小
+             */
+            setDialogWidth:function () {
+                if (this.innerWidth<768) {
+                    this.addDialogWidth('100%')
+                } else if (this.innerWidth>=768 && this.innerWidth<992) {
+                    this.addDialogWidth('85%')
+                } else if (this.innerWidth>=992 && this.innerWidth<1200) {
+                    this.addDialogWidth('70%')
+                } else if (this.innerWidth>=1200 && this.innerWidth<1920) {
+                    this.addDialogWidth('65%')
+                } else if (this.innerWidth>=1920) {
+                    this.addDialogWidth('50%');
+                    this.isCollapse = false;
+                    this.menuClass ='el-icon-s-unfold';
+                    this.asideWidth = "200px";
+                    this.headerStyle = {'margin-left':'200px'};
+                    this. mainStyle = {margin:'60px 0 60px 200px'}
+                    this.chatDialogWidth = '65%'
+                }
             }
         },
         /**
@@ -743,8 +767,18 @@
                     this.addCurrTabs(params);
                     this.addTabs(params);
                 }
+                //导航栏
                 this.getAuthMenu();
+                //消息推送
                 this.webPush();
+                //侧边栏隐藏
+                this.isCollapse = true;
+                this.menuClass = 'el-icon-s-fold';
+                this.asideWidth = "65px";
+                this.headerStyle = {'margin-left':'65px'};
+                this. mainStyle = {margin:'60px 0 60px 60px'}
+                this.chatDialogWidth = '85%';
+                this.setDialogWidth();
             });
         }
     }

@@ -42,7 +42,7 @@
         </div>
         <!--table 分页-->
         <!---弹框-->
-        <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal"  :center="center">
+        <el-dialog :title="title" :visible.sync="syncVisible" :width="dialogWidth" :modal="modal"  :center="center">
             <el-form :label-width="labelWidth" :model="roleModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="角色名称" prop="role_name">
                     <el-input v-model="roleModel.role_name" placeholder="角色名称"/>
@@ -126,7 +126,7 @@
             }
         },
         computed:{
-            ...mapGetters(['userInfo']),
+            ...mapGetters(['userInfo','dialogWidth']),
         },
         methods:{
             /**
