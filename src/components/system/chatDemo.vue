@@ -345,6 +345,8 @@
              * @param data
              */
             say:function(data){
+                this.chat.messageLists.push(data);
+                this.scrollToBottom();
                 if (this.userInfo.username!==data['from_client_name']){
                     if (data['to_client_id']!=='all') {
                         this.chat.chatTitle = data['from_client_name'];
@@ -359,7 +361,6 @@
                         this.chat.to_client_name = data['to_client_name'];
                         this.chat.to_client_id = data['to_client_id'];
                     }
-                    this.scrollToBottom();
                 }
             },
             /**
@@ -381,19 +382,9 @@
                         avatar_url:this.userInfo.avatar_url,
                         room_id:this.chat.to_client_name === 'all' ? this.chat.room_id : '',
                         uid:this.chat.uid,
+                        time:func.set_time(func.get_timestamp()*1000)
                     };
                     this.userInfo.websocketServer.send(JSON.stringify(str));
-                    //获取聊天记录
-                    let his = {
-                        type:'history',
-                        from_client_name:this.userInfo.username,
-                        from_client_id:this.userInfo.uuid,
-                        to_client_name:this.chat.to_client_name,
-                        to_client_id:this.chat.to_client_id,
-                        room_id:this.chat.to_client_name === 'all' ? this.chat.room_id : '',
-                        uid:this.userInfo.uuid
-                    };
-                    this.userInfo.websocketServer.send(JSON.stringify(his));
                     this.chat.messageLists.push(str);
                     this.scrollToBottom();
                     this.$refs.message.innerHTML = '';
