@@ -65,7 +65,7 @@
         <!--右键弹框-->
 
         <!---接口分类弹框-->
-        <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal"  :center="center">
+        <el-dialog :title="title" :width="dialogWidth" :visible.sync="syncVisible" :modal="modal"  :center="center">
             <el-form :label-width="labelWidth" :model="categoryModel" :ref="reFrom">
                 <el-form-item label="接口名称" prop="name" required>
                     <el-input v-model="categoryModel.name" placeholder="分类名称"/>
@@ -73,8 +73,7 @@
                 <el-form-item label="接口上级" prop="pid">
                     <el-select placeholder="接口上级" v-model="categoryModel.pid" style="width: 100%">
                         <el-option label="默认权限" value="0" v-if="categoryModel.pid === '0'" selected/>
-                        <el-option v-for="(category,index) in apiCategory" :key="index" :label="setName(category)"
-                                   :value="category.id"/>
+                        <el-option v-for="(category,index) in apiCategory" :key="index" :label="setName(category)" :value="category.id"/>
                     </el-select>
                 </el-form-item>
             </el-form>
@@ -150,7 +149,7 @@
             }
         },
         computed:{
-            ...mapGetters(['docVisible','docModel','docName','userInfo'])
+            ...mapGetters(['docVisible','docModel','docName','userInfo','dialogWidth'])
         },
         methods:{
             ...mapActions(['addDocVisible','addDocModel','saveSystemLog']),

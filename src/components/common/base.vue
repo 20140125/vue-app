@@ -85,9 +85,17 @@
                 <el-col :span="6" class="user-list">
                     <div class="aside">
                         <el-menu background-color="#393d49" text-color="#fff" active-text-color="#ffd04b">
-                            <el-menu-item @click="sendUser(user,index)" v-for="(user,index) in chat.client_list" :key="index" :index="index.toString()">
+                            <el-autocomplete placeholder="输入关键字查询"
+                                             v-model="chat.users"
+                                             clearable
+                                             :fetch-suggestions="querySearch"
+                                             :trigger-on-focus="false"
+                                             @select="clickUsers"
+                                             @clear="clearSearch"
+                                             style="width: 100%"/>
+                            <el-menu-item @click="sendUser(user,index)" v-for="(user,index) in chat.client_list_part" :key="index" :index="index.toString()">
                                 <el-avatar :size="50" :src="user.client_img" style="cursor: pointer"/>
-                                <span slot="title" style="margin-left: 20px" v-html="user.client_name"/>
+                                <span slot="title" :style="user.client_name === chat.users ? 'margin-left:20px;color:#ffd04b' : 'margin-left:20px'" v-html="user.client_name"/>
                                 <!--未读消息数-->
                                 <el-badge v-if="user.total" type="danger" :value="user.total" style="top: 10px;right: 15px"/>
                                 <!--在线-->
@@ -192,7 +200,7 @@
                 mainStyle:{margin:'60px 0 60px 200px'},
                 msg_dot:false,
                 innerWidth:window.innerWidth,
-                chatDialogWidth:'65%'
+                chatDialogWidth:'65%',
             }
         },
         components:{
@@ -342,6 +350,7 @@
                         case 'login':
                             __this.saveWeather(data.weather);
                             __this.chat.client_list = data.client_list;
+                            __this.chat.client_list_part = data.client_list;
                             __this.setUsersLists();
                             console.log(data);
                             break;
@@ -355,6 +364,7 @@
                             __this.chat.messageLists = data.message;
                             if (data.client_list.length>0) {
                                 __this.chat.client_list = data.client_list;
+                                __this.chat.client_list_part = data.client_list;
                                 __this.setUsersLists();
                             }
                             console.log(data);
@@ -371,6 +381,35 @@
                 ws.onerror = function() {
                     console.log("出现错误");
                 };
+            },
+            /**
+             * todo:用户搜索
+             * @param queryString
+             * @param cb (回调函数 cb(result))
+             */
+            querySearch:function (queryString, cb) {
+                let result = [];
+                for (let i in this.chat.client_list) {
+                    if (this.chat.client_list[i].client_name.indexOf(queryString)>=0) {
+                        result.push(this.chat.client_list[i])
+                    }
+                }
+                this.chat.client_list_part = result;
+            },
+            /**
+             * todo:点击搜索用户
+             * @param item
+             */
+            clickUsers:function (item) {
+                this.chat.client_list_part = [item];
+                this.chat.users = item.client_name;
+                this.sendUser(item,item.uid);
+            },
+            /**
+             * todo:清空搜索内容
+             */
+            clearSearch:function () {
+                this.chat.client_list_part = this.chat.client_list;
             },
             /**
              * todo:设置未读消息数
@@ -470,6 +509,7 @@
                 this.chat.from_client_id = user.uid;
                 this.chat.uid = this.chat.to_client_id;
                 this.chat.chatTitle = user.client_name;
+                this.chat.users = user.client_name;
                 this.chat.room_id = '';
                 //获取聊天记录
                 let str = {
@@ -713,9 +753,11 @@
                 room_id:'1200',
                 msgCount:0,
                 client_list:[],
+                client_list_part:[],
                 chatTitle:'隨心所欲,隨性而行',
                 messageLists:[],
                 msg_type:'text',
+                users:''
             };
             //客服系统初始化
             this.connect(this.userInfo.websocketServer);
@@ -783,6 +825,17 @@
         }
     }
 </script>
+<style>
+.user-list .aside .el-input__inner{
+    background: #393d49 !important;
+    color: #fff !important;
+    border: none;
+    border-radius: 5px;
+}
+.el-autocomplete-suggestion {
+    display: none;
+}
+</style>
 <style scoped>
     .el-header {
         background-color: #393d49;
@@ -817,7 +870,7 @@
     .user-list{
         box-shadow: 0 2px 12px #ffffff, 0 0 6px #F5F5F5;
         min-height:715px;
-        background-color:#ffffff;
+        background-color:#393d49;
         border-radius:10px;
         -moz-border-radius:10px;
         -webkit-border-radius:10px;

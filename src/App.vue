@@ -105,13 +105,13 @@
     /* 滚动条滑块 */
     ::-webkit-scrollbar-thumb {
         border-radius:1px;
-        background: #fff;
+        background: #393d49;
         opacity:0.3;
         -webkit-box-shadow:inset 0 0 0 #fff;
     }
     /* 滚动条滑块 */
     ::-webkit-scrollbar-thumb:window-inactive {
-        background: #fff;
+        background: #393d49;
         opacity:0.3;
         border-radius:1px;
     }

@@ -29,8 +29,7 @@
                         <el-form :label-width="labelWidth" :model="apiModel" :ref="reFrom" :rules="rules">
                             <el-form-item label="接口名称" prop="type">
                                 <el-select v-model="apiModel.type"  auto-complete="true" style="width: 100%" placeholder="接口名称">
-                                    <el-option v-for="(category,index) in apiCategory" :key="index"
-                                               :label="setName(category)" :value="category.id"/>
+                                    <el-option v-for="(category,index) in apiCategory" :key="index" :label="setName(category)" :value="category.id"/>
                                 </el-select>
                             </el-form-item>
                             <el-form-item label="接口描述" prop="desc">
@@ -41,30 +40,23 @@
                             </el-form-item>
                             <el-form-item label="接口方法" prop="method">
                                 <el-select v-model="apiModel.method" style="width: 100%" placeholder="接口方法">
-                                    <el-option v-for="(method,index) in methodLists" :key="index" :label="method"
-                                               :value="index"/>
+                                    <el-option v-for="(method,index) in methodLists" :key="index" :label="method" :value="index"/>
                                 </el-select>
                             </el-form-item>
                             <el-form-item label="请求字段" prop="request">
-                                <el-button type="primary" style="margin-bottom: 5px" plain icon="el-icon-plus"
-                                           @click="requestAdd()" size="medium"/>
+                                <el-button type="primary" style="margin-bottom: 5px" plain icon="el-icon-plus" @click="requestAdd()" size="medium"/>
                                 <div v-for="(request,index) in apiModel.request" :key="index">
-                                    <el-input v-model="request.name" auto-complete="true"
-                                              style="width: 195px;margin-bottom: 5px" placeholder="参数名"/>
+                                    <el-input v-model="request.name" auto-complete="true" style="width: 195px;margin-bottom: 5px" placeholder="参数名"/>
                                     <el-select v-model="request.type"  auto-complete="true" style="width: 195px" placeholder="字段类型">
-                                        <el-option v-for="(type,index) in typeLists" :key="index" :label="type"
-                                                   :value="index"/>
+                                        <el-option v-for="(type,index) in typeLists" :key="index" :label="type" :value="index"/>
                                     </el-select>
                                     <el-select v-model="request.required" style="width: 195px" placeholder="是否必须">
                                         <el-option label="是" value="1"/>
                                         <el-option label="否" value="0"/>
                                     </el-select>
-                                    <el-input v-model="request.desc" auto-complete="true" style="width: 195px"
-                                              placeholder="参数描述"/>
-                                    <el-input v-model="request.val" auto-complete="true" style="width: 195px"
-                                              placeholder="参数值"/>
-                                    <el-button type="danger" plain icon="el-icon-delete"
-                                               @click="requestRemove(request,index)" size="medium"/>
+                                    <el-input v-model="request.desc" auto-complete="true" style="width: 195px" placeholder="参数描述"/>
+                                    <el-input v-model="request.val" auto-complete="true" style="width: 195px" placeholder="参数值"/>
+                                    <el-button type="danger" plain icon="el-icon-delete" @click="requestRemove(request,index)" size="medium"/>
                                 </div>
                             </el-form-item>
                             <el-form-item label="返回参数" prop="response_string">
@@ -72,23 +64,18 @@
                                             :options="options" style="line-height: 20px"/>
                             </el-form-item>
                             <el-form-item label="返回字段" prop="response">
-                                <el-button type="primary" style="margin-bottom: 5px" plain icon="el-icon-plus"
-                                           @click="responseAdd()" size="medium"/>
+                                <el-button type="primary" style="margin-bottom: 5px" plain icon="el-icon-plus" @click="responseAdd()" size="medium"/>
                                 <div v-for="(response,index) in apiModel.response" :key="index">
-                                    <el-input v-model="response.name" auto-complete="true"
-                                              style="width: 195px;margin-bottom: 5px" placeholder="参数名"/>
+                                    <el-input v-model="response.name" auto-complete="true" style="width: 195px;margin-bottom: 5px" placeholder="参数名"/>
                                     <el-select v-model="response.type" auto-complete="true" style="width: 195px" placeholder="字段类型">
-                                        <el-option v-for="(type,index) in typeLists" :key="index" :label="type"
-                                                   :value="index"/>
+                                        <el-option v-for="(type,index) in typeLists" :key="index" :label="type" :value="index"/>
                                     </el-select>
-                                    <el-input v-model="response.desc" auto-complete="true" style="width: 200px"
-                                              placeholder="参数描述"/>
-                                    <el-button type="danger" icon="el-icon-delete" plain
-                                               @click="responseRemove(response,index)" size="medium"/>
+                                    <el-input v-model="response.desc" auto-complete="true" style="width: 200px" placeholder="参数描述"/>
+                                    <el-button type="danger" icon="el-icon-delete" plain @click="responseRemove(response,index)" size="medium"/>
                                 </div>
                             </el-form-item>
                             <el-form-item label="备注" prop="remark">
-                                <el-input v-model="apiModel.remark" placeholder="备注" type="textarea"/>
+                                <el-input v-model="apiModel.remark" maxlength="500" show-word-limit resize="none" :autosize="{ minRows: 4}" placeholder="备注" type="textarea"/>
                             </el-form-item>
                             <Submit :reFrom="reFrom" :model="apiModel" :url="url" :refs="refs" v-on:success="success"
                                     style="text-align: center"/>
@@ -97,7 +84,6 @@
                 </el-tabs>
             </el-col>
             <!--接口详情-->
-
         </el-row>
 
         <!--右键弹框-->
@@ -111,7 +97,7 @@
         <!--右键弹框-->
 
         <!---接口分类弹框-->
-        <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal"  :center="center">
+        <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal"  :center="center" :width="dialogWidth">
             <el-form :label-width="labelWidth" :model="categoryModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="接口名称" prop="name" required>
                     <el-input v-model="categoryModel.name" placeholder="分类名称"/>
@@ -119,8 +105,7 @@
                 <el-form-item label="接口上级" prop="pid">
                     <el-select placeholder="接口上级" v-model="categoryModel.pid" style="width: 100%">
                         <el-option label="默认权限" value="0" v-if="categoryModel.pid === '0'" selected/>
-                        <el-option v-for="(category,index) in apiCategory" :key="index" :label="setName(category)"
-                                   :value="category.id"/>
+                        <el-option v-for="(category,index) in apiCategory" :key="index" :label="setName(category)" :value="category.id"/>
                     </el-select>
                 </el-form-item>
             </el-form>
@@ -157,7 +142,6 @@
     //括号匹配
     require('codemirror/addon/edit/matchbrackets.js');
     import {mapGetters,mapActions} from 'vuex'
-    import doc from "./doc";
     export default {
         name: "lists",
         components: {Submit, Delete, Radio,codemirror},
@@ -263,7 +247,7 @@
             }
         },
         computed:{
-            ...mapGetters(['apiVisible','apiModel','interfaceName','userInfo'])
+            ...mapGetters(['apiVisible','apiModel','interfaceName','userInfo','dialogWidth'])
         },
         methods:{
             ...mapActions(['addApiVisible','addApiModel','saveSystemLog']),
