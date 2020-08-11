@@ -18,7 +18,10 @@
     import apiLists from '../../../api/api'
     export default {
         props:{
-            height:Number,
+            height:{
+                type:Number,
+                default:()=>300
+            },
         },
         data () {
             return {
@@ -39,21 +42,32 @@
                 emotionList:[],
                 limit:55,
                 page:1,
-                pages:0
+                pages:0,
+                offsetPage:0
             }
         },
         methods: {
+            /**
+             * todo:图标切换
+             * @param typeObj
+             */
             changeEmotionLists:function(typeObj){
                 this.type = typeObj.name;
                 this.page = 1;
                 this.emotionList = [];
                 this.showEmotionLists(this.page,this.limit);
             },
+            /**
+             * todo:点击图标
+             * @param emotion
+             */
             clickHandler (emotion) {
                 this.$emit('clickEmotion', emotion)
             },
             /**
              * TODO:展示表情数据
+             * @param page
+             * @param limit
              */
             showEmotionLists:function(page,limit) {
                 apiLists.EmotionLists( {type:this.type,limit:limit,page:page}).then(response=>{
@@ -68,8 +82,9 @@
              * TODO:数据流加载
              */
             scrollEmotion:function () {
-                if (this.page<=this.pages) {
-                    this.page = this.page+1;
+                this.offsetPage = this.offsetPage+1;
+                if (this.offsetPage<=this.pages) {
+                    this.page++;
                     this.showEmotionLists(this.page,this.limit);
                 }
             }

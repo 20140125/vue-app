@@ -3,8 +3,8 @@
         <!--header-->
         <el-header id="header">
             <el-menu :default-active="activeIndex" mode="horizontal" background-color="#393d49" text-color="#fff" active-text-color="#ffd04b" @select="handleSelect" :style="headerStyle">
-                <el-menu-item index="1" @click="hideMenu"> <i :class="menuClass" style="color: #fff;font-size: 25px"> </i></el-menu-item>
-                <el-menu-item index="5"><template slot="title"><i class="el-icon-location"></i>{{userInfo.city}}</template></el-menu-item>
+                <el-menu-item index="1" @click="hideMenu"><i :class="menuClass" style="color: #fff;font-size: 25px"/></el-menu-item>
+                <el-menu-item index="5" @click="showCity = !showCity"><template slot="title"><i class="el-icon-location"/>{{userInfo.city}}</template></el-menu-item>
                 <el-submenu index="2" style="float: right">
                     <template slot="title">
                         <el-avatar :src="userInfo.avatar_url" :alt="userInfo.username" :size="35"/>
@@ -112,28 +112,28 @@
                         </div>
                         <div class="input-msg">
                             <emotion @clickEmotion="getEmotion" v-show="showEmotion" :height="300"/>
-                            <div>
-                                <el-tooltip effect="dark" content="房间名称" placement="top-start">
-                                    <el-menu :default-active="chat.room_id" mode="horizontal" style="margin-bottom: 10px;border: none">
-                                        <el-menu-item @click="setRoomID(room)" v-for="(room,index) in oauthConfig" :key="index" :index="room.id.toString()">
-                                            {{room.value}}
-                                        </el-menu-item>
-                                    </el-menu>
+                            <el-tooltip effect="dark" content="房间名称" placement="top-start">
+                                <el-menu :default-active="chat.room_id"   background-color="#545c64"
+                                         text-color="#fff"
+                                         active-text-color="#ffd04b" mode="horizontal" style="margin-bottom:10px;border-radius:30px!important;-moz-border-radius:20px!important;-webkit-border-radius:20px!important;">
+                                    <el-menu-item @click="setRoomID(room)" v-for="(room,index) in oauthConfig" :key="index" :index="room.id.toString()">
+                                        {{room.value}}
+                                    </el-menu-item>
+                                </el-menu>
+                            </el-tooltip>
+                            <el-tooltip effect="dark" content="发送表情" placement="top-start">
+                                <i @click="showEmotion = !showEmotion" class="el-icon-picture-outline-round icon"/>
+                            </el-tooltip>
+                            <el-upload :action="cgi.uploadUrl"
+                                       :data="fileData"
+                                       :headers="headers"
+                                       :show-file-list="false"
+                                       :on-success="uploadSuccess"
+                                       :before-upload="beforeUpload" style="float: left">
+                                <el-tooltip effect="dark" content="发送文件和图片" placement="top-start">
+                                    <i @click="showEmotion = false" class="el-icon-picture-outline icon"/>
                                 </el-tooltip>
-                                <el-tooltip effect="dark" content="发送表情" placement="top-start">
-                                    <i @click="showEmotion = !showEmotion" class="el-icon-picture-outline-round icon"/>
-                                </el-tooltip>
-                                <el-upload :action="cgi.uploadUrl"
-                                           :data="fileData"
-                                           :headers="headers"
-                                           :show-file-list="false"
-                                           :on-success="uploadSuccess"
-                                           :before-upload="beforeUpload" style="float: left">
-                                    <el-tooltip effect="dark" content="发送文件和图片" placement="top-start">
-                                        <i class="el-icon-picture-outline icon"/>
-                                    </el-tooltip>
-                                </el-upload>
-                            </div>
+                            </el-upload>
                             <div contentEditable="true" ref="message" id="content" @focus="showEmotion = false" @keydown="setMsg">
 
                             </div>
@@ -148,7 +148,7 @@
             </el-row>
         </el-dialog>
         <!---chat message-->
-        <el-dialog :visible.sync="showCity" :width="dialogWidth" title="选择城市" center>
+        <el-dialog :visible.sync="showCity" :width="dialogWidth" :title="'【'+userInfo.city+'】天气预告'" center>
             <city @saveCityNode="saveCityNode"></city>
         </el-dialog>
     </el-container>
@@ -855,9 +855,9 @@
         box-shadow: 0 2px 12px #ffffff, 0 0 6px #F5F5F5;
         min-height:715px;
         background-color:#393d49;
-        border-radius:10px;
-        -moz-border-radius:10px;
-        -webkit-border-radius:10px;
+        border-radius:20px;
+        -moz-border-radius:20px;
+        -webkit-border-radius:20px;
         max-height: 715px;
         overflow: hidden;
         overflow-y: auto;
@@ -884,9 +884,9 @@
         overflow: hidden;
         overflow-y: auto;
         border: 1px solid #eee;
-        border-radius: 10px;
-        -moz-border-radius:10px;
-        -webkit-border-radius:10px;
+        border-radius: 20px;
+        -moz-border-radius:20px;
+        -webkit-border-radius:20px;
     }
     #msg .msg-list{
         box-shadow: 0 1px 0 #ffffff, 0 1px 2px #505860;
@@ -927,6 +927,8 @@
         border: 1px solid #eee;
         height: 95px;
         border-radius: 10px;
+        -moz-border-radius:10px;
+        -webkit-border-radius:10px;
         padding:10px;
         overflow: scroll;
         overflow-x: hidden;

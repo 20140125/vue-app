@@ -38,7 +38,9 @@
                         <emotion @clickEmotion="getEmotion" v-show="showEmotion" :height="300"/>
                         <div>
                             <el-tooltip effect="dark" content="房间名称" placement="top-start">
-                                <el-menu :default-active="chat.room_id" mode="horizontal" style="margin-bottom: 10px;border: none">
+                                <el-menu :default-active="chat.room_id"   background-color="#545c64"
+                                         text-color="#fff"
+                                         active-text-color="#ffd04b" mode="horizontal" style="margin-bottom: 10px;border: none">
                                     <el-menu-item @click="setRoomID(room)" v-for="(room,index) in oauthConfig" :key="index" :index="room.id.toString()">
                                         {{room.value}}
                                     </el-menu-item>
@@ -54,7 +56,7 @@
                                        :on-success="uploadSuccess"
                                        :before-upload="beforeUpload" style="float: left">
                                 <el-tooltip effect="dark" content="发送文件和图片" placement="top-start">
-                                    <i class="el-icon-picture-outline icon"/>
+                                    <i  @click="showEmotion = false" class="el-icon-picture-outline icon"/>
                                 </el-tooltip>
                             </el-upload>
                         </div>

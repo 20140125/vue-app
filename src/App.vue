@@ -62,10 +62,10 @@
         left: 0 !important;
         height:2px !important;
     }
-    .el-dialog{
-        border-radius: 10px;
-        -moz-border-radius: 10px;
-        -webkit-border-radius: 10px;
+    .el-dialog ,.el-card{
+        border-radius: 40px;
+        -webkit-border-radius: 40px;
+        -moz-border-radius: 40px;
     }
     .menu {
         z-index:100;
@@ -84,11 +84,6 @@
     }
     a:link{
         text-decoration: none;
-    }
-    .el-card{
-        border-radius: 15px;
-        -webkit-border-radius: 15px;
-        -moz-border-radius: 15px;
     }
     /* 滚动槽 */
     ::-webkit-scrollbar {
