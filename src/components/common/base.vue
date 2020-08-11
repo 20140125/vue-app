@@ -84,18 +84,11 @@
             <el-row :gutter="24">
                 <el-col :span="6" class="user-list">
                     <div class="aside">
+                        <el-autocomplete placeholder="搜索" v-model="chat.users" clearable :fetch-suggestions="querySearch" @clear="clearSearch" style="width: 100%"/>
                         <el-menu background-color="#393d49" text-color="#fff" active-text-color="#ffd04b">
-                            <el-autocomplete placeholder="输入关键字查询"
-                                             v-model="chat.users"
-                                             clearable
-                                             :fetch-suggestions="querySearch"
-                                             :trigger-on-focus="false"
-                                             @select="clickUsers"
-                                             @clear="clearSearch"
-                                             style="width: 100%"/>
                             <el-menu-item @click="sendUser(user,index)" v-for="(user,index) in chat.client_list_part" :key="index" :index="index.toString()">
                                 <el-avatar :size="50" :src="user.client_img" style="cursor: pointer"/>
-                                <span slot="title" :style="user.client_name === chat.users ? 'margin-left:20px;color:#ffd04b' : 'margin-left:20px'" v-html="user.client_name"/>
+                                <span slot="title" style="margin-left:20px" v-html="user.client_name.replace(chat.users,'<b style=color:#ffd04b;font-weight:100>'+chat.users+'</b>')"/>
                                 <!--未读消息数-->
                                 <el-badge v-if="user.total" type="danger" :value="user.total" style="top: 10px;right: 15px"/>
                                 <!--在线-->
@@ -395,15 +388,6 @@
                     }
                 }
                 this.chat.client_list_part = result;
-            },
-            /**
-             * todo:点击搜索用户
-             * @param item
-             */
-            clickUsers:function (item) {
-                this.chat.client_list_part = [item];
-                this.chat.users = item.client_name;
-                this.sendUser(item,item.uid);
             },
             /**
              * todo:清空搜索内容
