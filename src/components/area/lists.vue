@@ -12,18 +12,25 @@
                     <el-input v-model="search" placeholder="输入关键词查询"/>
                 </template>
                 <template slot-scope="scope">
-                    <el-button size="mini" plain type="primary" @click="getWeather(scope.row)" icon="el-icon-search">点击查看</el-button>
+                    <el-button size="mini" plain type="primary" @click="getWeather(scope.row)" icon="el-icon-edit">天气同步</el-button>
+                    <el-button size="mini" plain type="primary" @click="searchWeather(scope.row)" icon="el-icon-search">天气预告</el-button>
                 </template>
             </el-table-column>
         </el-table>
+        <el-dialog :visible.sync="showCity" :width="dialogWidth" :title="'【'+cityName+'】天气预告'" center>
+            <city :weather="weather"/>
+        </el-dialog>
     </div>
 </template>
 
 <script>
     import apiLists from '../../api/api';
     import $url from '../../api/url'
+    import City from "../common/city/city";
+    import {mapGetters} from 'vuex'
     export default {
         name: "lists",
+        components: {City},
         data(){
             return {
                 areaLists:[],
@@ -31,7 +38,13 @@
                 loadingText:'玩命加载中。。。',
                 search:'',
                 pid:1,
+                showCity:false,
+                cityName:'',
+                weather:{},
             }
+        },
+        computed:{
+            ...mapGetters(['dialogWidth'])
         },
         methods:{
             /**
@@ -65,12 +78,21 @@
              * @param areaObj
              */
             getWeather:function (areaObj) {
-                let params = { code:areaObj.code,id:areaObj.id,parent_id:areaObj.parent_id };
+                let params = { code:areaObj.code,id:areaObj.id,parent_id:areaObj.pid };
                 apiLists.AreaWeather(params).then(response=>{
                     if (response && response.data.code === 200) {
                         this.$message.success(response.data.msg)
                     }
                 })
+            },
+            /**
+             * todo:天气预告信息展示
+             * @param item
+             */
+            searchWeather:function (item) {
+                this.showCity = true;
+                this.cityName = item.name;
+                this.weather = JSON.parse(item.forecast);
             }
         },
         mounted() {

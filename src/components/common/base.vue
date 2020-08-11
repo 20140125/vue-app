@@ -149,7 +149,7 @@
         </el-dialog>
         <!---chat message-->
         <el-dialog :visible.sync="showCity" :width="dialogWidth" :title="'【'+userInfo.city+'】天气预告'" center>
-            <city @saveCityNode="saveCityNode"></city>
+            <city :weather="weather.forecast"/>
         </el-dialog>
     </el-container>
 </template>
@@ -682,23 +682,6 @@
                         this.$message.error(JSON.stringify(e));
                     }
                 })
-            },
-            /**
-             * todo:保存城市天气
-             * @param node
-             */
-            saveCityNode:function (node) {
-                if (node.length === 1) {
-                    let weather = {info:JSON.parse(node[0]['data']['info']),forecast:JSON.parse(node[0]['data']['info'])};
-                    apiLists.GetCityName({adcode:node[0]['data']['code']}).then(response=> {
-                        if (response && response.data.code === 200) {
-                            this.userInfo.city = response.data.item.city;
-                            this.saveUserInfo(this.userInfo);
-                            this.noticeArr = [];
-                            this.saveWeather(JSON.stringify(weather))
-                        }
-                    })
-                }
             },
             /**
              * todo:设置弹框大小
