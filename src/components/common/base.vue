@@ -134,7 +134,7 @@
                                     <i @click="showEmotion = false" class="el-icon-picture-outline icon"/>
                                 </el-tooltip>
                             </el-upload>
-                            <div style="margin: 10px 0;cursor: pointer">
+                            <div style="margin: 10px 0;cursor: pointer" v-if="chat.showRobotMessage">
                                 <el-tag @click="setTagMessage(robot)" v-for="(robot,index) in robotConfig" :key="index">{{robot.name}}</el-tag>
                             </div>
                             <div contentEditable="true" ref="message" id="content" @focus="showEmotion = false" @keydown="setMsg">
@@ -425,6 +425,7 @@
              */
             getMsgDialog:function(){
                 this.chatVisible = !this.chatVisible;
+                this.chat.showRobotMessage = true;
                 if (!this.chatVisible) {
                     this.chatMsgClass = 'el-icon-chat-dot-round';
                 } else {
@@ -468,6 +469,7 @@
                     };
                     this.userInfo.websocketServer.send(JSON.stringify(login))
                 }
+                this.chat.showRobotMessage = true;
                 //群聊时，接收方为所有用户
                 this.chat.to_client_id = 'all';
                 this.chat.to_client_name = 'all'
@@ -498,6 +500,8 @@
                 this.chat.chatTitle = user.client_name;
                 this.chat.users = user.client_name;
                 this.chat.room_id = '';
+                this.chat.messageLists = [];
+                this.chat.showRobotMessage = false;
                 //获取聊天记录
                 let str = {
                     type:'history',
@@ -738,6 +742,7 @@
                 messageLists:[],
                 msg_type:'text',
                 users:'',
+                showRobotMessage:true
             };
             //客服系统初始化
             this.connect(this.userInfo.websocketServer);

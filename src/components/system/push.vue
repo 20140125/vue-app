@@ -55,8 +55,7 @@
                 <el-form-item label="用户名" prop="username">
                     <el-select v-model="pushModel.username" filterable @change="changeOauthName" style="width: 100%">
                         <el-option label="所有人" value="all"/>
-                        <el-option v-for="(push,index) in oauthLists" :key="index" :label="push.username"
-                                   :value="push.uuid"/>
+                        <el-option v-for="(push,index) in oauthLists" :key="index" :label="push.username" :value="push.uuid"/>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="UUID" prop="uid">
@@ -66,8 +65,7 @@
                     <el-input v-model="pushModel.title" placeholder="推送标题"/>
                 </el-form-item>
                 <el-form-item label="时间" prop="created_at">
-                    <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"  v-model="pushModel.created_at"
-                                    style="width: 100%"/>
+                    <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"  v-model="pushModel.created_at" style="width: 100%"/>
                 </el-form-item>
                 <el-form-item label="消息" prop="info">
                     <el-input v-model="pushModel.info" placeholder="推送消息" type="textarea" resize="none" rows="4"/>
@@ -195,6 +193,11 @@
              * @param item
              */
             changeOauthName:function(item) {
+                this.oauthLists.map(row=>{
+                    if (item === row.uuid) {
+                        this.pushModel.username = row.username;
+                    }
+                })
                 this.pushModel.uid = item!=='all' ? item : ''
             },
             /**
