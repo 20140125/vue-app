@@ -61,7 +61,7 @@
                             @uploadSuccess="uploadSuccess"/>
                 </el-form-item>
                 <el-form-item label="密码" prop="password">
-                    <el-input v-model="userModel.password" type="password" placeholder="密码"/>
+                    <el-input v-model="userModel.password" show-password type="password" placeholder="密码"/>
                 </el-form-item>
                 <el-form-item label="邮箱" prop="email">
                     <el-input v-model="userModel.email" type="email" placeholder="邮箱"/>
@@ -149,6 +149,7 @@
              */
             success:function(){
                 this.getUserLists(this.page,this.limit);
+                localStorage.setItem('token','');
                 this.syncVisible = false;
             },
             /**

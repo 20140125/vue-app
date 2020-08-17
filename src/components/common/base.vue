@@ -364,7 +364,6 @@
                                 __this.chat.client_list_part = data.client_list;
                                 __this.setUsersLists();
                             }
-                            console.log(data);
                             break;
                         case 'logout':
                             console.log(data);
