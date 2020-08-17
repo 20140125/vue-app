@@ -30,6 +30,7 @@ import FormExample from '../components/components/example/forms'
 Vue.use(Router);
 
 export default new Router({
+    mode:'history',
     routes: [
         { path: '/', name: '/', component: Login,meta:{ mode:'',title:'登录' } },
         { path: '/login', name: 'Login', component: Login,meta:{ mode:'',title:'登录' } },

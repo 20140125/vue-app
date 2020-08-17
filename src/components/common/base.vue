@@ -104,7 +104,7 @@
                         <div id="msg">
                             <div v-for="(message,index) in chat.messageLists" :key="index">
                                 <div class="msg-img">
-                                    <el-avatar :size="50" :src="message.avatar_url" style="cursor: pointer"/>
+                                    <el-avatar :size="50" :src="message.client_img" style="cursor: pointer"/>
                                     <i>{{message.from_client_name}}   {{message.time}}</i>
                                 </div>
                                 <div class="msg-list" v-html="unescape(message.content)"/>
@@ -134,6 +134,9 @@
                                     <i @click="showEmotion = false" class="el-icon-picture-outline icon"/>
                                 </el-tooltip>
                             </el-upload>
+                            <div style="margin: 10px 0;cursor: pointer">
+                                <el-tag @click="setTagMessage(robot)" v-for="(robot,index) in robotConfig" :key="index">{{robot.name}}</el-tag>
+                            </div>
                             <div contentEditable="true" ref="message" id="content" @focus="showEmotion = false" @keydown="setMsg">
 
                             </div>
@@ -149,7 +152,7 @@
         </el-dialog>
         <!---chat message-->
         <el-dialog :visible.sync="showCity" :width="dialogWidth" :title="'【'+userInfo.city+'】天气预告'" center>
-            <city :weather="weather.forecast"/>
+            <VueJson :json-data="weather.forecast"/>
         </el-dialog>
     </el-container>
 </template>
@@ -160,7 +163,8 @@
     import $url from '../../api/url'
     import func from '../../api/func'
     import emotion from '../common/emotion/Index'
-    import City from "./city/city";
+    import VueJson from "./jsonView/json";
+    import code from "../../api/code";
     export default {
         name: "baseModule",
         inject:['reload'],
@@ -197,11 +201,11 @@
             }
         },
         components:{
-            City,
+            VueJson,
             emotion
         },
         computed:{
-            ...mapGetters(['tabs','activeAuthName','menuLists','oauthConfig','userInfo','weather','dialogWidth']),
+            ...mapGetters(['tabs','activeAuthName','menuLists','oauthConfig','userInfo','weather','dialogWidth','robotConfig']),
         },
         methods:{
             ...mapActions(['addTabs','deleteTabs','addCurrTabs','logoutSystem','getAuthMenu','getOauthConfig','saveWeather','saveUserInfo','addDialogWidth']),
@@ -475,7 +479,7 @@
                     from_client_id:this.chat.from_client_id,
                     to_client_name:this.chat.to_client_name,
                     to_client_id:this.chat.to_client_id,
-                    room_id:this.chat.to_client_name === 'all' ? this.chat.room_id : '',
+                    room_id:this.chat.room_id,
                     uid:this.userInfo.uuid,
                     source:'room',
                 };
@@ -514,6 +518,14 @@
              */
             setMsg:function(){
                 this.inputMsg = this.$refs.message.innerHTML;
+            },
+            /**
+             * todo:自定义消息
+             * @param robot
+             */
+            setTagMessage:function (robot) {
+                this.$refs.message.innerHTML = robot.value;
+                this.sendMsg();
             },
             /**
              * TODO:发送表情
@@ -575,7 +587,9 @@
              * @param data
              */
             say:function(data){
-                this.chat.messageLists.push(data);
+                if (data['room_id'] === '' || data['from_client_name'] === "systemRobot") {
+                    this.chat.messageLists.push(data);
+                }
                 this.scrollToBottom();
                 if (this.userInfo.username!==data['from_client_name']){
                     if (data['to_client_id']!=='all') {
@@ -611,7 +625,7 @@
                         from_client_id:this.userInfo.uuid,
                         msg_type:this.chat.msg_type,
                         content:this.inputMsg,
-                        avatar_url:this.userInfo.avatar_url,
+                        client_img:this.userInfo.avatar_url,
                         room_id:this.chat.to_client_name === 'all' ? this.chat.room_id : '',
                         uid:this.chat.uid,
                         time:func.set_time(func.get_timestamp()*1000)
@@ -724,11 +738,10 @@
                 chatTitle:'隨心所欲,隨性而行',
                 messageLists:[],
                 msg_type:'text',
-                users:''
+                users:'',
             };
             //客服系统初始化
             this.connect(this.userInfo.websocketServer);
-
             this.activeName = this.activeAuthName;
             this.asideHeight = {
                 'min-height':(window.innerHeight - 60)+'px'
@@ -788,6 +801,7 @@
                 this. mainStyle = {margin:'60px 0 60px 60px'}
                 this.chatDialogWidth = '85%';
                 this.setDialogWidth();
+                this.getOauthConfig('RobotConfig');
             });
         }
     }
@@ -836,12 +850,12 @@
     }
     .user-list{
         box-shadow: 0 2px 12px #ffffff, 0 0 6px #F5F5F5;
-        min-height:715px;
+        min-height:765px;
         background-color:#393d49;
         border-radius:20px;
         -moz-border-radius:20px;
         -webkit-border-radius:20px;
-        max-height: 715px;
+        max-height: 765px;
         overflow: hidden;
         overflow-y: auto;
         padding: 0 !important;

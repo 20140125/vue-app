@@ -18,7 +18,7 @@
             </el-table-column>
         </el-table>
         <el-dialog :visible.sync="showCity" :width="dialogWidth" :title="'【'+cityName+'】天气预告'" center>
-            <city :weather="weather"/>
+            <VueJson :json-data="weather"/>
         </el-dialog>
     </div>
 </template>
@@ -26,11 +26,11 @@
 <script>
     import apiLists from '../../api/api';
     import $url from '../../api/url'
-    import City from "../common/city/city";
+    import VueJson from "../common/jsonView/json";
     import {mapGetters} from 'vuex'
     export default {
         name: "lists",
-        components: {City},
+        components: {VueJson},
         data(){
             return {
                 areaLists:[],
@@ -81,7 +81,8 @@
                 let params = { code:areaObj.code,id:areaObj.id,parent_id:areaObj.pid };
                 apiLists.AreaWeather(params).then(response=>{
                     if (response && response.data.code === 200) {
-                        this.$message.success(response.data.msg)
+                        this.$message.success(response.data.msg);
+                        this.getAreaLists(this.pid);
                     }
                 })
             },

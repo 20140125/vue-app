@@ -21,10 +21,9 @@
                 <template slot-scope="scope" >
                     <div v-if="scope.row.children" style="text-align: center">
                         <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="setConfigVal(scope.row)">添 加</el-button>
-                        <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updateConfig(scope.row)">修 改</el-button>
+                        <el-button type="primary" plain icon="el-icon-search" size="mini" @click="updateConfig(scope.row)">查 看</el-button>
                     </div>
-                    <div v-else>
-                        <el-button type="primary" plain icon="el-icon-search" size="mini" @click="getConfigVal(scope.row)">查 看</el-button>
+                    <div v-else style="text-align: center">
                         <el-button plain type="danger" icon="el-icon-delete" size="mini" @click="removeConfigVal(scope.row)">删 除</el-button>
                     </div>
                 </template>
@@ -42,7 +41,6 @@
             </el-pagination>
         </div>
         <!--table 分页-->
-
         <!---配置值弹框-->
         <el-dialog :title="title" :visible.sync="syncVisible" :width="dialogWidth" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
             <el-form :label-width="labelWidth" :model="configValModel" :ref="reFrom" :rules="rules">
@@ -62,20 +60,19 @@
                     </el-radio-group>
                 </el-form-item>
             </el-form>
-            <div slot="footer" class="dialog-footer" v-show="showBtn">
-                <Submit :reFrom="reFrom" :model="configValModel" :url="url" :refs="refs" v-on:success="success"/>
+            <div slot="footer" class="dialog-footer">
+                <Submit :reFrom="reFrom" :model="configValModel" @cancelDialog="cancelDialog" :url="url" :refs="refs" v-on:success="success"/>
             </div>
         </el-dialog>
         <!---配置值弹框-->
-
         <!---配置弹框-->
         <el-dialog :title="title" :width="dialogWidth" :visible.sync="syncConfigVisible" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
             <el-form :label-width="labelWidth" :model="configModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="配置名称" prop="name">
                     <el-input v-model="configModel.name" placeholder="配置名称"/>
                 </el-form-item>
-                <el-form-item label="配置值" prop="value">
-                    <codemirror ref="edit" @change="updateContent" :value="configModel.value" :options="options" style="line-height: 20px"/>
+                <el-form-item label="配置值" prop="children">
+                    <VueJson :json-data="configModel.children"/>
                 </el-form-item>
                 <el-form-item label="配置状态" prop="status">
                     <el-radio-group v-model="configModel.status" size="small">
@@ -85,7 +82,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <Submit :reFrom="reFrom" :model="configModel" :url="url" :refs="refs" v-on:success="success"/>
+                <Submit :reFrom="reFrom" :model="configModel" @cancelDialog="cancelDialog" :url="url" :refs="refs" v-on:success="success"/>
             </div>
         </el-dialog>
         <!---配置弹框-->
@@ -100,25 +97,10 @@
     import Delete from "../common/Delete";
     import Submit from "../common/Submit";
     import { mapActions,mapGetters } from 'vuex'
-    import { codemirror } from 'vue-codemirror-lite'
-    //编辑器
-    require('codemirror/addon/hint/javascript-hint.js');
-    require('codemirror/mode/javascript/javascript.js');
-    require('codemirror/addon/selection/active-line');
-    //编辑器主题
-    require('codemirror/theme/monokai.css');
-    //代码折叠
-    require('codemirror/addon/fold/foldgutter.css');
-    require('codemirror/addon/fold/foldcode.js');
-    require('codemirror/addon/fold/foldgutter.js');
-    require('codemirror/addon/fold/brace-fold.js');
-    require('codemirror/addon/fold/brace-fold.js');
-    require('codemirror/addon/fold/comment-fold.js');
-    //括号匹配
-    require('codemirror/addon/edit/matchbrackets.js');
+    import VueJson from "../common/jsonView/json";
     export default {
         name: "lists",
-        components: {Submit, Delete, Radio,codemirror},
+        components: {VueJson, Submit, Delete, Radio},
         data(){
             return {
                 configLists:[],
@@ -154,37 +136,7 @@
                     name:[{required:true,message:'配置名称不得为空',trigger:'blur'}]
                 },
                 show:false,
-                showBtn:true,
-
-                //代码编辑器配置
                 syncConfigVisible:false,
-                options:{
-                    mode: 'application/ld+json',
-                    //缩进
-                    tabSize: 4,
-                    //显示行号
-                    lineNumbers: true,
-                    //theme
-                    theme:'monokai',
-                    //智能提示
-                    extraKeys:{"Ctrl-Space":"autocomplete"},//ctrl-space唤起智能提示
-                    //代码折叠
-                    lineWrapping:true,
-                    foldGutter: true,
-                    gutters:["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-                    //在缩进时，是否需要把 n*tab宽度个空格替换成n个tab字符，默认为false
-                    indentWithTabs: true,
-                    //自动缩进，设置是否根据上下文自动缩进（和上一行相同的缩进量）。默认为true。
-                    smartIndent: true,
-                    //括号匹配
-                    matchBrackets:true,
-                    // 光标高度
-                    cursorHeight:1,
-                    //自动刷新
-                    autoRefresh: true,
-                    //设置光标所在行高亮
-                    styleActiveLine:true,
-                },
             }
         },
         computed:{
@@ -199,6 +151,13 @@
                 this.syncVisible = false;
                 this.syncConfigVisible = false;
                 this.getConfigLists(this.page,this.limit)
+            },
+            /**
+             * todo:取消弹框
+             */
+            cancelDialog:function () {
+                this.syncVisible = false;
+                this.syncConfigVisible = false;
             },
             /**
              * todo：获取配置列表
@@ -239,14 +198,8 @@
                 this.title='修改配置';
                 this.configModel = item;
                 this.url = this.cgi.update;
+                this.configModel.act = 'editConfig';
                 this.syncConfigVisible = true;
-            },
-            /**
-             * TODO:编辑器修改值
-             * @param content
-             */
-            updateContent:function(content) {
-                this.configModel.value = content;
             },
             /**
              * todo：添加
@@ -255,7 +208,6 @@
                 this.title='添加配置';
                 this.configValModel = {name:'', status:1, value:'[]'}
                 this.show = false;
-                this.showBtn = true;
                 this.syncVisible = true;
                 this.url = this.cgi.insert;
             },
@@ -268,24 +220,11 @@
                 this.configValModel = item;
                 this.configVal.status = this.configValModel.status;
                 this.configValModel.value = this.configVal;
+                this.configValModel.act = 'setConfig';
                 this.title='设置【'+item.name+'】配置值';
                 this.show = true;
-                this.showBtn = true;
                 this.syncVisible = true;
                 this.url = this.cgi.update;
-            },
-            /**
-             * todo：查看配置值
-             * @param item
-             */
-            getConfigVal:function(item){
-                this.title='查看配置值';
-                this.configValModel = item;
-                this.configVal.name = item.name;
-                this.configVal.value = item.value;
-                this.show = true;
-                this.showBtn = false;
-                this.syncVisible = true;
             },
             /**
              * todo：移除配置值
@@ -301,7 +240,7 @@
                     apiLists.ConfigValUpdate(item).then(response=>{
                         if (response && response.data.code === 200) {
                             this.getConfigLists(this.page,this.limit);
-                            let data = { url:this.cgi.updateVal,msg:response.data.msg,token:this.$store.state.login.token };
+                            let data = { href:this.cgi.updateVal,msg:response.data.msg,token:this.$store.state.login.token };
                             this.saveSystemLog(data);
                             this.$message({type:'success',message:response.data.msg});
                             return false;

@@ -22,10 +22,12 @@ const state={
     weather:{},
     menuLists:[],
     oauthConfig:[],
+    robotConfig:[],
 };
 const getters={
     menuLists:state=>state.menuLists,
     oauthConfig:state=>state.oauthConfig,
+    robotConfig:state=>state.robotConfig,
     userInfo: state=>state.userInfo,
     token:state=>state.token,
     weather:state=>state.weather
@@ -40,12 +42,20 @@ const mutations={
         state.menuLists = menuLists;
     },
     /**
-     * todo:设置第三方配置
+     * todo:设置系统配置
      * @param state
      * @param oauthConfig
      */
     setOauthConfig:function (state,oauthConfig) {
         state.oauthConfig = oauthConfig;
+    },
+    /**
+     * todo:设置机器人配置
+     * @param state
+     * @param robotConfig
+     */
+    setRobotConfig:function (state,robotConfig) {
+        state.robotConfig = robotConfig;
     },
     /**
      * todo:设置用户信息
@@ -101,7 +111,11 @@ const actions={
     getOauthConfig:function({state,commit},name) {
         apiLists.GetConfig({name:name}).then((response)=>{
             if (response && response.data.code === code.SUCCESS) {
-                commit('setOauthConfig',response.data.item);
+                if (name === 'RobotConfig') {
+                    commit('setRobotConfig',response.data.item)
+                } else {
+                    commit('setOauthConfig',response.data.item);
+                }
             }
         })
     },

@@ -52,6 +52,7 @@
              */
             resetForm:function (ref) {
                 this.refs[ref].resetFields();
+                this.$emit('cancelDialog')
             }
         }
     }

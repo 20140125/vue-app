@@ -236,7 +236,6 @@
                 this.resetPasswordVisible = true;
                 this.passwordLogin.email = item.email;
                 this.passwordLogin.uuid = item.uuid;
-                console.log(this.passwordLogin);
             },
             /**
              * todo:系统登录

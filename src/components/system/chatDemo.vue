@@ -28,7 +28,7 @@
                     <div id="msg">
                         <div v-for="(message,index) in chat.messageLists" :key="index">
                             <div class="msg-img">
-                                <el-avatar :size="50" :src="message.avatar_url" style="cursor: pointer"/>
+                                <el-avatar :size="50" :src="message.client_img" style="cursor: pointer"/>
                                 <i>{{message.from_client_name}}   {{message.time}}</i>
                             </div>
                             <div class="msg-list" v-html="unescape(message.content)"></div>
@@ -383,7 +383,9 @@
              * @param data
              */
             say:function(data){
-                this.chat.messageLists.push(data);
+                if (data['room_id'] === '' || data['from_client_name'] === "systemRobot") {
+                    this.chat.messageLists.push(data);
+                }
                 this.scrollToBottom();
                 if (this.userInfo.username!==data['from_client_name']){
                     if (data['to_client_id']!=='all') {
@@ -416,7 +418,7 @@
                         from_client_id:this.userInfo.uuid,
                         msg_type:this.chat.msg_type,
                         content:this.inputMsg,
-                        avatar_url:this.userInfo.avatar_url,
+                        client_img:this.userInfo.avatar_url,
                         room_id:this.chat.to_client_name === 'all' ? this.chat.room_id : '',
                         uid:this.chat.uid,
                         time:func.set_time(func.get_timestamp()*1000)
