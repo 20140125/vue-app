@@ -378,8 +378,8 @@
                 //文件地址
                 let commUrl = this.userInfo.local+'storage'+item.path.substr(item.path.indexOf('public')+6,item.path.length-item.path.indexOf('public'));
                 //图片浏览
-                let imgExt = ['png','jpg','jpeg','gif','PNG','JPG','JPEG','GIF'];
-                if (imgExt.includes(ext)) {
+                let imgExt = ['png','jpg','jpeg','gif'];
+                if (imgExt.includes(ext.toLowerCase())) {
                     this.dialogVideoUrl = '';
                     this.dialogImageUrl = commUrl
                     this.imgVisible = true;

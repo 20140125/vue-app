@@ -11,6 +11,7 @@ import UserBind from '../components/user/bind'
 import LogLists from '../components/log/lists'
 import SystemLog from '../components/system/log'
 import SystemFile from '../components/system/file'
+import ImagePreview from '../components/system/imageView'
 import ConfigLists from '../components/system/config'
 import ApiLists from '../components/interface/api'
 import APIDoc from '../components/interface/doc'
@@ -49,6 +50,7 @@ export default new Router({
                 { path: 'log/index',  name:'LogLists',component:LogLists,meta:{ mode:'log',title:'日志列表' } },
                 { path: 'system/log',  name:'SystemLog',component:SystemLog,meta:{ mode:'log',title:'系统日志' } },
                 { path: 'file/index',  name:'SystemFile',component:SystemFile,meta:{ mode:'file',title:'文件列表' } },
+                { path: 'image/preview',  name:'ImagePreview',component:ImagePreview,meta:{ mode:'file',title:'图片预览' } },
                 { path: 'config/index',  name:'ConfigLists',component:ConfigLists,meta:{ mode:'config',title:'基础配置' } },
                 { path: 'category/index', name:'ApiLists',component:ApiLists,meta:{ mode:'api_lists',title:'项目列表' } },
                 { path: 'apidoc/index', name:'APIDoc',component:APIDoc,meta:{ mode:'api_lists',title:'APIDoc' } },
