@@ -1,6 +1,12 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText" style="margin: 0 20px">
-        <el-upload :on-success="uploadSuccess" :before-upload="beforeUpload" :show-file-list = false :action="action">
+        <el-upload
+            :on-success="uploadSuccess"
+            :data="fileData"
+            :headers="headers"
+            :before-upload="beforeUpload"
+            :show-file-list = false
+            :action="action">
             <el-button style="margin:0 0 10px 5px" size="medium" type="primary" plain>点击上传</el-button>
         </el-upload>
         <div>
@@ -24,6 +30,8 @@
 <script>
 import apiLists from "../../api/api";
 import {mapGetters} from 'vuex'
+import func from "../../api/func";
+import $url from "../../api/url";
 export default {
     name: "imageView",
     data(){
@@ -34,10 +42,12 @@ export default {
             loadingText:'数据加载中...',
             fullImagePart:[],
             path:'storage_path',
-            action:process.env.API_ROOT+"v1/wx/upload",
+            action:process.env.API_ROOT+$url.fileUpload.replace('/',''),
             limit:10,
             page:1,
-            total:0
+            total:0,
+            headers:{},
+            fileData:{}
         }
     },
     computed:{
@@ -74,7 +84,8 @@ export default {
          */
         uploadSuccess:function (response,file) {
             if (response && response.code === 200) {
-                this.fileLists.unshift({url:response.item.src, label:file.name})
+                this.fileLists.unshift({url:response.item.src, label:file.name});
+                this.filtersListsPart = this.fileLists.slice(0,this.total>this.limit ? this.limit : this.total)
             } else {
                 this.$message.error(response.msg);
             }
@@ -135,7 +146,12 @@ export default {
                 }
             });
         }
-    }
+    },
+    created(){
+        this.fileData.token = this.$store.state.login.token;
+        this.fileData.rand = true;
+        this.headers.Authorization = `${func.set_password(func.set_random(32),func.set_random(12))}${this.fileData.token}${func.set_password(func.set_random(32),func.set_random(12))}`
+    },
 }
 </script>
 
