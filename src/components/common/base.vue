@@ -72,7 +72,6 @@
                 <i class="msg-icon" @click="getMsgDialog">
                     <i :class="chatMsgClass" style="margin:13px 15px;">
                         <el-badge :value="chat.msgCount" v-if="chat.msgCount" type="danger" class="msg-count"/>
-                        <el-badge v-if="msg_dot" is-dot type="danger" class="msg-count"/>
                     </i>
                 </i>
             </el-container>
@@ -178,6 +177,7 @@
     import func from '../../api/func'
     import emotion from '../common/emotion/Index'
     import VueJson from "./jsonView/json";
+    import Push from 'push.js'
     export default {
         name: "baseModule",
         inject:['reload'],
@@ -208,7 +208,6 @@
                 chatMsgClass:'el-icon-chat-dot-round',
                 noticeArr:[],
                 mainStyle:{margin:'60px 0 60px 200px'},
-                msg_dot:false,
                 innerWidth:window.innerWidth,
                 chatDialogWidth:'65%',
             }
@@ -464,7 +463,6 @@
                     this.userInfo.websocketServer.send(JSON.stringify(str));
                     this.getOauthConfig('RoomLists');
                     this.scrollToBottom();
-                    this.msg_dot = false;
                 }
             },
             /**
@@ -624,9 +622,7 @@
                     }
                     this.chat.messageLists.push(data);
                     this.scrollToBottom();
-                    if (!this.chatVisible) {
-                        this.msg_dot = true;
-                    }
+                    this.pushMessage(data['content']);
                 }
                 if (this.chatVisible && this.userInfo.username===data['from_client_name']) {
                     if (data['to_client_id']!=='all') {
@@ -720,7 +716,7 @@
                     try {
                         div.scrollTop = div.scrollHeight
                     } catch (e) {
-                        this.$message.error(JSON.stringify(e));
+                        console.log(e);
                     }
                 })
             },
@@ -745,7 +741,19 @@
                     this. mainStyle = {margin:'60px 0 60px 200px'}
                     this.chatDialogWidth = '65%'
                 }
-            }
+            },
+            /**
+             * todo:推送弹框消息
+             * @param message
+             */
+            pushMessage:function (message){
+                Push.create("你有未读消息", {
+                    body: message,
+                    requireInteraction: true,
+                    icon: 'https://www.fanglonger.com/favicon.ico',
+                    timeout: 600000,
+                });
+            },
         },
         /**
          * TODO:Vue生命周期
@@ -778,6 +786,8 @@
             this.asideHeight = {
                 'min-height':(window.innerHeight - 60)+'px'
             };
+            //浏览器消息推送
+            Push.Permission.request();
             //图片上传参数
             this.fileData.token = this.userInfo.token;
             this.fileData.rand = false;

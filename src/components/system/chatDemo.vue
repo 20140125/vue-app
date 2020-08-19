@@ -94,6 +94,7 @@
     import $url from '../../api/url'
     import func from '../../api/func'
     import emotion from '../common/emotion/Index'
+    import Push from "push.js";
     export default {
         name: "chatDemo",
         data(){
@@ -417,6 +418,7 @@
                     }
                     this.chat.messageLists.push(data);
                     this.scrollToBottom();
+                    this.pushMessage(data['content']);
                 }
                 if (this.chatVisible && this.userInfo.username===data['from_client_name']) {
                     if (data['to_client_id']!=='all') {
@@ -471,7 +473,19 @@
                         this.$message.error(JSON.stringify(e));
                     }
                 })
-            }
+            },
+            /**
+             * todo:推送弹框消息
+             * @param message
+             */
+            pushMessage:function (message){
+                Push.create("你有未读消息", {
+                    body: message,
+                    requireInteraction: true,
+                    icon: 'https://www.fanglonger.com/favicon.ico',
+                    timeout: 600000,
+                });
+            },
         },
         /**
          * todo：生命周期
@@ -505,6 +519,7 @@
             //客服系统初始化
             this.connect(this.userInfo.websocketServer);
             this.getOauthConfig('RoomLists');
+            Push.Permission.request();
             let __this = this;
             //键盘事件
             document.onkeydown = function (e) {

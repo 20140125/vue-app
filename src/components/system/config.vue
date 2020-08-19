@@ -70,7 +70,7 @@
             <el-form :label-width="labelWidth" :model="configModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="配置名称">{{configModel.name}}</el-form-item>
                 <el-form-item label="配置值" prop="children"><VueJson :json-data="configModel.children"/></el-form-item>
-                <el-form-item label="配置状态"><el-button size="medium" plain :type="configModel.status === '2' ? 'success' : 'danger'">{{configModel.status === '2' ? '开启' : '关闭'}}</el-button></el-form-item>
+                <el-form-item label="配置状态"><el-button size="medium" plain :type="configModel.status == '1' ? 'success' : 'danger'">{{configModel.status == '1' ? '开启' : '关闭'}}</el-button></el-form-item>
             </el-form>
         </el-dialog>
         <!---配置弹框-->
