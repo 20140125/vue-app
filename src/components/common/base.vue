@@ -366,16 +366,15 @@
                         //发送消息
                         case 'say':
                             __this.say(data);
+                            __this.setUsersLists();
                             console.log(data);
                             break;
                         //聊天记录
                         case 'history':
                             __this.chat.messageLists = data.message;
-                            if (data.client_list.length>0) {
-                                __this.chat.client_list = data.client_list;
-                                __this.chat.client_list_part = data.client_list;
-                                __this.setUsersLists();
-                            }
+                            __this.chat.client_list = data.client_list;
+                            __this.chat.client_list_part = data.client_list;
+                            __this.setUsersLists();
                             break;
                         case 'logout':
                             console.log(data);
@@ -618,6 +617,7 @@
                     if (data['to_client_id']!=='all') {
                         this.chat.title = data['from_client_name'];
                         this.chat.to_client_name = data['from_client_name'];
+                        this.chat.img = data['client_img']
                         this.chat.to_client_id = data['from_client_id'];
                     }
                     this.chat.messageLists.push(data);
@@ -629,6 +629,7 @@
                         this.chat.title = data['to_client_name'];
                         this.chat.to_client_name = data['to_client_name'];
                         this.chat.to_client_id = data['to_client_id'];
+                        this.chat.img = data['client_img']
                     }
                 }
             },
@@ -716,7 +717,7 @@
                     try {
                         div.scrollTop = div.scrollHeight
                     } catch (e) {
-                        console.log(e);
+
                     }
                 })
             },
@@ -787,7 +788,11 @@
                 'min-height':(window.innerHeight - 60)+'px'
             };
             //浏览器消息推送
-            Push.Permission.request();
+            try {
+                Push.Permission.request();
+            } catch (e) {
+                e ? this.$message.error(JSON.stringify(e)) : '';
+            }
             //图片上传参数
             this.fileData.token = this.userInfo.token;
             this.fileData.rand = false;

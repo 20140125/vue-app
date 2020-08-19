@@ -164,23 +164,21 @@
                         case 'login':
                             __this.chat.client_list = data.client_list;
                             __this.chat.client_list_part = data.client_list;
-                            __this.chat.total = __this.chat.client_list.length;
                             __this.setUsersLists();
                             console.log(data);
                             break;
                         //发送消息
                         case 'say':
                             __this.say(data);
+                            __this.setUsersLists();
                             console.log(data);
                             break;
                         //聊天记录
                         case 'history':
                             __this.chat.messageLists = data.message;
-                            if (data.client_list.length>0) {
-                                __this.chat.client_list = data.client_list;
-                                __this.chat.client_list_part = data.client_list;
-                                __this.setUsersLists();
-                            }
+                            __this.chat.client_list = data.client_list;
+                            __this.chat.client_list_part = data.client_list;
+                            __this.setUsersLists();
                             console.log(data);
                             break;
                         case 'logout':
@@ -512,6 +510,12 @@
                 total:0,
                 online:0
             };
+            //浏览器消息推送
+            try {
+                Push.Permission.request();
+            } catch (e) {
+                e ? this.$message.error(JSON.stringify(e)) : '';
+            }
             //图片上传参数
             this.fileData.token = this.userInfo.token;
             this.fileData.rand = false;
