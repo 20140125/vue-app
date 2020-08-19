@@ -1,24 +1,20 @@
 <template>
     <!---chat message-->
-    <el-dialog id="chat" @close="chatVisible = false" top="3vh" width="80%"
-               :center="center" :show-close="closeModel"
-               :close-on-press-escape="closeModel"
-               :close-on-click-modal="closeModel"
-               :visible.sync="chatVisible">
+    <el-dialog id="chat" @close="chatVisible = false" top="3vh" width="80%" :center="center" :show-close="closeModel" :close-on-press-escape="closeModel" :close-on-click-modal="closeModel" :visible.sync="chatVisible">
         <div slot="title" style="display: flex;align-items: center;position: relative;">
             <el-avatar :src="chat.img" :size="50" fit="fill" :alt="chat.title"/>
             <div>
                 <div v-html="chat.title" style="margin-left: 10px;text-align: left;color: #fff"/>
-                <div v-if="!chat.room_id" slot="title" v-html="chat.desc" style="margin-left: 10px;color: #fff"/>
+                <div slot="title" v-html="chat.desc" style="margin-left: 10px;color: #fff"/>
             </div>
         </div>
         <el-row :gutter="24">
-            <el-col :span="18">
-                <el-card shadow="hover">
+            <el-col :span="18" id="leftBox">
+                <el-card>
                     <div id="msg">
                         <div v-for="(message,index) in chat.messageLists" :key="index">
                             <div class="msg-img" :style="message.from_client_name === userInfo.username ? 'color:red' : 'color:#0d1c86'">
-                                <el-avatar :size="60" :src="message.client_img" style="cursor: pointer"/>
+                                <el-avatar :size="30" :src="message.client_img" style="cursor: pointer"/>
                                 <i>{{message.from_client_name}}   {{message.time}}</i>
                             </div>
                             <div class="msg-list" v-html="unescape(message.content)"></div>
@@ -28,11 +24,11 @@
                         <emotion @clickEmotion="getEmotion" v-show="showEmotion" :height="300"/>
                         <div>
                             <el-tooltip effect="dark" content="房间名称" placement="top-start">
-                                <el-menu :default-active="chat.room_id"   background-color="#545c64"
+                                <el-menu :default-active="chat.room_id"   background-color="#409EFF"
                                          text-color="#fff"
                                          active-text-color="#ffd04b" mode="horizontal" style="margin-bottom:10px;">
                                     <el-menu-item @click="setRoomID(room)" v-for="(room,index) in oauthConfig" :key="index" :index="room.id.toString()">
-                                        {{room.value}}
+                                        {{room.name}}
                                     </el-menu-item>
                                 </el-menu>
                             </el-tooltip>
@@ -62,28 +58,31 @@
                 </el-card>
             </el-col>
             <el-col :span="6" id="rightBox">
-                <div style="background: #fff;min-height: 200px">群公告</div>
-                <div style="margin-bottom: 5px">
-                    在线人数({{chat.total}}/{{chat.online}})
-                    <el-tooltip effect="light" :content="chat.search ? '收缩搜索框' : '展开搜索框'" placement="top">
-                        <i class="el-icon-search" style="float: right" @click="chat.search = !chat.search"></i>
-                    </el-tooltip>
-                </div>
-                <el-autocomplete placeholder="搜索" v-if="chat.search" v-model="chat.users" clearable :fetch-suggestions="querySearch" @clear="clearSearch" style="width: 100%"/>
-                <div class="user-list">
-                    <el-menu style="width: 100%;">
-                        <el-menu-item @click="sendUser(user,index)" v-for="(user,index) in chat.client_list_part" :key="index" :index="index.toString()">
-                            <el-avatar :size="50" :src="user.client_img" style="cursor: pointer"/>
-                            <span slot="title" style="margin-left:20px" v-html="user.client_name.replace(chat.users,'<b style=color:#ffd04b;font-weight:100>'+chat.users+'</b>')"/>
-                            <!--未读消息数-->
-                            <el-badge v-if="user.total" type="danger" :value="user.total" style="top: 10px;right: 15px"/>
-                            <!--在线-->
-                            <el-badge v-else-if="user.online" type="success" is-dot style="top: 12px;right: 10px"/>
-                            <!--离线-->
-                            <el-badge v-else-if="!user.online" type="info" is-dot style="top: 12px;right: 10px"/>
-                        </el-menu-item>
-                    </el-menu>
-                </div>
+                <el-card>
+                    <div style="background: #fff;min-height: 200px">
+                        群公告:
+                        <div style="cursor: pointer" v-html="chat.notice"></div>
+                    </div>
+                    <el-divider/>
+                    <div style="margin-bottom: 10px">
+                        在线人数({{chat.total}}/{{chat.online}})
+                    </div>
+                    <el-autocomplete placeholder="搜索" v-model="chat.users" clearable :fetch-suggestions="querySearch" @clear="clearSearch" style="width: 100%"/>
+                    <div class="user-list">
+                        <el-menu style="width: 100%;">
+                            <el-menu-item @click="sendUser(user,index)" v-for="(user,index) in chat.client_list_part" :key="index" :index="index.toString()">
+                                <el-avatar :size="30" :src="user.client_img" style="cursor: pointer"/>
+                                <span slot="title" style="margin-left:20px;font-size: 14px" v-html="user.client_name.replace(chat.users,'<b style=color:#409EFF;font-weight:100>'+chat.users+'</b>')"/>
+                                <!--未读消息数-->
+                                <el-badge v-if="user.total" type="danger" :value="user.total" style="top: 10px;right: 15px"/>
+                                <!--在线-->
+                                <el-badge v-else-if="user.online" type="success" is-dot style="top: 12px;right: 10px"/>
+                                <!--离线-->
+                                <el-badge v-else-if="!user.online" type="info" is-dot style="top: 12px;right: 10px"/>
+                            </el-menu-item>
+                        </el-menu>
+                    </div>
+                </el-card>
             </el-col>
         </el-row>
     </el-dialog>
@@ -101,7 +100,6 @@
             return {
                 //workerManChat
                 cgi:{uploadUrl:process.env.API_ROOT+$url.fileUpload.replace('/','')},
-                title:'隨心所欲,隨性而行',
                 fileData:{},
                 headers:{},
                 chatVisible:true,
@@ -111,8 +109,7 @@
                 closeModel:false,
                 center:true,
                 chat:{},
-                noticeArr:[],
-                uid:'',
+                noticeArr:[]
             }
         },
         components:{
@@ -281,7 +278,8 @@
                 if (this.chat.room_id !== room.id.toString()) {
                     this.showEmotion = false;
                     this.chat.room_id = room.id.toString();
-                    this.chat.title = room.value;
+                    this.chat.title = room.name;
+                    this.chat.desc = room.value;
                     this.chat.img = 'https://cdn.pixabay.com/photo/2016/12/13/21/20/alien-1905155_960_720.png';
                     this.chat.desc = '';
                     //加入房间
@@ -330,6 +328,7 @@
                 this.chat.img = user.client_img;
                 this.chat.desc = user.desc;
                 this.chat.room_id = '';
+                user.total = 0;
                 //获取聊天记录
                 let str = {
                     type:'history',
@@ -410,16 +409,14 @@
              * @param data
              */
             say:function(data){
-                if (data['room_id'] === '' || data['from_client_name'] === "systemRobot") {
-                    this.chat.messageLists.push(data);
-                }
-                this.scrollToBottom();
                 if (this.userInfo.username!==data['from_client_name']){
                     if (data['to_client_id']!=='all') {
                         this.chat.title = data['from_client_name'];
                         this.chat.to_client_name = data['from_client_name'];
                         this.chat.to_client_id = data['from_client_id'];
                     }
+                    this.chat.messageLists.push(data);
+                    this.scrollToBottom();
                 }
                 if (this.chatVisible && this.userInfo.username===data['from_client_name']) {
                     if (data['to_client_id']!=='all') {
@@ -487,19 +484,19 @@
                 from_client_id: this.userInfo.uuid,
                 from_client_name:this.userInfo.username,
                 uid:this.userInfo.uuid,
-                room_id:'1200',
+                room_id:this.userInfo.room_id,
+                title:this.userInfo.room_name,
+                notice:'万物皆有可能',
                 msgCount:0,
                 client_list:[],
                 client_list_part:[],
-                title:'隨心所欲,隨性而行',
                 img:'https://cdn.pixabay.com/photo/2016/12/13/21/20/alien-1905155_960_720.png',
                 desc:this.userInfo.desc,
                 messageLists:[],
                 msg_type:'text',
                 users:'',
                 total:0,
-                online:0,
-                search:true
+                online:0
             };
             //图片上传参数
             this.fileData.token = this.userInfo.token;
@@ -529,6 +526,13 @@
     }
 </script>
 <style>
+#leftBox {
+    padding-left: 0 !important;
+    padding-right: 2px !important;
+}
+#rightBox {
+    padding: 0 !important;
+}
 #rightBox .el-input__inner{
     margin-bottom: 10px;
 }
@@ -536,7 +540,7 @@
     display: none;
 }
 #chat .el-dialog__header {
-    background: #393d49;
+    background: #409EFF;
 }
 #chat .el-card {
     border-radius: 0 !important;
@@ -545,97 +549,93 @@
 }
 </style>
 <style scoped>
-    .el-main{
-        margin-bottom: 60px;
-    }
-    .user-list{
-        min-height:100%;
-        max-height: 450px;
-        overflow: hidden;
-        overflow-y: auto;
-        padding: 0 !important;
-    }
-    #msg{
-        max-height: 380px;
-        min-height: 380px;
-        margin:10px 0 20px 0;
-        overflow: hidden;
-        overflow-y: auto;
-        border: 1px solid #eee;
-        border-radius: 10px;
-        -moz-border-radius:10px;
-        -webkit-border-radius:10px;
-    }
-    #msg .msg-list{
-        box-shadow: 0 1px 0 #ffffff, 0 1px 2px #505860;
-        line-height: 28px;
-        min-height: 20px;
-        margin: 0 15px 15px 15px;
-        font-family: "Source Code Pro", monospace;
-        font-size: 15px;
-        padding:15px;
-        border-radius: 10px;
-        -moz-border-radius:10px;
-        -webkit-border-radius:10px;
-        background:-webkit-gradient(linear, left top, left bottom, from(#eaeaea), to(#ffffff));
-        　background:-moz-linear-gradient(top, #eaeaea, #ffffff);
-        　　　　background:-o-linear-gradient(top, #eaeaea, #ffffff);
-        　　　　background:linear-gradient(top, #eaeaea, #ffffff);
-        position:relative;
-    }
-    #msg .msg-list:after {
-        content:'';
-        position:absolute;
-        bottom:100%;
-        left:15px;
-        width:0;
-        height:0;
-        border-width:10px;
-        border-style:solid;
-        border-color:transparent;
-        margin-bottom:-4px;
-        border-bottom-width:16px;
-        border-bottom-color:currentColor;
-        color:#eaeaea;
-    }
-    #msg .msg-img{
-        margin: 15px;
-    }
-    #content{
-        border: 1px solid #eee;
-        height: 95px;
-        border-radius: 10px;
-        padding:10px;
-        overflow: scroll;
-        overflow-x: hidden;
-    }
-    .input-msg{
-        min-height: 100px;
-        margin-bottom: 10px;
-    }
-    .input-msg .icon{
-        font-size: 25px;
-        margin:0 10px 10px 0;
-        color: #000;
-        cursor: pointer;
-    }
-    .msg-icon{
-        font-size: 50px;
-        color:#ffffff;
-        position:fixed;
-        right:10px;
-        bottom:10%;
-        width: 80px;
-        height: 80px;
-        background: #0066ff;
-        border-radius: 40px;
-        -moz-border-radius:40px;
-        -webkit-border-radius:40px;
-        z-index: 20004;
-    }
-    .msg-count{
-        position:absolute;
-        right:9px;
-        bottom:54%;
-    }
+.user-list{
+    min-height:354px;
+    max-height: 354px;
+    overflow: hidden;
+    overflow-y: auto;
+    padding: 0 !important;
+}
+#msg{
+    max-height: 380px;
+    min-height: 380px;
+    margin:10px 0 20px 0;
+    overflow: hidden;
+    overflow-y: auto;
+    border: 1px solid #eee;
+}
+#msg .msg-list{
+    box-shadow: 0 1px 0 #ffffff, 0 1px 2px #505860;
+    line-height: 28px;
+    min-height: 20px;
+    margin: 0 15px 15px 15px;
+    font-family: "Source Code Pro", monospace;
+    font-size: 12px;
+    padding:15px;
+    border-radius: 10px;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    background:-webkit-gradient(linear, left top, left bottom, from(#eaeaea), to(#ffffff));
+    　background:-moz-linear-gradient(top, #eaeaea, #ffffff);
+    　　　　background:-o-linear-gradient(top, #eaeaea, #ffffff);
+    　　　　background:linear-gradient(top, #eaeaea, #ffffff);
+    position:relative;
+}
+#msg .msg-list:after {
+    content:'';
+    position:absolute;
+    bottom:100%;
+    left:15px;
+    width:0;
+    height:0;
+    border-width:10px;
+    border-style:solid;
+    border-color:transparent;
+    margin-bottom:-4px;
+    border-bottom-width:16px;
+    border-bottom-color:currentColor;
+    color:#eaeaea;
+}
+#msg .msg-img{
+    margin: 15px;
+}
+#content{
+    border: 1px solid #eee;
+    height: 95px;
+    border-radius: 10px;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    padding:10px;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+.input-msg{
+    min-height: 100px;
+    margin-bottom: 10px;
+}
+.input-msg .icon{
+    font-size: 25px;
+    margin:0 10px 10px 0;
+    color: #000;
+    cursor: pointer;
+}
+.msg-icon{
+    font-size: 50px;
+    color:#ffffff;
+    position:fixed;
+    right:10px;
+    bottom:10%;
+    width: 80px;
+    height: 80px;
+    background: #409EFF;
+    border-radius: 40px;
+    -moz-border-radius:40px;
+    -webkit-border-radius:40px;
+    z-index: 20004;
+}
+.msg-count{
+    position:absolute;
+    right:9px;
+    bottom:54%;
+}
 </style>

@@ -68,22 +68,10 @@
         <!---配置弹框-->
         <el-dialog :title="title" :width="dialogWidth" :visible.sync="syncConfigVisible" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
             <el-form :label-width="labelWidth" :model="configModel" :ref="reFrom" :rules="rules">
-                <el-form-item label="配置名称" prop="name">
-                    <el-input v-model="configModel.name" placeholder="配置名称"/>
-                </el-form-item>
-                <el-form-item label="配置值" prop="children">
-                    <VueJson :json-data="configModel.children"/>
-                </el-form-item>
-                <el-form-item label="配置状态" prop="status">
-                    <el-radio-group v-model="configModel.status" size="small">
-                        <el-radio-button label="2">关闭</el-radio-button>
-                        <el-radio-button label="1">开启</el-radio-button>
-                    </el-radio-group>
-                </el-form-item>
+                <el-form-item label="配置名称">{{configModel.name}}</el-form-item>
+                <el-form-item label="配置值" prop="children"><VueJson :json-data="configModel.children"/></el-form-item>
+                <el-form-item label="配置状态"><el-button size="medium" plain :type="configModel.status === '2' ? 'success' : 'danger'">{{configModel.status === '2' ? '开启' : '关闭'}}</el-button></el-form-item>
             </el-form>
-            <div slot="footer" class="dialog-footer">
-                <Submit :reFrom="reFrom" :model="configModel" @cancelDialog="cancelDialog" :url="url" :refs="refs" v-on:success="success"/>
-            </div>
         </el-dialog>
         <!---配置弹框-->
 
@@ -195,10 +183,8 @@
              * @param item
              */
             updateConfig:function(item) {
-                this.title='修改配置';
+                this.title='查看配置';
                 this.configModel = item;
-                this.url = this.cgi.update;
-                this.configModel.act = 'editConfig';
                 this.syncConfigVisible = true;
             },
             /**
