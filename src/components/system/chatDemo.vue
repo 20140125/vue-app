@@ -170,6 +170,8 @@
                         //发送消息
                         case 'say':
                             __this.say(data);
+                            __this.chat.client_list = data.client_list;
+                            __this.chat.client_list_part = data.client_list;
                             __this.setUsersLists();
                             console.log(data);
                             break;
@@ -280,7 +282,6 @@
                     this.chat.title = room.name;
                     this.chat.desc = room.value;
                     this.chat.img = 'https://cdn.pixabay.com/photo/2016/12/13/21/20/alien-1905155_960_720.png';
-                    this.chat.desc = '';
                     //加入房间
                     let login = {
                         type:'login',

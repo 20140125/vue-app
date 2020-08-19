@@ -366,6 +366,8 @@
                         //发送消息
                         case 'say':
                             __this.say(data);
+                            __this.chat.client_list = data.client_list;
+                            __this.chat.client_list_part = data.client_list;
                             __this.setUsersLists();
                             console.log(data);
                             break;
