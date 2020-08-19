@@ -62,7 +62,7 @@
         left: 0 !important;
         height:2px !important;
     }
-    .el-dialog ,.el-card{
+   .el-card{
         border-radius: 40px;
         -webkit-border-radius: 40px;
         -moz-border-radius: 40px;

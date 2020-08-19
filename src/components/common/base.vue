@@ -78,14 +78,81 @@
             </el-container>
         </el-container>
         <!---chat message-->
-        <el-dialog :title="chat.chatTitle" @close="chatVisible = false" top="5vh" :width="chatDialogWidth"
+        <el-dialog id="chat" @close="chatVisible = false" top="5vh" :width="dialogWidth"
                    :center="center" :show-close="closeModel"
-                   :close-on-press-escape="closeModel" :visible.sync="chatVisible">
+                   :close-on-press-escape="closeModel"
+                   :close-on-click-modal="closeModel"
+                   :visible.sync="chatVisible">
+            <div slot="title" style="display: flex;align-items: center;position: relative;">
+                <el-avatar :src="chat.img" :size="50" fit="fill" :alt="chat.title"/>
+                <div>
+                    <div v-html="chat.title" style="margin-left: 10px;text-align: left;color: #fff"/>
+                    <div v-if="!chat.room_id" slot="title" v-html="chat.desc" style="margin-left: 10px;color: #fff"/>
+                </div>
+            </div>
             <el-row :gutter="24">
-                <el-col :span="6" class="user-list">
-                    <div class="aside">
-                        <el-autocomplete placeholder="搜索" v-model="chat.users" clearable :fetch-suggestions="querySearch" @clear="clearSearch" style="width: 100%"/>
-                        <el-menu background-color="#393d49" text-color="#fff" active-text-color="#ffd04b">
+                <el-col :span="18">
+                    <el-card shadow="hover">
+                        <div id="msg">
+                            <div v-for="(message,index) in chat.messageLists" :key="index">
+                                <div class="msg-img" :style="message.from_client_name === userInfo.username ? 'color:red' : 'color:#0d1c86'">
+                                    <el-avatar :size="60" :src="message.client_img" style="cursor: pointer"/>
+                                    <i>{{message.from_client_name}}   {{message.time}}</i>
+                                </div>
+                                <div class="msg-list" v-html="unescape(message.content)"></div>
+                            </div>
+                        </div>
+                        <div class="input-msg">
+                            <emotion @clickEmotion="getEmotion" v-show="showEmotion" :height="300"/>
+                            <div>
+                                <el-tooltip effect="dark" content="房间名称" placement="top-start">
+                                    <el-menu :default-active="chat.room_id"   background-color="#545c64"
+                                             text-color="#fff"
+                                             active-text-color="#ffd04b" mode="horizontal" style="margin-bottom:10px;">
+                                        <el-menu-item @click="setRoomID(room)" v-for="(room,index) in oauthConfig" :key="index" :index="room.id.toString()">
+                                            {{room.value}}
+                                        </el-menu-item>
+                                    </el-menu>
+                                </el-tooltip>
+                                <el-tooltip effect="dark" content="发送表情" placement="top-start">
+                                    <i @click="showEmotion = !showEmotion" class="el-icon-picture-outline-round icon"/>
+                                </el-tooltip>
+                                <el-upload :action="cgi.uploadUrl"
+                                           :data="fileData"
+                                           :headers="headers"
+                                           :show-file-list="false"
+                                           :on-success="uploadSuccess"
+                                           :before-upload="beforeUpload" style="float: left">
+                                    <el-tooltip effect="dark" content="发送文件和图片" placement="top-start">
+                                        <i  @click="showEmotion = false" class="el-icon-picture-outline icon"/>
+                                    </el-tooltip>
+                                </el-upload>
+                            </div>
+                            <div contentEditable="true" ref="message" id="content" @focus="showEmotion = false" @keydown="setMsg">
+
+                            </div>
+                        </div>
+                        <div class="input-button" style="text-align: right">
+                            <el-tooltip effect="dark" content="Shift + Enter 快捷发送" placement="top-start">
+                                <el-button type="primary" round plain size="medium" @click="sendMsg">发 送</el-button>
+                            </el-tooltip>
+                        </div>
+                    </el-card>
+                </el-col>
+                <el-col :span="6" id="rightBox">
+                    <div style="background: #fff;min-height: 200px">
+                        群公告:
+                        万物皆可能
+                    </div>
+                    <div style="margin-bottom: 5px">
+                        在线人数({{chat.total}}/{{chat.online}})
+                        <el-tooltip effect="light" :content="chat.search ? '收缩搜索框' : '展开搜索框'" placement="top">
+                            <i class="el-icon-search" style="float: right" @click="chat.search = !chat.search"></i>
+                        </el-tooltip>
+                    </div>
+                    <el-autocomplete placeholder="搜索" v-if="chat.search" v-model="chat.users" clearable :fetch-suggestions="querySearch" @clear="clearSearch" style="width: 100%"/>
+                    <div class="user-list">
+                        <el-menu style="width: 100%;">
                             <el-menu-item @click="sendUser(user,index)" v-for="(user,index) in chat.client_list_part" :key="index" :index="index.toString()">
                                 <el-avatar :size="50" :src="user.client_img" style="cursor: pointer"/>
                                 <span slot="title" style="margin-left:20px" v-html="user.client_name.replace(chat.users,'<b style=color:#ffd04b;font-weight:100>'+chat.users+'</b>')"/>
@@ -98,55 +165,6 @@
                             </el-menu-item>
                         </el-menu>
                     </div>
-                </el-col>
-                <el-col :span="18">
-                    <el-card shadow="always">
-                        <div id="msg">
-                            <div v-for="(message,index) in chat.messageLists" :key="index">
-                                <div class="msg-img">
-                                    <el-avatar :size="50" :src="message.client_img" style="cursor: pointer"/>
-                                    <i>{{message.from_client_name}}   {{message.time}}</i>
-                                </div>
-                                <div class="msg-list" v-html="unescape(message.content)"/>
-                            </div>
-                        </div>
-                        <div class="input-msg">
-                            <emotion @clickEmotion="getEmotion" v-show="showEmotion" :height="300"/>
-                            <el-tooltip effect="dark" content="房间名称" placement="top-start">
-                                <el-menu :default-active="chat.room_id"   background-color="#545c64"
-                                         text-color="#fff"
-                                         active-text-color="#ffd04b" mode="horizontal" style="margin-bottom:10px;border-radius:30px!important;-moz-border-radius:20px!important;-webkit-border-radius:20px!important;">
-                                    <el-menu-item @click="setRoomID(room)" v-for="(room,index) in oauthConfig" :key="index" :index="room.id.toString()">
-                                        {{room.value}}
-                                    </el-menu-item>
-                                </el-menu>
-                            </el-tooltip>
-                            <el-tooltip effect="dark" content="发送表情" placement="top-start">
-                                <i @click="showEmotion = !showEmotion" class="el-icon-picture-outline-round icon"/>
-                            </el-tooltip>
-                            <el-upload :action="cgi.uploadUrl"
-                                       :data="fileData"
-                                       :headers="headers"
-                                       :show-file-list="false"
-                                       :on-success="uploadSuccess"
-                                       :before-upload="beforeUpload" style="float: left">
-                                <el-tooltip effect="dark" content="发送文件和图片" placement="top-start">
-                                    <i @click="showEmotion = false" class="el-icon-picture-outline icon"/>
-                                </el-tooltip>
-                            </el-upload>
-                            <div style="margin: 10px 0;cursor: pointer" v-if="chat.showRobotMessage">
-                                <el-tag @click="setTagMessage(robot)" v-for="(robot,index) in robotConfig" :key="index">{{robot.name}}</el-tag>
-                            </div>
-                            <div contentEditable="true" ref="message" id="content" @focus="showEmotion = false" @keydown="setMsg">
-
-                            </div>
-                        </div>
-                        <div class="input-button" style="text-align: right">
-                            <el-tooltip effect="dark" content="Shift + Enter 快捷发送" placement="top-start">
-                                <el-button type="primary" round plain size="medium" @click="sendMsg">发 送</el-button>
-                            </el-tooltip>
-                        </div>
-                    </el-card>
                 </el-col>
             </el-row>
         </el-dialog>
@@ -164,7 +182,6 @@
     import func from '../../api/func'
     import emotion from '../common/emotion/Index'
     import VueJson from "./jsonView/json";
-    import code from "../../api/code";
     export default {
         name: "baseModule",
         inject:['reload'],
@@ -404,11 +421,17 @@
             setUsersLists:function () {
                 //展示单个用户未读消息数
                 let unreadMessage = [];
+                this.chat.online = 0;
+                this.chat.total = 0;
                 for (let i in this.chat.client_list) {
                     if (this.userInfo.username === this.chat.client_list[i]['client_name']) {
                         unreadMessage = this.chat.client_list[i]['unread'];
                         this.chat.msgCount = this.chat.client_list[i]['unreadCount']
                     }
+                    if (this.chat.client_list[i]['online']) {
+                        this.chat.online ++ ;
+                    }
+                    this.chat.total++;
                 }
                 if (unreadMessage.length>0) {
                     for (let i in unreadMessage) {
@@ -456,7 +479,9 @@
                 if (this.chat.room_id !== room.id.toString()) {
                     this.showEmotion = false;
                     this.chat.room_id = room.id.toString();
-                    this.chat.chatTitle = room.value;
+                    this.chat.title = room.value;
+                    this.chat.img = 'https://cdn.pixabay.com/photo/2016/12/13/21/20/alien-1905155_960_720.png';
+                    this.chat.desc = '';
                     //加入房间
                     let login = {
                         type:'login',
@@ -497,8 +522,12 @@
                 this.chat.to_client_id = client_id === '0' ? 'all' : client_id;
                 this.chat.from_client_id = user.uid;
                 this.chat.uid = this.chat.to_client_id;
-                this.chat.chatTitle = user.client_name;
-                this.chat.users = user.client_name;
+                this.chat.title = user.client_name;
+                if (this.chat.users) {
+                    this.chat.users = user.client_name;
+                }
+                this.chat.img = user.client_img;
+                this.chat.desc = user.desc;
                 this.chat.room_id = '';
                 this.chat.messageLists = [];
                 this.chat.showRobotMessage = false;
@@ -596,7 +625,7 @@
                 this.scrollToBottom();
                 if (this.userInfo.username!==data['from_client_name']){
                     if (data['to_client_id']!=='all') {
-                        this.chat.chatTitle = data['from_client_name'];
+                        this.chat.title = data['from_client_name'];
                         this.chat.to_client_name = data['from_client_name'];
                         this.chat.to_client_id = data['from_client_id'];
                     }
@@ -606,7 +635,7 @@
                 }
                 if (this.chatVisible && this.userInfo.username===data['from_client_name']) {
                     if (data['to_client_id']!=='all') {
-                        this.chat.chatTitle = data['to_client_name'];
+                        this.chat.title = data['to_client_name'];
                         this.chat.to_client_name = data['to_client_name'];
                         this.chat.to_client_id = data['to_client_id'];
                     }
@@ -738,11 +767,15 @@
                 msgCount:0,
                 client_list:[],
                 client_list_part:[],
-                chatTitle:'隨心所欲,隨性而行',
+                title:'隨心所欲,隨性而行',
+                img:'https://cdn.pixabay.com/photo/2016/12/13/21/20/alien-1905155_960_720.png',
+                desc:this.userInfo.desc,
                 messageLists:[],
                 msg_type:'text',
                 users:'',
-                showRobotMessage:true
+                total:0,
+                online:0,
+                search:true
             };
             //客服系统初始化
             this.connect(this.userInfo.websocketServer);
@@ -811,14 +844,19 @@
     }
 </script>
 <style>
-.user-list .aside .el-input__inner{
-    background: #393d49 !important;
-    color: #fff !important;
-    border: none;
-    border-radius: 5px;
+#rightBox .el-input__inner{
+    margin-bottom: 10px;
 }
 .el-autocomplete-suggestion {
     display: none;
+}
+#chat .el-dialog__header {
+    background: #393d49;
+}
+#chat .el-card {
+    border-radius: 0 !important;
+    -webkit-border-radius:  0 !important;
+    -moz-border-radius:  0 !important;
 }
 </style>
 <style scoped>
@@ -853,30 +891,11 @@
         margin-top: 60px;
     }
     .user-list{
-        box-shadow: 0 2px 12px #ffffff, 0 0 6px #F5F5F5;
-        min-height:765px;
-        background-color:#393d49;
-        border-radius:20px;
-        -moz-border-radius:20px;
-        -webkit-border-radius:20px;
-        max-height: 765px;
+        min-height:100%;
+        max-height: 450px;
         overflow: hidden;
         overflow-y: auto;
         padding: 0 !important;
-    }
-    .user-list .aside {
-        background-color:#393d49;
-        border-radius:10px;
-        -moz-border-radius:10px;
-        -webkit-border-radius:10px;
-    }
-    .contact-list{
-        box-shadow: 0 1px 0 #ffffff, 0 1px 2px #545c64;
-        min-height:600px;
-        border: 1px solid #F5F5F5;
-        border-radius:10px;
-        -moz-border-radius:10px;
-        -webkit-border-radius:10px;
     }
     #msg{
         max-height: 380px;
