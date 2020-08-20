@@ -138,7 +138,11 @@
                     <el-card>
                         <div style="background: #fff;min-height: 200px">
                             群公告:
-                            <div style="cursor: pointer" v-html="chat.notice"></div>
+                            <el-carousel tyle="cursor: pointer" :interval="4000" arrow="never" direction="vertical" indicator-position="none" height="149px">
+                                <el-carousel-item v-for="item in 6" :key="item">
+                                    <div style="cursor: pointer;margin-top: 20px" v-html="chat.notice"/>
+                                </el-carousel-item>
+                            </el-carousel>
                         </div>
                         <el-divider/>
                         <div style="margin-bottom: 10px">
@@ -149,7 +153,7 @@
                             <el-menu style="width: 100%;">
                                 <el-menu-item @click="sendUser(user,index)" v-for="(user,index) in chat.client_list_part" :key="index" :index="index.toString()">
                                     <el-avatar :size="30" :src="user.client_img" style="cursor: pointer"/>
-                                    <span slot="title" style="font-size: 14px" v-html="user.client_name.replace(chat.users,'<b style=color:#409EFF;font-weight:100>'+chat.users+'</b>')"/>
+                                    <span slot="title" style="font-size: 14px" v-html="user.client_name.replace(chat.users,'<b style=color:#0e82fc;font-weight:100>'+chat.users+'</b>')"/>
                                     <!--未读消息数-->
                                     <el-badge v-if="user.total" type="danger" :value="user.total" style="top: 10px;right: 15px"/>
                                     <!--在线-->
@@ -210,6 +214,9 @@
                 mainStyle:{margin:'60px 0 60px 200px'},
                 innerWidth:window.innerWidth,
                 chatDialogWidth:'65%',
+                dayWeather:'',
+                weatherDayMapping:{'date':'今天', 'daypower' : '风力', 'daytemp' : '温度', 'dayweather' : '天气', 'daywind' : '风向'},
+                weatherNightMapping:{ 'nightpower' : '风力', 'nighttemp' : '温度', 'nightweather' : '天气', 'nightwind' : '风向'}
             }
         },
         components:{
@@ -438,6 +445,7 @@
                         }
                     }
                 }
+                this.scrollToBottom();
             },
             /**
              * TODO:弹出框展示
@@ -463,7 +471,6 @@
                     this.chat.msgCount = 0;
                     this.userInfo.websocketServer.send(JSON.stringify(str));
                     this.getOauthConfig('RoomLists');
-                    this.scrollToBottom();
                 }
             },
             /**
@@ -505,7 +512,6 @@
                     source:'room',
                 };
                 this.userInfo.websocketServer.send(JSON.stringify(str));
-                this.scrollToBottom();
             },
             /**
              * TODO:设置发送给谁
@@ -525,7 +531,6 @@
                 this.chat.img = user.client_img;
                 this.chat.desc = user.desc;
                 this.chat.room_id = '';
-                this.chat.messageLists = [];
                 this.chat.showRobotMessage = false;
                 //获取聊天记录
                 let str = {
@@ -539,7 +544,6 @@
                     source:'user',
                 };
                 this.userInfo.websocketServer.send(JSON.stringify(str));
-                this.scrollToBottom();
             },
             /**
              * TODO:获取发送内容
@@ -623,7 +627,6 @@
                         this.chat.to_client_id = data['from_client_id'];
                     }
                     this.chat.messageLists.push(data);
-                    this.scrollToBottom();
                     this.pushMessage(data['content']);
                 }
                 if (this.chatVisible && this.userInfo.username===data['from_client_name']) {
@@ -718,9 +721,7 @@
                     let div = document.getElementById('msg');
                     try {
                         div.scrollTop = div.scrollHeight
-                    } catch (e) {
-
-                    }
+                    } catch (e) {}
                 })
             },
             /**
@@ -983,6 +984,7 @@
         font-size: 50px;
         color:#ffffff;
         position:fixed;
+        cursor: pointer;
         right:10px;
         bottom:10%;
         width: 80px;

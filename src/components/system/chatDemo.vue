@@ -61,7 +61,11 @@
                 <el-card>
                     <div style="background: #fff;min-height: 200px">
                         群公告:
-                        <div style="cursor: pointer" v-html="chat.notice"></div>
+                        <el-carousel tyle="cursor: pointer" :interval="4000" arrow="never" direction="vertical" indicator-position="none" height="149px">
+                            <el-carousel-item v-for="item in 6" :key="item">
+                                <div style="cursor: pointer;margin-top: 20px" v-html="chat.notice"/>
+                            </el-carousel-item>
+                        </el-carousel>
                     </div>
                     <el-divider/>
                     <div style="margin-bottom: 10px">
@@ -72,7 +76,7 @@
                         <el-menu style="width: 100%;">
                             <el-menu-item @click="sendUser(user,index)" v-for="(user,index) in chat.client_list_part" :key="index" :index="index.toString()">
                                 <el-avatar :size="30" :src="user.client_img" style="cursor: pointer"/>
-                                <span slot="title" style="margin-left:20px;font-size: 14px" v-html="user.client_name.replace(chat.users,'<b style=color:#409EFF;font-weight:100>'+chat.users+'</b>')"/>
+                                <span slot="title" style="font-size: 14px" v-html="user.client_name.replace(chat.users,'<b style=color:#0e82fc;font-weight:300>'+chat.users+'</b>')"/>
                                 <!--未读消息数-->
                                 <el-badge v-if="user.total" type="danger" :value="user.total" style="top: 10px;right: 15px"/>
                                 <!--在线-->
@@ -173,6 +177,7 @@
                             __this.chat.client_list = data.client_list;
                             __this.chat.client_list_part = data.client_list;
                             __this.setUsersLists();
+                            __this.scrollToBottom();
                             console.log(data);
                             break;
                         //聊天记录
@@ -181,6 +186,7 @@
                             __this.chat.client_list = data.client_list;
                             __this.chat.client_list_part = data.client_list;
                             __this.setUsersLists();
+                            __this.scrollToBottom();
                             console.log(data);
                             break;
                         case 'logout':
@@ -267,7 +273,6 @@
                     this.chat.msgCount = 0;
                     this.userInfo.websocketServer.send(JSON.stringify(str));
                     this.getOauthConfig('RoomLists');
-                    this.scrollToBottom();
                     this.msg_dot = false;
                 }
             },
@@ -309,7 +314,6 @@
                     source:'room',
                 };
                 this.userInfo.websocketServer.send(JSON.stringify(str));
-                this.scrollToBottom();
             },
             /**
              * TODO:设置发送给谁
@@ -341,7 +345,6 @@
                     source:'user',
                 };
                 this.userInfo.websocketServer.send(JSON.stringify(str));
-                this.scrollToBottom();
             },
             /**
              * TODO:获取发送内容
@@ -416,7 +419,6 @@
                         this.chat.to_client_id = data['from_client_id'];
                     }
                     this.chat.messageLists.push(data);
-                    this.scrollToBottom();
                     this.pushMessage(data['content']);
                 }
                 if (this.chatVisible && this.userInfo.username===data['from_client_name']) {
@@ -468,9 +470,7 @@
                     let div = document.getElementById('msg');
                     try {
                         div.scrollTop = div.scrollHeight
-                    } catch (e) {
-                        this.$message.error(JSON.stringify(e));
-                    }
+                    } catch (e) {}
                 })
             },
             /**
