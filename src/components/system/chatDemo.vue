@@ -1,6 +1,6 @@
 <template>
     <!---chat message-->
-    <el-dialog id="chat" @close="chatVisible = false" top="3vh" width="80%" :center="center" :show-close="closeModel" :close-on-press-escape="closeModel" :close-on-click-modal="closeModel" :visible.sync="chatVisible">
+    <el-dialog id="chat" @close="chatVisible = false" top="8vh" width="65%" :center="center" :show-close="closeModel" :close-on-press-escape="closeModel" :close-on-click-modal="closeModel" :visible.sync="chatVisible">
         <div slot="title" style="display: flex;align-items: center;position: relative;">
             <el-avatar :src="chat.img" :size="50" fit="fill" :alt="chat.title"/>
             <div>
@@ -561,6 +561,9 @@
 }
 #chat .el-dialog__header {
     background: #409EFF;
+}
+#chat .el-dialog--center .el-dialog__body {
+    padding: 5px 15px 5px !important;
 }
 #chat .el-card {
     border-radius: 0 !important;

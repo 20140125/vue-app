@@ -77,7 +77,7 @@
             </el-container>
         </el-container>
         <!---chat message-->
-        <el-dialog id="chat" @close="chatVisible = false" top="5vh" :width="dialogWidth" :center="center" :show-close="closeModel" :close-on-press-escape="closeModel" :close-on-click-modal="closeModel" :visible.sync="chatVisible">
+        <el-dialog id="chat" @close="chatVisible = false" top="15vh" :width="dialogWidth" :center="center" :show-close="closeModel" :close-on-press-escape="closeModel" :close-on-click-modal="closeModel" :visible.sync="chatVisible">
             <div slot="title" style="display: flex;align-items: center;position: relative;">
                 <el-avatar :src="chat.img" :size="50" fit="fill" :alt="chat.title"/>
                 <div>
@@ -136,9 +136,9 @@
                 </el-col>
                 <el-col :span="6" id="rightBox">
                     <el-card>
-                        <div style="background: #fff;min-height: 200px">
+                        <div style="background: #fff;min-height: 60px">
                             群公告:
-                            <el-carousel tyle="cursor: pointer" :interval="4000" arrow="never" direction="vertical" indicator-position="none" height="149px">
+                            <el-carousel tyle="cursor: pointer" :interval="4000" arrow="never" direction="vertical" indicator-position="none" height="100px">
                                 <el-carousel-item v-for="item in 6" :key="item">
                                     <div style="cursor: pointer;margin-top: 20px" v-html="chat.notice"/>
                                 </el-carousel-item>
@@ -873,6 +873,9 @@
 #chat .el-dialog__header {
     background: #409EFF;
 }
+#chat .el-dialog--center .el-dialog__body {
+    padding: 5px 15px 5px !important;
+}
 #chat .el-card {
     border-radius: 0 !important;
     -webkit-border-radius:  0 !important;
@@ -911,15 +914,15 @@
         margin-top: 60px;
     }
     .user-list{
-        min-height:354px;
-        max-height: 354px;
+        min-height:333px;
+        max-height: 333px;
         overflow: hidden;
         overflow-y: auto;
         padding: 0 !important;
     }
     #msg{
-        max-height: 380px;
-        min-height: 380px;
+        max-height: 278px;
+        min-height: 278px;
         margin:10px 0 20px 0;
         overflow: hidden;
         overflow-y: auto;
