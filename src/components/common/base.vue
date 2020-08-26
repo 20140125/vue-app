@@ -139,8 +139,8 @@
                         <div style="background: #fff;min-height: 60px">
                             群公告:
                             <el-carousel tyle="cursor: pointer" :interval="4000" arrow="never" direction="vertical" indicator-position="none" height="100px">
-                                <el-carousel-item v-for="item in 6" :key="item">
-                                    <div style="cursor: pointer;margin-top: 20px" v-html="chat.notice"/>
+                                <el-carousel-item v-for="(item,index) in groupAnnouncementConfig" :key="index">
+                                    <div style="cursor: pointer;margin-top: 20px" v-html="item.name"/>
                                 </el-carousel-item>
                             </el-carousel>
                         </div>
@@ -214,9 +214,6 @@
                 mainStyle:{margin:'60px 0 60px 200px'},
                 innerWidth:window.innerWidth,
                 chatDialogWidth:'65%',
-                dayWeather:'',
-                weatherDayMapping:{'date':'今天', 'daypower' : '风力', 'daytemp' : '温度', 'dayweather' : '天气', 'daywind' : '风向'},
-                weatherNightMapping:{ 'nightpower' : '风力', 'nighttemp' : '温度', 'nightweather' : '天气', 'nightwind' : '风向'}
             }
         },
         components:{
@@ -224,7 +221,7 @@
             emotion
         },
         computed:{
-            ...mapGetters(['tabs','activeAuthName','menuLists','oauthConfig','userInfo','weather','dialogWidth','robotConfig']),
+            ...mapGetters(['tabs','activeAuthName','menuLists','oauthConfig','userInfo','weather','dialogWidth','groupAnnouncementConfig']),
         },
         methods:{
             ...mapActions(['addTabs','deleteTabs','addCurrTabs','logoutSystem','getAuthMenu','getOauthConfig','saveWeather','saveUserInfo','addDialogWidth']),
@@ -772,7 +769,6 @@
                 uid:this.userInfo.uuid,
                 room_id:this.userInfo.room_id,
                 title:this.userInfo.room_name,
-                notice:'万物皆有可能',
                 msgCount:0,
                 client_list:[],
                 client_list_part:[],
@@ -851,7 +847,7 @@
                 this. mainStyle = {margin:'60px 0 60px 60px'}
                 this.chatDialogWidth = '85%';
                 this.setDialogWidth();
-                this.getOauthConfig('RobotConfig');
+                this.getOauthConfig('GroupAnnouncementConfig');
             });
         }
     }

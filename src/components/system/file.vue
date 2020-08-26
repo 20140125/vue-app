@@ -46,9 +46,9 @@
         <!--鼠标右键-->
         <!--权限框-->
         <el-dialog :visible.sync="syncVisible" :width="dialogWidth" :modal="modal" :title="title" :center="center">
-            <el-form :label-width="labelWidth" :model="chmodModel" :rules="rules" :ref="reFrom">
-                <el-form-item label="权限" prop="auth" required>
-                    <el-input placeholder="请输入内容" @change="setChmodAuth" v-model="chmodModel.auth"/>
+            <el-form :label-width="labelWidth" :model="chmodModel" :ref="reFrom">
+                <el-form-item label="权限" prop="auth" :rules="[{ required: true, message: '权限必须是数字',trigger:'blur' ,type: 'number'}]">
+                    <el-input placeholder="请输入内容" @change="setChmodAuth" v-model.number="chmodModel.auth"/>
                 </el-form-item>
                 <el-form-item label="所有者" required>
                     <el-checkbox-group v-model="all"  @change="allChange">
@@ -227,13 +227,6 @@
                 dialogImageUrl:'',
                 dialogVideoUrl:'',
                 dialogTitle:'',
-                //规则
-                rules:{
-                    auth:[
-                        { required: true, message: '权限不得为空',trigger:'blur'},
-                        { type: 'number', message: '权限必须为数字值',trigger:'blur'}
-                    ]
-                },
                 filterText:'',
                 scrollTop:0,
                 btn:{},
@@ -294,7 +287,7 @@
                 this.scrollTop = func.get_scroll_top();
                 document.addEventListener('click', this.foo);
                 menu.style.left = tree.offsetWidth + 50 +'px';
-                menu.style.top = MouseEvent.clientY + this.scrollTop - 135 + 'px';
+                menu.style.top = MouseEvent.clientY + this.scrollTop - 220 + 'px';
                 this.fileObject = object;
                 switch (this.fileObject.fileType) {
                     case 'file':
@@ -369,17 +362,16 @@
              * @val content tabs 标签下的内容
              */
             getFileContent:function (item) {
-                let ext = item.label.split(".")[1];
-                let compressionExt = ['tar','zip','7z','TAR','ZIP','7Z'];
-                if (compressionExt.includes(ext) || item.fileType!=='file'){
+                if (item.fileType !== 'file') {
                     return false;
                 }
+                let ext = item.label.split(".")[1];
                 this.dialogTitle = item.label;
                 //文件地址
                 let commUrl = this.userInfo.local+'storage'+item.path.substr(item.path.indexOf('public')+6,item.path.length-item.path.indexOf('public'));
                 //图片浏览
                 let imgExt = ['png','jpg','jpeg','gif'];
-                if (imgExt.includes(ext.toLowerCase())) {
+                if (ext && imgExt.includes(ext.toLowerCase())) {
                     this.dialogVideoUrl = '';
                     this.dialogImageUrl = commUrl
                     this.imgVisible = true;
@@ -387,16 +379,16 @@
                 }
                 //视频浏览
                 let videoExt = ['mp4','flv'];
-                if (videoExt.includes(ext)) {
+                if (ext && videoExt.includes(ext.toLowerCase())) {
                     this.dialogImageUrl = '';
                     this.dialogVideoUrl = commUrl
                     this.imgVisible = true;
                     return false;
                 }
-                //excel文件下载
-                let xlsExt = ['xls','csv'];
-                if (xlsExt.includes(ext)) {
-                    this.$confirm('是否下载文件【'+item.label+'】到本地',{showClose:false,center:true}).then(response=>{
+                //文件下载
+                let downloadExt = ['xls','csv','docx','word','tar','zip','7z'];
+                if (ext && downloadExt.includes(ext.toLowerCase())) {
+                    this.$confirm('是否下载文件【'+item.label+'】到本地',{showClose:false,center:true}).then(()=>{
                         window.location.href=commUrl
                     }).catch(()=>{})
                     return false

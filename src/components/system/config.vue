@@ -42,15 +42,15 @@
         </div>
         <!--table 分页-->
         <!---配置值弹框-->
-        <el-dialog :title="title" :visible.sync="syncVisible" :width="dialogWidth" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
-            <el-form :label-width="labelWidth" :model="configValModel" :ref="reFrom" :rules="rules">
-                <el-form-item label="配置名称" prop="name" v-show="!show">
+        <el-dialog :title="title" :visible.sync="syncVisible" :width="dialogWidth" center :destroy-on-close="true">
+            <el-form :label-width="labelWidth" :model="configValModel" :ref="reFrom">
+                <el-form-item label="配置名称" prop="name" v-show="!show" :rules="[ { required: true, message: '请输入配置名称', trigger: 'blur' }]">
                     <el-input v-model="configValModel.name" placeholder="配置名称"/>
                 </el-form-item>
-                <el-form-item label="配置健" v-show="show">
+                <el-form-item label="配置健" v-show="show" :rules="[ { required: true, message: '请输入配置健', trigger: 'blur' }]">
                     <el-input v-model="configVal.name" placeholder="配置内容"/>
                 </el-form-item>
-                <el-form-item label="配置值" v-show="show">
+                <el-form-item label="配置值" v-show="show" :rules="[ { required: true, message: '请输入配置值', trigger: 'blur' }]">
                     <el-input v-model="configVal.value" placeholder="配置内容"/>
                 </el-form-item>
                 <el-form-item label="配置状态" prop="status">
@@ -66,8 +66,8 @@
         </el-dialog>
         <!---配置值弹框-->
         <!---配置弹框-->
-        <el-dialog :title="title" :width="dialogWidth" :visible.sync="syncConfigVisible" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
-            <el-form :label-width="labelWidth" :model="configModel" :ref="reFrom" :rules="rules">
+        <el-dialog :title="title" :width="dialogWidth" :visible.sync="syncConfigVisible"  center :destroy-on-close="true">
+            <el-form :label-width="labelWidth" :model="configModel">
                 <el-form-item label="配置名称">{{configModel.name}}</el-form-item>
                 <el-form-item label="配置值" prop="children"><VueJson :json-data="configModel.children"/></el-form-item>
                 <el-form-item label="配置状态"><el-button size="medium" plain :type="configModel.status == '1' ? 'success' : 'danger'">{{configModel.status == '1' ? '开启' : '关闭'}}</el-button></el-form-item>
@@ -98,11 +98,8 @@
 
                 title:'',
                 syncVisible:false, //是否显示弹框
-                modal:true, //遮盖层是否需要
                 labelWidth:'80px',
                 loading:true,
-                destroy_on_close:true,
-                center:true,
                 loadingText:'玩命加载中。。。',
 
                 url:'',
@@ -119,9 +116,6 @@
                     insert:$url.configSave,
                     update:$url.configUpdate,
                     updateVal:$url.configValUpdate
-                },
-                rules:{
-                    name:[{required:true,message:'配置名称不得为空',trigger:'blur'}]
                 },
                 show:false,
                 syncConfigVisible:false,
@@ -206,7 +200,7 @@
                 this.configValModel = item;
                 this.configVal.status = this.configValModel.status;
                 this.configValModel.value = this.configVal;
-                this.configValModel.act = 'setConfig';
+                this.configValModel.act = 'editConfig';
                 this.title='设置【'+item.name+'】配置值';
                 this.show = true;
                 this.syncVisible = true;

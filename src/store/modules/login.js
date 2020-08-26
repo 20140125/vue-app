@@ -21,13 +21,18 @@ const state={
     },
     weather:{},
     menuLists:[],
+    //第三方授权登录
     oauthConfig:[],
+    //机器人
     robotConfig:[],
+    //群公告
+    groupAnnouncementConfig:[],
 };
 const getters={
     menuLists:state=>state.menuLists,
     oauthConfig:state=>state.oauthConfig,
     robotConfig:state=>state.robotConfig,
+    groupAnnouncementConfig:state=>state.groupAnnouncementConfig,
     userInfo: state=>state.userInfo,
     token:state=>state.token,
     weather:state=>state.weather
@@ -56,6 +61,14 @@ const mutations={
      */
     setRobotConfig:function (state,robotConfig) {
         state.robotConfig = robotConfig;
+    },
+    /**
+     * todo:群公告
+     * @param state
+     * @param groupAnnouncementConfig
+     */
+    setGroupAnnouncementConfig:function (state,groupAnnouncementConfig) {
+        state.groupAnnouncementConfig = groupAnnouncementConfig;
     },
     /**
      * todo:设置用户信息
@@ -111,10 +124,16 @@ const actions={
     getOauthConfig:function({state,commit},name) {
         apiLists.GetConfig({name:name}).then((response)=>{
             if (response && response.data.code === code.SUCCESS) {
-                if (name === 'RobotConfig') {
-                    commit('setRobotConfig',response.data.item)
-                } else {
-                    commit('setOauthConfig',response.data.item);
+                switch (name) {
+                    case 'RobotConfig':
+                        commit('setRobotConfig',response.data.item);
+                        break;
+                    case 'OauthConfig':
+                        commit('setOauthConfig',response.data.item);
+                        break;
+                    case 'GroupAnnouncementConfig':
+                        commit('setGroupAnnouncementConfig',response.data.item);
+                        break;
                 }
             }
         })
