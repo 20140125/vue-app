@@ -1,5 +1,5 @@
 <template>
-    <div v-loading="loading" :element-loading-text="loadingText" style="margin: 0 20px">
+    <div v-loading="loading" :element-loading-text="loadingText" style="margin: 0 20px" id="imageView">
         <el-upload
             :on-success="uploadSuccess"
             :data="fileData"
@@ -9,16 +9,20 @@
             :action="action">
             <el-button style="margin:0 0 10px 5px" size="medium" type="primary" plain>点击上传</el-button>
         </el-upload>
-        <div>
-            <el-image lazy fit="fill"
-                      :preview-src-list="[image.url]"
-                      :title="image.alt"
-                      :alt="image.alt"
-                      v-for="(image,index) in filtersListsPart"
-                      :src="image.url"
-                      style="width: 300px;height: 300px;margin:5px"
-                      :key="index"/>
-        </div>
+        <el-row>
+            <el-col :span="7"  v-for="(image,index) in filtersListsPart" :key="index" :offset="1" style="margin: 10px">
+                <el-card :body-style="{ padding: '0px',border: 'none' }" shadow="hover">
+                    <el-image fit="fill" :title="image.alt"  :alt="image.alt"  :src="image.url" class="image" :preview-src-list="[image.url]"/>
+                    <div style="padding: 14px;">
+                        <span v-html="image.alt"/>
+                        <div class="bottom clearfix">
+                            <time class="time">{{ image.time }}</time>
+                            <el-button @click="deleteImg(image,index)" type="text" class="button" icon="el-icon-delete">删 除</el-button>
+                        </div>
+                    </div>
+                </el-card>
+            </el-col>
+        </el-row>
         <el-pagination
             layout="prev, pager, next"
             :total="total"
@@ -29,7 +33,7 @@
 
 <script>
 import apiLists from "../../api/api";
-import {mapGetters} from 'vuex'
+import {mapGetters,mapActions} from 'vuex'
 import func from "../../api/func";
 import $url from "../../api/url";
 export default {
@@ -43,11 +47,12 @@ export default {
             fullImagePart:[],
             path:'storage_path',
             action:process.env.API_ROOT+$url.fileUpload.replace('/',''),
-            limit:10,
+            limit:9,
             page:1,
             total:0,
             headers:{},
-            fileData:{}
+            fileData:{},
+            visible: false,
         }
     },
     computed:{
@@ -59,6 +64,7 @@ export default {
         });
     },
     methods:{
+        ...mapActions(['saveSystemLog']),
         /**
          * todo:上传图片前处理函数
          * @param file
@@ -84,11 +90,31 @@ export default {
          */
         uploadSuccess:function (response,file) {
             if (response && response.code === 200) {
-                this.fileLists.unshift({url:response.item.src, label:file.name});
+                this.fileLists.unshift({url:response.item.src, alt:file.name,time:func.set_time(new Date())});
                 this.filtersListsPart = this.fileLists.slice(0,this.total>this.limit ? this.limit : this.total)
             } else {
                 this.$message.error(response.msg);
             }
+        },
+        /**
+         * todo:图片删除
+         * @param image
+         * @param index
+         */
+        deleteImg:function (image,index) {
+            this.$confirm('此操作将永远删除该条记录，是否继续？','删除记录',{confirmButtonText:'确定', cancelButtonText:'取消', type:'warning'}).then(()=> {
+                let params = {path:image.path};
+                apiLists.FileDelete(params).then((response)=> {
+                    if (response && response.data.code === 200) {
+                        let data = { msg:response.data.msg+'：'+params.path,href:$url.fileDelete };
+                        this.saveSystemLog(data);
+                        this.filtersListsPart.slice(index,1);
+                        this.$message({type:'success',message:response.data.msg+'：'+params.label});
+                    }
+                })
+            }).catch(()=> {
+                this.$message({type:'info',message:'cancel remove！'});
+            });
         },
         /**
          * todo：获取文件列表
@@ -135,7 +161,9 @@ export default {
                             this.fileLists.push(
                                 {
                                     url:this.userInfo.local+'storage'+row.path.substr(row.path.indexOf('public')+6,row.path.length-row.path.indexOf('public')),
-                                    alt:row.label
+                                    alt:row.label,
+                                    time:row.time,
+                                    path:row.path,
                                 }
                             );
                             this.fullImagePart.push(this.userInfo.local+'storage'+row.path.substr(row.path.indexOf('public')+6,row.path.length-row.path.indexOf('public')));
@@ -144,6 +172,9 @@ export default {
                         }
                     })
                 }
+            });
+            this.filtersListsPart.sort(function (a,b){
+                return a.time<b.time ? 1 : -1;
             });
         }
     },
@@ -154,7 +185,41 @@ export default {
     },
 }
 </script>
+<style lang="less">
+#imageView {
+    .el-card {
+        border-radius: 0 !important;
+        -webkit-border-radius: 0 !important;
+        -moz-border-radius: 0 !important;
+    }
+    .time {
+        font-size: 13px;
+        color: #999;
+    }
+    .bottom {
+        margin-top: 13px;
+        line-height: 12px;
+    }
 
-<style scoped>
+    .button {
+        padding: 0;
+        float: right;
+    }
 
+    .image {
+        width: 100%;
+        height: 300px;
+        display: block;
+    }
+
+    .clearfix:before,
+    .clearfix:after {
+        display: table;
+        content: "";
+    }
+
+    .clearfix:after {
+        clear: both
+    }
+}
 </style>

@@ -90,7 +90,7 @@
 
         <!--图片预览-->
         <el-dialog id="file" :visible.sync="imgVisible" width="30%" :title="dialogTitle" center :show-close="false">
-            <el-image v-if="dialogImageUrl" :src="dialogImageUrl" :alt="dialogTitle" fit="cover" :preview-src-list="[dialogImageUrl]" style="width: 300px;height: 300px"/>
+            <el-image v-if="dialogImageUrl" :src="dialogImageUrl" :alt="dialogTitle" fit="cover" :preview-src-list="[dialogImageUrl]" style="width: 100%;height: 100%"/>
             <video v-if="dialogVideoUrl" :src="dialogVideoUrl" autoplay controls width="300px" height="300px">您的浏览器不支持 video 标签。</video>
         </el-dialog>
         <!--图片预览-->
@@ -287,15 +287,15 @@
                 this.scrollTop = func.get_scroll_top();
                 document.addEventListener('click', this.foo);
                 menu.style.left = tree.offsetWidth + 50 +'px';
-                menu.style.top = MouseEvent.clientY + this.scrollTop - 220 + 'px';
+                menu.style.top = MouseEvent.clientY + this.scrollTop - 150 + 'px';
                 this.fileObject = object;
                 switch (this.fileObject.fileType) {
                     case 'file':
                         this.showRightBtn.DeCompression = false;
                         this.showRightBtn.download = true;
                         let ext = this.fileObject.label.split(".")[1];
-                        let compressionExt = ['tar','zip','7z','TAR','ZIP','7Z'];
-                        if (compressionExt.includes(ext)){
+                        let compressionExt = ['tar','zip','7z'];
+                        if (compressionExt.includes(ext.toLowerCase())){
                             this.showRightBtn.DeCompression = true;
                         }
                         break;
@@ -729,6 +729,7 @@
 <style>
     #file .el-dialog__body{
         text-align: center !important;
+        padding: 0 !important;
     }
     #file .el-dialog__header{
         overflow: hidden;
