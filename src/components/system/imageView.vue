@@ -11,7 +11,7 @@
         </el-upload>
         <div>
             <el-image lazy fit="fill"
-                      :preview-src-list="fullImagePart"
+                      :preview-src-list="[image.url]"
                       :title="image.alt"
                       :alt="image.alt"
                       v-for="(image,index) in filtersListsPart"
