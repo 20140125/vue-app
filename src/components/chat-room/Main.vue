@@ -156,7 +156,7 @@
             }
         },
         methods:{
-            ...mapActions(['getOauthConfig']),
+            ...mapActions(['getOauthConfig','saveWeather']),
             /**
              * todo:添加class
              * @param index
@@ -210,6 +210,7 @@
                             __this.chat.client_list = data.client_list;
                             __this.chat.client_list_part = data.client_list;
                             __this.setUsersLists();
+                            __this.saveWeather(data.weather);
                             console.log(data);
                             break;
                         //发送消息

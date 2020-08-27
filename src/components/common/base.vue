@@ -123,7 +123,7 @@
             ...mapGetters(['tabs','activeAuthName','menuLists','userInfo','weather','dialogWidth']),
         },
         methods:{
-            ...mapActions(['addTabs','deleteTabs','addCurrTabs','logoutSystem','getAuthMenu','saveWeather','saveUserInfo','addDialogWidth']),
+            ...mapActions(['addTabs','deleteTabs','addCurrTabs','logoutSystem','getAuthMenu','addDialogWidth']),
             /**
              * todo:设置未读消息数
              * @param msgCount
@@ -328,7 +328,7 @@
             },
             weather:function () {
                 if (this.weather) {
-                    this.noticeArr.push({time:func.get_timestamp(),message:this.weather['info'] ? JSON.stringify(this.weather['info']) : 'Welcome'})
+                    this.noticeArr.push({time:func.get_timestamp(),message:this.weather['info'] ? JSON.stringify(this.weather['info']) : JSON.stringify(['welcome'])})
                 }
             },
         },

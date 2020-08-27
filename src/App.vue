@@ -63,9 +63,9 @@
         height:2px !important;
     }
    .el-card{
-        border-radius: 40px;
-        -webkit-border-radius: 40px;
-        -moz-border-radius: 40px;
+        border-radius: 10px;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
     }
     .menu {
         z-index:100;
@@ -100,13 +100,13 @@
     /* 滚动条滑块 */
     ::-webkit-scrollbar-thumb {
         border-radius:1px;
-        background: #718189;
+        background: #a7b2b8;
         opacity:0.3;
         -webkit-box-shadow:inset 0 0 0 #fff;
     }
     /* 滚动条滑块 */
     ::-webkit-scrollbar-thumb:window-inactive {
-        background: #718189;
+        background: #a7b2b8;
         opacity:0.3;
         border-radius:1px;
     }
