@@ -76,98 +76,9 @@
                 </i>
             </el-container>
         </el-container>
-        <!---chat message-->
-        <el-dialog id="chat" @close="chatVisible = false" top="15vh" :width="dialogWidth" :center="center" :show-close="closeModel" :close-on-press-escape="closeModel" :close-on-click-modal="closeModel" :visible.sync="chatVisible">
-            <div slot="title" style="display: flex;align-items: center;position: relative;">
-                <el-avatar :src="chat.img" :size="50" fit="fill" :alt="chat.title"/>
-                <div>
-                    <div v-html="chat.title" style="margin-left: 10px;text-align: left;color: #fff"/>
-                    <div slot="title" v-html="chat.desc" style="margin-left: 10px;color: #fff"/>
-                </div>
-            </div>
-            <el-row :gutter="24">
-                <el-col :span="18" id="leftBox">
-                    <el-card>
-                        <div id="msg">
-                            <div v-for="(message,index) in chat.messageLists" :key="index">
-                                <div class="msg-img" :style="message.from_client_name === userInfo.username ? 'color:red' : 'color:#0d1c86'">
-                                    <el-avatar :size="30" :src="message.client_img" style="cursor: pointer"/>
-                                    <i>{{message.from_client_name}}   {{message.time}}</i>
-                                </div>
-                                <div class="msg-list" v-html="unescape(message.content)"></div>
-                            </div>
-                        </div>
-                        <div class="input-msg">
-                            <emotion @clickEmotion="getEmotion" v-show="showEmotion" :height="300"/>
-                            <div>
-                                <el-tooltip effect="dark" content="房间名称" placement="top-start">
-                                    <el-menu :default-active="chat.room_id"   background-color="#409EFF"
-                                             text-color="#fff"
-                                             active-text-color="#ffd04b" mode="horizontal" style="margin-bottom:10px;">
-                                        <el-menu-item @click="setRoomID(room)" v-for="(room,index) in oauthConfig" :key="index" :index="room.id.toString()">
-                                            {{room.name}}
-                                        </el-menu-item>
-                                    </el-menu>
-                                </el-tooltip>
-                                <el-tooltip effect="dark" content="发送表情" placement="top-start">
-                                    <i @click="showEmotion = !showEmotion" class="el-icon-picture-outline-round icon"/>
-                                </el-tooltip>
-                                <el-upload :action="cgi.uploadUrl"
-                                           :data="fileData"
-                                           :headers="headers"
-                                           :show-file-list="false"
-                                           :on-success="uploadSuccess"
-                                           :before-upload="beforeUpload" style="float: left">
-                                    <el-tooltip effect="dark" content="发送文件和图片" placement="top-start">
-                                        <i  @click="showEmotion = false" class="el-icon-picture-outline icon"/>
-                                    </el-tooltip>
-                                </el-upload>
-                            </div>
-                            <div contentEditable="true" ref="message" id="content" @focus="showEmotion = false" @keydown="setMsg">
-
-                            </div>
-                        </div>
-                        <div class="input-button" style="text-align: right">
-                            <el-tooltip effect="dark" content="Shift + Enter 快捷发送" placement="top-start">
-                                <el-button type="primary" round plain size="medium" @click="sendMsg">发 送</el-button>
-                            </el-tooltip>
-                        </div>
-                    </el-card>
-                </el-col>
-                <el-col :span="6" id="rightBox">
-                    <el-card>
-                        <div style="background: #fff;min-height: 60px">
-                            群公告:
-                            <el-carousel tyle="cursor: pointer" :interval="4000" arrow="never" direction="vertical" indicator-position="none" height="100px">
-                                <el-carousel-item v-for="(item,index) in groupAnnouncementConfig" :key="index">
-                                    <div style="cursor: pointer;margin-top: 20px" v-html="item.name"/>
-                                </el-carousel-item>
-                            </el-carousel>
-                        </div>
-                        <el-divider/>
-                        <div style="margin-bottom: 10px">
-                            在线人数({{chat.total}}/{{chat.online}})
-                        </div>
-                        <el-autocomplete placeholder="搜索" v-model="chat.users" clearable :fetch-suggestions="querySearch" @clear="clearSearch" style="width: 100%"/>
-                        <div class="user-list">
-                            <el-menu style="width: 100%;">
-                                <el-menu-item @click="sendUser(user,index)" v-for="(user,index) in chat.client_list_part" :key="index" :index="index.toString()">
-                                    <el-avatar :size="30" :src="user.client_img" style="cursor: pointer"/>
-                                    <span slot="title" style="font-size: 14px" v-html="user.client_name.replace(chat.users,'<b style=color:#0e82fc;font-weight:100>'+chat.users+'</b>')"/>
-                                    <!--未读消息数-->
-                                    <el-badge v-if="user.total" type="danger" :value="user.total" style="top: 10px;right: 15px"/>
-                                    <!--在线-->
-                                    <el-badge v-else-if="user.online" type="success" is-dot style="top: 12px;right: 10px"/>
-                                    <!--离线-->
-                                    <el-badge v-else-if="!user.online" type="info" is-dot style="top: 12px;right: 10px"/>
-                                </el-menu-item>
-                            </el-menu>
-                        </div>
-                    </el-card>
-                </el-col>
-            </el-row>
-        </el-dialog>
-        <!---chat message-->
+        <!---chatRoom Start-->
+        <chat-room :chat-visible="chatVisible" :dialog-width="dialogWidth" @setMsgCount="setMsgCount"/>
+        <!---chatRoom End-->
         <el-dialog :visible.sync="showCity" :width="dialogWidth" :title="'【'+userInfo.city+'】天气预告'" center>
             <VueJson :json-data="weather.forecast"/>
         </el-dialog>
@@ -177,19 +88,17 @@
 <script>
     import { mapGetters,mapActions} from 'vuex'
     import apiLists from '../../api/api'
-    import $url from '../../api/url'
     import func from '../../api/func'
-    import emotion from '../common/emotion/Index'
     import VueJson from "./jsonView/json";
-    import Push from 'push.js'
+    import chatRoom from "../chat-room/Main";
     export default {
         name: "baseModule",
-        inject:['reload'],
         data(){
             return {
                 isCollapse:false,
                 activeName:null,
                 showCity:false,
+                chatVisible:false,
                 activeIndex:'1',
                 menuClass:'el-icon-s-unfold',
                 asideWidth:"200px",
@@ -198,16 +107,6 @@
                 noticeLength:0,
                 notice:[],
                 online:0,
-                //workerManChat
-                cgi:{uploadUrl:process.env.API_ROOT+$url.fileUpload.replace('/','')},
-                fileData:{},
-                headers:{},
-                chatVisible:false,
-                inputMsg:'',
-                emotionLists:[],
-                showEmotion:false,
-                closeModel:false,
-                center:true,
                 chat:{},
                 chatMsgClass:'el-icon-chat-dot-round',
                 noticeArr:[],
@@ -218,25 +117,19 @@
         },
         components:{
             VueJson,
-            emotion
+            chatRoom
         },
         computed:{
-            ...mapGetters(['tabs','activeAuthName','menuLists','oauthConfig','userInfo','weather','dialogWidth','groupAnnouncementConfig']),
+            ...mapGetters(['tabs','activeAuthName','menuLists','userInfo','weather','dialogWidth']),
         },
         methods:{
-            ...mapActions(['addTabs','deleteTabs','addCurrTabs','logoutSystem','getAuthMenu','getOauthConfig','saveWeather','saveUserInfo','addDialogWidth']),
+            ...mapActions(['addTabs','deleteTabs','addCurrTabs','logoutSystem','getAuthMenu','saveWeather','saveUserInfo','addDialogWidth']),
             /**
-             * TODO:字符串标签转换
-             * @param html
+             * todo:设置未读消息数
+             * @param msgCount
              */
-            unescape:function (html) {
-                return html
-                    .replace(html ? /&(?!#?\w+;)/g : /&/g, '&amp;')
-                    .replace(/&lt;/g, "<")
-                    .replace(/&gt;/g, ">")
-                    .replace(/&quot;/g, "\"")
-                    .replace(/&amp;nbsp;/g," ")
-                    .replace(/&#39;/g, "\'");
+            setMsgCount:function (msgCount) {
+                this.chat.msgCount = msgCount;
             },
             /**
              * TODO：设置tabs
@@ -334,338 +227,14 @@
                 }
             },
             /**
-             * TODO:workerMan-chat链接
-             * @param ws
-             */
-            connect:function(ws){
-                let __this = this;
-                // 连接建立时发送登录信息
-                ws.onopen = function(){
-                    let str = {
-                        type:'login',
-                        from_client_id:__this.userInfo.uuid,
-                        client_name:__this.userInfo.username,
-                        room_id:__this.chat.room_id,
-                        client_img:__this.userInfo.avatar_url,
-                        uid:__this.userInfo.uuid,
-                        adcode:__this.userInfo.adcode
-                    };
-                    ws.send(JSON.stringify(str))
-                };
-                ws.onmessage = function(response){
-                    let data = JSON.parse(response.data);
-                    switch (data['type']) {
-                        //心跳
-                        case 'ping':
-                            ws.send('{"type":"pong"}');
-                            break;
-                        //登陆
-                        case 'login':
-                            __this.saveWeather(data.weather);
-                            __this.chat.client_list = data.client_list;
-                            __this.chat.client_list_part = data.client_list;
-                            __this.setUsersLists();
-                            console.log(data);
-                            break;
-                        //发送消息
-                        case 'say':
-                            __this.say(data);
-                            __this.chat.client_list = data.client_list;
-                            __this.chat.client_list_part = data.client_list;
-                            __this.setUsersLists();
-                            console.log(data);
-                            break;
-                        //聊天记录
-                        case 'history':
-                            __this.chat.messageLists = data.message;
-                            __this.chat.client_list = data.client_list;
-                            __this.chat.client_list_part = data.client_list;
-                            __this.setUsersLists();
-                            break;
-                        case 'logout':
-                            console.log(data);
-                            break;
-                    }
-                };
-                ws.onclose = function() {
-                    console.log("连接关闭，定时重连");
-                    __this.connect(ws);
-                };
-                ws.onerror = function() {
-                    console.log("出现错误");
-                };
-            },
-            /**
-             * todo:用户搜索
-             * @param queryString
-             * @param cb (回调函数 cb(result))
-             */
-            querySearch:function (queryString, cb) {
-                let result = [];
-                for (let i in this.chat.client_list) {
-                    if (this.chat.client_list[i].client_name.indexOf(queryString)>=0) {
-                        result.push(this.chat.client_list[i])
-                    }
-                }
-                this.chat.client_list_part = result;
-            },
-            /**
-             * todo:清空搜索内容
-             */
-            clearSearch:function () {
-                this.chat.client_list_part = this.chat.client_list;
-            },
-            /**
-             * todo:设置未读消息数
-             */
-            setUsersLists:function () {
-                //展示单个用户未读消息数
-                let unreadMessage = [];
-                this.chat.online = 0;
-                this.chat.total = 0;
-                for (let i in this.chat.client_list) {
-                    if (this.userInfo.username === this.chat.client_list[i]['client_name']) {
-                        unreadMessage = this.chat.client_list[i]['unread'];
-                        this.chat.msgCount = this.chat.client_list[i]['unreadCount']
-                    }
-                    if (this.chat.client_list[i]['online']) {
-                        this.chat.online ++ ;
-                    }
-                    this.chat.total++;
-                }
-                if (unreadMessage.length>0) {
-                    for (let i in unreadMessage) {
-                        for (let j in this.chat.client_list) {
-                            if (unreadMessage[i]['form'] === j) {
-                                this.chat.client_list[j]['total'] = parseInt(unreadMessage[i]['total']);
-                            }
-                        }
-                    }
-                }
-                this.scrollToBottom();
-            },
-            /**
              * TODO:弹出框展示
              */
             getMsgDialog:function(){
                 this.chatVisible = !this.chatVisible;
-                this.chat.showRobotMessage = true;
                 if (!this.chatVisible) {
                     this.chatMsgClass = 'el-icon-chat-dot-round';
                 } else {
                     this.chatMsgClass = 'el-icon-close';
-                    //获取聊天记录
-                    let str = {
-                        type:'history',
-                        from_client_name:this.userInfo.username,
-                        from_client_id:this.chat.from_client_id,
-                        to_client_name:this.chat.to_client_name,
-                        to_client_id:this.chat.to_client_id,
-                        room_id:this.chat.to_client_name === 'all' ? this.chat.room_id : '',
-                        uid:this.userInfo.uuid,
-                        source:'dialog',
-                    };
-                    this.chat.msgCount = 0;
-                    this.userInfo.websocketServer.send(JSON.stringify(str));
-                    this.getOauthConfig('RoomLists');
-                }
-            },
-            /**
-             * TODO:设置群聊房间号
-             * @param room
-             */
-            setRoomID:function(room) {
-                if (this.chat.room_id !== room.id.toString()) {
-                    this.showEmotion = false;
-                    this.chat.room_id = room.id.toString();
-                    this.chat.title = room.name;
-                    this.chat.desc = room.value;
-                    this.chat.img = 'https://cdn.pixabay.com/photo/2016/12/13/21/20/alien-1905155_960_720.png';
-                    //加入房间
-                    let login = {
-                        type:'login',
-                        from_client_id:this.userInfo.uuid,
-                        client_name:this.userInfo.username,
-                        room_id:this.chat.room_id,
-                        client_img:this.userInfo.avatar_url,
-                        uid:this.userInfo.uuid,
-                        adcode:this.userInfo.adcode
-                    };
-                    this.userInfo.websocketServer.send(JSON.stringify(login))
-                }
-                this.chat.showRobotMessage = true;
-                //群聊时，接收方为所有用户
-                this.chat.to_client_id = 'all';
-                this.chat.to_client_name = 'all'
-                //获取聊天记录
-                let str = {
-                    type:'history',
-                    from_client_name:this.userInfo.username,
-                    from_client_id:this.chat.from_client_id,
-                    to_client_name:this.chat.to_client_name,
-                    to_client_id:this.chat.to_client_id,
-                    room_id:this.chat.room_id,
-                    uid:this.userInfo.uuid,
-                    source:'room',
-                };
-                this.userInfo.websocketServer.send(JSON.stringify(str));
-            },
-            /**
-             * TODO:设置发送给谁
-             * @param user
-             * @param client_id
-             */
-            sendUser:function(user,client_id) {
-                this.chat.to_client_name = user.client_name;
-                this.chat.to_client_id = client_id === '0' ? 'all' : client_id;
-                this.chat.from_client_id = user.uid;
-                this.chat.uid = this.chat.to_client_id;
-                this.chat.title = user.client_name;
-                if (this.chat.users) {
-                    this.chat.users = user.client_name;
-                }
-                user.total = 0;
-                this.chat.img = user.client_img;
-                this.chat.desc = user.desc;
-                this.chat.room_id = '';
-                this.chat.showRobotMessage = false;
-                //获取聊天记录
-                let str = {
-                    type:'history',
-                    from_client_name:this.userInfo.username,
-                    from_client_id:this.userInfo.uuid,
-                    to_client_name:this.chat.to_client_name,
-                    to_client_id:this.chat.to_client_id,
-                    room_id:this.chat.to_client_name === 'all' ? this.chat.room_id : '',
-                    uid:this.userInfo.uuid,
-                    source:'user',
-                };
-                this.userInfo.websocketServer.send(JSON.stringify(str));
-            },
-            /**
-             * TODO:获取发送内容
-             */
-            setMsg:function(){
-                this.inputMsg = this.$refs.message.innerHTML;
-            },
-            /**
-             * todo:自定义消息
-             * @param robot
-             */
-            setTagMessage:function (robot) {
-                this.$refs.message.innerHTML = robot.value;
-                this.sendMsg();
-            },
-            /**
-             * TODO:发送表情
-             * @param emotion
-             */
-            getEmotion:function (emotion) {
-                this.chat.msg_type = 'text';
-                this.inputMsg+= "<img src='"+emotion.icon+"' width='50px' height='50px' alt='"+emotion.emoji+"' title='"+emotion.title+"'>"
-                this.$refs.message.innerHTML = this.inputMsg;
-            },
-            /**
-             * TODO：图片上传成功
-             * @param response
-             */
-            uploadSuccess:function(response){
-                if (response && response.code === 200){
-                    switch (this.chat.msg_type) {
-                        case 'img':
-                            this.inputMsg+= "<img src='"+response.item.src+"' width='100px' height='100px' alt=''>";
-                            break;
-                        case 'video':
-                            this.inputMsg+= "<video src='"+response.item.src+"' width='200px' height='200px' controls='controls'>";
-                            break;
-                    }
-                    this.$refs.message.innerHTML = this.inputMsg;
-                    return ;
-                }
-                this.$message({type:'warning',message:response.msg});
-            },
-            /**
-             * TODO：图片上传前
-             * @param file
-             */
-            beforeUpload:function(file){
-                let ext = file.name.split('.')[1];
-                switch (ext.toLocaleLowerCase()) {
-                    case 'jpg':
-                    case 'gif':
-                    case 'png':
-                    case 'jpeg':
-                        this.chat.msg_type = 'img';
-                        if (file.size>2*1024*1024){
-                            this.$message({type:'warning',message:'upload image size error'});
-                        }
-                        break;
-                    case 'mp4':
-                        this.chat.msg_type = 'video';
-                        if (file.size>5*1024*1024){
-                            this.$message({type:'warning',message:'upload video size error'});
-                        }
-                        break;
-                    default:
-                        this.$message({type:'warning',message:'Unsupported file format'});
-                        break;
-                }
-            },
-            /**
-             * TODO:发送消息
-             * @param data
-             */
-            say:function(data){
-                if (this.userInfo.username!==data['from_client_name']){
-                    if (data['to_client_id']!=='all') {
-                        this.chat.title = data['from_client_name'];
-                        this.chat.to_client_name = data['from_client_name'];
-                        this.chat.img = data['client_img']
-                        this.chat.to_client_id = data['from_client_id'];
-                    }
-                    this.chat.messageLists.push(data);
-                    this.pushMessage(data['content']);
-                }
-                if (this.chatVisible && this.userInfo.username===data['from_client_name']) {
-                    if (data['to_client_id']!=='all') {
-                        this.chat.title = data['to_client_name'];
-                        this.chat.to_client_name = data['to_client_name'];
-                        this.chat.to_client_id = data['to_client_id'];
-                        this.chat.img = data['client_img']
-                    }
-                }
-            },
-            /**
-             * TODO:消息发送
-             */
-            sendMsg:function(){
-                this.showEmotion = false;
-                this.inputMsg= this.$refs.message !== undefined ? this.$refs.message.innerHTML : '';
-                if (this.inputMsg.trim() !== '') {
-                    //发送消息
-                    let str = {
-                        type:'say',
-                        to_client_id:this.chat.to_client_id,
-                        to_client_name:this.chat.to_client_name,
-                        from_client_name:this.userInfo.username,
-                        from_client_id:this.userInfo.uuid,
-                        msg_type:this.chat.msg_type,
-                        content:this.inputMsg,
-                        client_img:this.userInfo.avatar_url,
-                        room_id:this.chat.to_client_name === 'all' ? this.chat.room_id : '',
-                        uid:this.chat.uid,
-                        time:func.set_time(func.get_timestamp()*1000)
-                    };
-                    this.userInfo.websocketServer.send(JSON.stringify(str));
-                    this.chat.messageLists.push(str);
-                    this.scrollToBottom();
-                    this.$refs.message.innerHTML = '';
-                    this.inputMsg = '';
-                    return ;
-                }
-                if (this.chatVisible) {
-                    this.$refs.message.focus();
-                    this.$message({type:'info',message:'Please enter message'})
                 }
             },
             /**
@@ -711,17 +280,6 @@
                 }
             },
             /**
-             * TODO:滚动条滚动到底部
-             */
-            scrollToBottom: function () {
-                this.$nextTick(() => {
-                    let div = document.getElementById('msg');
-                    try {
-                        div.scrollTop = div.scrollHeight
-                    } catch (e) {}
-                })
-            },
-            /**
              * todo:设置弹框大小
              */
             setDialogWidth:function () {
@@ -743,18 +301,6 @@
                     this.chatDialogWidth = '65%'
                 }
             },
-            /**
-             * todo:推送弹框消息
-             * @param message
-             */
-            pushMessage:function (message){
-                Push.create("你有未读消息", {
-                    body: message,
-                    requireInteraction: true,
-                    icon: 'https://www.fanglonger.com/favicon.ico',
-                    timeout: 600000,
-                });
-            },
         },
         /**
          * TODO:Vue生命周期
@@ -762,49 +308,14 @@
         created(){
             //初始化聊天系统参数
             this.chat = {
-                to_client_name:'all',
-                to_client_id:'all',
-                from_client_id: this.userInfo.uuid,
-                from_client_name:this.userInfo.username,
-                uid:this.userInfo.uuid,
-                room_id:this.userInfo.room_id,
-                title:this.userInfo.room_name,
                 msgCount:0,
-                client_list:[],
-                client_list_part:[],
-                img:'https://cdn.pixabay.com/photo/2016/12/13/21/20/alien-1905155_960_720.png',
-                desc:this.userInfo.desc,
-                messageLists:[],
-                msg_type:'text',
-                users:'',
                 total:0,
                 online:0
             };
-            //客服系统初始化
-            this.connect(this.userInfo.websocketServer);
             this.activeName = this.activeAuthName;
             this.asideHeight = {
                 'min-height':(window.innerHeight - 60)+'px'
             };
-            //浏览器消息推送
-            try {
-                Push.Permission.request();
-            } catch (e) {
-                e ? this.$message.error(JSON.stringify(e)) : '';
-            }
-            //图片上传参数
-            this.fileData.token = this.userInfo.token;
-            this.fileData.rand = false;
-            this.headers.Authorization = `${func.set_password(func.set_random(32),func.set_random(12))}${this.userInfo.token}${func.set_password(func.set_random(32),func.set_random(12))}`
-            //键盘事件
-            let __this = this;
-            document.onkeydown = function (e) {
-                if (e.code === 'Enter' && e.shiftKey) {
-                    e.preventDefault();
-                    __this.sendMsg();
-                    return false;
-                }
-            }
         },
         /**
          * TODO:Vue生命周期
@@ -814,9 +325,6 @@
                 if (!this.chatVisible) {
                     this.chatMsgClass = 'el-icon-chat-dot-round';
                 }
-            },
-            inputMsg:function () {
-                this.inputMsg = this.$refs.message.innerHTML;
             },
             weather:function () {
                 if (this.weather) {
@@ -845,158 +353,60 @@
                 this.asideWidth = "65px";
                 this.headerStyle = {'margin-left':'65px'};
                 this. mainStyle = {margin:'60px 0 60px 60px'}
-                this.chatDialogWidth = '85%';
                 this.setDialogWidth();
-                this.getOauthConfig('GroupAnnouncementConfig');
             });
         }
     }
 </script>
 <style>
-#leftBox {
-    padding-left: 0 !important;
-    padding-right: 2px !important;
+.el-header {
+    background-color: #393d49;
+    color: #333;
+    text-align: center;
+    line-height: 60px;
+    height: 64px;
+    position: fixed;
+    width: 100%;
+    z-index: 4
 }
-#rightBox {
-    padding: 0 !important;
+.el-footer {
+    background-color: #cccccc;
+    color: #333;
+    text-align: center;
+    line-height: 60px;
+    /*固定底部布局*/
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    bottom: 0;
+    z-index:2
 }
-#rightBox .el-input__inner{
-    margin-bottom: 10px;
+.el-aside {
+    background-color: #393d49;
+    color: #333;
+    line-height: 200px;
+    position: fixed;
+    z-index: 3;
+    margin-top: 60px;
 }
-.el-autocomplete-suggestion {
-    display: none;
-}
-#chat .el-dialog__header {
+.msg-icon{
+    font-size: 50px;
+    color:#ffffff;
+    position:fixed;
+    cursor: pointer;
+    right:10px;
+    bottom:10%;
+    width: 80px;
+    height: 80px;
     background: #409EFF;
+    border-radius: 40px;
+    -moz-border-radius:40px;
+    -webkit-border-radius:40px;
+    z-index: 20004;
 }
-#chat .el-dialog--center .el-dialog__body {
-    padding: 5px 15px 5px !important;
+.msg-count{
+    position:absolute;
+    right:9px;
+    bottom:54%;
 }
-#chat .el-card {
-    border-radius: 0 !important;
-    -webkit-border-radius:  0 !important;
-    -moz-border-radius:  0 !important;
-}
-</style>
-<style scoped>
-    .el-header {
-        background-color: #393d49;
-        color: #333;
-        text-align: center;
-        line-height: 60px;
-        height: 64px;
-        position: fixed;
-        width: 100%;
-        z-index: 4
-    }
-    .el-footer {
-        background-color: #cccccc;
-        color: #333;
-        text-align: center;
-        line-height: 60px;
-        /*固定底部布局*/
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        bottom: 0;
-        z-index:2
-    }
-    .el-aside {
-        background-color: #393d49;
-        color: #333;
-        line-height: 200px;
-        position: fixed;
-        z-index: 3;
-        margin-top: 60px;
-    }
-    .user-list{
-        min-height:333px;
-        max-height: 333px;
-        overflow: hidden;
-        overflow-y: auto;
-        padding: 0 !important;
-    }
-    #msg{
-        max-height: 278px;
-        min-height: 278px;
-        margin:10px 0 20px 0;
-        overflow: hidden;
-        overflow-y: auto;
-        border: 1px solid #eee;
-    }
-    #msg .msg-list{
-        box-shadow: 0 1px 0 #ffffff, 0 1px 2px #505860;
-        line-height: 28px;
-        min-height: 20px;
-        margin: 0 15px 15px 15px;
-        font-family: "Source Code Pro", monospace;
-        font-size: 12px;
-        padding:15px;
-        border-radius: 10px;
-        -moz-border-radius:10px;
-        -webkit-border-radius:10px;
-        background:-webkit-gradient(linear, left top, left bottom, from(#eaeaea), to(#ffffff));
-        　background:-moz-linear-gradient(top, #eaeaea, #ffffff);
-        　　　　background:-o-linear-gradient(top, #eaeaea, #ffffff);
-        　　　　background:linear-gradient(top, #eaeaea, #ffffff);
-        position:relative;
-    }
-    #msg .msg-list:after {
-        content:'';
-        position:absolute;
-        bottom:100%;
-        left:15px;
-        width:0;
-        height:0;
-        border-width:10px;
-        border-style:solid;
-        border-color:transparent;
-        margin-bottom:-4px;
-        border-bottom-width:16px;
-        border-bottom-color:currentColor;
-        color:#eaeaea;
-    }
-    #msg .msg-img{
-        margin: 15px;
-    }
-    #content{
-        border: 1px solid #eee;
-        height: 95px;
-        border-radius: 10px;
-        -moz-border-radius:10px;
-        -webkit-border-radius:10px;
-        padding:10px;
-        overflow: scroll;
-        overflow-x: hidden;
-    }
-    .input-msg{
-        min-height: 100px;
-        margin-bottom: 10px;
-    }
-    .input-msg .icon{
-        font-size: 25px;
-        margin:0 10px 10px 0;
-        color: #000;
-        cursor: pointer;
-    }
-    .msg-icon{
-        font-size: 50px;
-        color:#ffffff;
-        position:fixed;
-        cursor: pointer;
-        right:10px;
-        bottom:10%;
-        width: 80px;
-        height: 80px;
-        background: #409EFF;
-        border-radius: 40px;
-        -moz-border-radius:40px;
-        -webkit-border-radius:40px;
-        z-index: 20004;
-    }
-    .msg-count{
-        position:absolute;
-        right:9px;
-        bottom:54%;
-    }
 </style>

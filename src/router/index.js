@@ -23,7 +23,7 @@ import PushList from '../components/system/push'
 import MarkDown from '../components/editor/markdown'
 import UEditor from '../components/editor/ueditor'
 import TimeLine from '../components/system/timeline'
-import chatDemo from '../components/system/chatDemo'
+import chatRoom from '../components/chat-room/Main'
 import Empty from '../components/empty'
 import TableExample from '../components/components/example/tables'
 import FormExample from '../components/components/example/forms'
@@ -65,7 +65,7 @@ export default new Router({
 
             ]
         },
-        { path: '/chat', name:'chatDemo',component:chatDemo,meta:{ mode:'chat',title:'聊天室' }},
+        { path: '/chat', name:'chatRoom',component:chatRoom,meta:{ mode:'chat',title:'聊天室' }},
         { path: '*',redirect:'/404'},
     ]
 })

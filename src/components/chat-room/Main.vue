@@ -1,6 +1,6 @@
 <template>
     <!---chat message-->
-    <el-dialog id="chat" @close="chatVisible = false" top="8vh" width="65%" :center="center" :show-close="closeModel" :close-on-press-escape="closeModel" :close-on-click-modal="closeModel" :visible.sync="chatVisible">
+    <el-dialog id="chat" top="8vh" :width="dialogWidth" center :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false" :visible.sync="visible">
         <div slot="title" style="display: flex;align-items: center;position: relative;">
             <el-avatar :src="chat.img" :size="50" fit="fill" :alt="chat.title"/>
             <div>
@@ -11,13 +11,23 @@
         <el-row :gutter="24">
             <el-col :span="18" id="leftBox">
                 <el-card>
-                    <div id="msg">
-                        <div v-for="(message,index) in chat.messageLists" :key="index">
-                            <div class="msg-img" :style="message.from_client_name === userInfo.username ? 'color:red' : 'color:#0d1c86'">
-                                <el-avatar :size="30" :src="message.client_img" style="cursor: pointer"/>
-                                <i>{{message.from_client_name}}   {{message.time}}</i>
+                    <div class="main">
+                        <div class="list-container">
+                            <virtual-list v-show="!!chat.messageLists.length" class="stream scroll-touch" :class="{ overflow: overflow }" ref="vsl"
+                                          :data-key="'uid'"
+                                          :data-sources="chat.messageLists"
+                                          :data-component="messageComponent"
+                                          :estimate-size="100"
+                                          :item-class="'stream-item'"
+                                          :item-class-add="addItemClass"
+                                          @resized="onItemRendered">
+                            </virtual-list>
+                            <div class="empty" v-show="!chat.messageLists.length">
+                                <div class="wrapper">
+                                    <div class="icon"></div>
+                                    <div class="tips">No chats</div>
+                                </div>
                             </div>
-                            <div class="msg-list" v-html="unescape(message.content)"></div>
                         </div>
                     </div>
                     <div class="input-msg">
@@ -59,11 +69,11 @@
             </el-col>
             <el-col :span="6" id="rightBox">
                 <el-card>
-                    <div style="background: #fff;min-height: 200px">
+                    <div style="background: #fff;min-height: 60px">
                         群公告:
-                        <el-carousel tyle="cursor: pointer" :interval="4000" arrow="never" direction="vertical" indicator-position="none" height="149px">
-                            <el-carousel-item v-for="item in 6" :key="item">
-                                <div style="cursor: pointer;margin-top: 20px" v-html="chat.notice"/>
+                        <el-carousel tyle="cursor: pointer" :interval="4000" arrow="never" direction="vertical" indicator-position="none" height="100px">
+                            <el-carousel-item v-for="(item,index) in groupAnnouncementConfig" :key="index">
+                                <div style="cursor: pointer;margin-top: 20px" v-html="item.name"/>
                             </el-carousel-item>
                         </el-carousel>
                     </div>
@@ -99,44 +109,75 @@
     import func from '../../api/func'
     import emotion from '../common/emotion/Index'
     import Push from "push.js";
+    import Item from './Item'
+    import VirtualList from 'vue-virtual-scroll-list'
     export default {
-        name: "chatDemo",
+        props:{
+            chatVisible:{
+                type:Boolean,
+                default:()=>true
+            },
+            dialogWidth :{
+                type:String,
+                default:()=>'50%',
+            }
+        },
+        name: "chatRoom",
         data(){
             return {
-                //workerManChat
                 cgi:{uploadUrl:process.env.API_ROOT+$url.fileUpload.replace('/','')},
                 fileData:{},
                 headers:{},
-                chatVisible:true,
                 inputMsg:'',
                 emotionLists:[],
                 showEmotion:false,
-                closeModel:false,
-                center:true,
                 chat:{},
-                noticeArr:[]
+                messageComponent: Item,
+                overflow: false,
+                visible:this.chatVisible
             }
         },
         components:{
-            emotion
+            emotion,
+            VirtualList
         },
         computed:{
-            ...mapGetters(['userInfo','oauthConfig']),
+            ...mapGetters(['oauthConfig','groupAnnouncementConfig','userInfo']),
+        },
+        /**
+         * todo：生命周期
+         */
+        watch:{
+            inputMsg:function () {
+                this.inputMsg = this.$refs.message.innerHTML;
+            },
+            chatVisible:function () {
+                this.visible = this.chatVisible;
+            }
         },
         methods:{
             ...mapActions(['getOauthConfig']),
             /**
-             * TODO:字符串标签转换
-             * @param html
+             * todo:添加class
+             * @param index
              */
-            unescape:function (html) {
-                return html
-                    .replace(html ? /&(?!#?\w+;)/g : /&/g, '&amp;')
-                    .replace(/&lt;/g, "<")
-                    .replace(/&gt;/g, ">")
-                    .replace(/&quot;/g, "\"")
-                    .replace(/&amp;nbsp;/g," ")
-                    .replace(/&#39;/g, "\'");
+            addItemClass (index) {
+                return this.userInfo.username === this.chat.messageLists[index].to_client_name ? '' : 'creator'
+            },
+            /**
+             * todo:记录读取
+             */
+            onItemRendered () {
+                if (!this.$refs.vsl) {
+                    return
+                }
+                if (this.$refs.vsl) {
+                    this.$refs.vsl.scrollToBottom()
+                    const vsl = this.$refs.vsl
+                    if (vsl) {
+                        this.overflow = vsl.getScrollSize() > vsl.getClientSize()
+                    }
+                }
             },
             /**
              * TODO:workerMan-chat链接
@@ -177,7 +218,7 @@
                             __this.chat.client_list = data.client_list;
                             __this.chat.client_list_part = data.client_list;
                             __this.setUsersLists();
-                            __this.scrollToBottom();
+                            __this.$refs.vsl.scrollToBottom()
                             console.log(data);
                             break;
                         //聊天记录
@@ -186,7 +227,7 @@
                             __this.chat.client_list = data.client_list;
                             __this.chat.client_list_part = data.client_list;
                             __this.setUsersLists();
-                            __this.scrollToBottom();
+                            __this.$refs.vsl.scrollToBottom()
                             console.log(data);
                             break;
                         case 'logout':
@@ -234,6 +275,7 @@
                     if (this.userInfo.username === this.chat.client_list[i]['client_name']) {
                         unreadMessage = this.chat.client_list[i]['unread'];
                         this.chat.msgCount = this.chat.client_list[i]['unreadCount']
+                        this.$emit('setMsgCount',this.chat.msgCount);
                     }
                     if (this.chat.client_list[i]['online']) {
                         this.chat.online ++ ;
@@ -248,32 +290,6 @@
                             }
                         }
                     }
-                }
-            },
-            /**
-             * TODO:弹出框展示
-             */
-            getMsgDialog:function(){
-                this.chatVisible = !this.chatVisible;
-                if (!this.chatVisible) {
-                    this.chatMsgClass = 'el-icon-chat-dot-round';
-                } else {
-                    this.chatMsgClass = 'el-icon-close';
-                    //获取聊天记录
-                    let str = {
-                        type:'history',
-                        from_client_name:this.userInfo.username,
-                        from_client_id:this.chat.from_client_id,
-                        to_client_name:this.chat.to_client_name,
-                        to_client_id:this.chat.to_client_id,
-                        room_id:this.chat.to_client_name === 'all' ? this.chat.room_id : '',
-                        uid:this.userInfo.uuid,
-                        source:'dialog',
-                    };
-                    this.chat.msgCount = 0;
-                    this.userInfo.websocketServer.send(JSON.stringify(str));
-                    this.getOauthConfig('RoomLists');
-                    this.msg_dot = false;
                 }
             },
             /**
@@ -452,7 +468,7 @@
                     };
                     this.userInfo.websocketServer.send(JSON.stringify(str));
                     this.chat.messageLists.push(str);
-                    this.scrollToBottom();
+                    this.$refs.vsl.scrollToBottom()
                     this.$refs.message.innerHTML = '';
                     this.inputMsg = '';
                     return ;
@@ -461,17 +477,6 @@
                     this.$refs.message.focus();
                     this.$message({type:'info',message:'Please enter message'})
                 }
-            },
-            /**
-             * TODO:滚动条滚动到底部
-             */
-            scrollToBottom: function () {
-                this.$nextTick(() => {
-                    let div = document.getElementById('msg');
-                    try {
-                        div.scrollTop = div.scrollHeight
-                    } catch (e) {}
-                })
             },
             /**
              * todo:推送弹框消息
@@ -499,7 +504,6 @@
                 uid:this.userInfo.uuid,
                 room_id:this.userInfo.room_id,
                 title:this.userInfo.room_name,
-                notice:'万物皆有可能',
                 msgCount:0,
                 client_list:[],
                 client_list_part:[],
@@ -524,7 +528,7 @@
             //客服系统初始化
             this.connect(this.userInfo.websocketServer);
             this.getOauthConfig('RoomLists');
-            Push.Permission.request();
+            this.getOauthConfig('GroupAnnouncementConfig');
             let __this = this;
             //键盘事件
             document.onkeydown = function (e) {
@@ -535,17 +539,37 @@
                 }
             }
         },
-        /**
-         * todo：生命周期
-         */
-        watch:{
-            inputMsg:function () {
-                this.inputMsg = this.$refs.message.innerHTML;
-            }
-        },
     }
 </script>
 <style>
+.user-list{
+    min-height:355px;
+    max-height: 355px;
+    overflow: hidden;
+    overflow-y: auto;
+    padding: 0 !important;
+}
+#content{
+    border: 1px solid #eee;
+    height: 95px;
+    border-radius: 10px;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    padding:10px;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+.input-msg{
+    min-height: 100px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.input-msg .icon{
+    font-size: 25px;
+    margin:0 10px 10px 0;
+    color: #000;
+    cursor: pointer;
+}
 #leftBox {
     padding-left: 0 !important;
     padding-right: 2px !important;
@@ -571,94 +595,105 @@
     -moz-border-radius:  0 !important;
 }
 </style>
-<style scoped>
-.user-list{
-    min-height:354px;
-    max-height: 354px;
-    overflow: hidden;
-    overflow-y: auto;
-    padding: 0 !important;
-}
-#msg{
-    max-height: 380px;
-    min-height: 380px;
-    margin:10px 0 20px 0;
-    overflow: hidden;
+<style lang="less">
+.stream, .empty {
+    position: relative;
+    width: 100%;
+    height: 320px;
     overflow-y: auto;
     border: 1px solid #eee;
+    display: flex;
+    flex-direction: column-reverse;
+    &.overflow {
+        flex-direction: column;
+    }
+    .stream-item {
+        display: flex;
+        align-items: center;
+        padding: 1em;
+        &.creator {
+            flex-direction: row-reverse;
+        }
+    }
 }
-#msg .msg-list{
-    box-shadow: 0 1px 0 #ffffff, 0 1px 2px #505860;
-    line-height: 28px;
-    min-height: 20px;
-    margin: 0 15px 15px 15px;
-    font-family: "Source Code Pro", monospace;
-    font-size: 12px;
-    padding:15px;
-    border-radius: 10px;
-    -moz-border-radius:10px;
-    -webkit-border-radius:10px;
-    background:-webkit-gradient(linear, left top, left bottom, from(#eaeaea), to(#ffffff));
-    　background:-moz-linear-gradient(top, #eaeaea, #ffffff);
-    　　　　background:-o-linear-gradient(top, #eaeaea, #ffffff);
-    　　　　background:linear-gradient(top, #eaeaea, #ffffff);
-    position:relative;
+.empty {
+    .wrapper {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        color: #bfbfbf;
+    }
+    .icon {
+        width: 70px;
+        height: 70px;
+        background-size: cover;
+        background-image: url("data:image/svg+xml,%3Csvg t='1587779561352' class='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='1970' width='200' height='200'%3E%3Cpath d='M915.90919 428.28025l40.909735 6.785543 1.77339-10.488889 8.708336-12.93766-103.649662-69.574588-7.776104-5.219885-7.837502-2.918469L552.61093 223.932142l-6.92676-2.579755-6.962575 2.308579-347.57209 115.214045-8.804527 2.14792-5.704932 4.046153L53.550637 432.126858l9.832949 13.854543 4.493338 11.238972 39.739073-16.353456L75.734892 485.09114l96.368838 54.05001 0.107447 199.534476-2.349511 4.28356 2.352581 1.310855 0.001023 2.709715 4.859681 0 281.95872 157.194158 7.696286 4.260024 2.344395 1.277086 2.635013 1.726318 9.41851-3.080152 8.748245-3.419889 388.69979-159.572322 0.031722-9.44307L878.607632 546.373879l92.490507-35.759435L915.90919 428.28025zM561.218982 260.057921l245.843174 91.538833-245.843174 92.115977L561.218982 260.057921zM121.002888 475.127208l40.684608-56.45171 5.983271-8.358365 23.439852-32.558533 262.998903 123.622552L411.290297 637.993552 121.002888 475.127208zM203.051579 726.133985l-0.100284-169.629375 226.371704 126.989229 28.646434-91.38636 0.893346 276.69688L203.051579 726.133985zM473.818399 476.500485 225.704508 359.870184l304.674071-100.980879 0 196.376553L473.818399 476.500485zM847.766207 724.616422 489.771743 871.571379l-0.955768-301.186643 45.281299 109.166305 313.667909-121.215736L847.765183 724.616422zM551.061644 639.889739l-57.241702-137.940652 347.098299-130.082684 83.064834 123.892705L551.061644 639.889739z' p-id='1971' fill='%23bfbfbf'%3E%3C/path%3E%3C/svg%3E");
+    }
 }
-#msg .msg-list:after {
-    content:'';
-    position:absolute;
-    bottom:100%;
-    left:15px;
-    width:0;
-    height:0;
-    border-width:10px;
-    border-style:solid;
-    border-color:transparent;
-    margin-bottom:-4px;
-    border-bottom-width:16px;
-    border-bottom-color:currentColor;
-    color:#eaeaea;
-}
-#msg .msg-img{
-    margin: 15px;
-}
-#content{
-    border: 1px solid #eee;
-    height: 95px;
-    border-radius: 10px;
-    -moz-border-radius:10px;
-    -webkit-border-radius:10px;
-    padding:10px;
-    overflow: scroll;
-    overflow-x: hidden;
-}
-.input-msg{
-    min-height: 100px;
-    margin-bottom: 10px;
-}
-.input-msg .icon{
-    font-size: 25px;
-    margin:0 10px 10px 0;
-    color: #000;
-    cursor: pointer;
-}
-.msg-icon{
-    font-size: 50px;
-    color:#ffffff;
-    position:fixed;
-    right:10px;
-    bottom:10%;
-    width: 80px;
-    height: 80px;
-    background: #409EFF;
-    border-radius: 40px;
-    -moz-border-radius:40px;
-    -webkit-border-radius:40px;
-    z-index: 20004;
-}
-.msg-count{
-    position:absolute;
-    right:9px;
-    bottom:54%;
+.header {
+    padding: .5em;
+    .finished {
+        font-size: 14px;
+        text-align: center;
+        color: #bfbfbf;
+    }
+    .spinner {
+        font-size: 10px;
+        margin: 0 auto;
+        text-indent: -9999em;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background: #ffffff;
+        background: linear-gradient(to right, #ccc 10%, rgba(255, 255, 255, 0) 42%);
+        position: relative;
+        animation: load3 1.4s infinite linear;
+        transform: translateZ(0);
+    }
+    .spinner:before {
+        width: 50%;
+        height: 50%;
+        background: #ccc;
+        border-radius: 100% 0 0 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        content: '';
+    }
+    .spinner:after {
+        background: #ffffff;
+        width: 75%;
+        height: 75%;
+        border-radius: 50%;
+        content: '';
+        margin: auto;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+    }
+    @-webkit-keyframes load3 {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+    @keyframes load3 {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
 }
 </style>
