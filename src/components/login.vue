@@ -186,7 +186,7 @@
             getTabs:function(row){
                 this.headerTitle = row.label;
                 if (row.name === 'oauth') {
-                    this.getOauthConfig('oauth');
+                    this.getOauthConfig('Oauth');
                 }
             },
             /**

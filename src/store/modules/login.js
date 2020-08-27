@@ -128,7 +128,7 @@ const actions={
                     case 'RobotConfig':
                         commit('setRobotConfig',response.data.item);
                         break;
-                    case 'OauthConfig':
+                    case 'Oauth':
                     case "RoomLists":
                         commit('setOauthConfig',response.data.item);
                         break;
