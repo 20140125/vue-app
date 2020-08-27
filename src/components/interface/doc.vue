@@ -208,7 +208,7 @@
                 this.scrollTop = func.get_scroll_top();
                 document.addEventListener('click', this.foo);
                 menu.style.left = tree.offsetWidth + 50 + 'px';
-                menu.style.top = MouseEvent.clientY + this.scrollTop - 220 + 'px';
+                menu.style.top = MouseEvent.clientY + this.scrollTop - 150 + 'px';
                 this.categoryModel = object;
             },
             /**
