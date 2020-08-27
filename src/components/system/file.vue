@@ -294,8 +294,8 @@
                         this.showRightBtn.DeCompression = false;
                         this.showRightBtn.download = true;
                         let ext = this.fileObject.label.split(".")[1];
-                        let compressionExt = ['tar','zip','7z'];
-                        if (compressionExt.includes(ext.toLowerCase())){
+                        let compressionExt = ['tar','zip','7z','TAR','ZIP','7Z'];
+                        if (compressionExt.includes(ext)){
                             this.showRightBtn.DeCompression = true;
                         }
                         break;
