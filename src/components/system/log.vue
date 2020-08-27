@@ -133,7 +133,7 @@
              * @param path
              */
             getFileLists:function (path) {
-                let params = {path:path,basename:'/logs//',sort:'time'};
+                let params = {path:path,basename:'/logs//',sort:'time',sort_order:'asc'};
                 apiLists.FileLists(params).then((response)=>{
                     if (response && response.data.code === 200){
                         this.fileLists = response.data.item;

@@ -96,7 +96,7 @@ export default {
          */
         getFileLists:function (path) {
             this.loading = true;
-            let params = {path:path,basename:'/app/public//',sort:'time'};
+            let params = {path:path,basename:'/app/public//',sort:'time',sort_order:'desc'};
             apiLists.FileLists(params).then((response)=>{
                 if (response && response.data.code === 200){
                     this.getImage(response.data.item)
