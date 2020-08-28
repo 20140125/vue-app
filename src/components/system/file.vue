@@ -469,10 +469,10 @@
                     let params = {path:this.fileObject.path};
                     apiLists.FileDelete(params).then((response)=> {
                        if (response && response.data.code === 200) {
-                           let data = { msg:response.data.msg+'：'+params.path,href:$url.fileDelete };
+                           let data = { msg:response.data.msg+'：'+this.fileObject.path,href:$url.fileDelete };
                            this.saveSystemLog(data);
                            this.getFileLists(this.path);
-                           this.$message({type:'success',message:response.data.msg+'：'+params.label});
+                           this.$message({type:'success',message:response.data.msg+'：'+this.fileObject.label});
                        }
                     })
                 }).catch(()=> {
