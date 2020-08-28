@@ -1,6 +1,6 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText" style="margin: 0 20px" id="imageView">
-        <CommonUpload :check-size="false" :file-size="2048" :show-file-list="false" :btn-style="{margin:'0 0 10px 65px'}" :upload-success="uploadSuccess"/>
+        <CommonUpload :check-size="false" :upload-limit="1000" :file-size="2048" :show-file-list="false" :btn-style="{margin:'0 0 10px 65px'}" :upload-success="uploadSuccess"/>
         <el-row :span="24">
             <el-col :span="7"  v-for="(image,index) in filtersListsPart" :key="index" :offset="1" style="margin-bottom: 10px;margin-top: 10px">
                 <el-card :body-style="{ padding: '0px',border: 'none' }" shadow="hover">
