@@ -15,7 +15,7 @@
 <script>
 import {mapGetters} from 'vuex'
 export default {
-    name: 'chat-room-item',
+    name: 'Item',
     props: {
         source: {
             type: Object,

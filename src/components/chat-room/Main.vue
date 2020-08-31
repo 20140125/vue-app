@@ -1,106 +1,117 @@
 <template>
-    <!---chat message-->
-    <el-dialog id="chat" top="8vh" :width="dialogWidth" center :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false" :visible.sync="visible">
-        <div slot="title" style="display: flex;align-items: center;position: relative;">
-            <el-avatar :src="chat.img" :size="50" fit="fill" :alt="chat.title"/>
-            <div>
-                <div v-html="chat.title" style="margin-left: 10px;text-align: left;color: #fff"/>
-                <div slot="title" v-html="chat.desc" style="margin-left: 10px;color: #fff"/>
+    <div>
+        <!---chat message-->
+        <el-dialog id="chat" top="8vh" :width="dialogWidth" center :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false" :visible.sync="visible">
+            <div slot="title" style="display: flex;align-items: center;position: relative;">
+                <el-avatar :src="chat.img" :size="50" fit="fill" :alt="chat.title"/>
+                <div>
+                    <div v-html="chat.title" style="margin-left: 10px;text-align: left;color: #fff"/>
+                    <div slot="title" v-html="chat.desc" style="margin-left: 10px;color: #fff"/>
+                </div>
             </div>
-        </div>
-        <el-row :gutter="24">
-            <el-col :span="18" id="leftBox">
-                <el-card>
-                    <div class="main">
-                        <div class="list-container">
-                            <virtual-list v-show="!!chat.messageLists.length" class="stream scroll-touch" :class="{ overflow: overflow }" ref="vsl"
-                                          :data-key="'uid'"
-                                          :data-sources="chat.messageLists"
-                                          :data-component="messageComponent"
-                                          :estimate-size="100"
-                                          :item-class="'stream-item'"
-                                          :item-class-add="addItemClass"
-                                          @resized="onItemRendered">
-                            </virtual-list>
-                            <div class="empty" v-show="!chat.messageLists.length">
-                                <div class="wrapper">
-                                    <div class="icon"></div>
-                                    <div class="tips">No chats</div>
+            <el-row :gutter="24">
+                <el-col :xl="{'span':18}" :lg="{'span':16}" :md="{'span':16}" :sm="{'span':16}" :xs="{'span':14}" id="leftBox">
+                    <el-card>
+                        <div class="main">
+                            <div class="list-container">
+                                <virtual-list v-show="!!chat.messageLists.length" class="stream scroll-touch" :class="{ overflow: overflow }" ref="vsl"
+                                              :data-key="'uid'"
+                                              :data-sources="chat.messageLists"
+                                              :data-component="messageComponent"
+                                              :estimate-size="100"
+                                              :item-class="'stream-item'"
+                                              :item-class-add="addItemClass"
+                                              @resized="onItemRendered">
+                                </virtual-list>
+                                <div class="empty" v-show="!chat.messageLists.length">
+                                    <div class="wrapper">
+                                        <div class="icon"></div>
+                                        <div class="tips">No chats</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="input-msg">
-                        <emotion @clickEmotion="getEmotion" v-show="showEmotion" :height="300"/>
-                        <div>
-                            <el-tooltip effect="dark" content="房间名称" placement="top-start">
-                                <el-menu :default-active="chat.room_id"   background-color="#409EFF"
-                                         text-color="#fff"
-                                         active-text-color="#ffd04b" mode="horizontal" style="margin-bottom:10px;">
-                                    <el-menu-item @click="setRoomID(room)" v-for="(room,index) in oauthConfig" :key="index" :index="room.id.toString()">
-                                        {{room.name}}
-                                    </el-menu-item>
-                                </el-menu>
-                            </el-tooltip>
-                            <el-tooltip effect="dark" content="发送表情" placement="top-start">
-                                <i @click="showEmotion = !showEmotion" class="el-icon-picture-outline-round icon"/>
-                            </el-tooltip>
-                            <el-upload :action="cgi.uploadUrl"
-                                       :data="fileData"
-                                       :headers="headers"
-                                       :show-file-list="false"
-                                       :on-success="uploadSuccess"
-                                       :before-upload="beforeUpload" style="float: left">
-                                <el-tooltip effect="dark" content="发送文件和图片" placement="top-start">
-                                    <i  @click="showEmotion = false" class="el-icon-picture-outline icon"/>
+                        <div class="input-msg">
+                            <emotion @clickEmotion="getEmotion" v-show="showEmotion" :height="300"/>
+                            <div>
+                                <el-tooltip effect="dark" content="房间名称" placement="top-start">
+                                    <el-menu :default-active="chat.room_id"   background-color="#409EFF"
+                                             text-color="#fff"
+                                             active-text-color="#ffd04b" mode="horizontal" style="margin-bottom:10px;">
+                                        <el-menu-item @click="setRoomID(room)" v-for="(room,index) in oauthConfig" :key="index" :index="room.id.toString()">
+                                            {{room.name}}
+                                        </el-menu-item>
+                                    </el-menu>
                                 </el-tooltip>
-                            </el-upload>
-                        </div>
-                        <div contentEditable="true" ref="message" id="content" @focus="showEmotion = false" @keydown="setMsg">
+                                <el-tooltip effect="dark" content="发送表情" placement="top-start">
+                                    <i @click="showEmotion = !showEmotion" class="el-icon-picture-outline-round icon"/>
+                                </el-tooltip>
+                                <el-upload :action="cgi.uploadUrl"
+                                           :data="fileData"
+                                           :headers="headers"
+                                           :show-file-list="false"
+                                           :on-success="uploadSuccess"
+                                           :before-upload="beforeUpload" style="float: left">
+                                    <el-tooltip effect="dark" content="发送文件和图片" placement="top-start">
+                                        <i  @click="showEmotion = false" class="el-icon-picture-outline icon"/>
+                                    </el-tooltip>
+                                </el-upload>
+                            </div>
+                            <div contentEditable="true" ref="message" id="content" @focus="showEmotion = false" @keydown="setMsg">
 
+                            </div>
                         </div>
-                    </div>
-                    <div class="input-button" style="text-align: right">
-                        <el-tooltip effect="dark" content="Shift + Enter 快捷发送" placement="top-start">
-                            <el-button type="primary" round plain size="medium" @click="sendMsg">发 送</el-button>
-                        </el-tooltip>
-                    </div>
-                </el-card>
-            </el-col>
-            <el-col :span="6" id="rightBox">
-                <el-card>
-                    <div style="background: #fff;min-height: 60px">
-                        群公告:
-                        <el-carousel tyle="cursor: pointer" :interval="4000" arrow="never" direction="vertical" indicator-position="none" height="100px">
-                            <el-carousel-item v-for="(item,index) in groupAnnouncementConfig" :key="index">
-                                <div style="cursor: pointer;margin-top: 20px" v-html="item.name"/>
-                            </el-carousel-item>
-                        </el-carousel>
-                    </div>
-                    <el-divider/>
-                    <div style="margin-bottom: 10px">
-                        在线人数({{chat.total}}/{{chat.online}})
-                    </div>
-                    <el-autocomplete placeholder="搜索" v-model="chat.users" clearable :fetch-suggestions="querySearch" @clear="clearSearch" style="width: 100%"/>
-                    <div class="user-list">
-                        <el-menu style="width: 100%;">
-                            <el-menu-item @click="sendUser(user,index)" v-for="(user,index) in chat.client_list_part" :key="index" :index="index.toString()">
-                                <el-avatar :size="30" :src="user.client_img" style="cursor: pointer"/>
-                                <span slot="title" style="font-size: 14px" v-html="user.client_name.replace(chat.users,'<b style=color:#0e82fc;font-weight:300>'+chat.users+'</b>')"/>
-                                <!--未读消息数-->
-                                <el-badge v-if="user.total" type="danger" :value="user.total" style="top: 10px;right: 15px"/>
-                                <!--在线-->
-                                <el-badge v-else-if="user.online" type="success" is-dot style="top: 12px;right: 10px"/>
-                                <!--离线-->
-                                <el-badge v-else-if="!user.online" type="info" is-dot style="top: 12px;right: 10px"/>
-                            </el-menu-item>
-                        </el-menu>
-                    </div>
-                </el-card>
-            </el-col>
-        </el-row>
-    </el-dialog>
-    <!---chat message-->
+                        <div class="input-button" style="text-align: right">
+                            <el-tooltip effect="dark" content="Shift + Enter 快捷发送" placement="top-start">
+                                <el-button type="primary" round plain size="medium" @click="sendMsg">发 送</el-button>
+                            </el-tooltip>
+                        </div>
+                    </el-card>
+                </el-col>
+                <el-col :xl="{'span':6}" :lg="{'span':8}" :md="{'span':8}" :sm="{'span':8}" :xs="{'span':10}" id="rightBox">
+                    <el-card>
+                        <div style="background: #fff;min-height: 60px">
+                            群公告:
+                            <el-carousel tyle="cursor: pointer" :interval="4000" arrow="never" direction="vertical" indicator-position="none" height="100px">
+                                <el-carousel-item v-for="(item,index) in groupAnnouncementConfig" :key="index">
+                                    <div style="cursor: pointer;margin-top: 20px" v-html="item.name"/>
+                                </el-carousel-item>
+                            </el-carousel>
+                        </div>
+                        <el-divider/>
+                        <div style="margin-bottom: 10px">
+                            在线人数({{chat.total}}/{{chat.online}})
+                        </div>
+                        <el-autocomplete placeholder="搜索" v-model="chat.users" clearable :fetch-suggestions="querySearch" @clear="clearSearch" style="width: 100%"/>
+                        <div class="user-list">
+                            <el-menu style="width: 100%;">
+                                <el-menu-item :users="user" v-contextmenu:contextmenu @click="sendUser(user,index)" v-for="(user,index) in chat.client_list_part" :key="index" :index="index.toString()">
+                                    <el-avatar :size="30" :src="user.client_img" style="cursor: pointer"/>
+                                    <span slot="title" style="font-size: 14px" v-html="user.client_name.replace(chat.users,'<b style=color:#0e82fc;font-weight:300>'+chat.users+'</b>')"/>
+                                    <!--未读消息数-->
+                                    <el-badge v-if="user.total" type="danger" :value="user.total" style="top: 10px;right: 15px"/>
+                                    <!--在线-->
+                                    <el-badge v-else-if="user.online" type="success" is-dot style="top: 12px;right: 10px"/>
+                                    <!--离线-->
+                                    <el-badge v-else-if="!user.online" type="info" is-dot style="top: 12px;right: 10px"/>
+                                </el-menu-item>
+                            </el-menu>
+                        </div>
+                        <!--右键菜单-->
+                        <v-contextmenu ref="contextmenu" @contextmenu="menuRightChange">
+                            <v-contextmenu-item @click="userInfoVisible = true"><i class="el-icon-postcard"/> 查看资料</v-contextmenu-item>
+                            <v-contextmenu-item divider></v-contextmenu-item>
+                            <v-contextmenu-item><i class="el-icon-share"/> 分享他的名片</v-contextmenu-item>
+                        </v-contextmenu>
+                    </el-card>
+                </el-col>
+            </el-row>
+        </el-dialog>
+        <!---chat message-->
+        <!--userInfo Start-->
+        <UserInfo :user-info="targetUsers" :dialog-width="dialogWidth" :random-num="Math.ceil(Math.random()*44)" :user-info-visible="userInfoVisible" :closeDialog="closeDialog"/>
+        <!--userInfo End-->
+    </div>
 </template>
 
 <script>
@@ -111,6 +122,7 @@
     import Push from "push.js";
     import Item from './Item'
     import VirtualList from 'vue-virtual-scroll-list'
+    import UserInfo from "./UserInfo";
     export default {
         props:{
             chatVisible:{
@@ -134,19 +146,19 @@
                 chat:{},
                 messageComponent: Item,
                 overflow: false,
-                visible:this.chatVisible
+                visible:this.chatVisible,
+                targetUsers:{},
+                userInfoVisible:false
             }
         },
         components:{
+            UserInfo,
             emotion,
             VirtualList
         },
         computed:{
             ...mapGetters(['oauthConfig','groupAnnouncementConfig','userInfo']),
         },
-        /**
-         * todo：生命周期
-         */
         watch:{
             inputMsg:function () {
                 this.inputMsg = this.$refs.message.innerHTML;
@@ -157,6 +169,21 @@
         },
         methods:{
             ...mapActions(['getOauthConfig','saveWeather']),
+            /**
+             * todo:获取目标用户的信息
+             * @param item
+             */
+            menuRightChange (item) {
+                if (item.data.attrs && item.data.attrs.users) {
+                    this.targetUsers = item.data.attrs.users;
+                }
+            },
+            /**
+             * todo:弹框关闭回调
+             */
+            closeDialog:function () {
+                this.userInfoVisible = false;
+            },
             /**
              * todo:添加class
              * @param index
@@ -347,7 +374,7 @@
                     this.chat.users = user.client_name;
                 }
                 this.chat.img = user.client_img;
-                this.chat.desc = user.desc;
+                this.chat.desc = user.centerInfo.desc;
                 this.chat.room_id = '';
                 user.total = 0;
                 //获取聊天记录
@@ -509,7 +536,7 @@
                 client_list:[],
                 client_list_part:[],
                 img:'https://cdn.pixabay.com/photo/2016/12/13/21/20/alien-1905155_960_720.png',
-                desc:this.userInfo.desc,
+                desc:'',
                 messageLists:[],
                 msg_type:'text',
                 users:'',

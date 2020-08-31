@@ -4,7 +4,6 @@ import Vue from 'vue'
 
 import 'element-ui/lib/theme-chalk/index.css'
 import ElementUI, {Message} from 'element-ui'
-
 import App from './App'
 import router from './router'
 import VueRouter from 'vue-router'
@@ -13,15 +12,15 @@ import md5 from 'js-md5'
 import store from './store'
 import code from "./api/code"
 import apiLists from './api/api'
-
 import 'mavon-editor/dist/css/index.css'
 import mavonEditor from 'mavon-editor'
-
 import VueQuillEditor from 'vue-quill-editor'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
-
+import contentmenu from 'v-contextmenu'
+import 'v-contextmenu/dist/index.css'
+Vue.use(contentmenu)
 Vue.use(VueQuillEditor);
 Vue.config.productionTip = false;
 Vue.use(mavonEditor);
