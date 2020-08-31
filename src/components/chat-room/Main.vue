@@ -109,7 +109,7 @@
         </el-dialog>
         <!---chat message-->
         <!--userInfo Start-->
-        <UserInfo :user-info="targetUsers" :dialog-width="dialogWidth" :random-num="Math.ceil(Math.random()*44)" :user-info-visible="userInfoVisible" :closeDialog="closeDialog"/>
+        <UserInfo :user-info="targetUsers" :dialog-width="dialogWidth" :user-info-visible="userInfoVisible" :closeDialog="closeDialog"/>
         <!--userInfo End-->
     </div>
 </template>
@@ -166,6 +166,9 @@
             },
             chatVisible:function () {
                 this.visible = this.chatVisible;
+                if (!this.visible) {
+                    this.userInfoVisible = false;
+                }
             }
         },
         methods:{

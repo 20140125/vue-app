@@ -42,10 +42,6 @@ export default {
             type:String,
             default:()=>'40%'
         },
-        randomNum:{
-            type:String|Number,
-            default:()=>0
-        },
         id:{
             type:String,
             default:()=>'userInfo'
@@ -56,7 +52,7 @@ export default {
             visible:this.userInfoVisible,
             backgroundImgUrl:require('../../assets/default.jpg'),
             userInfoDialogWidth:this.dialogWidth,
-            transformStyle:{transform: 'rotate('+this.randomNum+'deg)'}
+            randomNum:0
         }
     },
     watch:{
@@ -68,6 +64,8 @@ export default {
     },
     created() {
         this.userInfoDialogWidth = (parseInt(this.dialogWidth.replace('%','')) - 15)+"%";
+        this.randomNum = Math.ceil(Math.random()*45|0)
+        this.transformStyle = {transform: 'rotate('+this.randomNum+'deg)'}
     },
     methods:{
         /**
