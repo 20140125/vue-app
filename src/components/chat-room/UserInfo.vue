@@ -62,6 +62,7 @@ export default {
     watch:{
         userInfoVisible:function () {
             this.visible = this.userInfoVisible;
+            this.userInfoDialogWidth = (parseInt(this.dialogWidth.replace('%','')) - 15)+"%";
             this.getUserInfo();
         },
     },

@@ -148,7 +148,8 @@
                 overflow: false,
                 visible:this.chatVisible,
                 targetUsers:{},
-                userInfoVisible:false
+                userInfoVisible:false,
+                userInfoDialogWidth:this.dialogWidth
             }
         },
         components:{
