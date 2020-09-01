@@ -30,6 +30,7 @@
                 console.log('ready', this.messages)
             },
             onEditorChange({ quill, html, text }) {
+                console.log({ quill, html, text })
             },
         },
     }

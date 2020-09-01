@@ -20,7 +20,6 @@
                 </el-tree>
             </el-col>
             <!--分类列表-->
-
             <!--接口详情-->
             <el-col :xl="{'span':18,'push':1}" :lg="{'span':18,'push':1}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}">
                 <el-tabs type="border-card" v-model="apiName" v-if="docVisible">
@@ -31,14 +30,14 @@
                                 <el-select v-model="codeStyle" v-if="mavonBool">
                                     <el-option v-for="(code,index) in codeStyleList" :label="index" :value="index" :key="index"/>
                                 </el-select>
-                                <el-button plain type="primary" @click="mavonBool = !mavonBool" icon="el-icon-edit-outline" style="float: right">修 改</el-button>
+                                <el-button plain type="primary" @click="mavonBool = !mavonBool" :icon="mavonBool ? 'el-icon-back' : 'el-icon-edit-outline'" style="float: right">{{mavonBool ? '返 回' : '修 改'}}</el-button>
                             </el-form-item>
                             <el-form-item>
                                 <mavon-editor @imgAdd="uploadFile"
                                               @change="getData"
                                               @save="saveData"
                                               ref="md"
-                                              :defaultOpen="open"
+                                              defaultOpen="preview"
                                               :subfield="mavonBool"
                                               :toolbarsFlag="mavonBool"
                                               v-model="docModel.markdown"
@@ -51,9 +50,7 @@
                 </el-tabs>
             </el-col>
             <!--接口详情-->
-
         </el-row>
-
         <!--右键弹框-->
         <div v-show="menuVisible">
             <el-menu id="menu" class="menu" style="border-bottom: solid 1px #393d49" background-color="#393d49" text-color="#cccccc" mode="horizontal" active-text-color="#ffd04b">
@@ -63,9 +60,8 @@
             </el-menu>
         </div>
         <!--右键弹框-->
-
         <!---接口分类弹框-->
-        <el-dialog :title="title" :width="dialogWidth" :visible.sync="syncVisible" :modal="modal"  :center="center">
+        <el-dialog :title="title" :width="dialogWidth" :visible.sync="syncVisible" :modal="true"  :center="true">
             <el-form :label-width="labelWidth" :model="categoryModel" :ref="reFrom">
                 <el-form-item label="接口名称" prop="name" required>
                     <el-input v-model="categoryModel.name" placeholder="分类名称"/>
@@ -82,7 +78,6 @@
             </div>
         </el-dialog>
          <!---接口分类弹框-->
-
     </div>
 </template>
 
@@ -108,10 +103,8 @@
                 //弹框配置值
                 title:'',
                 syncVisible:false, //是否显示弹框
-                modal:true, //遮盖层是否需要
                 labelWidth:'80px',
                 loading:true,
-                center:true,
                 loadingText:'玩命加载中。。。',
                 url:'',
                 refs:this.$refs,
@@ -127,7 +120,6 @@
 
                 //是否展示编辑器
                 mavonBool:false,
-                open:'preview',
                 codeStyle:'monokai',
                 cgi:{
                     categoryInsert:$url.categorySave,
@@ -208,7 +200,11 @@
                 this.scrollTop = func.get_scroll_top();
                 document.addEventListener('click', this.foo);
                 menu.style.left = tree.offsetWidth + 50 + 'px';
-                menu.style.top = MouseEvent.clientY + this.scrollTop - 150 + 'px';
+                if (this.scrollTop>=229) {
+                    menu.style.top = MouseEvent.clientY + this.scrollTop - 235 + 'px';
+                } else {
+                    menu.style.top = MouseEvent.clientY + this.scrollTop - 180 + 'px';
+                }
                 this.categoryModel = object;
             },
             /**
@@ -346,6 +342,6 @@
     }
 </script>
 
-<style scoped>
+<style>
 
 </style>

@@ -9,7 +9,7 @@
                 <el-tree :props="props"
                          @node-contextmenu="rightClick"
                          :filter-node-method="filterNode"
-                         :highlight-current="highlight"
+                         :highlight-current="true"
                          :data="categoryLists"
                          @node-click="getApiDetail"
                          default-expand-all
@@ -20,7 +20,6 @@
                 </el-tree>
             </el-col>
             <!--分类列表-->
-
             <!--接口详情-->
             <el-col :xl="{'span':18,'push':1}" :lg="{'span':18,'push':1}" :md="{'span':24}" :sm="{'span':24}" :xs="{'span':24}" v-show="apiVisible">
                 <el-tabs type="border-card" v-model="apiName">
@@ -60,8 +59,7 @@
                                 </div>
                             </el-form-item>
                             <el-form-item label="返回参数" prop="response_string">
-                                <codemirror ref="edit" @change="updateContent" :value="apiModel.response_string"
-                                            :options="options" style="line-height: 20px"/>
+                                <codemirror ref="edit" @change="updateContent" :value="apiModel.response_string" :options="options" style="line-height: 20px"/>
                             </el-form-item>
                             <el-form-item label="返回字段" prop="response">
                                 <el-button type="primary" style="margin-bottom: 5px" plain icon="el-icon-plus" @click="responseAdd()" size="medium"/>
@@ -77,27 +75,22 @@
                             <el-form-item label="备注" prop="remark">
                                 <el-input v-model="apiModel.remark" maxlength="500" show-word-limit resize="none" :autosize="{ minRows: 4}" placeholder="备注" type="textarea"/>
                             </el-form-item>
-                            <Submit :reFrom="reFrom" :model="apiModel" :url="url" :refs="refs" v-on:success="success"
-                                    style="text-align: center"/>
+                            <Submit :reFrom="reFrom" :model="apiModel" :url="url" :refs="refs" v-on:success="success" style="text-align: center" v-if="btn.edit"/>
                         </el-form>
                     </el-card>
                 </el-tabs>
             </el-col>
             <!--接口详情-->
         </el-row>
-
         <!--右键弹框-->
-        <div v-show="menuVisible">
-            <el-menu id="menu" class="menu" style="border-bottom: solid 1px #393d49" background-color="#393d49" text-color="#cccccc" mode="horizontal" active-text-color="#ffd04b">
-                <el-menu-item v-show="btn.add" @click="addCategory"><i class="el-icon-circle-plus-outline"/>添 加</el-menu-item>
-                <el-menu-item v-show="btn.edit" @click="updateCategory"><i class="el-icon-edit-outline"/>修 改</el-menu-item>
-                <el-menu-item v-show="btn.del" @click="deleteCategory"><i class="el-icon-delete-solid"/>删 除</el-menu-item>
-            </el-menu>
-        </div>
+        <el-menu v-show="menuVisible" id="menu" class="menu" style="border-bottom: solid 1px #393d49" background-color="#393d49" text-color="#cccccc" mode="horizontal" active-text-color="#ffd04b">
+            <el-menu-item v-show="btn.add" @click="addCategory"><i class="el-icon-circle-plus-outline"/>添 加</el-menu-item>
+            <el-menu-item v-show="btn.edit" @click="updateCategory"><i class="el-icon-edit-outline"/>修 改</el-menu-item>
+            <el-menu-item v-show="btn.del" @click="deleteCategory"><i class="el-icon-delete-solid"/>删 除</el-menu-item>
+        </el-menu>
         <!--右键弹框-->
-
         <!---接口分类弹框-->
-        <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal"  :center="center" :width="dialogWidth">
+        <el-dialog :title="title" :visible.sync="syncVisible" :modal="true"  :center="true" :width="dialogWidth">
             <el-form :label-width="labelWidth" :model="categoryModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="接口名称" prop="name" required>
                     <el-input v-model="categoryModel.name" placeholder="分类名称"/>
@@ -144,23 +137,17 @@
     import {mapGetters,mapActions} from 'vuex'
     export default {
         name: "lists",
-        components: {Submit, Delete, Radio,codemirror},
+        components: { Submit, Delete, Radio,codemirror},
         data(){
             return {
                 categoryLists:[],
-                props:{
-                    label:'name',
-                    children:'children',
-                    id:'id'
-                },
+                props:{label:'name', children:'children', id:'id'},
                 filterText:'',
                 //弹框配置值
                 title:'',
                 syncVisible:false, //是否显示弹框
-                modal:true, //遮盖层是否需要
                 labelWidth:'80px',
                 loading:true,
-                center:true,
                 loadingText:'玩命加载中。。。',
                 url:'',
                 refs:this.$refs,
@@ -171,7 +158,6 @@
                 menuVisible:false,
                 categoryModel:{},
                 apiCategory:[],
-                highlight:true,
                 //代码编辑器配置
                 options:{
                     mode: 'application/ld+json',
@@ -200,29 +186,18 @@
                     autoRefresh: true,
                     //设置光标所在行高亮
                     styleActiveLine:true,
+                    //只读
+                    readonly:false
                 },
                 //是否展示编辑器
                 apiStatus:false,
                 //方法集合
-                methodLists:{
-                    POST:'POST',
-                    GET:'GET',
-                    PUT:'PUT',
-                    DELETE:'DELETE',
-                },
+                methodLists:{POST:'POST', GET:'GET', PUT:'PUT', DELETE:'DELETE'},
                 //参数类型
-                typeLists:{
-                    String:'String',
-                    Float:'Float',
-                    Number:'Number',
-                    Object:'Object',
-                    Array:'Array',
-                    Timestamp:'Timestamp'
-                },
+                typeLists:{String:'String', Float:'Float', Number:'Number', Object:'Object', Array:'Array', Timestamp:'Timestamp'},
                 cgi:{
                     insert:$url.apiSave,
                     update:$url.apiUpdate,
-
                     categoryInsert:$url.categorySave,
                     categoryUpdate:$url.categoryUpdate,
                     remove:$url.categoryDelete,
@@ -235,10 +210,9 @@
                     desc:[{required:true,message:'请输入接口描述', trigger: 'blur'},],
                     response_string:[{required:true,message:'请输入返回参数', trigger: 'blur'},],
                 },
-                //滚动条高度
-                scrollTop:0,
                 //细化权限按钮
-                btn:{}
+                btn:{},
+                scrollTop:0,
             }
         },
         watch: {
@@ -300,9 +274,14 @@
                 const menu = document.querySelector('#menu');
                 const tree = document.getElementById('tree');
                 this.scrollTop = func.get_scroll_top();
+                console.log(this.scrollTop);
                 document.addEventListener('click', this.foo);
                 menu.style.left = tree.offsetWidth + 50 +'px';
-                menu.style.top = MouseEvent.clientY + this.scrollTop - 150 + 'px';
+                if (this.scrollTop>=229) {
+                    menu.style.top = MouseEvent.clientY + this.scrollTop - 235 + 'px';
+                } else {
+                    menu.style.top = MouseEvent.clientY + this.scrollTop - 180 + 'px';
+                }
                 this.categoryModel = object;
             },
             /**
@@ -423,6 +402,7 @@
             } else {
                 this.url = this.cgi.insert
             }
+            this.options.readonly = this.btn.edit;
         },
         mounted() {
             this.$nextTick(function () {
@@ -433,6 +413,6 @@
     }
 </script>
 
-<style scoped>
+<style>
 
 </style>

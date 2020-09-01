@@ -45,7 +45,7 @@
         </div>
         <!--鼠标右键-->
         <!--权限框-->
-        <el-dialog :visible.sync="syncVisible" :width="dialogWidth" :modal="modal" :title="title" :center="center">
+        <el-dialog :visible.sync="syncVisible" :width="dialogWidth" :modal="true" :title="title" :center="true">
             <el-form :label-width="labelWidth" :model="chmodModel" :ref="reFrom">
                 <el-form-item label="权限" prop="auth" :rules="[{ required: true, message: '权限必须是数字',trigger:'blur' ,type: 'number'}]">
                     <el-input placeholder="请输入内容" @change="setChmodAuth" v-model.number="chmodModel.auth"/>
@@ -194,9 +194,7 @@
                 activeFileTabName:null,
                 title:'default',
                 syncVisible:false, //是否显示弹框
-                modal:true, //遮盖层是否需要
                 labelWidth:'80px',
-                center:true,
                 loading:true,
                 loadingText:'玩命加载中。。。',
                 //自定义组件
@@ -287,7 +285,11 @@
                 this.scrollTop = func.get_scroll_top();
                 document.addEventListener('click', this.foo);
                 menu.style.left = tree.offsetWidth + 50 +'px';
-                menu.style.top = MouseEvent.clientY + this.scrollTop - 150 + 'px';
+                if (this.scrollTop>=229) {
+                    menu.style.top = MouseEvent.clientY + this.scrollTop - 235 + 'px';
+                } else {
+                    menu.style.top = MouseEvent.clientY + this.scrollTop - 180 + 'px';
+                }
                 this.fileObject = object;
                 switch (this.fileObject.fileType) {
                     case 'file':
