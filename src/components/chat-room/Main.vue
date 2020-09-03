@@ -205,10 +205,12 @@
              * @param index
              */
             addItemClass (index) {
-                if (this.chat.messageLists[index].to_client_name === 'all') {
-                    return this.userInfo.username === this.chat.messageLists[index].from_client_name ? 'creator' : ''
-                } else {
-                    return this.userInfo.username === this.chat.messageLists[index].to_client_name ? '' : 'creator'
+                if (this.chat.messageLists.length>0) {
+                    if (this.chat.messageLists[index].to_client_name === 'all') {
+                        return this.userInfo.username === this.chat.messageLists[index].from_client_name ? 'creator' : ''
+                    } else {
+                        return this.userInfo.username === this.chat.messageLists[index].to_client_name ? '' : 'creator'
+                    }
                 }
             },
             /**
@@ -286,9 +288,13 @@
                             __this.$refs.vsl.scrollToBottom()
                             console.log(data);
                             break;
-                        //消息撤回/删除
+                        //消息删除/消息撤回
                         case 'srem':
                         case 'recall':
+                            __this.chat.messageLists = data.message;
+                            __this.chat.client_list = data.client_list;
+                            __this.chat.client_list_part = data.client_list;
+                            __this.setUsersLists();
                             __this.removeMessageList(data);
                             console.log(data)
                             break;
@@ -558,18 +564,20 @@
              * todo:删除消息
              */
             removeMessageList:function (targetMessage) {
-                let i = 0
-                this.chat.messageLists.map((item,index)=>{
-                    if (this.compareJson(item,targetMessage)) {
-                        i = index;
-                    }
-                });
-                let __this = this,messageLists = [];
-                Object.keys(__this.chat.messageLists).forEach(function (message) {
-                    messageLists.push(__this.chat.messageLists[message]);
-                });
-                messageLists.splice(i,1);
-                this.chat.messageLists = messageLists;
+                if (this.chat.messageLists.length>0) {
+                    let i = 0
+                    this.chat.messageLists.map((item,index)=>{
+                        if (this.compareJson(item,targetMessage)) {
+                            i = index;
+                        }
+                    });
+                    let __this = this,messageLists = [];
+                    Object.keys(__this.chat.messageLists).forEach(function (message) {
+                        messageLists.push(__this.chat.messageLists[message]);
+                    });
+                    messageLists.splice(i,1);
+                    this.chat.messageLists = messageLists;
+                }
             },
             /**
              * todo:json字符串比较
@@ -641,13 +649,13 @@
             }
             //撤回消息
             this.$on('recallMessage', (newMessage,oldMessage) => {
-                //消息推送
-                this.chat.messageLists.push(newMessage);
                 //消息撤回
                 newMessage.type = 'recall';
                 newMessage['recall_message'] = JSON.parse(JSON.stringify(oldMessage));
                 this.removeMessageList(oldMessage);
+                //消息推送
                 this.userInfo.websocketServer.send(JSON.stringify(newMessage));
+                this.chat.messageLists.push(newMessage);
             })
             //删除消息
             this.$on('deleteMessage', (newMessage,oldMessage) => {

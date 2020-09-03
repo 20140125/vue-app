@@ -6,7 +6,7 @@
                 <el-avatar :src="source.client_img" />
             </div>
             <div class="body">
-                <div class="name" v-if="source.from_client_name !== userInfo.username">{{source.from_client_name}} {{source.time}}</div>
+                <div class="name" v-if="source.from_client_name !== userInfo.username">{{source.username || source.from_client_name}} {{source.time}}</div>
                 <div class="content">
                     <div class="text"><span v-html="source.from_client_name === userInfo.username ? unescape(source.content.replace('%ACCOUNT%','你')) : unescape(source.content.replace('%ACCOUNT%',source.from_client_name))"/></div>
                 </div>
@@ -18,7 +18,7 @@
                 <el-avatar :src="source.client_img" />
             </div>
             <div class="body">
-                <div class="name" v-if="source.to_client_name === userInfo.username">{{source.from_client_name}} {{source.time}}</div>
+                <div class="name" v-if="source.to_client_name === userInfo.username">{{source.username || source.from_client_name}} {{source.time}}</div>
                 <div class="content">
                     <div class="text"><span v-html="source.from_client_name === userInfo.username ? unescape(source.content.replace('%ACCOUNT%','你')) : unescape(source.content.replace('%ACCOUNT%',source.from_client_name))"/></div>
                 </div>
@@ -93,6 +93,8 @@ export default {
                 case 'recall' :
                     let recallMessage = JSON.parse(JSON.stringify(this.targetMessage));
                     recallMessage.content = '%ACCOUNT%撤回了一条消息';
+                    recallMessage.username = 'systemRobot';
+                    recallMessage.client_img = 'https://cdn.pixabay.com/photo/2016/12/13/21/20/alien-1905155_960_720.png';
                     recallMessage.time = func.set_time(new Date());
                     this.dispatch('chatRoom','recallMessage',recallMessage,this.targetMessage)
                     break;
