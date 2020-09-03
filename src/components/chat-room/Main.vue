@@ -21,7 +21,12 @@
                                               :estimate-size="100"
                                               :item-class="'stream-item'"
                                               :item-class-add="addItemClass"
-                                              @resized="onItemRendered">
+                                              @resized="onItemRendered"
+                                              @totop="onTotop">
+                                    <div slot="header" v-show="overflow" class="header">
+                                        <div class="spinner" v-show="!finished"></div>
+                                        <div class="finished" v-show="finished">No more data</div>
+                                    </div>
                                 </virtual-list>
                                 <div class="empty" v-show="!chat.messageLists.length">
                                     <div class="wrapper">
@@ -101,7 +106,7 @@
                         <v-contextmenu ref="contextmenu" @contextmenu="menuRightChange">
                             <v-contextmenu-item @click="userInfoVisible = true"><i class="el-icon-postcard"/> 查看资料</v-contextmenu-item>
                             <v-contextmenu-item divider></v-contextmenu-item>
-                            <v-contextmenu-item><i class="el-icon-share"/> 分享他的名片</v-contextmenu-item>
+                            <v-contextmenu-item @click="sendToMessage"><i class="el-icon-chat-line-square"/> 发送消息</v-contextmenu-item>
                         </v-contextmenu>
                     </el-card>
                 </el-col>
@@ -146,6 +151,7 @@
                 chat:{},
                 messageComponent: Item,
                 overflow: false,
+                finished:false,
                 visible:this.chatVisible,
                 targetUsers:{},
                 userInfoVisible:false,
@@ -189,11 +195,21 @@
                 this.userInfoVisible = false;
             },
             /**
+             * todo:发送消息
+             */
+            sendToMessage:function () {
+                this.sendUser(this.targetUsers,this.targetUsers.uid)
+            },
+            /**
              * todo:添加class
              * @param index
              */
             addItemClass (index) {
-                return this.userInfo.username === this.chat.messageLists[index].to_client_name ? '' : 'creator'
+                if (this.chat.messageLists[index].to_client_name === 'all') {
+                    return this.userInfo.username === this.chat.messageLists[index].from_client_name ? 'creator' : ''
+                } else {
+                    return this.userInfo.username === this.chat.messageLists[index].to_client_name ? '' : 'creator'
+                }
             },
             /**
              * todo:记录读取
@@ -211,7 +227,15 @@
                 }
             },
             /**
-             * TODO:workerMan-chat链接
+             * todo:向上滚动
+             */
+            onTotop:function () {
+                setTimeout(()=>{
+                    this.finished = true
+                },500)
+            },
+            /**
+             * todo:workerMan-chat链接
              * @param ws
              */
             connect:function(ws){
@@ -261,6 +285,12 @@
                             __this.setUsersLists();
                             __this.$refs.vsl.scrollToBottom()
                             console.log(data);
+                            break;
+                        //消息撤回/删除
+                        case 'srem':
+                        case 'recall':
+                            __this.removeMessageList(data);
+                            console.log(data)
                             break;
                         case 'logout':
                             console.log(data);
@@ -331,6 +361,7 @@
             setRoomID:function(room) {
                 if (this.chat.room_id !== room.id.toString()) {
                     this.showEmotion = false;
+                    this.finished = false;
                     this.chat.room_id = room.id.toString();
                     this.chat.title = room.name;
                     this.chat.desc = room.value;
@@ -369,6 +400,7 @@
              * @param client_id
              */
             sendUser:function(user,client_id) {
+                this.finished = false;
                 this.chat.to_client_name = user.client_name;
                 this.chat.to_client_id = client_id === '0' ? 'all' : client_id;
                 this.chat.from_client_id = user.uid;
@@ -522,6 +554,43 @@
                     timeout: 600000,
                 });
             },
+            /**
+             * todo:删除消息
+             */
+            removeMessageList:function (targetMessage) {
+                let i = 0
+                this.chat.messageLists.map((item,index)=>{
+                    if (this.compareJson(item,targetMessage)) {
+                        i = index;
+                    }
+                });
+                let __this = this,messageLists = [];
+                Object.keys(__this.chat.messageLists).forEach(function (message) {
+                    messageLists.push(__this.chat.messageLists[message]);
+                });
+                messageLists.splice(i,1);
+                this.chat.messageLists = messageLists;
+            },
+            /**
+             * todo:json字符串比较
+             * @param jsonA
+             * @param jsonB
+             * @param field
+             * @returns {boolean}
+             */
+            compareJson:function (jsonA,jsonB,field=['type']) {
+                let a = Object.keys(jsonA),b = Object.keys(jsonB);
+                if (a.length!== b.length) {
+                    return false;
+                }
+                let total = a.length,num = field.length;
+                for (let i in jsonA) {
+                    if (!field.includes(i) && jsonA[i] === jsonB[i]) {
+                        num++;
+                    }
+                }
+                return num === total;
+            },
         },
         /**
          * todo：生命周期
@@ -570,6 +639,23 @@
                     return false;
                 }
             }
+            //撤回消息
+            this.$on('recallMessage', (newMessage,oldMessage) => {
+                //消息推送
+                this.chat.messageLists.push(newMessage);
+                //消息撤回
+                newMessage.type = 'recall';
+                newMessage['recall_message'] = JSON.parse(JSON.stringify(oldMessage));
+                this.removeMessageList(oldMessage);
+                this.userInfo.websocketServer.send(JSON.stringify(newMessage));
+            })
+            //删除消息
+            this.$on('deleteMessage', (newMessage,oldMessage) => {
+                //删除消息
+                newMessage.type = 'srem';
+                this.removeMessageList(oldMessage);
+                this.userInfo.websocketServer.send(JSON.stringify(newMessage));
+            })
         },
     }
 </script>
@@ -677,7 +763,6 @@
 
     .header {
         padding: .5em;
-
         .finished {
             font-size: 14px;
             text-align: center;

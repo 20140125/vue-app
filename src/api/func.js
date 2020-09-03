@@ -219,6 +219,6 @@ const func = {
     str_shuffle:str_shuffle,
     set_password:set_password,
     get_scroll_top:get_scroll_top,
-    set_btn_status:set_btn_status
+    set_btn_status:set_btn_status,
 };
 module.exports = func;
