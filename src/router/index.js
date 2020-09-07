@@ -20,6 +20,7 @@ import OauthLists from '../components/oauth/lists'
 import ReqRuleLists from '../components/req_rule/lists'
 import AreaLists from '../components/area/lists'
 import PushList from '../components/system/push'
+import ChatLists from '../components/system/chat'
 import MarkDown from '../components/editor/markdown'
 import UEditor from '../components/editor/ueditor'
 import TimeLine from '../components/system/timeline'
@@ -57,6 +58,7 @@ export default new Router({
                 { path: 'database/index', name:'DatabaseLists',component:DatabaseLists,meta:{ mode:'',title:'数据表列表' } },
                 { path: 'area/index', name:'AreaLists',component:AreaLists,meta:{ mode:'china_area',title:'城市列表' } },
                 { path: 'push/index', name:'PushList',component:PushList,meta:{ mode:'push',title:'站内通知' }},
+                { path: 'chat/index', name:'ChatLists',component:ChatLists,meta:{ mode:'chat',title:'聊天记录' }},
                 { path: 'editor/markdown', name:'MarkDown',component:MarkDown,meta:{ mode:'push',title:'MarkDown' }},
                 { path: 'editor/quill', name:'UEditor',component:UEditor,meta:{ mode:'push',title:'UEditor' }},
                 { path: 'timeline/index', name:'TimeLine',component:TimeLine,meta:{ mode:'timeline',title:'时间线' }},

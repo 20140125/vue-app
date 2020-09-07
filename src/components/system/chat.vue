@@ -3,30 +3,51 @@
         <el-form :inline="true" style="margin-top: 10px">
         </el-form>
         <el-table :data="chatLists">
-            <el-table-column label="#" prop="id" width="100px"/>
-            <el-table-column label="发送者" prop="from_client_name"> </el-table-column>
-            <el-table-column label="用户头像">
-                <template slot-scope="scope">
-                    <el-avatar :src="scope.row.avatar_url"/>
+            <el-table-column type="expand">
+                <template slot-scope="props">
+                    <el-form label-position="left" inline class="demo-table-expand">
+                        <el-form-item label="发送方：">
+                            <span>{{ props.row.content['from_client_name'] }}</span>
+                        </el-form-item>
+                        <el-form-item label="接收ID：">
+                            <span>{{ props.row.content['to_client_id'] }}</span>
+                        </el-form-item>
+                        <el-form-item label="发送ID：">
+                            <span>{{ props.row.content['from_client_id'] }}</span>
+                        </el-form-item>
+                        <el-form-item label="接收方：">
+                            <span>{{ props.row.content['to_client_name'] }}</span>
+                        </el-form-item>
+                        <el-form-item label="用户头像：">
+                            <el-avatar :src="props.row.content['client_img']" :size="30" :alt="props.row.content['from_client_name'] "/>
+                        </el-form-item>
+                        <el-form-item label="消息类型：">
+                            <span>{{ props.row.content['msg_type'] }}</span>
+                        </el-form-item>
+                        <el-form-item label="发送内容：">
+                            <span v-html="unescape(props.row.content['content'])"></span>
+                        </el-form-item>
+                        <el-form-item label="发送时间：">
+                            <span>{{ props.row.content['time'] }}</span>
+                        </el-form-item>
+                    </el-form>
                 </template>
             </el-table-column>
-            <el-table-column label="接收者" prop="to_client_name"> </el-table-column>
-            <el-table-column label="消息体" width="300px" align="center">
-                <template slot-scope="scope">
-                    <div v-html="unescape(scope.row.content)" style="height: 80px"></div>
-                </template>
-            </el-table-column>
-            <el-table-column label="消息类型" prop="msg_type"> </el-table-column>
-            <el-table-column label="发送时间" prop="time"> </el-table-column>
+            <el-table-column label="发送者" prop="from_client_id"> </el-table-column>
+            <el-table-column label="接收者" prop="to_client_id"> </el-table-column>
             <el-table-column label="房间号" prop="room_id"> </el-table-column>
+            <el-table-column label="发送时间">
+                <template slot-scope="scope">
+                    <span v-html="scope.row.content['time']"/>
+                </template>
+            </el-table-column>
         </el-table>
         <div style="margin: 25px 0">
             <el-pagination
                     @size-change="sizeChange"
                     @current-change="currentChange"
-                    :page-sizes="[15, 30, 50, 100]"
                     :page-size="limit"
-                    layout="total, sizes, prev, pager, next, jumper"
+                    layout="total, prev, pager, next"
                     :total="total"
                     :current-page="page">
             </el-pagination>
@@ -47,7 +68,7 @@
             return {
                 chatLists:[],
                 page:1,
-                limit:15,
+                limit:10,
                 total:0,
 
                 title:'',
@@ -129,6 +150,17 @@
         }
     }
 </script>
-
 <style scoped>
+.demo-table-expand {
+    font-size: 0;
+}
+.demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+}
+.demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+}
 </style>

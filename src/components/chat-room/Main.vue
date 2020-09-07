@@ -18,7 +18,7 @@
                                               :data-key="'uid'"
                                               :data-sources="chat.messageLists"
                                               :data-component="messageComponent"
-                                              :estimate-size="100"
+                                              :estimate-size="1000"
                                               :item-class="'stream-item'"
                                               :item-class-add="addItemClass"
                                               @resized="onItemRendered"
@@ -85,7 +85,7 @@
                         </div>
                         <el-divider/>
                         <div style="margin-bottom: 10px">
-                            在线人数({{chat.total}}/{{chat.online}})
+                            在线人数({{chat.userTotal}}/{{chat.userOnline}})
                         </div>
                         <el-autocomplete placeholder="搜索" v-model="chat.users" clearable :fetch-suggestions="querySearch" @clear="clearSearch" style="width: 100%"/>
                         <div class="user-list">
@@ -136,7 +136,15 @@
             },
             dialogWidth :{
                 type:String,
-                default:()=>'50%',
+                default:()=>'50%'
+            },
+            currentPage:{
+                type:Number,
+                default:()=>1
+            },
+            sizeLimit:{
+                type:Number,
+                default:()=>19,
             }
         },
         name: "chatRoom",
@@ -221,7 +229,7 @@
                     return
                 }
                 if (this.$refs.vsl) {
-                    this.$refs.vsl.scrollToBottom()
+                    // this.$refs.vsl.scrollToBottom()
                     const vsl = this.$refs.vsl
                     if (vsl) {
                         this.overflow = vsl.getScrollSize() > vsl.getClientSize()
@@ -229,10 +237,28 @@
                 }
             },
             /**
-             * todo:向上滚动
+             * todo:向上滚动获取数据
              */
             onTotop:function () {
                 setTimeout(()=>{
+                    console.log(this.chat)
+                    if (this.chat.currentPage <= Math.ceil(this.chat.messageTotal/this.chat.sizeLimit)) {
+                        this.chat.currentPage++;
+                        //获取聊天记录
+                        let str = {
+                            type:'history',
+                            from_client_name:this.userInfo.username,
+                            from_client_id:this.userInfo.uuid,
+                            to_client_name:this.chat.to_client_name,
+                            to_client_id:this.chat.to_client_id,
+                            room_id:this.chat.to_client_name === 'all' ? this.chat.room_id : '',
+                            uid:this.userInfo.uuid,
+                            page:this.chat.currentPage,
+                            limit:this.chat.sizeLimit,
+                            source:'user',
+                        };
+                        this.userInfo.websocketServer.send(JSON.stringify(str));
+                    }
                     this.finished = true
                 },500)
             },
@@ -281,11 +307,19 @@
                             break;
                         //聊天记录
                         case 'history':
-                            __this.chat.messageLists = data.message;
+                            __this.chat.messageTotal = data.total;
                             __this.chat.client_list = data.client_list;
                             __this.chat.client_list_part = data.client_list;
+                            if (__this.chat.currentPage > 1) {
+                                __this.chat.messageLists = __this.chat.messageLists.concat(data.message);
+                            } else {
+                                __this.chat.messageLists = data.message;
+                                __this.$refs.vsl.scrollToBottom()
+                            }
+                            __this.chat.messageLists.sort(function (a,b){
+                                return a.time > b.time ? 1 : -1;
+                            })
                             __this.setUsersLists();
-                            __this.$refs.vsl.scrollToBottom()
                             console.log(data);
                             break;
                         //消息删除/消息撤回
@@ -337,8 +371,8 @@
             setUsersLists:function () {
                 //展示单个用户未读消息数
                 let unreadMessage = [];
-                this.chat.online = 0;
-                this.chat.total = 0;
+                this.chat.userOnline = 0;
+                this.chat.userTotal = 0;
                 for (let i in this.chat.client_list) {
                     if (this.userInfo.username === this.chat.client_list[i]['client_name']) {
                         unreadMessage = this.chat.client_list[i]['unread'];
@@ -346,9 +380,9 @@
                         this.$emit('setMsgCount',this.chat.msgCount);
                     }
                     if (this.chat.client_list[i]['online']) {
-                        this.chat.online ++ ;
+                        this.chat.userOnline ++ ;
                     }
-                    this.chat.total++;
+                    this.chat.userTotal++;
                 }
                 if (unreadMessage.length>0) {
                     for (let i in unreadMessage) {
@@ -371,6 +405,7 @@
                     this.chat.room_id = room.id.toString();
                     this.chat.title = room.name;
                     this.chat.desc = room.value;
+                    this.chat.currentPage = 1;
                     this.chat.img = 'https://cdn.pixabay.com/photo/2016/12/13/21/20/alien-1905155_960_720.png';
                     //加入房间
                     let login = {
@@ -386,7 +421,7 @@
                 }
                 //群聊时，接收方为所有用户
                 this.chat.to_client_id = 'all';
-                this.chat.to_client_name = 'all'
+                this.chat.to_client_name = 'all';
                 //获取聊天记录
                 let str = {
                     type:'history',
@@ -396,6 +431,8 @@
                     to_client_id:this.chat.to_client_id,
                     room_id:this.chat.to_client_name === 'all' ? this.chat.room_id : '',
                     uid:this.userInfo.uuid,
+                    page:this.chat.currentPage,
+                    limit:this.chat.sizeLimit,
                     source:'room',
                 };
                 this.userInfo.websocketServer.send(JSON.stringify(str));
@@ -419,6 +456,7 @@
                 this.chat.desc = user.centerInfo.desc;
                 this.chat.room_id = '';
                 user.total = 0;
+                this.chat.currentPage = 1;
                 //获取聊天记录
                 let str = {
                     type:'history',
@@ -428,6 +466,8 @@
                     to_client_id:this.chat.to_client_id,
                     room_id:this.chat.to_client_name === 'all' ? this.chat.room_id : '',
                     uid:this.userInfo.uuid,
+                    page:this.chat.currentPage,
+                    limit:this.chat.sizeLimit,
                     source:'user',
                 };
                 this.userInfo.websocketServer.send(JSON.stringify(str));
@@ -455,7 +495,7 @@
                 if (response && response.code === 200){
                     switch (this.chat.msg_type) {
                         case 'img':
-                            this.inputMsg+= "<img src='"+response.item.src+"' width='100px' height='100px' alt=''>";
+                            this.inputMsg+= "<img src='"+response.item.src+"' width='100px' height='100px' alt='"+this.chat.from_client_name+"'>";
                             break;
                         case 'video':
                             this.inputMsg+= "<video src='"+response.item.src+"' width='200px' height='200px' controls='controls'>";
@@ -621,8 +661,11 @@
                 messageLists:[],
                 msg_type:'text',
                 users:'',
-                total:0,
-                online:0
+                userTotal:0,
+                userOnline:0,
+                currentPage:this.currentPage,
+                sizeLimit:this.sizeLimit,
+                messageTotal:0
             };
             //浏览器消息推送
             try {
