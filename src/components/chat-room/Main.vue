@@ -18,7 +18,7 @@
                                               :data-key="'uid'"
                                               :data-sources="chat.messageLists"
                                               :data-component="messageComponent"
-                                              :estimate-size="1000"
+                                              :estimate-size="70"
                                               :item-class="'stream-item'"
                                               :item-class-add="addItemClass"
                                               @resized="onItemRendered"
@@ -241,7 +241,6 @@
              */
             onTotop:function () {
                 setTimeout(()=>{
-                    console.log(this.chat)
                     if (this.chat.currentPage <= Math.ceil(this.chat.messageTotal/this.chat.sizeLimit)) {
                         this.chat.currentPage++;
                         //获取聊天记录
