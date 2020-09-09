@@ -1,7 +1,6 @@
 <template>
     <router-view :class="ClassName"/>
 </template>
-
 <script>
     export default {
         name: 'App',
