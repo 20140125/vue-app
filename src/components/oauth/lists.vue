@@ -1,5 +1,5 @@
 <template>
-    <div v-loading="loading" :element-loading-text="loadingText" id="oauth">
+    <div v-loading="loading" :element-loading-text="loadingText">
         <el-form :inline="true" style="margin-top: 10px">
             <el-form-item style="float:right;">
                 <el-button icon="el-icon-plus" type="primary" size="medium" plain @click="oauthLogin">账号绑定</el-button>
@@ -69,7 +69,7 @@
         </el-dialog>
         <!---弹框-->
         <!---账号授权绑定-->
-        <el-dialog :visible.sync = 'oauthVisible' title="账户授权登录" :destroy-on-close="destroy_on_close" :center="center" :width="dialogWidth">
+        <el-dialog :visible.sync = 'oauthVisible' title="账户授权登录" :destroy-on-close="destroy_on_close" :center="center" :width="dialogWidth" id="oauth">
             <el-button plain v-for="(oauth,index) in oauthConfig" type="primary" :key="index" v-if="oauth.status === 1" @click="goto(oauth.name)">{{oauth.name.toUpperCase()}}</el-button>
         </el-dialog>
         <!---账号授权绑定-->
@@ -268,7 +268,7 @@
 
 <style lang="less">
 #oauth{
-    .el-dialog__body{
+    .el-dialog__body  .el-button{
         text-align: center!important;
     }
 }
