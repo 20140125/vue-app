@@ -1,5 +1,5 @@
 <template>
-    <div v-loading="loading" :element-loading-text="loadingText">
+    <div v-loading="loading" :element-loading-text="loadingText" id="oauth">
         <el-form :inline="true" style="margin-top: 10px">
             <el-form-item style="float:right;">
                 <el-button icon="el-icon-plus" type="primary" size="medium" plain @click="oauthLogin">账号绑定</el-button>
@@ -149,7 +149,7 @@
              */
             oauthLogin:function(){
                 this.oauthVisible = true;
-                this.getOauthConfig('oauth');
+                this.getOauthConfig('Oauth');
             },
             /**
              * TODO:页面跳转
@@ -266,6 +266,10 @@
     }
 </script>
 
-<style scoped>
-
+<style lang="less">
+#oauth{
+    .el-dialog__body{
+        text-align: center!important;
+    }
+}
 </style>
