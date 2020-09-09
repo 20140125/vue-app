@@ -42,12 +42,12 @@
         </div>
         <!--table 分页-->
         <!---弹框-->
-        <el-dialog :title="title" :visible.sync="syncVisible" :width="dialogWidth" :modal="modal"  :center="center">
-            <el-form :label-width="labelWidth" :model="roleModel" :ref="reFrom" :rules="rules">
-                <el-form-item label="角色名称" prop="role_name">
+        <el-dialog :title="title" :visible.sync="syncVisible" :width="dialogWidth" :center="true">
+            <el-form :label-width="labelWidth" :model="roleModel" :ref="reFrom" label-position="left">
+                <el-form-item label="角色名称：" prop="role_name" :rules="[{ required:true,message:'角色名称不得为空',trigger:'blur' }]">
                     <el-input v-model="roleModel.role_name" placeholder="角色名称"/>
                 </el-form-item>
-                <el-form-item label="权限列表" prop="auth_ids">
+                <el-form-item label="权限列表：" required prop="auth_ids">
                     <el-transfer
                         :titles="['所有', '拥有']"
                         :button-texts="['移除', '添加']"
@@ -57,7 +57,7 @@
                         @change="handleChange">
                     </el-transfer>
                 </el-form-item>
-                <el-form-item label="状态" prop="status" v-if="act === 'add'">
+                <el-form-item required label="状态：" prop="status" v-if="act === 'add'">
                     <el-radio-group v-model="roleModel.status" size="small">
                         <el-radio-button label="0">关闭</el-radio-button>
                         <el-radio-button label="1">开启</el-radio-button>
@@ -94,32 +94,19 @@
                 limit:15,
                 page:1,
                 total:0,
-
                 title:'',
                 syncVisible:false, //是否显示弹框
-                modal:true, //遮盖层是否需要
-                labelWidth:'80px',
-                center:true,
-
+                labelWidth:'100px',
                 url:'',
                 refs:this.$refs,
                 reFrom:'role',
                 act:'',
                 roleModel:{},
-
-                ids:[],
-                urls:[],
-
                 cgi:{
                     insert:$url.roleSave,
                     update:$url.roleUpdate,
                     remove:$url.roleDelete,
                     status:$url.roleUpdate
-                },
-                rules:{
-                    role_name:[{ required:true,message:'角色名称不得为空',trigger:'blur' }],
-                    ids:[{ required:true,message:'权限ID不得为空',trigger:'blur' }],
-                    urls:[{ required:true,message:'权限地址不得为空',trigger:'blur' }]
                 },
                 //细化权限按钮
                 btn:{},
@@ -185,22 +172,21 @@
              * @param movedKeys  发生移动的数据 key 数组
              */
             handleChange(value, direction, movedKeys) {
-                let __this = this;
                 switch (direction) {
                   //删除
                     case 'left':
-                        movedKeys.forEach(function (item,index) {
-                            __this.ids.splice(__this.ids.indexOf(item),1);
+                        movedKeys.map((item) => {
+                            this.defaultChecked.splice(this.defaultChecked.indexOf(item),1);
                         });
                         break;
                   //添加
                     case 'right':
-                        movedKeys.forEach(function (item,index) {
-                            __this.ids.push(parseInt(item));
+                        movedKeys.map((item) => {
+                            this.defaultChecked.push(parseInt(item));
                         });
                         break;
                 }
-                __this.roleModel.auth_ids = __this.ids;
+                this.roleModel.auth_ids = this.defaultChecked;
             },
             /**
              * todo：角色保存
@@ -210,13 +196,11 @@
                 this.syncVisible = true;
                 this.title = '修改角色';
                 this.url = this.cgi.update;
-                this.ids = JSON.parse(item.auth_ids);
-                this.urls = JSON.parse(item.auth_url);
                 this.defaultChecked = []; //需要重置角色拥有的权限
                 this.act = 'update';
-                for (let i in this.ids){
-                    this.defaultChecked.push(parseInt(this.ids[i]));
-                }
+                JSON.parse(item.auth_ids).map(item=>{
+                    this.defaultChecked.push(parseInt(item));
+                })
                 this.roleModel = item;
                 this.roleModel.auth_ids = this.defaultChecked;
             },
