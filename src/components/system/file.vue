@@ -72,7 +72,7 @@
         </el-dialog>
         <!--权限框-->
         <!--文件上传-->
-        <el-dialog :visible.sync="fileSyncVisible" :width="dialogWidth" :modal="modal" title="文件上传" :center="center">
+        <el-dialog :visible.sync="fileSyncVisible" :width="dialogWidth" :modal="true" title="文件上传" :center="true">
             <el-button style="margin-left: 10px;margin-bottom: 20px" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
             <el-upload ref="upload"
                        :data="fileData"

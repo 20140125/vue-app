@@ -32,7 +32,7 @@
         <!--table 表格-->
 
         <!---弹框-->
-        <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal" :center="center" :width="dialogWidth">
+        <el-dialog :title="title" :visible.sync="syncVisible" :modal="true" :center="true" :width="dialogWidth">
             <el-form :label-width="labelWidth" :model="authModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="权限名称" prop="name">
                     <el-input v-model="authModel.name" placeholder="权限名称"/>
@@ -78,8 +78,6 @@
                 authLevel:[],
                 search:'',
                 syncVisible:false, //是否显示弹框
-                modal:true, //遮盖层是否需要
-                center:true,
                 labelWidth:'80px',
                 title:'',
                 loading:true,
@@ -91,12 +89,7 @@
                 //权限默认数据
                 authModel:{},
                 //URL
-                cgi:{
-                    insert:$url.authSave,
-                    update:$url.authUpdate,
-                    remove:$url.authDelete,
-                    status:$url.authUpdate,
-                },
+                cgi:{ insert:$url.authSave, update:$url.authUpdate, remove:$url.authDelete, status:$url.authUpdate },
                 //表单验证规则
                 rules:{
                     name:[ { required:true,message:'权限名称不得为空',trigger:'blur' } ],

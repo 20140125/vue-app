@@ -6,7 +6,7 @@
                   lazy
                   :load="load">
             <el-table-column label="地区名称" prop="name"/>
-            <el-table-column label="天气" prop="info" :show-overflow-tooltip="true"></el-table-column>
+            <el-table-column label="天气" prop="info" :show-overflow-tooltip="true"/>
             <el-table-column align="right">
                 <template slot="header" slot-scope="scope">
                     <el-input v-model="search" placeholder="输入关键词查询"/>

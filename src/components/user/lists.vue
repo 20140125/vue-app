@@ -165,7 +165,7 @@
              * @param limit
              */
             getUserLists:function (page,limit) {
-                let params = {  page:page, limit:limit ,level:'1'};
+                let params = {  page:page, limit:limit };
                 apiLists.UserLists(params).then(response=>{
                     if (response && response.data.code===200){
                         this.userLists = response.data.item.data;

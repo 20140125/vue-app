@@ -27,7 +27,7 @@
         <!--右键菜单-->
         <v-contextmenu ref="contextmenu" theme="bright" @contextmenu="menuRightChange" v-if="source.from_client_name === userInfo.username && showContextMenu">
             <v-contextmenu-item @click="setMessages('recall')">消息撤回</v-contextmenu-item>
-            <v-contextmenu-item divider></v-contextmenu-item>
+            <v-contextmenu-item divider/>
             <v-contextmenu-item @click="setMessages('delete')">消息删除</v-contextmenu-item>
         </v-contextmenu>
         <v-contextmenu ref="contextmenu" v-else/>
