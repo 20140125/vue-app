@@ -4,7 +4,7 @@
         <el-row :span="24">
             <el-col :span="7"  v-for="(image,index) in filtersListsPart" :key="index" :offset="1" style="margin-bottom: 10px;margin-top: 10px">
                 <el-card :body-style="{ padding: '0px',border: 'none' }" shadow="hover">
-                    <el-image lazy fit="fill" :title="image.label"  :alt="image.label"  :src="image.url" class="image" :preview-src-list="[image.url]"/>
+                    <el-image lazy fit="contain" :title="image.label"  :alt="image.label"  :src="image.url" class="image" :preview-src-list="[image.url]"/>
                     <div style="padding: 14px;">
                         <span v-html="image.label"/>
                         <div class="bottom clearfix">

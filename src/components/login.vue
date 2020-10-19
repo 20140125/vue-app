@@ -22,7 +22,7 @@
                                         <template slot="prepend"><i class="el-icon-picture"/></template>
                                     </el-input>
                                     <div class="verify_code" @click="refreshCode">
-                                        <s-identify :identify-code="verifyCode"></s-identify>
+                                        <s-identify :identify-code="verifyCode"/>
                                     </div>
                                 </el-form-item>
                             </el-form>

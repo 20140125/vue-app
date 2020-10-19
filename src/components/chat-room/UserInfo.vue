@@ -1,7 +1,6 @@
 <template>
     <div :id="id">
-        <el-dialog :visible.sync="visible" :title="userInfo.client_name" :width="userInfoDialogWidth" center id="userInfo" @close="closeDialog" :show-close="false"
-                   :style="transformStyle">
+        <el-dialog :visible.sync="visible" :title="userInfo.client_name" :width="userInfoDialogWidth" center id="userInfo" @close="closeDialog" :show-close="false" :style="transformStyle">
             <div slot="title" style="display: flex;align-items: center;position: relative;">
                 <el-avatar :src="userInfo.client_img" :size="50" fit="fill" :alt="userInfo.client_name"/>
                 <div>
