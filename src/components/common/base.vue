@@ -59,19 +59,12 @@
                                       @close="closeNotice(item)"/>
                         </el-carousel-item>
                     </el-carousel>
-                    <el-tabs type="border-card" v-contextmenu:contextmenu closable lazy v-model="activeName" @tab-click="goto" @tab-remove="remove">
+                    <el-tabs type="border-card" closable lazy v-model="activeName" @tab-click="goto" @tab-remove="remove">
                         <el-tab-pane v-for="item in tabs" :tab="item" :label="item.label" :key="item.name" :name="item.name"/>
                         <el-card shadow="always">
                             <router-view/>
                         </el-card>
                     </el-tabs>
-                    <!--鼠标右键-->
-                    <v-contextmenu ref="contextmenu">
-                        <v-contextmenu-item  @click="closeTabs('other')"><i class="el-icon-circle-close"/> 关闭其他窗口</v-contextmenu-item>
-                        <v-contextmenu-item divider></v-contextmenu-item>
-                        <v-contextmenu-item @click="closeTabs('all')"><i class="el-icon-circle-close"/> 关闭所有窗口</v-contextmenu-item>
-                    </v-contextmenu>
-                    <!--鼠标右键-->
                 </el-main>
                 <el-footer>
                     <el-link href="mailto:fl140125@gmail.com">fl140125@gmail.com</el-link>
@@ -119,8 +112,7 @@
                 noticeArr:[],
                 mainStyle:{margin:'60px 0 60px 200px'},
                 innerWidth:window.innerWidth,
-                chatDialogWidth:'65%',
-                tabsModel:{},
+                chatDialogWidth:'65%'
             }
         },
         components:{
@@ -138,34 +130,6 @@
              */
             setMsgCount:function (msgCount) {
                 this.chat.msgCount = msgCount;
-            },
-            /**
-             * todo:关闭窗口
-             */
-            closeTabs:function (item) {
-                this.tabsModel.label = this.$route.meta.title;
-                this.tabsModel.name = this.$route.path;
-                switch (item) {
-                    case 'other':
-                        this.tabs.forEach((tab) => {
-                            if (tab.name !== this.tabsModel.name) {
-                                this.deleteTabs(tab.name);
-                                this.activeName = this.tabsModel.name;
-                                this.$router.push({path:this.tabsModel.name});
-                                this.addCurrTabs(this.tabsModel);
-                            }
-                        });
-                        break;
-                    case 'all':
-                        let userParams = {label:'欢迎页',name:'/admin/index'};
-                        this.tabs.forEach((tab) => {
-                            this.deleteTabs(tab.name);
-                        });
-                        this.activeName = userParams.name;
-                        this.$router.push({path:userParams.name});
-                        this.addCurrTabs(userParams);
-                        break;
-                }
             },
             /**
              * TODO：设置tabs
