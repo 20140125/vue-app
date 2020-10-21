@@ -19,7 +19,7 @@
                 //检索字段
                 searchOption:{},
                 //请求参数
-                params:{ table:'os_users',lan:'en' },
+                params:{ table:'os_users',lan:'zh' },
             }
         },
         methods:{

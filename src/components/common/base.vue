@@ -8,7 +8,7 @@
                 <el-submenu index="2" style="float: right">
                     <template slot="title">
                         <el-avatar :src="userInfo.avatar_url" :alt="userInfo.username" :size="35"/>
-                        <span v-html="userInfo.username" style="margin-left: 10px"/>
+                        <span v-html="userInfo.username" style="margin-left: 10px"></span>
                     </template>
                     <el-menu-item index="2-1"><i class="el-icon-user-solid"> </i> 个人中心</el-menu-item>
                     <el-menu-item index="2-2"><i class="el-icon-upload2"> </i> 退出系统</el-menu-item>

@@ -10,12 +10,7 @@
             <el-table-column label="管理员" prop="username" align="center"/>
             <el-table-column label="头像" align="center">
                 <template slot-scope="scope">
-                    <el-image :src="scope.row.avatar_url"
-                              style="width: 50px; height: 50px"
-                              fit="cover"
-                              :title="scope.row.username"
-                              :preview-src-list="[scope.row.avatar_url]">
-                    </el-image>
+                    <el-image :src="scope.row.avatar_url" style="width: 50px; height: 50px" fit="fill" :title="scope.row.username" :preview-src-list="[scope.row.avatar_url]"></el-image>
                 </template>
             </el-table-column>
             <el-table-column label="邮箱" prop="email" align="center" :show-tooltip-when-overflow="true"/>
@@ -52,29 +47,28 @@
         <!--table 分页-->
         <!---弹框-->
         <el-dialog :title="title" :width="dialogWidth" :visible.sync="syncVisible" :modal="modal"  :center="center">
-            <el-form :label-width="labelWidth" :model="userModel" :ref="reFrom" :rules="rules">
-                <el-form-item label="管理员" prop="username">
+            <el-form :label-width="labelWidth" :model="userModel" :ref="reFrom" label-width="100px" :rules="rules" label-position="left">
+                <el-form-item label="管理员：" prop="username">
                     <el-input v-model="userModel.username" :readonly="act === 'edit'" placeholder="管理员名称"/>
                 </el-form-item>
-                <el-form-item label="用户头像" prop="avatar_url">
-                    <Upload :avatar_url="userModel.avatar_url" :username="userModel.username"
-                            @uploadSuccess="uploadSuccess"/>
+                <el-form-item label="用户头像：" prop="avatar_url" id="avatar" style="display: flex;align-items: center;position: relative;" required>
+                    <Upload :avatar_url="userModel.avatar_url" :username="userModel.username" @uploadSuccess="uploadSuccess"/>
                 </el-form-item>
-                <el-form-item label="密码" prop="password">
+                <el-form-item label="密码：" prop="password">
                     <el-input v-model="userModel.password" show-password type="password" placeholder="密码"/>
                 </el-form-item>
-                <el-form-item label="邮箱" prop="email">
+                <el-form-item label="邮箱：" prop="email">
                     <el-input v-model="userModel.email" type="email" placeholder="邮箱"/>
                 </el-form-item>
-                <el-form-item label="手机号" prop="phone_number" v-if="act === 'update'">
+                <el-form-item label="手机号：" prop="phone_number" v-if="act === 'update'">
                     <el-input v-model="userModel.phone_number" type="email" placeholder="手机号"/>
                 </el-form-item>
-                <el-form-item label="角色" prop="role_id" v-if="userInfo.role_id === md5('1')">
+                <el-form-item label="角色：" prop="role_id" v-if="userInfo.role_id === md5('1')">
                     <el-select v-model="userModel.role_id" style="width: 100%">
                         <el-option v-for="(role,index) in roleLists" :key="index" :label="role.role_name" :value="role.id"/>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="显示状态" prop="status" v-if="act === 'add'">
+                <el-form-item label="显示状态：" prop="status" v-if="act === 'add'">
                     <el-radio-group  v-model="userModel.status" size="small">
                         <el-radio-button label="2">关闭</el-radio-button>
                         <el-radio-button label="1">开启</el-radio-button>
@@ -222,6 +216,6 @@
     }
 </script>
 
-<style scoped>
+<style>
 
 </style>

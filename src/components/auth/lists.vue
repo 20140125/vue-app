@@ -43,7 +43,7 @@
                 <el-form-item label="权限上级" prop="pid">
                     <el-select placeholder="权限上级" filterable style="width: 100%" v-model="authModel.pid">
                         <el-option label="默认权限" value="0" v-if="authModel.pid === '0'" selected/>
-                        <el-option v-for="(item,index) in authLevel" :key="index" :disabled="item.id === authModel.id" :label="setAuthName(item)" :value="item.id.toString()"/>
+                        <el-option v-for="(item,index) in authLevel" :key="index" :disabled="item.id === authModel.id || item.pid === authModel.id" :label="setAuthName(item)" :value="item.id.toString()"/>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="权限状态" prop="status" v-if="act === 'add'">
@@ -125,6 +125,9 @@
                     }
                 });
             },
+            /**
+             * todo:远程检索数据
+             */
             load:function (tree, treeNode, resolve) {
                 apiLists.AuthLists({id:tree.id}).then(response=>{
                     if (response && response.data.code === 200) {

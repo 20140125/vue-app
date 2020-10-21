@@ -19,16 +19,24 @@
                 </el-select>
             </el-form-item>
             <el-form-item>
-                <el-button icon="el-icon-search" type="primary" plain="plain" @click="search">Search</el-button>
-                <el-button icon="el-icon-download" type="primary" plain="plain" @click="ExcelExport">Excel Export To Server</el-button>
+                <el-button icon="el-icon-search" type="primary" size="medium" plain="plain" @click="search">Search</el-button>
+                <el-button icon="el-icon-download" type="primary" size="medium" plain="plain" @click="ExcelExport">Excel Export To Server</el-button>
+                <el-dropdown split-button trigger="click" type="primary" size="medium" @command="handleCommand">
+                    {{searchOption.lan === 'zh' ? '中文' : 'English' }}
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item command="zh">中文</el-dropdown-item>
+                        <el-dropdown-item command="en">English</el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
             </el-form-item>
         </el-form>
         <el-table :data="tableData" :empty-text="empty" border>
-            <el-table-column v-for="(column,index) in columns" show-overflow-tooltip :label="column.label" :prop="column.prop" :key="index"/>
-            <el-table-column align="right" label="Action">
+            <el-table-column v-for="(column,index) in columns" align="center" show-overflow-tooltip :label="column.label" :prop="column.prop" :key="index"/>
+            <el-table-column align="center"  fixed="right" label="Action" width="200px">
                 <template slot-scope="scope">
+                    <el-button size="mini" plain type="primary" icon="el-icon-edit">{{searchOption.lan === 'zh' ? '修改' : 'Edit'}}</el-button>
                     <el-tooltip content="look before you leap" placement="top">
-                        <el-button plain type="danger" icon="el-icon-delete" size="mini" @click="removeResource(scope.row,scope.$index)">Delete</el-button>
+                        <el-button plain type="danger" icon="el-icon-delete" size="mini" @click="removeResource(scope.row,scope.$index)">{{searchOption.lan === 'zh' ? '删除' : 'Delete'}}</el-button>
                     </el-tooltip>
                 </template>
             </el-table-column>
@@ -83,10 +91,20 @@
         },
         methods:{
             ...mapActions(['saveSystemLog']),
+            /**
+             * todo:数据检索
+             */
             search:function () {
                 for (let i in this.searchOptions) {
                     this.searchOption[this.searchOptions[i].prop] = this.searchOptions[i].model
                 }
+                this.$emit("search",this.searchOption);
+            },
+            /**
+             * todo:语言切换
+             */
+            handleCommand:function (item) {
+                this.searchOption.lan = item;
                 this.$emit("search",this.searchOption);
             },
             /**

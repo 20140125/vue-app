@@ -10,11 +10,7 @@
             <el-table-column label="用户名" prop="username" align="center"/>
             <el-table-column label="头像" align="center">
                 <template slot-scope="scope">
-                    <el-image :src="scope.row.avatar_url"
-                              style="width: 50px; height: 50px"
-                              fit="cover"
-                              :title="scope.row.username"
-                              :preview-src-list="[scope.row.avatar_url]">
+                    <el-image :src="scope.row.avatar_url" style="width: 50px; height: 50px" fit="fill" :title="scope.row.username" :preview-src-list="[scope.row.avatar_url]">
                     </el-image>
                 </template>
             </el-table-column>
@@ -47,19 +43,19 @@
         <!--table 分页-->
         <!---弹框-->
         <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal" :width="dialogWidth" :center="center" :destroy-on-close="destroy_on_close">
-            <el-form :label-width="labelWidth" :model="OauthModel" :ref="reFrom" :rules="rules">
-                <el-form-item label="用户名称" prop="username">
+            <el-form :label-width="labelWidth" :model="OauthModel" label-position="left" label-width="100px" :ref="reFrom" :rules="rules">
+                <el-form-item label="用户名称：" prop="username">
                     <el-input v-model="OauthModel.username"/>
                 </el-form-item>
-                <el-form-item label="用户头像" prop="avatar_url">
+                <el-form-item label="用户头像：" prop="avatar_url" id="avatar" style="display: flex;align-items: center;position: relative;">
                     <Upload :avatar_url="OauthModel.avatar_url" :username="OauthModel.username" @uploadSuccess="uploadSuccess"/>
                 </el-form-item>
-                <el-form-item label="邮箱账号" prop="email">
-                    <el-input v-model="OauthModel.email" ref="bindEmail">
+                <el-form-item label="邮箱账号：" prop="email">
+                    <el-input v-model="OauthModel.email">
                         <el-button slot="append" @click="sendMail(OauthModel)" icon="el-icon-edit">绑定邮箱</el-button>
                     </el-input>
                 </el-form-item>
-                <el-form-item label="验证码" prop="code" v-if="showCode">
+                <el-form-item label="验证码：" prop="code" v-if="showCode">
                     <el-input v-model.number="OauthModel.code" maxlength="8" @blur="checkCode(OauthModel)"/>
                 </el-form-item>
             </el-form>

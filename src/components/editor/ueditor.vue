@@ -1,5 +1,6 @@
 <template>
     <quill-editor v-model="messages"
+                  id="quill"
                   ref="myQuillEditor"
                   :options="editorOption"
                   @blur="onEditorBlur($event)"
@@ -36,4 +37,7 @@
     }
 </script>
 <style>
+#quill .ql-tooltip{
+    left: 40% !important;
+}
 </style>

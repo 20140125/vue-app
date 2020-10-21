@@ -60,7 +60,7 @@ export default new Router({
                 { path: 'push/index', name:'PushList',component:PushList,meta:{ mode:'push',title:'站内通知' }},
                 { path: 'chat/index', name:'ChatLists',component:ChatLists,meta:{ mode:'chat',title:'聊天记录' }},
                 { path: 'editor/markdown', name:'MarkDown',component:MarkDown,meta:{ mode:'push',title:'MarkDown' }},
-                { path: 'editor/quill', name:'UEditor',component:UEditor,meta:{ mode:'push',title:'UEditor' }},
+                { path: 'editor/quill', name:'UEditor',component:UEditor,meta:{ mode:'push',title:'Quill' }},
                 { path: 'timeline/index', name:'TimeLine',component:TimeLine,meta:{ mode:'timeline',title:'时间线' }},
                 { path: 'example/table', name: 'TableExample', component: TableExample,meta:{ mode:'',title:'表格组件' } },
                 { path: 'example/form', name: 'FormExample', component: FormExample,meta:{ mode:'',title:'表单组件' } },

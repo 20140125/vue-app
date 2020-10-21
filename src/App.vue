@@ -44,6 +44,9 @@
         -moz-osx-font-smoothing: grayscale;
         color: #2c3e50;
     }
+    #avatar .el-form-item__content {
+        margin-left: 0!important;
+    }
     .CodeMirror {
         border: 1px solid #eee;
         min-height: 300px;
