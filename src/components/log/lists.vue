@@ -2,8 +2,8 @@
     <div v-loading="loading" :element-loading-text="loadingText">
         <el-table :data="logLists.filter(data=>(!search || data.username.toLowerCase().includes(search.toLowerCase())
         || data.ip_address.includes(search.toLowerCase()) || data.log.includes(search.toLowerCase()) ))">
-            <el-table-column label="#" prop="id" sortable width="100px"/>
-            <el-table-column label="执行人" prop="username" sortable width="150px"/>
+            <el-table-column label="#" prop="id" sortable width="100px"></el-table-column>
+            <el-table-column label="执行人" prop="username" sortable width="150px"></el-table-column>
             <el-table-column label="日志信息" :show-overflow-tooltip="true">
                 <template slot-scope="scope">
                     <el-link type="success" :href="scope.row.url" target="_blank">[{{scope.row.url}}]</el-link>　{{scope.row.log}}　
@@ -14,14 +14,13 @@
                     {{scope.row.local}}【{{scope.row.ip_address}}】
                 </template>
             </el-table-column>
-            <el-table-column label="创建时间" sortable prop="created_at" width="200px"/>
+            <el-table-column label="创建时间" sortable prop="created_at" width="200px"></el-table-column>
             <el-table-column label="操作" align="right" width="200px">
                 <template slot="header" slot-scope="scope">
-                    <el-input v-model="search" placeholder="请输入关键字查询"/>
+                    <el-input v-model="search" placeholder="请输入关键字查询"></el-input>
                 </template>
                 <template slot-scope="scope">
-                    <Delete v-if="btn.del" :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="logLists"
-                            v-on:success="success"/>
+                    <Delete v-if="btn.del" :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="logLists" v-on:success="success"></Delete>
                 </template>
             </el-table-column>
         </el-table>

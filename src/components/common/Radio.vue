@@ -13,8 +13,14 @@
     export default {
         name: "Radio",
         props:{
-            item:Object,
-            url:String,
+            item:{
+                type:Object,
+                default:()=>{}
+            },
+            url:{
+                type:String,
+                default:()=>''
+            },
         },
         data(){
             return {

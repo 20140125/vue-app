@@ -2,7 +2,7 @@
     <el-upload :action="uploadUrl"
                :data="fileData"
                :headers="headers"
-               :show-file-list="false"
+               :show-file-list="showFile"
                :index="index"
                :on-success="uploadSuccess"
                :before-upload="beforeUpload">
@@ -31,6 +31,14 @@
             index:{
                 type:[Number,String],
                 default:()=>1
+            },
+            showFile:{
+                type:Boolean,
+                default:()=>false
+            },
+            sizeLimit:{
+                type:Number,
+                default:()=>2
             }
         },
         data(){
@@ -64,7 +72,7 @@
                     this.$message({type:'warning',message:'upload image format error'});
                     return false;
                 }
-                if (file.size>2*1024*1024) {
+                if (file.size>this.sizeLimit*1024*1024) {
                     this.$message({type:'warning',message:'upload image size error'});
                     return false;
                 }

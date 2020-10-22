@@ -11,10 +11,22 @@
     export default {
         name: "Submit",
         props:{
-            reFrom:String,
-            model:Object,
-            url:String,
-            refs:Object
+            reFrom:{
+                type:String,
+                default:()=>''
+            },
+            model:{
+                type:Object,
+                default:()=>{}
+            },
+            url:{
+                type:String,
+                default:()=>''
+            },
+            refs:{
+                type:Object,
+                default:()=>{}
+            },
         },
         data(){
             return {

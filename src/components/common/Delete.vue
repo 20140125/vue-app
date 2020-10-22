@@ -10,10 +10,22 @@
     export default {
         name: "Delete",
         props:{
-            item:Object,
-            url:String,
-            index:Number,
-            Lists:Array,
+            item:{
+                type:Object,
+                default:()=>{}
+            },
+            url:{
+                type:String,
+                default:()=>''
+            },
+            index:{
+                type:Number,
+                default:()=>0
+            },
+            Lists:{
+                type:Array,
+                default:()=>[]
+            },
         },
         data(){
             return {
