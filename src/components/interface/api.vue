@@ -87,20 +87,22 @@
             <!--接口详情-->
         </el-row>
         <!--右键弹框-->
-        <el-menu v-show="menuVisible" id="menu" class="menu" style="border-bottom: solid 1px #393d49" background-color="#393d49" text-color="#cccccc" mode="horizontal" active-text-color="#ffd04b">
-            <el-menu-item v-show="btn.add" @click="addCategory"><i class="el-icon-circle-plus-outline"/>添 加</el-menu-item>
-            <el-menu-item v-show="btn.edit" @click="updateCategory"><i class="el-icon-edit-outline"/>修 改</el-menu-item>
-            <el-menu-item v-show="btn.del" @click="deleteCategory"><i class="el-icon-delete-solid"/>删 除</el-menu-item>
-        </el-menu>
+        <div v-show="menuVisible" style="z-index:100">
+            <el-menu id="menu" class="menu" style="border-bottom: solid 1px #393d49" background-color="#393d49" text-color="#cccccc" mode="horizontal" active-text-color="#ffd04b">
+                <el-menu-item v-show="btn.add" @click="addCategory"><i class="el-icon-circle-plus-outline"/>添 加</el-menu-item>
+                <el-menu-item v-show="btn.edit" @click="updateCategory"><i class="el-icon-edit-outline"/>修 改</el-menu-item>
+                <el-menu-item v-show="btn.del" @click="deleteCategory"><i class="el-icon-delete-solid"/>删 除</el-menu-item>
+            </el-menu>
+        </div>
         <!--右键弹框-->
         <!---接口分类弹框-->
         <el-dialog :title="title" :visible.sync="syncVisible" :modal="true"  :center="true" :width="dialogWidth">
             <el-form :label-width="labelWidth" :model="categoryModel" :ref="reFrom" :rules="rules">
-                <el-form-item label="接口名称" prop="name" required>
-                    <el-input v-model="categoryModel.name" placeholder="分类名称"/>
+                <el-form-item label="接口名称" prop="name" :rules="[{required:true,message:'请输入接口名称',trigger:'blur'}]">
+                    <el-input v-model="categoryModel.name" placeholder="接口名称"/>
                 </el-form-item>
-                <el-form-item label="接口上级" prop="pid">
-                    <el-select placeholder="接口上级" v-model="categoryModel.pid" style="width: 100%">
+                <el-form-item label="权限名称" prop="pid" :rules="[{required:true,message:'请选择权限名称',trigger:'blur'}]">
+                    <el-select placeholder="权限名称" v-model="categoryModel.pid" style="width: 100%" :disabled="reFrom === 'update'">
                         <el-option label="默认权限" value="0" v-if="categoryModel.pid === '0'" selected/>
                         <el-option v-for="(category,index) in apiCategory" :key="index" :label="setName(category)" :value="category.id"/>
                     </el-select>
@@ -139,7 +141,7 @@
                 loadingText:'玩命加载中。。。',
                 url:'',
                 refs:this.$refs,
-                reFrom:'category',
+                reFrom:'created',
                 //接口名称
                 apiName:'',
                 //右键功能显示与否
@@ -267,6 +269,7 @@
             addCategory:function () {
                 this.title='添加接口';
                 this.syncVisible = true;
+                this.reFrom = 'created'
                 this.url = this.cgi.categoryInsert;
                 this.categoryModel = {name:'', pid:this.categoryModel.id === undefined ? '0':this.categoryModel.id, path:'1', level:1};
             },
@@ -276,6 +279,7 @@
             updateCategory:function () {
                 this.title = this.categoryModel.name;
                 this.syncVisible = true;
+                this.reFrom = 'update'
                 this.url = this.cgi.categoryUpdate;
             },
             /**

@@ -215,11 +215,7 @@
                 //编辑器显示与否
                 showIdea:true,
                 //地址
-                cgi:{
-                    update:$url.fileUpdate,
-                    chmod:$url.fileChmod,
-                    uploadUrl:process.env.API_ROOT+$url.fileUpload.replace('/','')
-                },
+                cgi:{ update:$url.fileUpdate, chmod:$url.fileChmod, uploadUrl:process.env.API_ROOT+$url.fileUpload.replace('/','') },
                 //图片弹框
                 imgVisible:false,
                 dialogImageUrl:'',
