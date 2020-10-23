@@ -7,29 +7,30 @@
         </el-form>
         <el-table :data="reqRuleLists.filter(data=>(!search || data.username.toLowerCase().includes(search.toLowerCase()) || data.href.includes(search.toLowerCase())))">
             <el-table-column label="#ID" prop="id" width="70px" align="center" sortable/>
-            <el-table-column label="申请人" prop="username" width="130px" :show-tooltip-when-overflow="true" align="center"/>
-            <el-table-column label="授权地址" prop="href" align="center" :show-tooltip-when-overflow="true"/>
+            <el-table-column label="申请人" prop="username" width="130px" :show-tooltip-when-overflow="true" align="center"></el-table-column>
+            <el-table-column label="授权地址" prop="href" align="center" :show-tooltip-when-overflow="true"></el-table-column>
             <el-table-column label="授权状态" align="center" v-if="userInfo.username === 'admin'">
                 <template slot-scope="scope">
-                    <Radio :item="scope.row" :url="cgi.status" v-on:success="success"/>
+                    <el-button v-if="scope.row.status === 1" icon="el-icon-success" circle plain type="success" size="medium"></el-button>
+                    <Radio v-else :item="scope.row" :url="cgi.status" v-on:success="success"></Radio>
                 </template>
             </el-table-column>
             <el-table-column label="授权状态" align="center" v-if="userInfo.username !== 'admin'">
                 <template slot-scope="scope">
-                    <el-button v-if="scope.row.status === 1" type="success" size="mini">已授权</el-button>
-                    <el-button v-if="scope.row.status === 2" type="info" size="mini">未授权</el-button>
+                    <el-button v-if="scope.row.status === 1" icon="el-icon-success" circle plain type="success" size="medium"></el-button>
+                    <el-button v-if="scope.row.status === 2" icon="el-icon-error" circle plain type="info" size="medium"></el-button>
                 </template>
             </el-table-column>
-            <el-table-column label="创建时间" prop="created_at"  align="center" width="160px" sortable/>
-            <el-table-column label="修改时间" prop="updated_at" align="center" width="160px" sortable/>
-            <el-table-column label="权限时效" prop="expires" align="center" width="160px" sortable/>
+            <el-table-column label="创建时间" prop="created_at"  align="center" width="160px" sortable></el-table-column>
+            <el-table-column label="修改时间" prop="updated_at" align="center" width="160px" sortable></el-table-column>
+            <el-table-column label="权限时效" prop="expires" align="center" width="160px" sortable></el-table-column>
             <el-table-column label="操作" width="200px" align="right">
                 <template slot="header" slot-scope="scope">
-                    <el-input v-model="search" placeholder="请输入关键字查询"/>
+                    <el-input v-model="search" placeholder="请输入关键字查询"></el-input>
                 </template>
                 <template slot-scope="scope">
-                    <el-button type="primary" v-if="scope.row.status === 1 && btn.edit" plain icon="el-icon-plus" size="mini" @click="updateReqRule(scope.row)">续 期</el-button>
-                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="reqRuleLists" v-on:success="success" v-if="btn.del"/>
+                    <el-button type="primary" v-if="scope.row.status === 1 && btn.edit && Date.parse(scope.row.expires)/1000<=time" plain icon="el-icon-plus" size="mini" @click="updateReqRule(scope.row)">续 期</el-button>
+                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="reqRuleLists" v-on:success="success" v-if="scope.row.status === 1 && btn.del" btn-text="撤 销"></Delete>
                 </template>
             </el-table-column>
         </el-table>
@@ -46,7 +47,7 @@
         </div>
         <!--table 分页-->
         <!---弹框-->
-        <el-dialog :title="title" :visible.sync="syncVisible" :modal="modal" :width="dialogWidth" :center="center" :destroy-on-close="destroy_on_close">
+        <el-dialog :title="title" :visible.sync="syncVisible" :modal="true" :width="dialogWidth" :center="true" :destroy-on-close="true">
             <el-form :label-width="labelWidth" :model="reqRuleModel" :ref="reFrom" :rules="rules">
                 <el-form-item label="申请人" prop="username">
                     <el-select filterable style="width: 100%" v-model="reqRuleModel.username" @change="getAuth">
@@ -104,28 +105,16 @@
                 limit:15,
                 total:0,
                 search:'',
-
                 title:'',
                 syncVisible:false, //是否显示弹框
-                modal:true, //遮盖层是否需要
                 labelWidth:'80px',
                 loading:true,
-                destroy_on_close:true,
-                center:true,
                 loadingText:'玩命加载中。。。',
-
                 url:'',
                 refs:this.$refs,
                 reFrom:'reqRule',
-
                 reqRuleModel:{},
-
-                cgi:{
-                    remove:$url.reqRuleDelete,
-                    status:$url.reqRuleUpdate,
-                    update:$url.reqRuleUpdate,
-                    insert:$url.reqRuleSave
-                },
+                cgi:{ remove:$url.reqRuleDelete, status:$url.reqRuleUpdate, update:$url.reqRuleUpdate, insert:$url.reqRuleSave },
                 rules:{
                     username:[{required:true,message:'申请人不得为空',trigger:'blur'}],
                     href:[{required:true,message:'授权地址不得为空',trigger:'change'}],
@@ -133,8 +122,9 @@
                     desc:[{required:true,message:'授权说明不得为空',trigger:'blur'}],
                     status:[{required:true,message:'授权状态不得为空',trigger:'blur'}]
                 },
+                //提前七天通知用户续期
+                time:Date.parse(new Date())/1000 + 3600 * 7 * 24,
                 href:false,
-
                 //日期快捷键
                 pickerOptions: {
                     disabledDate(time) {

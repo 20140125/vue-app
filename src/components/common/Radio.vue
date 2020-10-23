@@ -35,7 +35,8 @@
              */
             setStatus:function (item) {
                 this.checkAuth({url:this.url});
-                let params = {status:item.status,id:item.id,token:this.$store.state.login.token,'act':'status'};
+                let params = {status:parseInt(item.status),id:item.id,token:this.$store.state.login.token,'act':'status'};
+                console.log(params);
                 apiLists.SaveData(params,this.url).then((response)=> {
                     if (response && response.data.code === 200) {
                         let data = {href:this.url, msg:response.data.msg, token:this.$store.state.login.token};

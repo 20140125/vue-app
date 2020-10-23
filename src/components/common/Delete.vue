@@ -1,7 +1,5 @@
 <template>
-    <el-tooltip content="look before you leap" placement="top">
-        <el-button plain type="danger" icon="el-icon-delete" size="mini" @click="remove(item,index)">删 除</el-button>
-    </el-tooltip>
+    <el-button plain type="danger" icon="el-icon-delete" size="mini" @click="remove(item,index)">{{btnText}}</el-button>
 </template>
 
 <script>
@@ -26,6 +24,10 @@
                 type:Array,
                 default:()=>[]
             },
+            btnText:{
+                type:String,
+                default:()=>'删 除'
+            }
         },
         data(){
             return {
@@ -40,7 +42,7 @@
              * @param index
              */
             remove:function (item,index) {
-                this.$confirm('此操作将永远删除该条记录，是否继续？','删除记录',{
+                this.$confirm('此操作将永远'+this.btnText.replace(' ','')+'该条记录，是否继续？',this.btnText.replace(' ','')+'记录',{
                     confirmButtonText:'确定',
                     cancelButtonText:'取消',
                     type:'warning'
