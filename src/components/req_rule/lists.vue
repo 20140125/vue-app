@@ -18,7 +18,7 @@
             <el-table-column label="授权状态" align="center" v-if="userInfo.username !== 'admin'">
                 <template slot-scope="scope">
                     <el-button v-if="scope.row.status === 1" icon="el-icon-success" circle plain type="success" size="medium"></el-button>
-                    <el-button v-if="scope.row.status === 2" icon="el-icon-error" circle plain type="info" size="medium"></el-button>
+                    <el-button v-if="scope.row.status === 2" icon="el-icon-error" circle plain type="danger" size="medium"></el-button>
                 </template>
             </el-table-column>
             <el-table-column label="创建时间" prop="created_at"  align="center" width="160px" sortable></el-table-column>
@@ -49,10 +49,9 @@
         <!---弹框-->
         <el-dialog :title="title" :visible.sync="syncVisible" :modal="true" :width="dialogWidth" :center="true" :destroy-on-close="true">
             <el-form :label-width="labelWidth" :model="reqRuleModel" :ref="reFrom" :rules="rules">
-                <el-form-item label="申请人" prop="username">
+                <el-form-item label="申请人" prop="user_id">
                     <el-select filterable style="width: 100%" v-model="reqRuleModel.username" @change="getAuth">
-                        <el-option v-for="(user,index) in userLists" :label="user.username" :key="index"
-                                   :value="user.id"/>
+                        <el-option v-for="(user,index) in userLists" :label="user.username" :key="index" :value="user.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="授权地址" prop="href" v-if="href">
@@ -116,7 +115,7 @@
                 reqRuleModel:{},
                 cgi:{ remove:$url.reqRuleDelete, status:$url.reqRuleUpdate, update:$url.reqRuleUpdate, insert:$url.reqRuleSave },
                 rules:{
-                    username:[{required:true,message:'申请人不得为空',trigger:'blur'}],
+                    user_id:[{required:true,message:'申请人不得为空',trigger:'blur'}],
                     href:[{required:true,message:'授权地址不得为空',trigger:'change'}],
                     expires: [{required:true,message:'授权时效不得为空',trigger:'change'}],
                     desc:[{required:true,message:'授权说明不得为空',trigger:'blur'}],
@@ -236,7 +235,7 @@
             addReqRule:function() {
                 this.title='权限申请';
                 this.syncVisible = true;
-                this.reqRuleModel = { username:'', href:'', desc:'', expires:'', status:1 };
+                this.reqRuleModel = { user_id:'', href:'', desc:'', expires:'', status:1 };
                 this.url = this.cgi.insert;
                 this.href = false;
             },

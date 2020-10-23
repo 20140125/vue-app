@@ -4,6 +4,7 @@ import code from '../../api/code'
 import router from '../../router'
 import func from '../../api/func'
 import io from 'socket.io-client'
+import store from "../index";
 const state={
     //登录标识
     token:localStorage.getItem('token'),
@@ -17,7 +18,8 @@ const state={
         uuid:'',
         token:'',
         adcode:'',
-        city:''
+        city:'',
+        user_id:''
     },
     weather:{},
     menuLists:[],
@@ -217,7 +219,7 @@ const actions={
             let info = '你没有访问权限，请联系管理员【' + code.QQ + '】检验数据的正确性！';
             MessageBox.alert(info).then(() => {
                 let req = {
-                    username:state.username,
+                    user_id:state.user_id,
                     href:[params.url]
                 };
                 apiLists.ReqRuleSave(req).then((res) => {
@@ -225,7 +227,7 @@ const actions={
                         let data = {
                             href: params.url.replace('admin','v1'),
                             msg: JSON.stringify({info: info, result: res.data.result}),
-                            token: state.token
+                            token: state.token,
                         };
                         apiLists.LogSave(data).then((response) => {
                             if (response && response.data.code === code.SUCCESS) {

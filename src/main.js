@@ -73,7 +73,7 @@ router.beforeEach((to,from,next)=>{
                 let info = '你没有访问权限，请联系管理员【'+code.QQ+'】检验数据的正确性';
                 ElementUI.MessageBox.alert(info).then(()=>{
                     let req = {
-                        username:store.state.login.username,
+                        user_id:store.state.login.userInfo.user_id,
                         href:[to.path]
                     };
                     apiLists.ReqRuleSave(req).then((res)=>{
