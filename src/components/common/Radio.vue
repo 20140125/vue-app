@@ -1,10 +1,10 @@
 <template>
-    <el-tooltip content="look before you leap" placement="top">
-        <el-radio-group v-model="item.status" size="mini" @change="setStatus(item)">
-            <el-radio-button label="2">否</el-radio-button>
-            <el-radio-button label="1">是</el-radio-button>
-        </el-radio-group>
-    </el-tooltip>
+    <el-button :icon="item.status === 1 ? 'el-icon-success' : 'el-icon-error'"
+               circle
+               :type="item.status === 1 ? 'success' : 'danger'"
+               @click="setStatus(item)"
+               size="medium">
+    </el-button>
 </template>
 
 <script>
@@ -23,9 +23,7 @@
             },
         },
         data(){
-            return {
-                table:this.$route.meta.mode,
-            }
+            return {}
         },
         methods:{
             ...mapActions(['saveSystemLog','checkAuth']),
@@ -35,20 +33,15 @@
              */
             setStatus:function (item) {
                 this.checkAuth({url:this.url});
-                let params = {status:parseInt(item.status),id:item.id,token:this.$store.state.login.token,'act':'status'};
-                console.log(params);
-                apiLists.SaveData(params,this.url).then((response)=> {
+                item.status = item.status === 1 ? 2 :1
+                let params = {status:item.status,id:item.id,token:this.$store.state.login.token,'act':'status'};
+                apiLists.SaveData(params,this.url).then(response=> {
                     if (response && response.data.code === 200) {
                         let data = {href:this.url, msg:response.data.msg, token:this.$store.state.login.token};
                         this.saveSystemLog(data);
                         this.$message({type:'success',message:response.data.msg});
-                        this.$emit('success');
-                        return ;
+                        this.$emit('success',item);
                     }
-                    item.status = parseInt(params.status) === 1 ? 2 : 1;
-                },error=>{
-                    item.status = parseInt(params.status) === 1 ? 2 : 1;
-                    console.log(error);
                 })
             }
         }

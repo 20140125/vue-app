@@ -1,12 +1,10 @@
 const state= {
     tabs: [{label:'欢迎页',name:'/admin/index'}],
     currTabs: {label:null,name:null},
-    activeAuthName:'/admin/index',
 };
 const getters={
     tabs:state=>state.tabs,
-    currTabs:state=>state.currTabs,
-    activeAuthName:state=>state.activeAuthName,
+    currTabs:state=>state.currTabs
 };
 const mutations={
     /**
@@ -23,7 +21,6 @@ const mutations={
      * @param tabs
      */
     defaultTabs(state,tabs) {
-        console.log(tabs);
         state.tabs = tabs;
     },
     /**
@@ -33,14 +30,6 @@ const mutations={
      */
     setCurrTabs(state,currTabs){
         state.currTabs = currTabs
-    },
-    /**
-     * todo：设置当前tabs
-     * @param state
-     * @param activeAuthName
-     */
-    setActiveAuthName(state,activeAuthName){
-        state.activeAuthName = activeAuthName;
     },
     /**
      * todo：移除tabs
@@ -71,7 +60,6 @@ const actions={
      */
     addCurrTabs({state,commit},currTabs){
         commit('setCurrTabs', currTabs);
-        commit('setActiveAuthName',currTabs.label)
     },
     /**
      * todo：删除tabs

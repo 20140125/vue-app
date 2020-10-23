@@ -11,16 +11,17 @@
             <el-table-column label="授权地址" prop="href" align="center" :show-tooltip-when-overflow="true"></el-table-column>
             <el-table-column label="授权状态" align="center" v-if="userInfo.username === 'admin'">
                 <template slot-scope="scope">
-                    <el-button v-if="scope.row.status === 1" icon="el-icon-success" circle plain type="success" size="medium"></el-button>
+                    <el-button v-if="scope.row.status === 1" icon="el-icon-success" circle type="success" size="medium"></el-button>
                     <Radio v-else :item="scope.row" :url="cgi.status" v-on:success="success"></Radio>
                 </template>
             </el-table-column>
             <el-table-column label="授权状态" align="center" v-if="userInfo.username !== 'admin'">
                 <template slot-scope="scope">
-                    <el-button v-if="scope.row.status === 1" icon="el-icon-success" circle plain type="success" size="medium"></el-button>
-                    <el-button v-if="scope.row.status === 2" icon="el-icon-error" circle plain type="danger" size="medium"></el-button>
+                    <el-button v-if="scope.row.status === 1" icon="el-icon-success" circle type="success" size="medium"></el-button>
+                    <el-button v-if="scope.row.status === 2" icon="el-icon-error" circle type="danger" size="medium"></el-button>
                 </template>
             </el-table-column>
+            <el-table-column label="描述" prop="desc"  show-tooltip-when-overflow></el-table-column>
             <el-table-column label="创建时间" prop="created_at"  align="center" width="160px" sortable></el-table-column>
             <el-table-column label="修改时间" prop="updated_at" align="center" width="160px" sortable></el-table-column>
             <el-table-column label="权限时效" prop="expires" align="center" width="160px" sortable></el-table-column>

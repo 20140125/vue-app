@@ -6,29 +6,29 @@
             </el-form-item>
         </el-form>
         <el-table :data="userLists.filter(data=>(!search || data.username.toLowerCase().includes(search.toLowerCase()) || data.email.toLowerCase().includes(search.toLowerCase()) || data.phone_number.toLowerCase().includes(search.toLowerCase())))">
-            <el-table-column label="#" prop="id" width="80" align="center"/>
-            <el-table-column label="管理员" prop="username" align="center"/>
+            <el-table-column label="#" prop="id" width="80" align="center"></el-table-column>
+            <el-table-column label="管理员" prop="username" align="center" show-overflow-tooltip></el-table-column>
             <el-table-column label="头像" align="center">
                 <template slot-scope="scope">
                     <el-image :src="scope.row.avatar_url" style="width: 50px; height: 50px" fit="fill" :title="scope.row.username" :preview-src-list="[scope.row.avatar_url]"></el-image>
                 </template>
             </el-table-column>
-            <el-table-column label="邮箱" prop="email" align="center" :show-tooltip-when-overflow="true"/>
-            <el-table-column label="手机号" prop="phone_number" align="center" :show-tooltip-when-overflow="true"/>
+            <el-table-column label="邮箱" prop="email" align="center" :show-tooltip-when-overflow="true"></el-table-column>
+            <el-table-column label="手机号" prop="phone_number" align="center" :show-tooltip-when-overflow="true"></el-table-column>
             <el-table-column label="允许登录" v-if="userInfo.role_id === md5('1')" align="center" width="120">
                 <template slot-scope="scope">
-                    <Radio :item="scope.row" :url="cgi.status"/>
+                    <Radio :item="scope.row" :url="cgi.status" v-on:success="success"></Radio>
                 </template>
             </el-table-column>
-            <el-table-column label="创建时间" prop="created_at" width="160" align="center"/>
-            <el-table-column label="修改时间" prop="updated_at" width="160" align="center"/>
+            <el-table-column label="创建时间" prop="created_at" width="160" align="center"></el-table-column>
+            <el-table-column label="修改时间" prop="updated_at" width="160" align="center"></el-table-column>
             <el-table-column label="操作" align="right" width="260">
                 <template slot="header" slot-scope="scope">
-                    <el-input v-model="search"  placeholder="请输入关键词查询"/>
+                    <el-input v-model="search"  placeholder="请输入关键词查询"></el-input>
                 </template>
                 <template slot-scope="scope">
                     <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updateUser(scope.row)" v-if="btn.edit">修 改</el-button>
-                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="userLists" v-on:success="success" v-if="btn.del"/>
+                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="userLists" v-on:success="success" v-if="btn.del"></Delete>
                 </template>
             </el-table-column>
         </el-table>
@@ -46,37 +46,34 @@
         </div>
         <!--table 分页-->
         <!---弹框-->
-        <el-dialog :title="title" :width="dialogWidth" :visible.sync="syncVisible" :modal="modal"  :center="center">
+        <el-dialog :title="title" :width="dialogWidth" :visible.sync="syncVisible" :modal="true"  :center="true">
             <el-form :label-width="labelWidth" :model="userModel" :ref="reFrom" label-width="100px" :rules="rules" label-position="left">
                 <el-form-item label="管理员：" prop="username">
-                    <el-input v-model="userModel.username" :readonly="act === 'edit'" placeholder="管理员名称"/>
+                    <el-input v-model="userModel.username" :readonly="reFrom === 'update'" placeholder="管理员名称"></el-input>
                 </el-form-item>
                 <el-form-item label="用户头像：" prop="avatar_url" id="avatar" style="display: flex;align-items: center;position: relative;" required>
-                    <Upload :avatar_url="userModel.avatar_url" :username="userModel.username" @uploadSuccess="uploadSuccess"/>
+                    <Upload :avatar_url="userModel.avatar_url" :username="userModel.username" @uploadSuccess="uploadSuccess"></Upload>
                 </el-form-item>
                 <el-form-item label="密码：" prop="password">
-                    <el-input v-model="userModel.password" show-password type="password" placeholder="密码"/>
+                    <el-input v-model="userModel.password" show-password type="password" placeholder="密码"></el-input>
                 </el-form-item>
                 <el-form-item label="邮箱：" prop="email">
-                    <el-input v-model="userModel.email" type="email" placeholder="邮箱"/>
+                    <el-input v-model="userModel.email" type="email" placeholder="邮箱"></el-input>
                 </el-form-item>
-                <el-form-item label="手机号：" prop="phone_number" v-if="act === 'update'">
-                    <el-input v-model="userModel.phone_number" type="email" placeholder="手机号"/>
+                <el-form-item label="手机号：" prop="phone_number" v-if="reFrom === 'update'">
+                    <el-input v-model="userModel.phone_number" type="email" placeholder="手机号"></el-input>
                 </el-form-item>
                 <el-form-item label="角色：" prop="role_id" v-if="userInfo.role_id === md5('1')">
                     <el-select v-model="userModel.role_id" style="width: 100%">
-                        <el-option v-for="(role,index) in roleLists" :key="index" :label="role.role_name" :value="role.id"/>
+                        <el-option v-for="(role,index) in roleLists" :key="index" :label="role.role_name" :value="role.id"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="显示状态：" prop="status" v-if="act === 'add'">
-                    <el-radio-group  v-model="userModel.status" size="small">
-                        <el-radio-button label="2">关闭</el-radio-button>
-                        <el-radio-button label="1">开启</el-radio-button>
-                    </el-radio-group>
+                <el-form-item label="显示状态：" prop="status" v-if="reFrom === 'created'" required>
+                    <Status :status="userModel.status"></Status>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <Submit :reFrom="reFrom" :model="userModel" :url="url" :refs="refs" v-on:success="success"/>
+                <Submit :reFrom="reFrom" :model="userModel" :url="url" :refs="refs" v-on:success="success"></Submit>
             </div>
         </el-dialog>
         <!---弹框-->
@@ -92,9 +89,10 @@
     import Submit from "../common/Submit";
     import Upload from '../common/Upload';
     import {mapGetters} from 'vuex';
+    import Status from "../common/Status";
     export default {
         name: "lists",
-        components: {Submit, Delete, Radio,Upload},
+        components: {Status, Submit, Delete, Radio,Upload},
         data(){
             return {
                 userLists:[],
@@ -103,26 +101,16 @@
                 limit:15,
                 total:0,
                 search:'',
-
                 title:'',
                 syncVisible:false, //是否显示弹框
-                modal:true, //遮盖层是否需要
                 labelWidth:'80px',
                 loading:true,
-                center:true,
                 loadingText:'玩命加载中。。。',
-
                 url:'',
                 refs:this.$refs,
-                reFrom:'user',
-                act:'',
+                reFrom:'created',
                 userModel:{},
-                cgi:{
-                    insert:$url.userSave,
-                    update:$url.userUpdate,
-                    remove:$url.userDelete,
-                    status:$url.userUpdate
-                },
+                cgi:{insert:$url.userSave, update:$url.userUpdate, remove:$url.userDelete, status:$url.userUpdate},
                 rules:{
                     username:[{required:true,message:'管理员名称不得为空',trigger:'blur'}],
                     password:[{required:true,message:'密码不得为空',trigger:'blur'}],
@@ -140,11 +128,11 @@
         methods:{
             /**
              * todo：关闭弹框
+             * @param item
              */
-            success:function(){
+            success:function(item){
                 this.getUserLists(this.page,this.limit);
-                localStorage.setItem('token','');
-                this.syncVisible = false;
+                item.id === this.userInfo.user_id ?  localStorage.setItem('token','') : ''
             },
             /**
              * TODO:图片上传回调
@@ -159,6 +147,7 @@
              * @param limit
              */
             getUserLists:function (page,limit) {
+                this.syncVisible = false;
                 let params = {  page:page, limit:limit };
                 apiLists.UserLists(params).then(response=>{
                     if (response && response.data.code===200){
@@ -191,8 +180,8 @@
             addUser:function () {
                 this.title='添加管理员';
                 this.syncVisible = true;
-                this.act = 'add';
-                this.userModel = {username:'', email:'', password:'', salt:func.set_random(), status:'1', role_id:1, phone_number:'', created_at:func.get_timestamp(), updated_at:func.get_timestamp(), remember_token:''};
+                this.reFrom = 'created';
+                this.userModel = {username:'', email:'', password:'', salt:func.set_random(), status:1, role_id:1, phone_number:'', created_at:func.get_timestamp(), updated_at:func.get_timestamp(), remember_token:''};
                 this.url = this.cgi.insert;
             },
             /**
@@ -204,7 +193,7 @@
                 this.syncVisible = true;
                 this.userModel = item;
                 this.url = this.cgi.update;
-                this.act = 'update';
+                this.reFrom = 'update';
             }
         },
         mounted() {

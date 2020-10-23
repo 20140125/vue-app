@@ -11,21 +11,21 @@
                   lazy
                   :load="load"
                   :tree-props="{children: '__child', hasChildren: 'hasChildren'}">
-            <el-table-column label="权限名称" prop="name"/>
-            <el-table-column label="权限链接" prop="href"/>
-            <el-table-column label="显示状态" v-if="btn.edit">
+            <el-table-column label="权限名称" prop="name"></el-table-column>
+            <el-table-column label="权限链接" prop="href" align="center"></el-table-column>
+            <el-table-column label="显示状态" v-if="btn.edit" align="center">
                 <template slot-scope="scope">
-                    <Radio :item="scope.row" :url="cgi.status"/>
+                    <Radio :item="scope.row" :url="cgi.status"></Radio>
                 </template>
             </el-table-column>
             <el-table-column align="right">
                 <template slot="header" slot-scope="scope">
-                    <el-input v-model="search" placeholder="输入关键词查询"/>
+                    <el-input v-model="search" placeholder="输入关键词查询"></el-input>
                 </template>
                 <template slot-scope="scope">
                     <el-button icon="el-icon-plus" type="primary" size="mini" v-if="scope.row.level<=1 && btn.add" plain @click="addAuth(scope.row)">添 加</el-button>
                     <el-button type="primary" plain icon="el-icon-edit" size="mini" @click="updateAuth(scope.row)" v-if="btn.edit">修 改</el-button>
-                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="authLists" v-on:success="success" v-if="scope.row.level>0 && btn.del"/>
+                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="authLists" v-on:success="success" v-if="scope.row.level>0 && btn.del"></Delete>
                 </template>
             </el-table-column>
         </el-table>
@@ -33,28 +33,25 @@
 
         <!---弹框-->
         <el-dialog :title="title" :visible.sync="syncVisible" :modal="true" :center="true" :width="dialogWidth">
-            <el-form :label-width="labelWidth" :model="authModel" :ref="reFrom" :rules="rules">
-                <el-form-item label="权限名称" prop="name">
-                    <el-input v-model="authModel.name" placeholder="权限名称"/>
+            <el-form :label-width="labelWidth" :model="authModel" :ref="reFrom" :rules="rules" label-width="100px" label-position="left">
+                <el-form-item label="权限名称：" prop="name">
+                    <el-input v-model="authModel.name" placeholder="权限名称"></el-input>
                 </el-form-item>
-                <el-form-item label="权限链接" prop="href">
-                    <el-input v-model="authModel.href" placeholder="/admin/auth/lists"/>
+                <el-form-item label="权限链接：" prop="href">
+                    <el-input v-model="authModel.href" placeholder="/admin/auth/index"></el-input>
                 </el-form-item>
-                <el-form-item label="权限上级" prop="pid">
+                <el-form-item label="权限上级：" prop="pid">
                     <el-select placeholder="权限上级" filterable style="width: 100%" v-model="authModel.pid">
-                        <el-option label="默认权限" value="0" v-if="authModel.pid === '0'" selected/>
-                        <el-option v-for="(item,index) in authLevel" :key="index" :disabled="item.id === authModel.id || item.pid === authModel.id" :label="setAuthName(item)" :value="item.id.toString()"/>
+                        <el-option label="默认权限" value="0" v-if="authModel.pid === '0'" selected></el-option>
+                        <el-option v-for="(item,index) in authLevel" :key="index" :disabled="item.id === authModel.id || item.pid === authModel.id" :label="setAuthName(item)" :value="item.id.toString()"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="权限状态" prop="status" v-if="act === 'add'">
-                    <el-radio-group v-model="authModel.status" size="small">
-                        <el-radio-button label="2">关闭</el-radio-button>
-                        <el-radio-button label="1">开启</el-radio-button>
-                    </el-radio-group>
+                <el-form-item label="权限状态：" prop="status" v-if="reFrom === 'created'">
+                    <Status :status="authModel.status"></Status>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <Submit :reFrom="reFrom" :model="authModel" :url="url" :refs="refs" v-on:success="success"/>
+                <Submit :reFrom="reFrom" :model="authModel" :url="url" :refs="refs" v-on:success="success"></Submit>
             </div>
         </el-dialog>
         <!---弹框-->
@@ -69,9 +66,10 @@
     import func from '../../api/func'
     import $url from '../../api/url';
     import {mapGetters} from 'vuex'
+    import Status from "../common/Status";
     export default {
         name: "lists",
-        components: {Delete, Radio, Submit},
+        components: {Status, Delete, Radio, Submit},
         data(){
             return {
                 authLists:[],
@@ -84,8 +82,7 @@
                 loadingText:'玩命加载中。。。',
                 url:'',
                 refs:this.$refs,
-                reFrom:'auth',
-                act:'',
+                reFrom:'created',
                 //权限默认数据
                 authModel:{},
                 //URL
@@ -108,15 +105,16 @@
         methods:{
             /**
              * todo：关闭弹框
+             * @param item
              */
-            success:function(){
+            success:function(item){
                 this.getAuthLists(this.id);
-                this.syncVisible = false;
             },
             /**
              * todo：获取权限
              */
             getAuthLists:function (id) {
+                this.syncVisible = false;
                 apiLists.AuthLists({id:id}).then(response=>{
                     if (response && response.data.code===200){
                         this.authLists = response.data.item.authLists;
@@ -153,8 +151,8 @@
                 this.syncVisible = true;
                 this.title = '添加权限';
                 this.url = this.cgi.insert;
-                this.act = 'add';
-                this.authModel = { name:'', href:'', status:'1', pid:'0', level:0, path:'1' };
+                this.reFrom = 'created';
+                this.authModel = { name:'', href:'', status:1, pid:'0', level:0, path:'1' };
                 if (scope.name) {
                     this.authModel.pid = scope.id.toString();
                 }
@@ -168,7 +166,7 @@
                 this.title = '修改权限';
                 this.url = this.cgi.update;
                 this.authModel = item;
-                this.act = 'update';
+                this.reFrom = 'update';
                 this.authModel.pid = this.authModel.pid.toString();
             }
         },

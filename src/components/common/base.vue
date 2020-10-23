@@ -96,7 +96,7 @@
         data(){
             return {
                 isCollapse:false,
-                activeName:null,
+                activeName:'/admin/index',
                 showCity:false,
                 chatVisible:false,
                 activeIndex:'1',
@@ -120,7 +120,7 @@
             chatRoom
         },
         computed:{
-            ...mapGetters(['tabs','activeAuthName','menuLists','userInfo','weather','dialogWidth']),
+            ...mapGetters(['tabs','menuLists','userInfo','weather','dialogWidth','currTabs']),
         },
         methods:{
             ...mapActions(['addTabs','deleteTabs','addCurrTabs','logoutSystem','getAuthMenu','addDialogWidth']),
@@ -312,7 +312,6 @@
                 total:0,
                 online:0
             };
-            this.activeName = this.activeAuthName;
             this.asideHeight = {
                 'min-height':(window.innerHeight - 60)+'px'
             };
@@ -331,6 +330,10 @@
                     this.noticeArr.push({time:func.get_timestamp(),message:this.weather['info'] ? JSON.stringify(this.weather['info']) : JSON.stringify(['welcome'])})
                 }
             },
+            currTabs:function () {
+                this.activeName = this.currTabs.name
+            }
+
         },
         /**
          * TODO:Vue生命周期

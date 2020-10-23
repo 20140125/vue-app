@@ -7,23 +7,22 @@
         </el-form>
         <!--table 表格-->
         <el-table :data="roleLists.filter(data=>(!search || data.role_name.includes(search)))">
-            <el-table-column label="#ID" prop='id' sortable align="center" width="100px"/>
-            <el-table-column label="角色名称" prop="role_name" align="center"/>
+            <el-table-column label="#ID" prop='id' sortable align="center" width="100px"></el-table-column>
+            <el-table-column label="角色名称" prop="role_name" align="center"></el-table-column>
             <el-table-column label="显示状态" v-if="btn.edit" align="center">
                 <template slot-scope="scope">
-                    <Radio :item="scope.row" :url="cgi.status"/>
+                    <Radio :item="scope.row" :url="cgi.status"></Radio>
                 </template>
             </el-table-column>
-            <el-table-column label="创建时间" sortable prop="created_at" align="center"/>
-            <el-table-column label="修改时间" sortable prop="updated_at" align="center"/>
+            <el-table-column label="创建时间" sortable prop="created_at" align="center"></el-table-column>
+            <el-table-column label="修改时间" sortable prop="updated_at" align="center"></el-table-column>
             <el-table-column label="操作" align="right">
                 <template slot="header" slot-scope="scope">
-                    <el-input v-model="search" placeholder="请输入关键词查询"/>
+                    <el-input v-model="search" placeholder="请输入关键词查询"></el-input>
                 </template>
                 <template slot-scope="scope">
                     <el-button type="primary" plain icon="el-icon-edit" v-if="btn.edit" size="mini" @click="updateRole(scope.row)">修 改</el-button>
-                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="roleLists"
-                            v-on:success="success" v-if="btn.del"/>
+                    <Delete :url="cgi.remove" :item="scope.row" :index="scope.$index" :Lists="roleLists" v-on:success="success" v-if="btn.del"></Delete>
                 </template>
             </el-table-column>
         </el-table>
@@ -45,23 +44,13 @@
         <el-dialog :title="title" :visible.sync="syncVisible" :width="dialogWidth" :center="true">
             <el-form :label-width="labelWidth" :model="roleModel" :ref="reFrom" label-position="left">
                 <el-form-item label="角色名称：" prop="role_name" :rules="[{ required:true,message:'角色名称不得为空',trigger:'blur' }]">
-                    <el-input v-model="roleModel.role_name" placeholder="角色名称"/>
+                    <el-input v-model="roleModel.role_name" placeholder="角色名称"></el-input>
                 </el-form-item>
                 <el-form-item label="权限列表：" required prop="auth_ids">
-                    <el-transfer
-                        :titles="['所有', '拥有']"
-                        :button-texts="['移除', '添加']"
-                        v-model="defaultChecked"
-                        :data="authLists"
-                        filterable
-                        @change="handleChange">
-                    </el-transfer>
+                    <el-transfer :titles="['所有', '拥有']" :button-texts="['移除', '添加']" v-model="defaultChecked" :data="authLists" filterable @change="handleChange"></el-transfer>
                 </el-form-item>
                 <el-form-item required label="状态：" prop="status" v-if="act === 'add'">
-                    <el-radio-group v-model="roleModel.status" size="small">
-                        <el-radio-button label="0">关闭</el-radio-button>
-                        <el-radio-button label="1">开启</el-radio-button>
-                    </el-radio-group>
+                    <Status :status="roleModel.status"></Status>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -80,9 +69,10 @@
     import Delete from "../common/Delete";
     import Submit from "../common/Submit";
     import {mapGetters} from "vuex";
+    import Status from "../common/Status";
     export default {
         name: "lists",
-        components: {Submit, Delete, Radio},
+        components: {Status, Submit, Delete, Radio},
         data(){
             return {
                 roleLists:[],
@@ -164,7 +154,7 @@
                 this.url = this.cgi.insert;
                 this.act = 'add';
                 this.defaultChecked = [];
-                this.roleModel={role_name:'', auth_ids:[], auth_url:[], status:'1', created_at:func.get_timestamp(), updated_at:func.get_timestamp()}
+                this.roleModel={role_name:'', auth_ids:[], auth_url:[], status:1, created_at:func.get_timestamp(), updated_at:func.get_timestamp()}
             },
             /**
              * @param value      当前值
