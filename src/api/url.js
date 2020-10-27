@@ -25,7 +25,6 @@ let url={
     configLists:'/v1/config/index',
     configSave:'/v1/config/save',
     configUpdate:'/v1/config/update',
-    configValUpdate:'/v1/config/updateVal',
     configDelete:'/v1/config/delete',
     //接口列表
     apiLists:'/v1/api/index',

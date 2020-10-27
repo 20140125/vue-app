@@ -49,12 +49,12 @@
                 <el-form-item label="权限列表：" required prop="auth_ids">
                     <el-transfer :titles="['所有', '拥有']" :button-texts="['移除', '添加']" v-model="defaultChecked" :data="authLists" filterable @change="handleChange"></el-transfer>
                 </el-form-item>
-                <el-form-item required label="状态：" prop="status" v-if="act === 'add'">
-                    <Status :status="roleModel.status"></Status>
+                <el-form-item required label="状态：" prop="status" v-if="reFrom === 'created'">
+                    <Status :status="roleModel.status" @changeStatus="changeStatus"></Status>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <Submit :reFrom="reFrom" :model="roleModel" :url="url" :refs="refs" v-on:success="success"/>
+                <Submit :reFrom="reFrom" :model="roleModel" :url="url" :refs="refs" v-on:success="success"></Submit>
             </div>
         </el-dialog>
         <!---弹框-->
@@ -89,15 +89,10 @@
                 labelWidth:'100px',
                 url:'',
                 refs:this.$refs,
-                reFrom:'role',
+                reFrom:'created',
                 act:'',
                 roleModel:{},
-                cgi:{
-                    insert:$url.roleSave,
-                    update:$url.roleUpdate,
-                    remove:$url.roleDelete,
-                    status:$url.roleUpdate
-                },
+                cgi:{insert:$url.roleSave, update:$url.roleUpdate, remove:$url.roleDelete, status:$url.roleUpdate},
                 //细化权限按钮
                 btn:{},
             }
@@ -107,11 +102,18 @@
         },
         methods:{
             /**
-             * todo：关闭弹框
+             * todo:修改状态
+             * @param status
              */
-            success:function(){
+            changeStatus:function (status) {
+                this.roleModel.status = status
+            },
+            /**
+             * todo：关闭弹框
+             * @param item
+             */
+            success:function(item){
                 this.getRoleLists(this.page,this.limit)
-                this.syncVisible = false;
             },
             /**
              * todo：获取角色列表
@@ -120,6 +122,7 @@
              */
             getRoleLists:function (page,limit) {
                 let params = { page:page, limit:limit};
+                this.syncVisible = false;
                 apiLists.RoleLists(params).then(response=>{
                     if (response && response.data.code===200){
                         this.roleLists = response.data.item.role.data;
@@ -152,7 +155,7 @@
                 this.title='添加角色';
                 this.syncVisible = true;
                 this.url = this.cgi.insert;
-                this.act = 'add';
+                this.reFrom = 'created';
                 this.defaultChecked = [];
                 this.roleModel={role_name:'', auth_ids:[], auth_url:[], status:1, created_at:func.get_timestamp(), updated_at:func.get_timestamp()}
             },
@@ -187,7 +190,7 @@
                 this.title = '修改角色';
                 this.url = this.cgi.update;
                 this.defaultChecked = []; //需要重置角色拥有的权限
-                this.act = 'update';
+                this.reFrom = 'update';
                 JSON.parse(item.auth_ids).map(item=>{
                     this.defaultChecked.push(parseInt(item));
                 })

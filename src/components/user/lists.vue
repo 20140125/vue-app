@@ -69,7 +69,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="显示状态：" prop="status" v-if="reFrom === 'created'" required>
-                    <Status :status="userModel.status"></Status>
+                    <Status :status="userModel.status" @changeStatus="changeStatus"></Status>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -126,6 +126,13 @@
             ...mapGetters(['userInfo','dialogWidth'])
         },
         methods:{
+            /**
+             * todo:修改状态
+             * @param status
+             */
+            changeStatus:function (status) {
+                this.userModel.status = status
+            },
             /**
              * todo：关闭弹框
              * @param item

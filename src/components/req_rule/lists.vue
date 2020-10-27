@@ -49,36 +49,29 @@
         <!--table 分页-->
         <!---弹框-->
         <el-dialog :title="title" :visible.sync="syncVisible" :modal="true" :width="dialogWidth" :center="true" :destroy-on-close="true">
-            <el-form :label-width="labelWidth" :model="reqRuleModel" :ref="reFrom" :rules="rules">
-                <el-form-item label="申请人" prop="user_id">
+            <el-form :model="reqRuleModel" :ref="reFrom" :rules="rules" label-position="left" label-width="100px">
+                <el-form-item label="申请人：" prop="user_id">
                     <el-select filterable style="width: 100%" v-model="reqRuleModel.username" @change="getAuth">
                         <el-option v-for="(user,index) in userLists" :label="user.username" :key="index" :value="user.id"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="授权地址" prop="href" v-if="href">
+                <el-form-item label="授权地址：" prop="href" v-if="href">
                     <el-select multiple="multiple" filterable style="width: 100%" v-model="reqRuleModel.href">
-                        <el-option v-for="(rule,index) in ruleLists" :label="setAuthName(rule)" :key="index"
-                                   :value="rule.href" :disabled="rule.disable"/>
+                        <el-option v-for="(rule,index) in ruleLists" :label="setAuthName(rule)" :key="index" :value="rule.href" :disabled="rule.disable"/>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="授权时间" prop="expires">
-                    <el-date-picker v-model="reqRuleModel.expires" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
-                                    placeholder="选择授权时间"
-                                    :picker-options="pickerOptions"
-                                    style="width: 100%"/>
+                <el-form-item label="授权时间：" prop="expires">
+                    <el-date-picker v-model="reqRuleModel.expires" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择授权时间" :picker-options="pickerOptions" style="width: 100%"/>
                 </el-form-item>
-                <el-form-item label="授权说明" prop="desc">
-                    <el-input v-model="reqRuleModel.desc" maxlength="200" show-word-limit resize="none" :autosize="{ minRows: 4}" type="textarea"/>
+                <el-form-item label="授权说明：" prop="desc">
+                    <el-input v-model="reqRuleModel.desc" maxlength="200" show-word-limit resize="none" :autosize="{ minRows: 4}" type="textarea"></el-input>
                 </el-form-item>
-                <el-form-item label="是否授权" prop="status" v-if="userInfo.username==='admin'">
-                    <el-radio-group v-model="reqRuleModel.status" size="small">
-                        <el-radio-button label="2">否</el-radio-button>
-                        <el-radio-button label="1">是</el-radio-button>
-                    </el-radio-group>
+                <el-form-item label="是否授权：" prop="status" v-if="reFrom === 'created'">
+                    <Status :status="reqRuleModel.status" @changeStatus="changeStatus"></Status>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <Submit :reFrom="reFrom" :model="reqRuleModel" :url="url" :refs="refs" v-on:success="success"/>
+                <Submit :reFrom="reFrom" :model="reqRuleModel" :url="url" :refs="refs" v-on:success="success"></Submit>
             </div>
         </el-dialog>
         <!---弹框-->
@@ -93,9 +86,10 @@
     import Delete from "../common/Delete";
     import Submit from "../common/Submit";
     import {mapGetters} from 'vuex';
+    import Status from "../common/Status";
     export default {
         name: "lists",
-        components: {Submit, Delete, Radio},
+        components: {Status, Submit, Delete, Radio},
         data(){
             return {
                 reqRuleLists:[],
@@ -107,12 +101,11 @@
                 search:'',
                 title:'',
                 syncVisible:false, //是否显示弹框
-                labelWidth:'80px',
                 loading:true,
                 loadingText:'玩命加载中。。。',
                 url:'',
                 refs:this.$refs,
-                reFrom:'reqRule',
+                reFrom:'created',
                 reqRuleModel:{},
                 cgi:{ remove:$url.reqRuleDelete, status:$url.reqRuleUpdate, update:$url.reqRuleUpdate, insert:$url.reqRuleSave },
                 rules:{
@@ -176,10 +169,16 @@
         },
         methods:{
             /**
+             * todo:修改状态
+             * @param status
+             */
+            changeStatus:function (status) {
+                this.reqRuleModel.status = status
+            },
+            /**
              * todo：关闭弹框
              */
             success:function(){
-                this.syncVisible = false;
                 this.getReqRuleLists(this.page,this.limit)
             },
             /**
@@ -196,6 +195,7 @@
              */
             getReqRuleLists:function (page,limit) {
                 let params = { page:page,limit:limit };
+                this.syncVisible = false;
                 this.loading = true;
                 apiLists.ReqRuleLists(params).then(response=>{
                     if (response && response.data.code === 200){
@@ -238,6 +238,7 @@
                 this.syncVisible = true;
                 this.reqRuleModel = { user_id:'', href:'', desc:'', expires:'', status:1 };
                 this.url = this.cgi.insert;
+                this.reFrom = 'created'
                 this.href = false;
             },
             /**
@@ -263,6 +264,7 @@
                 this.reqRuleModel.href = [this.reqRuleModel.href];
                 this.ruleLists = this.reqRuleModel.ruleLists
                 this.url = this.cgi.update;
+                this.reFrom = 'update'
                 this.href = true;
             }
         },

@@ -28,7 +28,7 @@ export default {
     methods:{
         setStatus:function (status) {
             this.showIcon = status === 1 ? 2 : 1;
-            this.$emit('changeStatus',this.showIcon)
+            this.$emit('changeStatus',this.showIcon);
         }
     }
 }

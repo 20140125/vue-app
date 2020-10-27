@@ -6,26 +6,20 @@
             </el-form-item>
         </el-form>
         <el-table :data="configLists" row-key="id"  :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
-            <el-table-column label="#" prop="id" width="100px"/>
-            <el-table-column label="配置名称" prop="name"> </el-table-column>
+            <el-table-column label="#" prop="id" width="100px"></el-table-column>
+            <el-table-column label="配置名称" prop="name"></el-table-column>
             <el-table-column label="显示状态">
-                <template slot-scope="scope">
-                    <div v-if="scope.row.children">
-                        <Radio :item="scope.row" :url="cgi.status" v-on:success="success"/>
-                    </div>
+                <template slot-scope="scope" v-if="scope.row.children">
+                    <Radio :item="scope.row" :url="cgi.status" v-on:success="success"></Radio>
                 </template>
             </el-table-column>
-            <el-table-column label="创建时间" prop="created_at"/>
-            <el-table-column label="修改时间" prop="updated_at"/>
+            <el-table-column label="创建时间" prop="created_at"></el-table-column>
+            <el-table-column label="修改时间" prop="updated_at"></el-table-column>
             <el-table-column label="操作" width="200px">
                 <template slot-scope="scope" >
-                    <div v-if="scope.row.children" style="text-align: center">
-                        <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="setConfigVal(scope.row)">添 加</el-button>
-                        <el-button type="primary" plain icon="el-icon-search" size="mini" @click="updateConfig(scope.row)">查 看</el-button>
-                    </div>
-                    <div v-else style="text-align: center">
-                        <el-button plain type="danger" icon="el-icon-delete" size="mini" @click="removeConfigVal(scope.row)">删 除</el-button>
-                    </div>
+                    <el-button type="primary" v-if="scope.row.children" plain icon="el-icon-plus" size="mini" @click="setConfigVal(scope.row)">添 加</el-button>
+                    <el-button v-else plain type="danger" icon="el-icon-delete" size="mini" @click="removeConfigVal(scope.row)">删 除</el-button>
+                    <el-button type="primary" plain icon="el-icon-search" size="mini" @click="updateConfig(scope.row) ">修 改</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -42,39 +36,26 @@
         </div>
         <!--table 分页-->
         <!---配置值弹框-->
-        <el-dialog :title="title" :visible.sync="syncVisible" :width="dialogWidth" center :destroy-on-close="true">
-            <el-form :label-width="labelWidth" :model="configValModel" :ref="reFrom">
-                <el-form-item label="配置名称" prop="name" v-show="!show" :rules="[ { required: true, message: '请输入配置名称', trigger: 'blur' }]">
-                    <el-input v-model="configValModel.name" placeholder="配置名称"/>
+        <el-dialog :title="title" :visible.sync="syncVisible" :width="dialogWidth" center destroy-on-close @close="success">
+            <el-form :label-width="labelWidth" :model="configValModel" :ref="reFrom" label-position="left">
+                <el-form-item label="Key：" prop="name" :rules="[{required:true,message:'请输入Key',trigger:'blur'}]">
+                    <el-input placeholder="key" v-model="configValModel.name"></el-input>
                 </el-form-item>
-                <el-form-item label="配置健" v-show="show" :rules="[ { required: true, message: '请输入配置健', trigger: 'blur' }]">
-                    <el-input v-model="configVal.name" placeholder="配置内容"/>
+                <el-form-item label="Value：" prop="value" v-if="showValue" :rules="[{required:true,message:'请输入Value',trigger:'blur'}]">
+                    <el-input placeholder="value" v-model="configValModel.value"></el-input>
                 </el-form-item>
-                <el-form-item label="配置值" v-show="show" :rules="[ { required: true, message: '请输入配置值', trigger: 'blur' }]">
-                    <el-input v-model="configVal.value" placeholder="配置内容"/>
+                <el-form-item label="参数配置：" prop="children" v-if="configValModel.children" required>
+                    <VueJson :json-data="configValModel.children"></VueJson>
                 </el-form-item>
-                <el-form-item label="配置状态" prop="status">
-                    <el-radio-group v-model="configValModel.status" size="small">
-                        <el-radio-button label="2">关闭</el-radio-button>
-                        <el-radio-button label="1">开启</el-radio-button>
-                    </el-radio-group>
+                <el-form-item label="显示状态：" prop="status" required v-if="!configValModel.children">
+                    <Status :status="configValModel.status" @changeStatus="changeStatus"></Status>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <Submit :reFrom="reFrom" :model="configValModel" @cancelDialog="cancelDialog" :url="url" :refs="refs" v-on:success="success"/>
+                <Submit :reFrom="reFrom" :model="configModel" :url="url" :refs="refs" v-on:success="success" :show-btn="false"></Submit>
             </div>
         </el-dialog>
         <!---配置值弹框-->
-        <!---配置弹框-->
-        <el-dialog :title="title" :width="dialogWidth" :visible.sync="syncConfigVisible"  center :destroy-on-close="true">
-            <el-form :label-width="labelWidth" :model="configModel">
-                <el-form-item label="配置名称">{{configModel.name}}</el-form-item>
-                <el-form-item label="配置值" prop="children"><VueJson :json-data="configModel.children"/></el-form-item>
-                <el-form-item label="配置状态"><el-button size="medium" plain :type="configModel.status == '1' ? 'success' : 'danger'">{{configModel.status == '1' ? '开启' : '关闭'}}</el-button></el-form-item>
-            </el-form>
-        </el-dialog>
-        <!---配置弹框-->
-
     </div>
 </template>
 
@@ -86,39 +67,29 @@
     import Submit from "../common/Submit";
     import { mapActions,mapGetters } from 'vuex'
     import VueJson from "../common/jsonView/json";
+    import Status from "../common/Status";
+    import func from '../../api/func'
     export default {
         name: "lists",
-        components: {VueJson, Submit, Delete, Radio},
+        components: {Status, VueJson, Submit, Delete, Radio},
         data(){
             return {
                 configLists:[],
                 page:1,
                 limit:15,
                 total:0,
-
                 title:'',
                 syncVisible:false, //是否显示弹框
-                labelWidth:'80px',
+                labelWidth:'100px',
                 loading:true,
                 loadingText:'玩命加载中。。。',
-
                 url:'',
                 refs:this.$refs,
-                reFrom:'config',
-
+                reFrom:'created',
                 configValModel:{},
                 configModel:{},
-                configVal:{},
-
-                cgi:{
-                    remove:$url.configDelete,
-                    status:$url.configUpdate,
-                    insert:$url.configSave,
-                    update:$url.configUpdate,
-                    updateVal:$url.configValUpdate
-                },
-                show:false,
-                syncConfigVisible:false,
+                cgi:{remove:$url.configDelete, status:$url.configUpdate, insert:$url.configSave, update:$url.configUpdate},
+                showValue:false
             }
         },
         computed:{
@@ -127,19 +98,17 @@
         methods:{
             ...mapActions(['saveSystemLog']),
             /**
+             * todo:修改状态
+             * @param status
+             */
+            changeStatus:function (status) {
+                this.configModel.status = status
+            },
+            /**
              * todo：关闭弹框
              */
             success:function(){
-                this.syncVisible = false;
-                this.syncConfigVisible = false;
                 this.getConfigLists(this.page,this.limit)
-            },
-            /**
-             * todo:取消弹框
-             */
-            cancelDialog:function () {
-                this.syncVisible = false;
-                this.syncConfigVisible = false;
             },
             /**
              * todo：获取配置列表
@@ -147,6 +116,7 @@
              * @param limit
              */
             getConfigLists:function (page,limit) {
+                this.syncVisible = false;
                 let params = { page:page,limit:limit };
                 apiLists.ConfigLists(params).then(response=>{
                     if (response && response.data.code === 200){
@@ -177,33 +147,49 @@
              * @param item
              */
             updateConfig:function(item) {
-                this.title='查看配置';
+                this.title='查看【'+item.name+'】配置';
+                this.configValModel = item;
                 this.configModel = item;
-                this.syncConfigVisible = true;
+                this.syncVisible = true;
+                this.showValue = !item.children
+                this.url = this.cgi.update;
+                this.configModel.hasChildren = !!item.children;
+                this.reFrom = 'update';
             },
             /**
              * todo：添加
              */
             addConfig:function () {
                 this.title='添加配置';
-                this.configValModel = {name:'', status:1, value:'[]'}
-                this.show = false;
+                this.configValModel = {name:'', status:1}
+                this.configModel = this.configValModel;
+                this.configModel.hasChildren = false;
                 this.syncVisible = true;
+                this.showValue = true;
                 this.url = this.cgi.insert;
+                this.reFrom = 'created'
             },
             /**
              * todo：设置配置值
              * @param item
              */
             setConfigVal:function (item) {
-                this.configVal = { name:'', value:'', status:1, id:1 };
-                this.configValModel = item;
-                this.configVal.status = this.configValModel.status;
-                this.configValModel.value = this.configVal;
-                this.configValModel.act = 'editConfig';
                 this.title='设置【'+item.name+'】配置值';
-                this.show = true;
+                this.configValModel = {
+                    name:'',
+                    value:'',
+                    status:1,
+                    pid:item.children[item.children.length-1].pid,
+                    created_at:func.set_time(new Date()),
+                    updated_at:func.set_time(new Date()),
+                    id:item.children[item.children.length-1].id+1 || item.children[item.children.length-1].pid*100
+                }
+                item.children.push(this.configValModel);
+                this.configModel = item;
+                this.configModel.hasChildren = true;
                 this.syncVisible = true;
+                this.showValue = true;
+                this.reFrom = 'created';
                 this.url = this.cgi.update;
             },
             /**

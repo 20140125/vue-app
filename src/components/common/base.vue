@@ -137,7 +137,6 @@
              */
             setAttr:function(item){
                 let params = {label:item.name,name:item.href};
-                this.activeName = params.name;
                 this.addCurrTabs(params);
                 this.addTabs(params);
                 this.asideHeight = {
@@ -162,8 +161,7 @@
                         let nextTab = this.tabs[index + 1] || this.tabs[index - 1];
                         if (nextTab) {
                             this.deleteTabs(tabName);
-                            this.activeName = nextTab.name;
-                            this.$router.push({path:this.activeName});
+                            this.$router.push({path:nextTab.name});
                             this.addCurrTabs(nextTab);
                         }
                     }
@@ -178,7 +176,6 @@
                 switch (key) {
                     case '2-1':
                         let userParams = {label:'个人中心',name:'/admin/user/center'};
-                        this.activeName = userParams.name;
                         this.addCurrTabs(userParams);
                         this.addTabs(userParams);
                         this.$router.push({path:userParams.name});
@@ -197,7 +194,6 @@
             readNotice:function(noticeObj) {
                 if (noticeObj === 'more') {
                     let pushParams = {label:'站内通知',name:'/admin/push/index'};
-                    this.activeName = pushParams.name;
                     this.addCurrTabs(pushParams);
                     this.addTabs(pushParams);
                     this.$router.push({path:pushParams.name});
@@ -342,7 +338,6 @@
             this.$nextTick(function () {
                 let params = {label:this.$route.meta.title,name:this.$route.path};
                 if (params.label !== '欢迎页' || func.str_count(params.name,'/') !== 3) {
-                    this.activeName = params.name;
                     this.addCurrTabs(params);
                     this.addTabs(params);
                 }

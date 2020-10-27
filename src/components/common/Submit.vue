@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-button @click="resetForm(reFrom)" plain>取 消</el-button>
+        <el-button @click="resetForm(reFrom)" plain v-if="showBtn">取 消</el-button>
         <el-button type="primary" @click="submitForm(reFrom)" plain>确 定</el-button>
     </div>
 </template>
@@ -27,6 +27,10 @@
                 type:Object,
                 default:()=>{}
             },
+            showBtn:{
+                type:Boolean,
+                default:()=>true
+            }
         },
         data(){
             return {
@@ -40,6 +44,7 @@
              * @param ref
              */
             submitForm:function(ref){
+                console.log(this.model)
                 this.refs[ref].validate((valid)=>{
                     if (!valid) {
                         this.$message({type:'warning',message:'请检查字段完整性~'});
@@ -63,7 +68,6 @@
              */
             resetForm:function (ref) {
                 this.refs[ref].resetFields();
-                this.$emit('cancelDialog')
             }
         }
     }
