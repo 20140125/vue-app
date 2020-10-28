@@ -11,8 +11,7 @@
             <el-table-column label="授权地址" prop="href" align="center" :show-tooltip-when-overflow="true"></el-table-column>
             <el-table-column label="授权状态" align="center" v-if="userInfo.username === 'admin'">
                 <template slot-scope="scope">
-                    <el-button v-if="scope.row.status === 1" icon="el-icon-success" circle type="success" size="medium"></el-button>
-                    <Radio v-else :item="scope.row" :url="cgi.status" v-on:success="success"></Radio>
+                    <Radio :item="scope.row" :url="cgi.status" v-on:success="success"></Radio>
                 </template>
             </el-table-column>
             <el-table-column label="授权状态" align="center" v-if="userInfo.username !== 'admin'">
@@ -56,7 +55,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="授权地址：" prop="href" v-if="href">
-                    <el-select multiple="multiple" filterable style="width: 100%" v-model="reqRuleModel.href">
+                    <el-select multiple="multiple" filterable style="width: 100%" v-model="reqRuleModel.href" :disabled="reFrom === 'update'">
                         <el-option v-for="(rule,index) in ruleLists" :label="setAuthName(rule)" :key="index" :value="rule.href" :disabled="rule.disable"/>
                     </el-select>
                 </el-form-item>

@@ -169,7 +169,7 @@
                   //删除
                     case 'left':
                         movedKeys.map((item) => {
-                            this.defaultChecked.splice(this.defaultChecked.indexOf(item),1);
+                            this.defaultChecked.splice(this.defaultChecked.indexOf(parseInt(item)),1);
                         });
                         break;
                   //添加

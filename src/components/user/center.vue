@@ -22,15 +22,7 @@
                         </el-form-item>
                         <el-form-item>
                             <i class="el-icon-collection-tag"></i>
-                            <el-button style="margin-bottom: 5px" :key="tag" v-for="tag in userCenter.tags" size="mini" plain type="primary">{{tag}}</el-button>
-                        </el-form-item>
-                        <el-form-item>
-                            <i :class="userCenter.notice_status === '1' ? 'el-icon-microphone' : 'el-icon-turn-off-microphone'"></i>
-                            <el-button size="mini"  :type="userCenter.notice_status === '1' ? 'primary' : 'info'" plain>{{userCenter.notice_status === '1' ? '启用站内通知' : '禁用站内通知'}}</el-button>
-                        </el-form-item>
-                        <el-form-item>
-                            <i :class="userCenter.user_status === '1' ? 'el-icon-microphone' : 'el-icon-turn-off-microphone'"></i>
-                            <el-button size="mini" :type="userCenter.user_status === '1' ? 'primary' : 'info'" plain>{{userCenter.user_status === '1' ? '启用账号通知' : '禁用账号通知'}}</el-button>
+                            <el-tag style="margin-right: 5px" :key="tag" v-for="tag in userCenter.tags"  effect="plain" type="success">{{tag}}</el-tag>
                         </el-form-item>
                     </el-form>
                 </el-tabs>
@@ -43,7 +35,7 @@
                                 <el-avatar :src="userInfo.avatar_url" :size="100" :alt="userInfo.username"></el-avatar>
                             </el-form-item>
                             <el-form-item label="用户名：" prop="u_name">
-                                <el-input v-model="userCenter.u_name" placeholder="用户名"></el-input>
+                                <el-input v-model="userCenter.u_name" readonly placeholder="用户名"></el-input>
                             </el-form-item>
                             <el-form-item label="居住地址：" prop="local">
                                 <el-cascader :props="props" :options="options" filterable v-model="userCenter.local" style="width: 100%"/>
@@ -63,16 +55,16 @@
                             </el-form-item>
                             <el-form-item label="站内通知：" prop="notice_status">
                                 <el-tooltip effect="dark" content="系统性的通知或者更新消息" placement="top-start">
-                                    <el-switch active-value="1" inactive-value="2" v-model="userCenter.notice_status"/>
+                                    <el-switch active-value="1" inactive-value="2" v-model="userCenter.notice_status"></el-switch>
                                 </el-tooltip>
                             </el-form-item>
                             <el-form-item label="账号信息：" prop="user_status">
                                 <el-tooltip effect="dark" content="帐号变更的通知消息" placement="top-start">
-                                    <el-switch active-value="1" inactive-value="2" v-model="userCenter.user_status"/>
+                                    <el-switch active-value="1" inactive-value="2" v-model="userCenter.user_status"></el-switch>
                                 </el-tooltip>
                             </el-form-item>
                             <el-form-item style="text-align: center">
-                                <Submit :reFrom="reFrom" :url="url" :model="userCenter" :refs="refs"/>
+                                <Submit :reFrom="reFrom" :url="url" :model="userCenter" :refs="refs"></Submit>
                             </el-form-item>
                         </el-form>
                 </el-tabs>
@@ -166,8 +158,8 @@
             handleInputConfirm:function() {
                 let inputValue = this.inputValue;
                 if (inputValue && this.userCenter.tags.indexOf(inputValue)<0) {
-                    if ((this.userCenter.tags.length+1)>4) {
-                        this.$message.warning('User tags must not exceed four');
+                    if ((this.userCenter.tags.length+1)>3) {
+                        this.$message.warning('User tags must not exceed three');
                         return ;
                     }
                     this.userCenter.tags.push(inputValue);

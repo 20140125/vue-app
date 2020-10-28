@@ -13,13 +13,14 @@ const state={
         socketServer:'',
         websocketServer:'',
         username:'',
-        auth_url:'',
+        auth:'',
         role_id:0,
         uuid:'',
         token:'',
         adcode:'',
         city:'',
-        user_id:''
+        user_id:'',
+        default_client_id:''
     },
     weather:{},
     menuLists:[],
