@@ -188,7 +188,7 @@
                 this.title='添加管理员';
                 this.syncVisible = true;
                 this.reFrom = 'created';
-                this.userModel = {username:'', email:'', password:'', salt:func.set_random(), status:1, role_id:1, phone_number:'', created_at:func.get_timestamp(), updated_at:func.get_timestamp(), remember_token:''};
+                this.userModel = {username:'', email:'', password:'', salt:func.set_random(), status:1, role_id:2, phone_number:'', created_at:func.get_timestamp(), updated_at:func.get_timestamp(), remember_token:''};
                 this.url = this.cgi.insert;
             },
             /**

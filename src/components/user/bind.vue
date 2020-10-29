@@ -48,7 +48,7 @@
                 loadingText:'玩命加载中。。。',
                 url:$url.userUpdate,
                 refs:this.$refs,
-                reFrom:'user',
+                reFrom:'created',
                 showPassword:false,
                 userModel:{
                     username:'',

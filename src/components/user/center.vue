@@ -101,9 +101,6 @@
                 url:$url.saveUserCenter,
                 fileData:{},
                 headers:{},
-                cgi:{
-                    save:''
-                },
                 rules:{
                     avatarUrl:[{required:true,message:'用户头像不得为空',trigger:'change'}],
                     u_name:[{required: true,message:'用户名称不得为空',trigger:'blur'}],
