@@ -14,12 +14,11 @@ let url={
     userSave:'/v1/user/save',
     userUpdate:'/v1/user/update',
     userDelete:'/v1/user/delete',
-    userCenter:'/v1/user/center',
+    userCenter:'/v1/center/index',
     saveUserCenter:'/v1/center/save',
     userBind:'/v1/user/bind',
     //系统日志操作接口
     logLists:'/v1/log/index',
-    logSave:'/v1/log/save',
     logDelete:'/v1/log/delete',
     //基础配置
     configLists:'/v1/config/index',
@@ -31,9 +30,9 @@ let url={
     apiSave:'/v1/api/save',
     apiUpdate:'/v1/api/update',
     //接口列表(markdown)
-    apiDocLists:'/v1/apidoc/index',
-    apiDocSave:'/v1/apidoc/save',
-    apiDocUpdate:'/v1/apidoc/update',
+    apiDocLists:'/v1/api_doc/index',
+    apiDocSave:'/v1/api_doc/save',
+    apiDocUpdate:'/v1/api_doc/update',
     //接口分类
     categoryLists:'/v1/category/index',
     categorySave:'/v1/category/save',
@@ -53,11 +52,11 @@ let url={
     sendMail:'/v1/oauth/sendMail',
     verifyCode:'/v1/oauth/verifyCode',
     //请求授权
-    reqRuleLists:'/v1/req-rule/index',
-    reqRuleSave:'/v1/req-rule/save',
-    reqRuleUpdate:'/v1/req-rule/update',
-    reqRuleDelete:'/v1/req-rule/delete',
-    getAuthByToken:'/v1/req-rule/getAuth',
+    reqRuleLists:'/v1/req_rule/index',
+    reqRuleSave:'/v1/req_rule/save',
+    reqRuleUpdate:'/v1/req_rule/update',
+    reqRuleDelete:'/v1/req_rule/delete',
+    getAuthByToken:'/v1/req_rule/get',
     //文件列表
     fileLists:'/v1/file/index',
     fileRead:'/v1/file/read',
@@ -77,7 +76,6 @@ let url={
     areaWeather:'/v1/area/weather',
     //聊天记录
     emotionLists:'/v1/emotion/index',
-    chatLists:'/v1/chat/index',
     //推送列表
     pushList:'/v1/push/index',
     pushSave:'/v1/push/save',
@@ -93,17 +91,18 @@ let url={
     timeLineSave:'/v1/timeline/save',
     timeLineUpdate:'/v1/timeline/update',
     //公共操作接口
-    tree:'/v1/menu',
-    login:'/v1/login',
-    reportCode:'/v1/report/verifyCode',
-    logout:'/v1/logout',
-    checkToken:'/v1/checkLogin',
-    getConfig:'/v1/config',
-    getCountData:'/v1/total',
-    sendEmail:'/v1/sendEmail',
-    checkCode:'/v1/checkCode',
-    getCityName:'/v1/getCityName',
-    confirmMail:'/v1/confirmMail',
-    resetPass: '/v1/resetPass'
+    menu:'/v1/common/menu',
+    login:'/v1/common/login',
+    reportCode:'/v1/common/report',
+    logout:'/v1/common/logout',
+    checkToken:'/v1/common/check_login',
+    getConfig:'/v1/common/config',
+    sendEmail:'/v1/common/send_email',
+    checkCode:'/v1/common/check_code',
+    getCityName:'/v1/common/get_city_name',
+    resetPass: '/v1/common/reset_pass',
+    logSave:'/v1/common/log_save',
+    chatLists:'/v1/common/chat',
+
 };
 export default url

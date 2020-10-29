@@ -157,13 +157,13 @@
             })
         },
         methods:{
-            ...mapMutations(['setToken','defaultTabs','setActiveAuthName']),
+            ...mapMutations(['setToken','defaultTabs']),
             /**
              * todo:数据总量
              */
             totalCharts:function () {
-                apiLists.GetCountData({}).then(response=>{
-                    this.activities = response.data.item.timeline.data;
+                apiLists.TimeLineLists({page:1,limit:10}).then(response=>{
+                    this.activities = response.data.item.data;
                 })
             },
         },

@@ -51,7 +51,7 @@
                    if (!valid) {
                        return false;
                    }
-                   apiLists.SendEmail(this.users,$url.confirmMail).then(response=>{
+                   apiLists.SendEmail(this.users,$url.sendEmail).then(response=>{
                        if (response && response.data.code === 200) {
                            this.$message.success(response.data.msg);
                            this.$emit('resetPassword',response.data.item);

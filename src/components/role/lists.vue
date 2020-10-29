@@ -46,7 +46,7 @@
                 <el-form-item label="角色名称：" prop="role_name" :rules="[{ required:true,message:'角色名称不得为空',trigger:'blur' }]">
                     <el-input v-model="roleModel.role_name" placeholder="角色名称"></el-input>
                 </el-form-item>
-                <el-form-item label="权限列表：" required prop="auth_ids">
+                <el-form-item label="权限列表：" prop="auth_ids" :rules="[{required:true,message:'请选择权限',trigger:'change'}]">
                     <el-transfer :titles="['所有', '拥有']" :button-texts="['移除', '添加']" v-model="defaultChecked" :data="authLists" filterable @change="handleChange"></el-transfer>
                 </el-form-item>
                 <el-form-item required label="状态：" prop="status" v-if="reFrom === 'created'">
@@ -90,7 +90,6 @@
                 url:'',
                 refs:this.$refs,
                 reFrom:'created',
-                act:'',
                 roleModel:{},
                 cgi:{insert:$url.roleSave, update:$url.roleUpdate, remove:$url.roleDelete, status:$url.roleUpdate},
                 //细化权限按钮

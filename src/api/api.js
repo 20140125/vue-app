@@ -74,8 +74,8 @@ const roleLists = async function(params = {}){
  * @param params
  * @returns {Promise<AxiosResponse<T>>}
  */
-const authTree = async function(params = {}){
-    return await request.post(url.tree,qs.stringify(Object.assign(params,access_token)))
+const authMenu = async function(params = {}){
+    return await request.post(url.menu,qs.stringify(Object.assign(params,access_token)))
 };
 /**
  * TODO:管理员列表
@@ -458,7 +458,7 @@ const interfaceLists = {
     CheckToken:checkToken,
     AuthLists:authLists,
     RoleLists:roleLists,
-    AuthTree:authTree,
+    AuthMenu:authMenu,
     UserLists:userLists,
     UserCenter:userCenter,
     UserBind:userBind,

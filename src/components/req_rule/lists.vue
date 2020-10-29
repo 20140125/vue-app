@@ -16,8 +16,7 @@
             </el-table-column>
             <el-table-column label="授权状态" align="center" v-if="userInfo.username !== 'admin'">
                 <template slot-scope="scope">
-                    <el-button v-if="scope.row.status === 1" icon="el-icon-success" circle type="success" size="medium"></el-button>
-                    <el-button v-if="scope.row.status === 2" icon="el-icon-error" circle type="danger" size="medium"></el-button>
+                    <el-button :icon="scope.row.status === 1 ? 'el-icon-success' : 'el-icon-error'" circle :type="scope.row.status === 1 ? 'success' : 'danger'" size="medium"></el-button>
                 </template>
             </el-table-column>
             <el-table-column label="描述" prop="desc"  show-tooltip-when-overflow></el-table-column>
@@ -54,7 +53,7 @@
                         <el-option v-for="(user,index) in userLists" :label="user.username" :key="index" :value="user.id"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="授权地址：" prop="href" v-if="href">
+                <el-form-item label="授权地址：" prop="href">
                     <el-select multiple="multiple" filterable style="width: 100%" v-model="reqRuleModel.href" :disabled="reFrom === 'update'">
                         <el-option v-for="(rule,index) in ruleLists" :label="setAuthName(rule)" :key="index" :value="rule.href" :disabled="rule.disable"/>
                     </el-select>
@@ -116,7 +115,6 @@
                 },
                 //提前七天通知用户续期
                 time:Date.parse(new Date())/1000 + 3600 * 7 * 24,
-                href:false,
                 //日期快捷键
                 pickerOptions: {
                     disabledDate(time) {
@@ -235,10 +233,10 @@
             addReqRule:function() {
                 this.title='权限申请';
                 this.syncVisible = true;
-                this.reqRuleModel = { user_id:'', href:'', desc:'', expires:'', status:1 };
+                this.reqRuleModel = { user_id:this.userInfo.user_id, href:[], desc:'', expires:'', status:1,username:this.userInfo.username };
+                this.getAuth(this.userInfo.user_id);
                 this.url = this.cgi.insert;
                 this.reFrom = 'created'
-                this.href = false;
             },
             /**
              * TODO:获取权限
@@ -248,7 +246,6 @@
                 apiLists.GetAuthByToken(params).then(response=>{
                     if (response && response.data.code === 200) {
                         this.ruleLists = response.data.item;
-                        this.href = true;
                     }
                 });
             },
@@ -260,11 +257,11 @@
                 this.title='权限续期';
                 this.syncVisible = true;
                 this.reqRuleModel = item;
+                this.getAuth(item.user_id);
                 this.reqRuleModel.href = [this.reqRuleModel.href];
                 this.ruleLists = this.reqRuleModel.ruleLists
                 this.url = this.cgi.update;
                 this.reFrom = 'update'
-                this.href = true;
             }
         },
         mounted() {

@@ -175,7 +175,7 @@
             handleSelect(key, keyPath) {
                 switch (key) {
                     case '2-1':
-                        let userParams = {label:'个人中心',name:'/admin/user/center'};
+                        let userParams = {label:'个人中心',name:'/admin/center/index'};
                         this.addCurrTabs(userParams);
                         this.addTabs(userParams);
                         this.$router.push({path:userParams.name});

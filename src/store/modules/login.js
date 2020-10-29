@@ -153,7 +153,7 @@ const actions={
             commit('setMenuLists',state.menuLists);
         }
         if (state.userInfo.username) {
-            apiLists.AuthTree([]).then((response)=> {
+            apiLists.AuthMenu([]).then((response)=> {
                 if (response && response.data.code === code.SUCCESS) {
                     commit('setMenuLists',func.set_tree(response.data.item));
                 }

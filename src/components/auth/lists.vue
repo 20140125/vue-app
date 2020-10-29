@@ -12,7 +12,7 @@
                   :load="load"
                   :tree-props="{children: '__child', hasChildren: 'hasChildren'}">
             <el-table-column label="权限名称" prop="name"></el-table-column>
-            <el-table-column label="权限链接" prop="href" align="center"></el-table-column>
+            <el-table-column label="权限链接" prop="href"></el-table-column>
             <el-table-column label="显示状态" v-if="btn.edit" align="center">
                 <template slot-scope="scope">
                     <Radio :item="scope.row" :url="cgi.status"></Radio>
