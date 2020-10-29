@@ -127,6 +127,7 @@
                         this.roleLists = response.data.item.role.data;
                         this.total = response.data.item.role.total;
                         this.authLists = response.data.item.auth;
+                        this.defaultChecked = response.data.item.defaultAuth;
                         this.loading = false;
                     }
                 })
@@ -155,7 +156,6 @@
                 this.syncVisible = true;
                 this.url = this.cgi.insert;
                 this.reFrom = 'created';
-                this.defaultChecked = [];
                 this.roleModel={role_name:'', auth_ids:[], auth_url:[], status:1, created_at:func.get_timestamp(), updated_at:func.get_timestamp()}
             },
             /**
