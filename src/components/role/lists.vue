@@ -47,7 +47,7 @@
                     <el-input v-model="roleModel.role_name" placeholder="角色名称"></el-input>
                 </el-form-item>
                 <el-form-item label="权限列表：" prop="auth_ids" :rules="[{required:true,message:'请选择权限',trigger:'change'}]">
-                    <el-transfer :titles="['所有', '拥有']" :button-texts="['移除', '添加']" v-model="defaultChecked" :data="authLists" filterable @change="handleChange"></el-transfer>
+                    <el-transfer :titles="['所有', '拥有']" :button-texts="['移除', '添加']" style="text-align: left; display: inline-block" v-model="defaultChecked" :data="authLists" filterable @change="handleChange"></el-transfer>
                 </el-form-item>
                 <el-form-item required label="状态：" prop="status" v-if="reFrom === 'created'">
                     <Status :status="roleModel.status" @changeStatus="changeStatus"></Status>

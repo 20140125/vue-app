@@ -13,7 +13,7 @@
         "axios": "^0.19.0",
         "cross-env": "^5.2.0",
         "echarts": "^4.2.1",
-        "element-ui": "^2.11.1",
+        "element-ui": "^2.14.0",
         "emitter-js": "^2.0.2",
         "fs-extra": "^8.1.0",
         "jquery": "^3.4.1",

@@ -12,7 +12,6 @@
 
 <script>
     import func from '../../api/func'
-    import $url from '../../api/url'
     export default {
         name: 'Upload',
         props:{
@@ -45,7 +44,7 @@
             return {
                 fileData:{},
                 headers:{},
-                uploadUrl:process.env.API_ROOT+$url.fileUpload.replace('/','')
+                uploadUrl:process.env.API_ROOT+'v1/common/upload'
             }
         },
         methods:{
