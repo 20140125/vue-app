@@ -53,7 +53,7 @@ export default {
         },
         action: {
             type: String,
-            default:()=>process.env.API_ROOT+'v1/wx/upload',
+            default:()=>process.env.API_ROOT+'v1/common/upload',
         },
         showFileList:{
             type:Boolean,

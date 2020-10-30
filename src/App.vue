@@ -47,6 +47,9 @@
     #avatar .el-form-item__content {
         margin-left: 0!important;
     }
+    .el-avatar>img {
+        width: 100%;
+    }
     .CodeMirror {
         border: 1px solid #eee;
         min-height: 300px;
