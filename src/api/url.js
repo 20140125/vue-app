@@ -72,7 +72,6 @@ let url={
     imagePreview:'/v1/image/preview',
     //城市地区
     areaIndex:'/v1/area/index',
-    areaLists:'/v1/area/lists',
     areaWeather:'/v1/area/weather',
     //聊天记录
     emotionLists:'/v1/emotion/index',
@@ -103,6 +102,7 @@ let url={
     resetPass: '/v1/common/reset_pass',
     logSave:'/v1/common/log_save',
     chatLists:'/v1/common/chat',
+    areaLists:'/v1/common/area',
 
 };
 export default url
