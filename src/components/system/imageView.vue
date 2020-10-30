@@ -9,7 +9,7 @@
                         <span v-html="image.label"/>
                         <div class="bottom clearfix">
                             <time class="time">{{ image.time }}</time>
-                            <el-button @click="deleteImg(image,index)" type="text" class="button" icon="el-icon-delete" v-if="btn.del">删 除</el-button>
+                            <el-button @click="deleteImg(image,index)" type="text" class="button" icon="el-icon-delete">删 除</el-button>
                         </div>
                     </div>
                 </el-card>
@@ -46,8 +46,7 @@ export default {
             limit:9,
             page:1,
             total:0,
-            visible: false,
-            btn:{}
+            visible: false
         }
     },
     computed:{
@@ -55,7 +54,6 @@ export default {
     },
     mounted() {
         this.$nextTick(function () {
-            this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.userInfo.auth);
             this.getFileLists(this.path);
         });
     },

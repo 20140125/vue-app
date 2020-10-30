@@ -68,7 +68,7 @@ router.beforeEach((to,from,next)=>{
             }
             store.commit('setUserInfo',response.data.item);
             //用户权限验证 (admin  最高权限不做权限验证)
-            let commonAuth = ['Welcome','UserBind','Empty','chatRoom'];
+            let commonAuth = ['Empty'];
             if (store.state.login.userInfo.auth.indexOf(to.path)===-1 && !commonAuth.includes(to.name)) {
                 let info = '你没有访问权限，请联系管理员【'+code.QQ+'】检验数据的正确性';
                 ElementUI.MessageBox.alert(info).then(()=>{

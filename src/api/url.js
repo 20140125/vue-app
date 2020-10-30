@@ -73,8 +73,6 @@ let url={
     //城市地区
     areaIndex:'/v1/area/index',
     areaWeather:'/v1/area/weather',
-    //聊天记录
-    emotionLists:'/v1/emotion/index',
     //推送列表
     pushList:'/v1/push/index',
     pushSave:'/v1/push/save',
@@ -103,6 +101,7 @@ let url={
     logSave:'/v1/common/log_save',
     chatLists:'/v1/common/chat',
     areaLists:'/v1/common/area',
+    emotionLists:'/v1/common/emotion',
 
 };
 export default url

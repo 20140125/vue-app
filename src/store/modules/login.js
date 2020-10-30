@@ -4,7 +4,6 @@ import code from '../../api/code'
 import router from '../../router'
 import func from '../../api/func'
 import io from 'socket.io-client'
-import store from "../index";
 const state={
     //登录标识
     token:localStorage.getItem('token'),
@@ -216,7 +215,7 @@ const actions={
      */
     checkAuth:function ({state,commit},params) {
         params.url = params.url.replace('v1','admin');
-        if (state.userInfo.auth.indexOf(params.url)===-1 && params.url !=='/admin/index') {
+        if (state.userInfo.auth.indexOf(params.url)===-1) {
             let info = '你没有访问权限，请联系管理员【' + code.QQ + '】检验数据的正确性！';
             MessageBox.alert(info).then(() => {
                 let req = {
