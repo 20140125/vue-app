@@ -6,7 +6,7 @@
                     <el-tab-pane label="个人简介"></el-tab-pane>
                     <el-form id="information">
                         <el-form-item style="text-align: center">
-                            <el-avatar :src="userInfo.avatar_url" :size="100" :alt="userInfo.username"></el-avatar>
+                            <el-avatar :src="userInfo.avatar_url" fit="fill" :size="100" :alt="userInfo.username"></el-avatar>
                         </el-form-item>
                         <el-form-item>
                             <i class="el-icon-user"></i> <span v-html="userCenter.u_name"></span>
@@ -32,7 +32,7 @@
                     <el-tab-pane label="信息展示"></el-tab-pane>
                         <el-form :model="userCenter" label-width="100px" style="margin-left: 20px" label-position="left" ref="center" :rules="rules">
                             <el-form-item label="头像：" id="avatar" style="display: flex;align-items: center;position: relative;" required>
-                                <el-avatar :src="userInfo.avatar_url" :size="100" :alt="userInfo.username"></el-avatar>
+                                <el-avatar :src="userInfo.avatar_url" fit="fill" :size="100" :alt="userInfo.username"></el-avatar>
                             </el-form-item>
                             <el-form-item label="用户名：" prop="u_name">
                                 <el-input v-model="userCenter.u_name" readonly placeholder="用户名"></el-input>
@@ -224,5 +224,8 @@
 }
 #information .el-form-item__content>i {
     font-size: 16px;
+}
+#information .el-avatar>img,#avatar .el-avatar>img {
+    width: 100%;
 }
 </style>

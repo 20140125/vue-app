@@ -68,7 +68,7 @@
         <!---邮箱确认-->
         <!---修改密码-->
         <el-dialog :visible.sync="resetPasswordVisible" title="修改密码" center :width="dialogWidth" top="25vh" :close-on-click-modal="false" :show-close="false">
-            <ResetPassword v-on:close="resetPasswordVisible = false;emailSendVisible = true" @autoLoginSys="autoLoginSys" :user-email="passwordLogin.email" :user-uuid="passwordLogin.uuid"></ResetPassword>
+            <ResetPassword v-on:close="resetPasswordVisible = false;emailSendVisible = true" @autoLoginSys="autoLoginSys" :user-email="passwordLogin.email" :remember-token="passwordLogin.remember_token"></ResetPassword>
         </el-dialog>
         <!---修改密码-->
     </div>
@@ -91,7 +91,7 @@
                     email:'',
                     password:'',
                     verify_code:'',
-                    uuid:'',
+                    remember_token:'',
                     loginType:'password'
                 },
                 passwordRules:{
@@ -235,7 +235,7 @@
                 this.emailSendVisible = false;
                 this.resetPasswordVisible = true;
                 this.passwordLogin.email = item.email;
-                this.passwordLogin.uuid = item.uuid;
+                this.passwordLogin.remember_token = item.remember_token;
             },
             /**
              * todo:系统登录
@@ -244,7 +244,7 @@
             autoLoginSys:function (item) {
                 this.passwordLogin.email = item.email;
                 this.passwordLogin.password = item.password;
-                this.passwordLogin.uuid = item.uuid;
+                this.passwordLogin.remember_token = item.remember_token;
                 this.resetPasswordVisible = false;
             }
         },

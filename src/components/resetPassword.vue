@@ -35,8 +35,14 @@
     export default {
         name: "resetPassword",
         props:{
-            userEmail:String,
-            userUuid:String
+            userEmail:{
+                type:String,
+                default:()=>''
+            },
+            rememberToken:{
+                type:String,
+                default:()=>''
+            }
         },
         data(){
             const validatePass = (rule, value, callback) => {
@@ -63,7 +69,7 @@
                     password:'',
                     confirmPassword:'',
                     email:'',
-                    uuid:''
+                    remember_token:''
                 },
                 rules:{
                     password: [{ validator: validatePass, trigger: 'blur',required:true }],
@@ -74,8 +80,8 @@
             }
         },
         created() {
-            this.resetPass.email = this.userEmail ? this.userEmail : this.resetPass.email;
-            this.resetPass.uuid = this.userUuid ? this.userUuid : this.resetPass.uuid
+            this.resetPass.email = this.userEmail || this.resetPass.email;
+            this.resetPass.remember_token = this.rememberToken || this.resetPass.remember_token
         },
         methods:{
             /**

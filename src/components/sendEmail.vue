@@ -20,7 +20,10 @@
     export default {
         name: "sendEmail",
         props:{
-            userEmail:String
+            userEmail:{
+                type:String,
+                default:()=>''
+            }
         },
         data() {
             return {
