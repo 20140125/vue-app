@@ -64,7 +64,6 @@ let url={
     fileDelete:'/v1/file/delete',
     fileUpdate:'/v1/file/update',
     fileUpload:'/v1/file/upload',
-    fileDownload:'/v1/file/download',
     fileCompression:'/v1/file/zip',
     fileDecompression:'/v1/file/unzip',
     imagePreview:'/v1/image/preview',
@@ -100,6 +99,7 @@ let url={
     chatLists:'/v1/common/chat',
     areaLists:'/v1/common/area',
     emotionLists:'/v1/common/emotion',
+    fileDownload:'/v1/common/download',
 
 };
 export default url

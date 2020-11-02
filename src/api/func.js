@@ -177,7 +177,7 @@ const set_btn_status = function (currUrl,name,authLists) {
             if (authLists.indexOf(prefix+'unzip')>=0) {
                 btn.unzip = true;
             }
-            if (authLists.indexOf(prefix+'download')>=0) {
+            if (authLists.indexOf('/admin/common/download')>=0) {
                 btn.download = true;
             }
             if (authLists.indexOf(prefix+'rename')>=0) {
