@@ -150,7 +150,7 @@
         name: "chatRoom",
         data(){
             return {
-                cgi:{uploadUrl:process.env.API_ROOT+$url.fileUpload.replace('/','')},
+                cgi:{uploadUrl:process.env.API_ROOT+'v1/common/upload'},
                 fileData:{},
                 headers:{},
                 inputMsg:'',
@@ -483,7 +483,7 @@
              */
             getEmotion:function (emotion) {
                 this.chat.msg_type = 'text';
-                this.inputMsg+= "<img src='"+emotion.icon+"' width='50px' height='50px' alt='"+emotion.emoji+"' title='"+emotion.title+"'>"
+                this.inputMsg+= "<img src='"+emotion.icon+"' width='50px' height='50px' style='object-fit: contain;' alt='"+emotion.emoji+"' title='"+emotion.title+"'>"
                 this.$refs.message.innerHTML = this.inputMsg;
             },
             /**
@@ -494,7 +494,7 @@
                 if (response && response.code === 200){
                     switch (this.chat.msg_type) {
                         case 'img':
-                            this.inputMsg+= "<img src='"+response.item.src+"' width='100px' height='100px' alt='"+this.chat.from_client_name+"'>";
+                            this.inputMsg+= "<img src='"+response.item.src+"' width='100px' height='100px' style='object-fit: contain;' alt='"+this.chat.from_client_name+"'>";
                             break;
                         case 'video':
                             this.inputMsg+= "<video src='"+response.item.src+"' width='200px' height='200px' controls='controls'>";
