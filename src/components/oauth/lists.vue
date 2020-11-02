@@ -1,6 +1,6 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText">
-        <el-form :inline="true" style="margin-top: 10px">
+        <el-form :inline="true" style="margin-top: 10px" v-if="btn.add">
             <el-form-item style="float:right;">
                 <el-button icon="el-icon-plus" type="primary" size="medium" plain @click="oauthLogin">账号绑定</el-button>
             </el-form-item>
@@ -54,11 +54,11 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item label="验证码：" prop="code" v-if="showCode">
-                    <el-input v-model.number="OauthModel.code" maxlength="8" @blur="checkCode(OauthModel)"/>
+                    <el-input v-model.number="OauthModel.code" maxlength="8" @blur="checkCode(OauthModel)"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <Submit :reFrom="reFrom" :model="OauthModel" :url="url" :refs="refs" v-on:success="success"/>
+                <Submit :reFrom="reFrom" :model="OauthModel" :url="url" :refs="refs" v-on:success="success"></Submit>
             </div>
         </el-dialog>
         <!---弹框-->
@@ -88,8 +88,8 @@
                     if (!Number.isInteger(value)) {
                         callback(new Error('验证码格式错误'));
                     }
-                    if (value.toString().length!==6) {
-                        callback(new Error('请输入6位长度的验证码'));
+                    if (value.toString().length!==8) {
+                        callback(new Error('请输入8位长度的验证码'));
                     }
                     callback();
                 }catch (e) {

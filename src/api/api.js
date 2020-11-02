@@ -323,7 +323,7 @@ const getAuthByToken = async function (params = {}) {
  * @param href
  * @returns {Promise<AxiosResponse<T>>}
  */
-const sendEmail = async function (params = {},href = url.sendMail ) {
+const sendEmail = async function (params = {},href = url.sendEmail) {
     return await request.post(href,qs.stringify(Object.assign(params,access_token)))
 };
 /**
@@ -332,7 +332,7 @@ const sendEmail = async function (params = {},href = url.sendMail ) {
  * @param href
  * @returns {Promise<AxiosResponse<T>>}
  */
-const verifyCode = async function (params = {},href= url.verifyCode) {
+const verifyCode = async function (params = {},href= url.checkCode) {
     return await request.post(href,qs.stringify(Object.assign(params,access_token)))
 };
 /**

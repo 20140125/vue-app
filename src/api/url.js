@@ -48,9 +48,7 @@ let url={
     oauthLists:'/v1/oauth/index',
     oauthUpdate:'/v1/oauth/update',
     oauthDelete:'/v1/oauth/delete',
-    oauthBind:'/v1/oauth/bind',
-    sendMail:'/v1/oauth/sendMail',
-    verifyCode:'/v1/oauth/verifyCode',
+    oauthBind:'/v1/oauth/save',
     //请求授权
     reqRuleLists:'/v1/req_rule/index',
     reqRuleSave:'/v1/req_rule/save',

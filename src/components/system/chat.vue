@@ -19,12 +19,12 @@
                             <span>{{ props.row.content['to_client_name'] }}</span>
                         </el-form-item>
                         <el-form-item label="用户头像：">
-                            <el-avatar :src="props.row.content['client_img']" :size="30" :alt="props.row.content['from_client_name'] "/>
+                            <el-avatar :src="props.row.content['client_img']" class="image" :size="40" :alt="props.row.content['from_client_name'] "></el-avatar>
                         </el-form-item>
                         <el-form-item label="消息类型：">
                             <span>{{ props.row.content['msg_type'] }}</span>
                         </el-form-item>
-                        <el-form-item label="发送内容：">
+                        <el-form-item label="发送内容：" class="image">
                             <span v-html="unescape(props.row.content['content'])"></span>
                         </el-form-item>
                         <el-form-item label="发送时间：">
@@ -151,6 +151,11 @@
     }
 </script>
 <style scoped>
+.image{
+    display: flex;
+    align-items: center;
+    position: relative;
+}
 .demo-table-expand {
     font-size: 0;
 }

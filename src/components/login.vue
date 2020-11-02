@@ -167,7 +167,7 @@
                                 break;
                             case 'mail':
                                 let params = {verify_code:this.mailLogin.verify_code,email:this.mailLogin.email};
-                                apiLists.VerifyCode(params,$url.checkCode).then(response=>{
+                                apiLists.VerifyCode(params).then(response=>{
                                     if (response && response.data.code === 200) {
                                         this.loginSystem(this.mailLogin);
                                         return ;
@@ -206,7 +206,7 @@
                     return;
                 }
                 let params = {email:this.mailLogin.email};
-                apiLists.SendEmail(params,$url.sendEmail).then(response=>{
+                apiLists.SendEmail(params).then(response=>{
                     if (response && response.data.code === 200) {
                         this.$message({type:'success',message:response.data.msg});
                         this.disabled = true;
