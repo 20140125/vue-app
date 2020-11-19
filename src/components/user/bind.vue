@@ -31,65 +31,65 @@
 </template>
 
 <script>
-    import apiLists from '../../api/api';
-    import $url from '../../api/url';
+    import apiLists from '../../api/api'
+    import $url from '../../api/url'
     import func from '../../api/func'
-    import Submit from "../common/Submit";
+    import Submit from '../common/Submit'
     import Upload from '../common/Upload'
-    import {mapGetters} from 'vuex';
-    import Status from "../common/Status";
+    import {mapGetters} from 'vuex'
+    import Status from '../common/Status'
     export default {
-        name: "lists",
-        components: {Status, Submit,Upload},
-        data(){
+        name: 'lists',
+        components: {Status, Submit, Upload},
+        data () {
             return {
-                labelWidth:'100px',
-                loading:false,
-                loadingText:'玩命加载中。。。',
-                url:$url.userUpdate,
-                refs:this.$refs,
-                reFrom:'created',
-                showPassword:false,
-                userModel:{
-                    username:'',
-                    email:'',
-                    password:'',
-                    salt:func.set_random(),
-                    status:1,
-                    role_id:2,
-                    phone_number:'',
-                    created_at:func.get_timestamp(),
-                    updated_at:func.get_timestamp(),
-                    avatar_url:''
+                labelWidth: '100px',
+                loading: false,
+                loadingText: '玩命加载中。。。',
+                url: $url.userUpdate,
+                refs: this.$refs,
+                reFrom: 'created',
+                showPassword: false,
+                userModel: {
+                    username: '',
+                    email: '',
+                    password: '',
+                    salt: func.setTime(),
+                    status: 1,
+                    role_id: 2,
+                    phone_number: '',
+                    created_at: func.getTimestamp(),
+                    updated_at: func.getTimestamp(),
+                    avatar_url: ''
                 },
-                rules:{
-                    username:[{required:true,message:'请输入用户名',trigger:'blur'}],
-                    password:[{required:true,message:'请输入密码',trigger:'blur'}],
-                    email:[{required:true,message:'请输入邮箱',trigger:'blur'},{type:'email',message:'邮箱格式不正确',trigger:'blur'}],
-                    status:[{required:true,message:'请勾选登录状态',trigger:'change'}],
-                    avatar_url:[{required:true,message:'请上传用户头像',trigger:'change'}],
-                    phone_number:[{required:true,message:'请输入手机号码',trigger:'change'}],
-                },
+                rules: {
+                    username: [{required: true, message: '请输入用户名', trigger: 'blur'}],
+                    password: [{required: true, message: '请输入密码', trigger: 'blur'}],
+                    email: [{required: true, message: '请输入邮箱', trigger: 'blur'}, {type: 'email', message: '邮箱格式不正确', trigger: 'blur'}],
+                    status: [{required: true, message: '请勾选登录状态', trigger: 'change'}],
+                    avatar_url: [{required: true, message: '请上传用户头像', trigger: 'change'}],
+                    phone_number: [{required: true, message: '请输入手机号码', trigger: 'change'}]
+                }
             }
         },
-        computed:{
-            ...mapGetters(['userInfo']),
+        computed: {
+            ...mapGetters(['userInfo'])
         },
-        methods:{
+        methods: {
             /**
              * todo:修改状态
              * @param status
              */
-            changeStatus:function (status) {
+            changeStatus: function (status) {
                 this.userModel.status = status
             },
             /**
              * TODO:获取用户绑定信息
              */
-            userBind:function() {
-                apiLists.UserBind({'remember_token':this.userInfo.token}).then(response=>{
-                    if (response && response.data.code===200){
-                        this.userModel = response.data.item;
+            userBind: function () {
+                apiLists.UserBind({'remember_token': this.userInfo.token}).then(response => {
+                    if (response && response.data.code === 200) {
+                        this.userModel = response.data.item
                     }
                 })
             },
@@ -97,20 +97,20 @@
              * TODO:图片上传回调
              * @param src
              */
-            uploadSuccess:function(src) {
-                this.userModel.avatar_url = src;
-            },
+            uploadSuccess: function (src) {
+                this.userModel.avatar_url = src
+            }
         },
-        mounted() {
+        mounted () {
             this.$nextTick(function () {
-                this.userBind();
+                this.userBind()
             })
         },
-        created(){
-            this.userModel.username = this.userInfo.username;
-            this.userModel.avatar_url = this.userInfo.avatar_url;
-            this.userModel.remember_token = this.userInfo.token;
-        },
+        created () {
+            this.userModel.username = this.userInfo.username
+            this.userModel.avatar_url = this.userInfo.avatar_url
+            this.userModel.remember_token = this.userInfo.token
+        }
     }
 </script>
 

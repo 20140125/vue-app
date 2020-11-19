@@ -60,167 +60,167 @@
 </template>
 
 <script>
-    import apiLists from '../../api/api';
-    import $url from '../../api/url';
-    import Radio from "../common/Radio";
-    import Delete from "../common/Delete";
-    import Submit from "../common/Submit";
-    import { mapActions,mapGetters } from 'vuex'
-    import VueJson from "../common/jsonView/json";
-    import Status from "../common/Status";
+    import apiLists from '../../api/api'
+    import $url from '../../api/url'
+    import Radio from '../common/Radio'
+    import Delete from '../common/Delete'
+    import Submit from '../common/Submit'
+    import { mapActions, mapGetters } from 'vuex'
+    import VueJson from '../common/jsonView/json'
+    import Status from '../common/Status'
     import func from '../../api/func'
     export default {
-        name: "lists",
+        name: 'lists',
         components: {Status, VueJson, Submit, Delete, Radio},
-        data(){
+        data () {
             return {
-                configLists:[],
-                page:1,
-                limit:15,
-                total:0,
-                title:'',
-                syncVisible:false, //是否显示弹框
-                labelWidth:'100px',
-                loading:true,
-                loadingText:'玩命加载中。。。',
-                url:'',
-                refs:this.$refs,
-                reFrom:'created',
-                configValModel:{},
-                configModel:{},
-                cgi:{remove:$url.configDelete, status:$url.configUpdate, insert:$url.configSave, update:$url.configUpdate},
-                showValue:false
+                configLists: [],
+                page: 1,
+                limit: 15,
+                total: 0,
+                title: '',
+                syncVisible: false, // 是否显示弹框
+                labelWidth: '100px',
+                loading: true,
+                loadingText: '玩命加载中。。。',
+                url: '',
+                refs: this.$refs,
+                reFrom: 'created',
+                configValModel: {},
+                configModel: {},
+                cgi: {remove: $url.configDelete, status: $url.configUpdate, insert: $url.configSave, update: $url.configUpdate},
+                showValue: false
             }
         },
-        computed:{
+        computed: {
             ...mapGetters(['dialogWidth'])
         },
-        methods:{
+        methods: {
             ...mapActions(['saveSystemLog']),
             /**
              * todo:修改状态
              * @param status
              */
-            changeStatus:function (status) {
+            changeStatus: function (status) {
                 this.configModel.status = status
             },
             /**
              * todo：关闭弹框
              */
-            success:function(){
-                this.getConfigLists(this.page,this.limit)
+            success: function () {
+                this.getConfigLists(this.page, this.limit)
             },
             /**
              * todo：获取配置列表
              * @param page
              * @param limit
              */
-            getConfigLists:function (page,limit) {
-                this.syncVisible = false;
-                let params = { page:page,limit:limit };
-                apiLists.ConfigLists(params).then(response=>{
-                    if (response && response.data.code === 200){
-                        this.configLists = response.data.item;
-                        this.total = response.data.item.length;
-                        this.loading = false;
+            getConfigLists: function (page, limit) {
+                this.syncVisible = false
+                let params = { page: page, limit: limit }
+                apiLists.ConfigLists(params).then(response => {
+                    if (response && response.data.code === 200) {
+                        this.configLists = response.data.item
+                        this.total = response.data.item.length
+                        this.loading = false
                     }
-                });
+                })
             },
             /**
              * todo：每页记录数
              * @param val
              */
-            sizeChange:function(val){
-                this.limit = val;
-                this.getConfigLists(this.page,this.limit)
+            sizeChange: function (val) {
+                this.limit = val
+                this.getConfigLists(this.page, this.limit)
             },
             /**
              * todo：当前页码
              * @param val
              */
-            currentChange:function(val) {
-                this.page = val;
-                this.getConfigLists(this.page,this.limit)
+            currentChange: function (val) {
+                this.page = val
+                this.getConfigLists(this.page, this.limit)
             },
             /**
              * TODO:修改配置
              * @param item
              */
-            updateConfig:function(item) {
-                this.title='查看【'+item.name+'】配置';
-                this.configValModel = item;
-                this.configModel = item;
-                this.syncVisible = true;
+            updateConfig: function (item) {
+                this.title = '查看【' + item.name + '】配置'
+                this.configValModel = item
+                this.configModel = item
+                this.syncVisible = true
                 this.showValue = !item.children
-                this.url = this.cgi.update;
-                this.configModel.hasChildren = !!item.children;
-                this.reFrom = 'update';
+                this.url = this.cgi.update
+                this.configModel.hasChildren = !!item.children
+                this.reFrom = 'update'
             },
             /**
              * todo：添加
              */
-            addConfig:function () {
-                this.title='添加配置';
-                this.configValModel = {name:'', status:1}
-                this.configModel = this.configValModel;
-                this.configModel.hasChildren = false;
-                this.syncVisible = true;
-                this.showValue = true;
-                this.url = this.cgi.insert;
+            addConfig: function () {
+                this.title = '添加配置'
+                this.configValModel = {name: '', status: 1}
+                this.configModel = this.configValModel
+                this.configModel.hasChildren = false
+                this.syncVisible = true
+                this.showValue = true
+                this.url = this.cgi.insert
                 this.reFrom = 'created'
             },
             /**
              * todo：设置配置值
              * @param item
              */
-            setConfigVal:function (item) {
-                this.title='设置【'+item.name+'】配置值';
+            setConfigVal: function (item) {
+                this.title = '设置【' + item.name + '】配置值'
                 this.configValModel = {
-                    name:'',
-                    value:'',
-                    status:1,
-                    pid:item.children[item.children.length-1].pid,
-                    created_at:func.set_time(new Date()),
-                    updated_at:func.set_time(new Date()),
-                    id:item.children[item.children.length-1].id+1 || item.children[item.children.length-1].pid*100
+                    name: '',
+                    value: '',
+                    status: 1,
+                    pid: item.children[item.children.length - 1].pid,
+                    created_at: func.setTime(new Date()),
+                    updated_at: func.setTime(new Date()),
+                    id: item.children[item.children.length - 1].id + 1 || item.children[item.children.length - 1].pid * 100
                 }
-                item.children.push(this.configValModel);
-                this.configModel = item;
-                this.configModel.hasChildren = true;
-                this.syncVisible = true;
-                this.showValue = true;
-                this.reFrom = 'created';
-                this.url = this.cgi.update;
+                item.children.push(this.configValModel)
+                this.configModel = item
+                this.configModel.hasChildren = true
+                this.syncVisible = true
+                this.showValue = true
+                this.reFrom = 'created'
+                this.url = this.cgi.update
             },
             /**
              * todo：移除配置值
              * @param item
              */
-            removeConfigVal:function (item) {
-                this.$confirm('此操作将永远删除该条记录，是否继续？','删除记录',{
-                    confirmButtonText:'确定',
-                    cancelButtonText:'取消',
-                    type:'warning'
-                }).then(()=>{
-                    item.act = 'remove';
-                    apiLists.ConfigValUpdate(item).then(response=>{
+            removeConfigVal: function (item) {
+                this.$confirm('此操作将永远删除该条记录，是否继续？', '删除记录', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    item.act = 'remove'
+                    apiLists.ConfigValUpdate(item).then(response => {
                         if (response && response.data.code === 200) {
-                            this.getConfigLists(this.page,this.limit);
-                            let data = { href:this.cgi.updateVal,msg:response.data.msg,token:this.$store.state.login.token };
-                            this.saveSystemLog(data);
-                            this.$message({type:'success',message:response.data.msg});
-                            return false;
+                            this.getConfigLists(this.page, this.limit)
+                            let data = { href: this.cgi.updateVal, msg: response.data.msg, token: this.$store.state.login.token }
+                            this.saveSystemLog(data)
+                            this.$message({type: 'success', message: response.data.msg})
+                            return false
                         }
                     })
-                }).catch(()=>{
-                    this.$message({type:'info',message:'已取消删除！'});
+                }).catch(() => {
+                    this.$message({type: 'info', message: '已取消删除！'})
                 })
             }
         },
-        mounted() {
+        mounted () {
             this.$nextTick(function () {
-                this.getConfigLists(this.page,this.limit)
-            });
+                this.getConfigLists(this.page, this.limit)
+            })
         }
     }
 </script>

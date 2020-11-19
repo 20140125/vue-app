@@ -39,51 +39,51 @@
     import apiLists from '../../api/api'
     import {mapMutations, mapGetters} from 'vuex'
     export default {
-        name: "index",
-        data(){
+        name: 'index',
+        data () {
             return {
-                access_token:'',
-                showTimestamp:'',
-                charts:{},
-                xAxisData:[],
-                seriesData:{
-                    log:[],
-                    notice:[],
-                    oauth:[],
+                access_token: '',
+                showTimestamp: '',
+                charts: {},
+                xAxisData: [],
+                seriesData: {
+                    log: [],
+                    notice: [],
+                    oauth: []
                 },
-                innerWidth:window.innerWidth,
+                innerWidth: window.innerWidth,
                 reverse: false,
-                activities:'',
-                value:new Date(),
-                chartsNum:14,
-                timestampNum:10,
-                chartsStyle:'',
+                activities: '',
+                value: new Date(),
+                chartsNum: 14,
+                timestampNum: 10,
+                chartsStyle: ''
             }
         },
-        computed:{
-            ...mapGetters(['userInfo','tabs']),
+        computed: {
+            ...mapGetters(['userInfo', 'tabs'])
         },
-        mounted() {
+        mounted () {
             this.$nextTick(function () {
-                this.totalCharts();
-                if (this.access_token){
-                    this.setToken(this.access_token);
-                    //删除tabs，避免token暴露在连接中。
-                    this.defaultTabs([{label:'欢迎页',name:'/admin/index'}]);
-                    this.$router.push({path:'/admin/index'});
+                this.totalCharts()
+                if (this.access_token) {
+                    this.setToken(this.access_token)
+                    // 删除tabs，避免token暴露在连接中。
+                    this.defaultTabs([{label: '欢迎页', name: '/admin/index'}])
+                    this.$router.push({path: '/admin/index'})
                 }
-                //图表初始化
-                this.echarts = echarts.init(document.getElementById('charts'));
-                //用户通知
-                this.userInfo.socketServer.on('charts',(response)=>{
-                    //日期
-                    this.xAxisData = response.day;
-                    //系统日志总量
-                    this.seriesData.log = response.total.log;
-                    //站内通知总量
-                    this.seriesData.notice = response.total.push;
-                    //授权用户
-                    this.seriesData.oauth = response.total.oauth;
+                // 图表初始化
+                this.echarts = echarts.init(document.getElementById('charts'))
+                // 用户通知
+                this.userInfo.socketServer.on('charts', (response) => {
+                    // 日期
+                    this.xAxisData = response.day
+                    // 系统日志总量
+                    this.seriesData.log = response.total.log
+                    // 站内通知总量
+                    this.seriesData.notice = response.total.push
+                    // 授权用户
+                    this.seriesData.oauth = response.total.oauth
                     this.echarts.setOption({
                         title: {
                             text: ''
@@ -98,7 +98,7 @@
                             }
                         },
                         legend: {
-                            data:['授权用户','站内通知','系统日志']
+                            data: ['授权用户', '站内通知', '系统日志']
                         },
                         grid: {
                             left: '3%',
@@ -121,57 +121,57 @@
                         },
                         series: [
                             {
-                                name:'授权用户',
-                                type:'line',
+                                name: '授权用户',
+                                type: 'line',
                                 stack: '总量',
                                 areaStyle: {normal: {}},
-                                data:this.seriesData.oauth
+                                data: this.seriesData.oauth
                             },
                             {
-                                name:'站内通知',
-                                type:'line',
+                                name: '站内通知',
+                                type: 'line',
                                 stack: '总量',
                                 areaStyle: {normal: {}},
-                                data:this.seriesData.notice
+                                data: this.seriesData.notice
                             },
                             {
-                                name:'系统日志',
-                                type:'line',
+                                name: '系统日志',
+                                type: 'line',
                                 stack: '总量',
                                 areaStyle: {normal: {}},
-                                data:this.seriesData.log
+                                data: this.seriesData.log
                             }
                         ]
-                    });
-                });
-                //窗口适应
-                if (this.innerWidth>=1920) {
-                    this.chartsNum = 14;
+                    })
+                })
+                // 窗口适应
+                if (this.innerWidth >= 1920) {
+                    this.chartsNum = 14
                     this.timestampNum = 10
-                    this.chartsStyle = {display:'block'};
+                    this.chartsStyle = {display: 'block'}
                 } else {
-                    this.chartsNum = 24;
+                    this.chartsNum = 24
                     this.timestampNum = 24
-                    this.chartsStyle = {display:'none'};
+                    this.chartsStyle = {display: 'none'}
                 }
             })
         },
-        methods:{
-            ...mapMutations(['setToken','defaultTabs']),
+        methods: {
+            ...mapMutations(['setToken', 'defaultTabs']),
             /**
              * todo:数据总量
              */
-            totalCharts:function () {
-                apiLists.TimeLineLists({page:1,limit:10}).then(response=>{
-                    this.activities = response.data.item.data;
+            totalCharts: function () {
+                apiLists.TimeLineLists({page: 1, limit: 10}).then(response => {
+                    this.activities = response.data.item.data
                 })
-            },
-        },
-        created(){
-            if (this.$route.params.access_token){
-                this.access_token = this.$route.params.access_token;
             }
         },
+        created () {
+            if (this.$route.params.access_token) {
+                this.access_token = this.$route.params.access_token
+            }
+        }
     }
 </script>
 

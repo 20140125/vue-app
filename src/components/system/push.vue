@@ -80,158 +80,158 @@
 </template>
 
 <script>
-    import apiLists from '../../api/api';
-    import $url from '../../api/url';
+    import apiLists from '../../api/api'
+    import $url from '../../api/url'
     import func from '../../api/func'
-    import Radio from "../common/Radio";
-    import Delete from "../common/Delete";
-    import Submit from "../common/Submit";
+    import Radio from '../common/Radio'
+    import Delete from '../common/Delete'
+    import Submit from '../common/Submit'
     import {mapGetters} from 'vuex'
-    import Status from "../common/Status";
+    import Status from '../common/Status'
     export default {
-        name: "lists",
+        name: 'lists',
         components: {Status, Submit, Delete, Radio},
-        data(){
+        data () {
             return {
-                pushLists:[],
-                page:1,
-                limit:15,
-                state:'',
-                status:'',
-                total:0,
-                search:'',
-                oauthLists:[],
-                title:'',
-                syncVisible:false, //是否显示弹框
-                labelWidth:'80px',
-                loading:true,
-                loadingText:'玩命加载中。。。',
-                url:'',
-                refs:this.$refs,
-                reFrom:'created',
-                pushModel:{},
-                cgi:{insert:$url.pushSave, update:$url.pushUpdate, remove:$url.pushDelete, status:$url.pushUpdate},
-                pushState:[{'val':'successfully','label':'成功','type':'success'}, {'val':'failed','label':'失败','type':'danger'}, {'val':'offline','label':'离线','type':'default'}],
-                //权限细化按钮
-                btn:{},
+                pushLists: [],
+                page: 1,
+                limit: 15,
+                state: '',
+                status: '',
+                total: 0,
+                search: '',
+                oauthLists: [],
+                title: '',
+                syncVisible: false, // 是否显示弹框
+                labelWidth: '80px',
+                loading: true,
+                loadingText: '玩命加载中。。。',
+                url: '',
+                refs: this.$refs,
+                reFrom: 'created',
+                pushModel: {},
+                cgi: {insert: $url.pushSave, update: $url.pushUpdate, remove: $url.pushDelete, status: $url.pushUpdate},
+                pushState: [{'val': 'successfully', 'label': '成功', 'type': 'success'}, {'val': 'failed', 'label': '失败', 'type': 'danger'}, {'val': 'offline', 'label': '离线', 'type': 'default'}],
+                // 权限细化按钮
+                btn: {}
             }
         },
-        computed:{
-            ...mapGetters(['userInfo','dialogWidth']),
+        computed: {
+            ...mapGetters(['userInfo', 'dialogWidth'])
         },
-        methods:{
+        methods: {
             /**
              * todo:修改状态
              * @param status
              */
-            changeStatus:function (status) {
+            changeStatus: function (status) {
                 this.pushModel.status = status
             },
             /**
              * todo：关闭弹框
              */
-            success:function(){
-                this.getPushLists(this.page,this.limit)
+            success: function () {
+                this.getPushLists(this.page, this.limit)
             },
             /**
              * TODO:实时状态查询
              * @param value
              * @param row
              */
-            filterStatus:function(value, row) {
-                return row.status.toString() === value;
+            filterStatus: function (value, row) {
+                return row.status.toString() === value
             },
             /**
              * TODO:设置按钮类型
              * @param state
              */
-            setType:function(state) {
-                let type = '';
+            setType: function (state) {
+                let type = ''
                 switch (state) {
-                    case 'failed'      :  type = 'danger';   break;
-                    case 'successfully':  type = 'success';  break;
-                    case 'offline'     :  type = 'default';  break;
+                case 'failed' : type = 'danger'; break
+                case 'successfully': type = 'success'; break
+                case 'offline' : type = 'default'; break
                 }
-                return type;
+                return type
             },
             /**
              * todo：获取角色列表
              * @param page
              * @param limit
              */
-            getPushLists:function (page,limit) {
-                let params = { page:page,limit:limit,state:this.state,status:this.status };
-                this.syncVisible = false;
-                this.oauthLists = [];
-                apiLists.PushList(params).then(response=>{
-                    this.pushLists = response.data.item.data;
-                    this.total = response.data.item.total;
-                    this.oauthLists =response.data.item.oauth;
-                    this.oauthLists.unshift({uuid:this.userInfo.default_client_id,username:'default'});
-                });
-                this.loading = false;
+            getPushLists: function (page, limit) {
+                let params = { page: page, limit: limit, state: this.state, status: this.status }
+                this.syncVisible = false
+                this.oauthLists = []
+                apiLists.PushList(params).then(response => {
+                    this.pushLists = response.data.item.data
+                    this.total = response.data.item.total
+                    this.oauthLists = response.data.item.oauth
+                    this.oauthLists.unshift({uuid: this.userInfo.default_client_id, username: 'default'})
+                })
+                this.loading = false
             },
             /**
              * TODO：修改推送人获取推送人ID
              * @param item
              */
-            changeOauthName:function(item) {
-                this.oauthLists.map(row=>{
+            changeOauthName: function (item) {
+                this.oauthLists.map(row => {
                     if (item === row.uuid) {
-                        this.pushModel.username = row.username;
+                        this.pushModel.username = row.username
                     }
-                });
-                this.pushModel.uid = item;
+                })
+                this.pushModel.uid = item
             },
             /**
              * TODO：推送状态查询
              * @param state
              */
-            getState:function(state) {
-               this.state = state;
-               this.getPushLists(1,this.limit)
+            getState: function (state) {
+                this.state = state
+                this.getPushLists(1, this.limit)
             },
             /**
              * todo：每页记录数
              * @param val
              */
-            sizeChange:function(val){
-                this.limit = val;
-                this.getPushLists(this.page,this.limit)
+            sizeChange: function (val) {
+                this.limit = val
+                this.getPushLists(this.page, this.limit)
             },
             /**
              * todo：当前页码
              * @param val
              */
-            currentChange:function(val){
-                this.page = val;
-                this.getPushLists(this.page,this.limit)
+            currentChange: function (val) {
+                this.page = val
+                this.getPushLists(this.page, this.limit)
             },
             /**
              * todo：添加
              */
-            addPush:function () {
-                this.title='添加站内通知';
-                this.syncVisible = true;
-                this.pushModel = {username:'', uid:'', state:'', status:2, created_at:func.set_time(new Date()), title:'系统通知'};
-                this.url = this.cgi.insert;
+            addPush: function () {
+                this.title = '添加站内通知'
+                this.syncVisible = true
+                this.pushModel = {username: '', uid: '', state: '', status: 2, created_at: func.setTime(new Date()), title: '系统通知'}
+                this.url = this.cgi.insert
             },
             /**
              * todo：修改
              * @param item
              */
-            updatePush:function (item) {
-                this.title='修改站内通知';
-                this.syncVisible = true;
-                this.pushModel = item;
-                this.url = this.cgi.update;
+            updatePush: function (item) {
+                this.title = '修改站内通知'
+                this.syncVisible = true
+                this.pushModel = item
+                this.url = this.cgi.update
             }
         },
-        mounted() {
+        mounted () {
             this.$nextTick(function () {
-                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.userInfo.auth);
-                this.getPushLists(this.page,this.limit)
-            });
+                this.btn = func.setBtnStatus(this.$route.path, this.$route.name, this.userInfo.auth)
+                this.getPushLists(this.page, this.limit)
+            })
         }
     }
 </script>

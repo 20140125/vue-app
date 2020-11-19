@@ -62,73 +62,73 @@
 </template>
 
 <script>
-    import apiLists from '../../api/api';
-    import $url from '../../api/url';
+    import apiLists from '../../api/api'
+    import $url from '../../api/url'
     import func from '../../api/func'
-    import Radio from "../common/Radio";
-    import Delete from "../common/Delete";
-    import Submit from "../common/Submit";
-    import {mapGetters} from "vuex";
-    import Status from "../common/Status";
+    import Radio from '../common/Radio'
+    import Delete from '../common/Delete'
+    import Submit from '../common/Submit'
+    import {mapGetters} from 'vuex'
+    import Status from '../common/Status'
     export default {
-        name: "lists",
+        name: 'lists',
         components: {Status, Submit, Delete, Radio},
-        data(){
+        data () {
             return {
-                roleLists:[],
-                loading:true,
-                loadingText:'玩命加载中。。。',
-                authLists:[],
-                defaultChecked:[],
-                search:'',
-                limit:15,
-                page:1,
-                total:0,
-                title:'',
-                syncVisible:false, //是否显示弹框
-                labelWidth:'100px',
-                url:'',
-                refs:this.$refs,
-                reFrom:'created',
-                roleModel:{},
-                cgi:{insert:$url.roleSave, update:$url.roleUpdate, remove:$url.roleDelete, status:$url.roleUpdate},
-                //细化权限按钮
-                btn:{},
+                roleLists: [],
+                loading: true,
+                loadingText: '玩命加载中。。。',
+                authLists: [],
+                defaultChecked: [],
+                search: '',
+                limit: 15,
+                page: 1,
+                total: 0,
+                title: '',
+                syncVisible: false, // 是否显示弹框
+                labelWidth: '100px',
+                url: '',
+                refs: this.$refs,
+                reFrom: 'created',
+                roleModel: {},
+                cgi: {insert: $url.roleSave, update: $url.roleUpdate, remove: $url.roleDelete, status: $url.roleUpdate},
+                // 细化权限按钮
+                btn: {}
             }
         },
-        computed:{
-            ...mapGetters(['userInfo','dialogWidth']),
+        computed: {
+            ...mapGetters(['userInfo', 'dialogWidth'])
         },
-        methods:{
+        methods: {
             /**
              * todo:修改状态
              * @param status
              */
-            changeStatus:function (status) {
+            changeStatus: function (status) {
                 this.roleModel.status = status
             },
             /**
              * todo：关闭弹框
              * @param item
              */
-            success:function(item){
-                this.getRoleLists(this.page,this.limit)
+            success: function (item) {
+                this.getRoleLists(this.page, this.limit)
             },
             /**
              * todo：获取角色列表
              * @param page
              * @param limit
              */
-            getRoleLists:function (page,limit) {
-                let params = { page:page, limit:limit};
-                this.syncVisible = false;
-                apiLists.RoleLists(params).then(response=>{
-                    if (response && response.data.code===200){
-                        this.roleLists = response.data.item.role.data;
-                        this.total = response.data.item.role.total;
-                        this.authLists = response.data.item.auth;
-                        this.defaultChecked = response.data.item.defaultAuth;
-                        this.loading = false;
+            getRoleLists: function (page, limit) {
+                let params = {page: page, limit: limit}
+                this.syncVisible = false
+                apiLists.RoleLists(params).then(response => {
+                    if (response && response.data.code === 200) {
+                        this.roleLists = response.data.item.role.data
+                        this.total = response.data.item.role.total
+                        this.authLists = response.data.item.auth
+                        this.defaultChecked = response.data.item.defaultAuth
+                        this.loading = false
                     }
                 })
             },
@@ -136,72 +136,72 @@
              * todo：每页记录数
              * @param val
              */
-            sizeChange:function(val){
-                this.limit = val;
-                this.getRoleLists(this.page,this.limit)
+            sizeChange: function (val) {
+                this.limit = val
+                this.getRoleLists(this.page, this.limit)
             },
             /**
              * todo：当前页码
              * @param val
              */
-            currentChange:function(val){
-                this.page = val;
-                this.getRoleLists(this.page,this.limit)
+            currentChange: function (val) {
+                this.page = val
+                this.getRoleLists(this.page, this.limit)
             },
             /**
              * todo：角色添加
              */
-            addRole:function () {
-                this.title='添加角色';
-                this.syncVisible = true;
-                this.url = this.cgi.insert;
-                this.reFrom = 'created';
-                this.roleModel={role_name:'', auth_ids:[], auth_url:[], status:1, created_at:func.get_timestamp(), updated_at:func.get_timestamp()}
+            addRole: function () {
+                this.title = '添加角色'
+                this.syncVisible = true
+                this.url = this.cgi.insert
+                this.reFrom = 'created'
+                this.roleModel = {role_name: '', auth_ids: [], auth_url: [], status: 1, created_at: func.getTimestamp(), updated_at: func.getTimestamp()}
             },
             /**
              * @param value      当前值
              * @param direction  数据移动的方向（'left' / 'right'）
              * @param movedKeys  发生移动的数据 key 数组
              */
-            handleChange(value, direction, movedKeys) {
+            handleChange (value, direction, movedKeys) {
                 switch (direction) {
-                  //删除
-                    case 'left':
-                        movedKeys.map((item) => {
-                            this.defaultChecked.splice(this.defaultChecked.indexOf(parseInt(item)),1);
-                        });
-                        break;
-                  //添加
-                    case 'right':
-                        movedKeys.map((item) => {
-                            this.defaultChecked.push(parseInt(item));
-                        });
-                        break;
+                // 删除
+                case 'left':
+                    movedKeys.map((item) => {
+                        this.defaultChecked.splice(this.defaultChecked.indexOf(parseInt(item)), 1)
+                    })
+                    break
+                // 添加
+                case 'right':
+                    movedKeys.map((item) => {
+                        this.defaultChecked.push(parseInt(item))
+                    })
+                    break
                 }
-                this.roleModel.auth_ids = this.defaultChecked;
+                this.roleModel.auth_ids = this.defaultChecked
             },
             /**
              * todo：角色保存
              * @param item
              */
-            updateRole:function (item) {
-                this.syncVisible = true;
-                this.title = '修改角色';
-                this.url = this.cgi.update;
-                this.defaultChecked = []; //需要重置角色拥有的权限
-                this.reFrom = 'update';
-                JSON.parse(item.auth_ids).map(item=>{
-                    this.defaultChecked.push(parseInt(item));
+            updateRole: function (item) {
+                this.syncVisible = true
+                this.title = '修改角色'
+                this.url = this.cgi.update
+                this.defaultChecked = [] // 需要重置角色拥有的权限
+                this.reFrom = 'update'
+                JSON.parse(item.auth_ids).map(item => {
+                    this.defaultChecked.push(parseInt(item))
                 })
-                this.roleModel = item;
-                this.roleModel.auth_ids = this.defaultChecked;
-            },
+                this.roleModel = item
+                this.roleModel.auth_ids = this.defaultChecked
+            }
         },
-        mounted() {
+        mounted () {
             this.$nextTick(function () {
-                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.userInfo.auth);
-                this.getRoleLists(this.page,this.limit)
-            });
+                this.btn = func.setBtnStatus(this.$route.path, this.$route.name, this.userInfo.auth)
+                this.getRoleLists(this.page, this.limit)
+            })
         }
     }
 </script>

@@ -82,108 +82,102 @@
 </template>
 
 <script>
-    import apiLists from '../../api/api';
+    import apiLists from '../../api/api'
     import func from '../../api/func'
-    import $url from '../../api/url';
-    import Delete from "../common/Delete";
-    import Submit from "../common/Submit";
-    import {mapGetters,mapActions} from 'vuex'
+    import $url from '../../api/url'
+    import Delete from '../common/Delete'
+    import Submit from '../common/Submit'
+    import {mapGetters, mapActions} from 'vuex'
     export default {
-        name: "doc",
+        name: 'doc ',
         components: {Submit, Delete},
-        data(){
+        data () {
             return {
-                categoryLists:[],
-                props:{
-                    label:'name',
-                    children:'children',
-                    id:'id'
+                categoryLists: [],
+                props: {
+                    label: 'name',
+                    children: 'children',
+                    id: 'id'
                 },
-                filterText:'',
-                //弹框配置值
-                title:'',
-                syncVisible:false, //是否显示弹框
-                labelWidth:'80px',
-                loading:true,
-                loadingText:'玩命加载中。。。',
-                url:'',
-                refs:this.$refs,
-                reFrom:'category',
-                //接口名称
-                apiName:'README',
-                //右键功能显示与否
-                menuVisible:false,
-                categoryModel:{},
-                apiCategory:[],
-                highlight:true,
-                value:"",
-
-                //是否展示编辑器
-                mavonBool:false,
-                codeStyle:'monokai',
-                cgi:{
-                    categoryInsert:$url.categorySave,
-                    categoryUpdate:$url.categoryUpdate,
-                    remove:$url.categoryDelete,
-                    uploadUrl:process.env.API_ROOT+$url.fileUpload,
-                },
-                //滚动条高度
-                scrollTop:0,
-                //细化权限按钮
-                btn:{},
-                token:'',
-                codeStyleList:require('../../assets/theme.json')
+                filterText: '',
+                // 弹框配置值
+                title: '',
+                syncVisible: false, // 是否显示弹框
+                labelWidth: '80px',
+                loading: true,
+                loadingText: '玩命加载中。。。',
+                url: '',
+                refs: this.$refs,
+                reFrom: 'category',
+                // 接口名称
+                apiName: 'README',
+                // 右键功能显示与否
+                menuVisible: false,
+                categoryModel: {},
+                apiCategory: [],
+                highlight: true,
+                value: '',
+                // 是否展示编辑器
+                mavonBool: false,
+                codeStyle: 'monokai',
+                cgi: {categoryInsert: $url.categorySave, categoryUpdate: $url.categoryUpdate, uploadUrl: process.env.API_ROOT + $url.fileUpload},
+                // 滚动条高度
+                scrollTop: 0,
+                // 细化权限按钮
+                btn: {},
+                token: '',
+                codeStyleList: require('../../assets/theme.json')
             }
         },
         watch: {
-            filterText(val) {
-                this.$refs.tree.filter(val);
+            filterText (val) {
+                this.$refs.tree.filter(val)
             }
         },
-        computed:{
-            ...mapGetters(['docVisible','docModel','docName','userInfo','dialogWidth'])
+        computed: {
+            ...mapGetters(['docVisible', 'docModel', 'docName', 'userInfo', 'dialogWidth'])
         },
-        methods:{
-            ...mapActions(['addDocVisible','addDocModel','saveSystemLog']),
+        methods: {
+            ...mapActions(['addDocVisible', 'addDocModel', 'saveSystemLog']),
             /**
              * todo：关闭弹框
              */
-            success:function(){
-                this.getCategoryLists();
-                this.syncVisible = false;
+            success: function () {
+                this.getCategoryLists()
+                this.syncVisible = false
             },
             /**
              * TODO：搜索接口名称
              * @param value
              * @param data
              */
-            filterNode:function(value, data) {
-                if (!value) return true;
-                return data.name.indexOf(value) !== -1;
+            filterNode: function (value, data) {
+                if (!value) return true
+                return data.name.indexOf(value) !== -1
             },
             /**
              * todo:设置API名称
              * @param item
              * @return {String}
              */
-            setName:function(item){
-                return Array(item.level+1).join('　　')+item.name;
+            setName: function (item) {
+                return Array(item.level + 1).join('　　') + item.name
             },
             /**
              * todo：获取API分类列表
              */
-            getCategoryLists:function () {
-                apiLists.CategoryLists({}).then(response=>{
-                    if (response && response.data.code === 200){
-                        this.apiCategory = response.data.item.category;
-                        this.categoryLists = response.data.item.category_tree;
+            getCategoryLists: function () {
+                apiLists.CategoryLists({}).then(response => {
+                    if (response && response.data.code === 200) {
+                        this.apiCategory = response.data.item.category
+                        this.categoryLists = response.data.item.category_tree
                         if (!this.docModel.id) {
-                            this.apiName = this.categoryLists[0].name;
-                            this.getApiDetail(this.categoryLists[0]);
+                            this.apiName = this.categoryLists[0].name
+                            this.getApiDetail(this.categoryLists[0])
                         }
-                        this.loading = false;
+                        this.loading = false
                     }
-                });
+                })
             },
             /**
              * todo：鼠标右击触发事件
@@ -192,54 +186,50 @@
              * @param Node 节点对应的 Node、
              * @param element 节点组件本身。
              */
-            rightClick:function(MouseEvent, object, Node, element) {
-                this.menuVisible = false;
-                this.menuVisible = true;
-                const menu = document.querySelector('#menu');
-                const tree = document.getElementById('tree');
-                this.scrollTop = func.get_scroll_top();
-                document.addEventListener('click', this.foo);
-                menu.style.left = tree.offsetWidth + 50 + 'px';
-                if (this.scrollTop>=229) {
-                    menu.style.top = MouseEvent.clientY + this.scrollTop - 235 + 'px';
-                } else {
-                    menu.style.top = MouseEvent.clientY + this.scrollTop - 180 + 'px';
-                }
-                this.categoryModel = object;
+            rightClick: function (MouseEvent, object, Node, element) {
+                this.menuVisible = false
+                this.menuVisible = true
+                const menu = document.querySelector('#menu')
+                const tree = document.getElementById('tree')
+                this.scrollTop = func.getScrollTop()
+                document.addEventListener('click', this.foo)
+                menu.style.left = tree.offsetWidth + 50 + 'px'
+                menu.style.top = this.scrollTop >= 229 ? MouseEvent.clientY + this.scrollTop - 235 + 'px' : MouseEvent.clientY + this.scrollTop - 180 + 'px'
+                this.categoryModel = object
             },
             /**
              * todo：取消鼠标监听事件菜单栏
              */
-            foo:function() {
-                this.menuVisible = false;
-                document.removeEventListener('click', this.foo);
+            foo: function () {
+                this.menuVisible = false
+                document.removeEventListener('click', this.foo)
             },
             /**
              * todo：添加API分类
              */
-            addCategory:function () {
-                this.title='添加接口';
-                this.syncVisible = true;
-                this.url = this.cgi.categoryInsert;
-                this.categoryModel = {name:'', pid:this.categoryModel.id === undefined ? '0':this.categoryModel.id, path:'1', level:1};
+            addCategory: function () {
+                this.title = '添加接口'
+                this.syncVisible = true
+                this.url = this.cgi.categoryInsert
+                this.categoryModel = {name: '', pid: this.categoryModel.id === undefined ? '0' : this.categoryModel.id, path: '1', level: 1}
             },
             /**
              * todo：修改API分类
              */
-            updateCategory:function () {
-                this.title = this.categoryModel.name;
-                this.syncVisible = true;
-                this.url = this.cgi.categoryUpdate;
+            updateCategory: function () {
+                this.title = this.categoryModel.name
+                this.syncVisible = true
+                this.url = this.cgi.categoryUpdate
             },
             /**
              * TODO:删除API分类
              */
-            deleteCategory:function(){
-                apiLists.CategoryDelete({id:this.categoryModel.id}).then(response=>{
-                    if (response && response.data.code === 200){
-                        let data = { href:this.cgi.remove, msg:response.data.msg,token:this.$store.state.login.token };
-                        this.saveSystemLog(data);
-                        this.$message({type:'success',message:response.data.msg});
+            deleteCategory: function () {
+                apiLists.CategoryDelete({id: this.categoryModel.id}).then(response => {
+                    if (response && response.data.code === 200) {
+                        let data = {href: this.cgi.remove, msg: response.data.msg, token: this.$store.state.login.token}
+                        this.saveSystemLog(data)
+                        this.$message({type: 'success', message: response.data.msg})
                         this.getCategoryLists()
                     }
                 })
@@ -249,24 +239,24 @@
              * @param post
              * @param file
              */
-            uploadFile:function (post,file) {
-                let type = file.type;
-                let typeArr = ['image/jpg','image/gif','image/png','image/jpeg'];
-                if (!typeArr.includes(type)){
-                    this.$message({type:'warning',message:'upload image format error'});
-                    return false;
+            uploadFile: function (post, file) {
+                let type = file.type
+                let typeArr = ['image/jpg', 'image/gif', 'image/png', 'image/jpeg']
+                if (!typeArr.includes(type)) {
+                    this.$message({type: 'warning', message: 'upload image format error'})
+                    return false
                 }
-                if (file.size>2*1024*1024) {
-                    this.$message({type:'warning',message:'upload image size error'});
-                    return false;
+                if (file.size > 2 * 1024 * 1024) {
+                    this.$message({type: 'warning', message: 'upload image size error'})
+                    return false
                 }
-                let params = new FormData();
-                params.append("file",file);
-                params.append("token",this.userInfo.token);
-                params.append("rand",true);
-                let config = {headers: {"Content-Type": "multipart/form-data","Authorization":`${func.set_password(func.set_random(32),func.set_random(12))}${this.userInfo.token}${func.set_password(func.set_random(32),func.set_random(12))}`}}
-                this.$http.post(this.cgi.uploadUrl,params,config).then(response=>{
-                    this.$refs['md'].$img2Url(post, response.data.item.src);
+                let params = new FormData()
+                params.append('file', file)
+                params.append('token', this.userInfo.token)
+                params.append('rand', true)
+                let config = {headers: {'Content-Type': 'multipart/form-data', 'Authorization': `${func.setPassword(func.setRandom(32), func.setRandom(12))}${this.userInfo.token}${func.setPassword(func.setRandom(32), func.setRandom(12))}`}}
+                this.$http.post(this.cgi.uploadUrl, params, config).then(response => {
+                    this.$refs['md'].$img2Url(post, response.data.item.src)
                 })
             },
             /**
@@ -274,30 +264,30 @@
              * @param data
              * @param render
              */
-            getData:function (data,render) {
-                this.docModel.markdown = data;
-                this.docModel.html = render;
+            getData: function (data, render) {
+                this.docModel.markdown = data
+                this.docModel.html = render
             },
             /**
              * todo:保存数据
              */
-            saveData:function() {
+            saveData: function () {
                 if (this.docModel.id) {
-                    apiLists.ApiDocUpdate(this.docModel).then(response=>{
-                        if (response && response.data.code===200){
-                            this.addDocModel(this.docModel);
-                            let data = { href:$url.apiDocUpdate, msg:response.data.msg,token:this.$store.state.login.token };
-                            this.saveSystemLog(data);
-                            this.$message.success(response.data.msg);
+                    apiLists.ApiDocUpdate(this.docModel).then(response => {
+                        if (response && response.data.code === 200) {
+                            this.addDocModel(this.docModel)
+                            let data = {href: $url.apiDocUpdate, msg: response.data.msg, token: this.$store.state.login.token}
+                            this.saveSystemLog(data)
+                            this.$message.success(response.data.msg)
                         }
                     })
                 } else {
-                    apiLists.ApiDocSave(this.docModel).then(response=>{
-                        if (response && response.data.code===200){
-                            this.$message.success(response.data.msg);
+                    apiLists.ApiDocSave(this.docModel).then(response => {
+                        if (response && response.data.code === 200) {
+                            this.$message.success(response.data.msg)
                             this.addDocModel(this.docModel)
-                            let data = { href:$url.apiDocSave, msg:response.data.msg,token:this.$store.state.login.token };
-                            this.saveSystemLog(data);
+                            let data = {href: $url.apiDocSave, msg: response.data.msg, token: this.$store.state.login.token}
+                            this.saveSystemLog(data)
                             this.getCategoryLists()
                         }
                     })
@@ -307,37 +297,36 @@
              * TODO:获取接口详情
              * @param data
              */
-            getApiDetail:function(data){
-                const obj = { 'docVisible':true,'docName':data.name };
-                this.addDocVisible(obj);
-                this.mavonBool = false;
+            getApiDetail: function (data) {
+                let obj = {docVisible: true, docName: data.name}
+                this.addDocVisible(obj)
+                this.mavonBool = false
                 if (this.$refs.md && this.$refs.md !== 'undefined') {
-                    this.$refs['md'].markdownIt.set({ breaks: false });
+                    this.$refs['md'].markdownIt.set({breaks: false})
                 }
-                this.apiName = this.docName;
-                apiLists.ApiDocLists({type:data.id}).then(response=>{
-                    if (response && response.data.code===200){
-                        this.addDocModel(response.data.item);
+                this.apiName = this.docName
+                apiLists.ApiDocLists({type: data.id}).then(response => {
+                    if (response && response.data.code === 200) {
+                        this.addDocModel(response.data.item)
                     } else {
-                        this.mavonBool = true;
-                        this.addDocModel({});
-                        this.docModel.type = data.id;
+                        this.mavonBool = true
+                        this.addDocModel({})
+                        this.docModel.type = data.id
                     }
-                });
-
+                })
             }
         },
-        created(){
+        created () {
             if (this.docName) {
-                this.apiName = this.docName;
+                this.apiName = this.docName
             }
-            this.token = this.$store.state.login.token;
+            this.token = this.$store.state.login.token
         },
-        mounted() {
+        mounted () {
             this.$nextTick(function () {
-                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.userInfo.auth);
-                this.getCategoryLists();
-            });
+                this.btn = func.setBtnStatus(this.$route.path, this.$route.name, this.userInfo.auth)
+                this.getCategoryLists()
+            })
         }
     }
 </script>

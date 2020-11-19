@@ -6,13 +6,13 @@
 <script>
     import baseModule from './common/Base'
     export default{
-        name:'index',
-        data(){
+        name: 'index',
+        data () {
             return {
 
             }
         },
-        components:{
+        components: {
             baseModule
         }
     }

@@ -36,53 +36,53 @@
 </template>
 
 <script>
-    import apiLists from '../../api/api';
+    import apiLists from '../../api/api'
     import func from '../../api/func'
     import {mapActions, mapGetters} from 'vuex'
     export default {
-        name: "lists",
-        data(){
+        name: 'lists',
+        data () {
             return {
-                databaseLists:[],
-                labelWidth:'80px',
-                loading:true,
-                loadingText:'玩命加载中。。。',
-                edit:false,
-                name:'',
-                search:'',
-                //细化权限按钮
-                btn:{}
+                databaseLists: [],
+                labelWidth: '80px',
+                loading: true,
+                loadingText: '玩命加载中。。。',
+                edit: false,
+                name: '',
+                search: '',
+                // 细化权限按钮
+                btn: {}
             }
         },
-        computed:{
+        computed: {
             ...mapGetters(['userInfo'])
         },
-        methods:{
+        methods: {
             ...mapActions(['saveSystemLog']),
             /**
              * TODO：获取角色列表
              */
-            getDatabaseLists:function () {
-                apiLists.DatabaseLists([]).then(response=>{
-                    if (response && response.data.code === 200){
-                        this.databaseLists = response.data.item;
-                        this.loading = false;
+            getDatabaseLists: function () {
+                apiLists.DatabaseLists([]).then(response => {
+                    if (response && response.data.code === 200) {
+                        this.databaseLists = response.data.item
+                        this.loading = false
                     }
-                });
+                })
             },
             /**
              * TODO：数据表备份
              * @param databaseObject
              * @constructor
              */
-            backup:function (databaseObject) {
-                this.loading = true;
-                this.edit = false;
-                apiLists.DatabaseBackup(databaseObject).then(response=>{
+            backup: function (databaseObject) {
+                this.loading = true
+                this.edit = false
+                apiLists.DatabaseBackup(databaseObject).then(response => {
                     if (response && response.data.code === 200) {
-                        setTimeout(()=>{ this.loading = false;this.$message({type:'success',message:response.data.msg}) },response.data.item.times)
-                        let data = {href:response.config.url, msg:response.data.msg, token:this.$store.state.login.token};
-                        this.saveSystemLog(data);
+                        setTimeout(() => { this.loading = false; this.$message({type: 'success', message: response.data.msg}) }, response.data.item.times)
+                        let data = {href: response.config.url, msg: response.data.msg, token: this.$store.state.login.token}
+                        this.saveSystemLog(data)
                     }
                 })
             },
@@ -90,46 +90,46 @@
              * TODO：设置
              * @param databaseObject
              */
-            setComment:function(databaseObject) {
-                this.name = databaseObject.name;
-                this.edit = true;
+            setComment: function (databaseObject) {
+                this.name = databaseObject.name
+                this.edit = true
             },
             /**
              * TODO：修改注释
              * @param databaseObject
              */
-            updateComment:function(databaseObject) {
+            updateComment: function (databaseObject) {
                 if (!databaseObject.comment) {
-                    this.$message.warning('请输入数据表备注');
-                    this.$refs['comment'].focus();
-                    return false;
+                    this.$message.warning('请输入数据表备注')
+                    this.$refs['comment'].focus()
+                    return false
                 }
-                this.loading = true;
-                apiLists.DatabaseUpdateComment(databaseObject).then(response=>{
-                    if (response && response.data.code === 200){
-                        this.loading = false;
-                        this.$message({type:'success',message:response.data.msg});
-                        this.edit = false;
-                        this.name = '';
-                        let data = {href:response.config.url, msg:response.data.msg, token:this.$store.state.login.token};
-                        this.saveSystemLog(data);
+                this.loading = true
+                apiLists.DatabaseUpdateComment(databaseObject).then(response => {
+                    if (response && response.data.code === 200) {
+                        this.loading = false
+                        this.$message({type: 'success', message: response.data.msg})
+                        this.edit = false
+                        this.name = ''
+                        let data = {href: response.config.url, msg: response.data.msg, token: this.$store.state.login.token}
+                        this.saveSystemLog(data)
                     }
-                });
+                })
             },
             /**
              * TODO：数据表修复
              * @param databaseObject
              * @constructor
              */
-            repair:function (databaseObject) {
-                this.loading = true;
-                this.edit = false;
-                apiLists.DatabaseRepair(databaseObject).then(response=>{
+            repair: function (databaseObject) {
+                this.loading = true
+                this.edit = false
+                apiLists.DatabaseRepair(databaseObject).then(response => {
                     if (response && response.data.code === 200) {
-                        this.loading = false;
-                        this.$message({type:'success',message:response.data.msg});
-                        let data = {href:response.config.url, msg:response.data.msg, token:this.$store.state.login.token};
-                        this.saveSystemLog(data);
+                        this.loading = false
+                        this.$message({type: 'success', message: response.data.msg})
+                        let data = {href: response.config.url, msg: response.data.msg, token: this.$store.state.login.token}
+                        this.saveSystemLog(data)
                     }
                 })
             },
@@ -138,24 +138,24 @@
              * @param databaseObject
              * @constructor
              */
-            optimize:function (databaseObject) {
-                this.loading = true;
-                this.edit = false;
-                apiLists.DatabaseOptimize(databaseObject).then(response=>{
+            optimize: function (databaseObject) {
+                this.loading = true
+                this.edit = false
+                apiLists.DatabaseOptimize(databaseObject).then(response => {
                     if (response && response.data.code === 200) {
-                        this.loading = false;
-                        this.$message({type:'success',message:response.data.msg});
-                        let data = {href:response.config.url, msg:response.data.msg, token:this.$store.state.login.token};
-                        this.saveSystemLog(data);
+                        this.loading = false
+                        this.$message({type: 'success', message: response.data.msg})
+                        let data = {href: response.config.url, msg: response.data.msg, token: this.$store.state.login.token}
+                        this.saveSystemLog(data)
                     }
                 })
             }
         },
-        mounted() {
+        mounted () {
             this.$nextTick(function () {
-                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.userInfo.auth);
+                this.btn = func.setBtnStatus(this.$route.path, this.$route.name, this.userInfo.auth)
                 this.getDatabaseLists()
-            });
+            })
         }
     }
 </script>

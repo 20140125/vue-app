@@ -47,113 +47,106 @@
 </template>
 
 <script>
-    import apiLists from '../../api/api';
-    import $url from '../../api/url';
+    import apiLists from '../../api/api'
+    import $url from '../../api/url'
     import func from '../../api/func'
-    import Radio from "../common/Radio";
-    import Delete from "../common/Delete";
-    import Submit from "../common/Submit";
+    import Radio from '../common/Radio'
+    import Delete from '../common/Delete'
+    import Submit from '../common/Submit'
     import {mapGetters} from 'vuex'
     export default {
-        name: "lists",
+        name: 'lists',
         components: {Submit, Delete, Radio},
-        data(){
+        data () {
             return {
-                roleLists:[],
-                page:1,
-                limit:15,
-                total:0,
-
-                title:'',
-                syncVisible:false, //是否显示弹框
-                modal:true, //遮盖层是否需要
-                labelWidth:'80px',
-                loading:true,
-                destroy_on_close:true,
-                center:true,
-                loadingText:'玩命加载中。。。',
-
-                url:'',
-                refs:this.$refs,
-                reFrom:'role',
-
-                authModel:{},
-
-                cgi:{
-                    remove:$url.remove,
-                    status:$url.status
-                },
-                rules:{},
+                roleLists: [],
+                page: 1,
+                limit: 15,
+                total: 0,
+                title: '',
+                syncVisible: false, // 是否显示弹框
+                modal: true, // 遮盖层是否需要
+                labelWidth: '80px',
+                loading: true,
+                destroy_on_close: true,
+                center: true,
+                loadingText: '玩命加载中。。。',
+                url: '',
+                refs: this.$refs,
+                reFrom: 'role',
+                authModel: {},
+                cgi: {remove: $url.remove, status: $url.status},
+                rules: {}
             }
         },
-        computed:{
+        computed: {
             ...mapGetters(['dialogWidth'])
         },
-        methods:{
+        methods: {
             /**
              * todo：关闭弹框
              */
-            success:function(){
-                this.syncVisible = false;
+            success: function () {
+                this.syncVisible = false
             },
             /**
              * todo：设置时间
              * @param timestamp
              */
-            setTimes:function(timestamp){
-                return func.set_time(timestamp*1000);
+            setTimes: function (timestamp) {
+                return func.setTime(timestamp * 1000)
             },
             /**
              * todo：获取角色列表
              * @param page
              * @param limit
              */
-            getRoleLists:function (page,limit) {
-                let params = { page:page,limit:limit };
-                apiLists.RoleLists(params).then(response=>{
-                    console.log(response);
-                });
-                this.loading = false;
+            getRoleLists: function (page, limit) {
+                let params = { page: page, limit: limit }
+                apiLists.RoleLists(params).then(response => {
+                    console.log(response)
+                })
+                this.loading = false
             },
             /**
              * todo：每页记录数
              * @param val
              */
-            sizeChange:function(val){
-                this.limit = val;
-                this.getRoleLists(this.page,this.limit)
+            sizeChange: function (val) {
+                this.limit = val
+                this.getRoleLists(this.page, this.limit)
             },
             /**
              * todo：当前页码
              * @param val
              */
-            currentChange:function(val){
-                this.page = val;
-                this.getRoleLists(this.page,this.limit)
+            currentChange: function (val) {
+                this.page = val
+                this.getRoleLists(this.page, this.limit)
             },
             /**
              * todo：添加
              */
-            addAuth:function () {
-                this.title='添加';
-                this.syncVisible = true;
-                this.url = this.cgi.insert;
+            addAuth: function () {
+                this.title = '添加'
+                this.syncVisible = true
+                this.url = this.cgi.insert
             },
             /**
              * todo：修改
              * @param item
              */
-            updateAuth:function (item) {
-                this.title='修改';
-                this.syncVisible = true;
-                this.roleModel = item;
-                this.url = this.cgi.update;
+            updateAuth: function (item) {
+                this.title = '修改'
+                this.syncVisible = true
+                this.roleModel = item
+                this.url = this.cgi.update
             }
         },
-        mounted() {
+        mounted () {
             this.$nextTick(function () {
-                this.getRoleLists(this.page,this.limit)
-            });
+                this.getRoleLists(this.page, this.limit)
+            })
         }
     }
 </script>

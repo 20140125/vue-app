@@ -98,173 +98,173 @@
 </template>
 
 <script>
-    import apiLists from '../../api/api';
-    import func from '../../api/func';
-    import $url from '../../api/url';
-    import Submit from "../common/Submit";
-    import { mapGetters,mapActions } from 'vuex';
+    import apiLists from '../../api/api'
+    import func from '../../api/func'
+    import $url from '../../api/url'
+    import Submit from '../common/Submit'
+    import { mapGetters, mapActions } from 'vuex'
     import { codemirror } from 'vue-codemirror-lite'
-    //编辑器代码 php
-    require('codemirror/mode/php/php.js');
+    // 编辑器代码 php
+    require('codemirror/mode/php/php.js')
     require('codemirror/mode/sql/sql.js')
     require('codemirror/addon/hint/sql-hint.js')
     require('codemirror/addon/hint/show-hint.js')
-    require('codemirror/mode/markdown/markdown.js');
-    require('codemirror/mode/xml/xml.js');
-    require('codemirror/addon/hint/javascript-hint.js');
-    require('codemirror/mode/javascript/javascript.js');
-    require('codemirror/addon/selection/active-line');
-    //编辑器主题
-    require('codemirror/theme/monokai.css');
-    //代码折叠
-    require('codemirror/addon/fold/foldgutter.css');
-    require('codemirror/addon/fold/foldcode.js');
-    require('codemirror/addon/fold/foldgutter.js');
-    require('codemirror/addon/fold/brace-fold.js');
-    require('codemirror/addon/fold/brace-fold.js');
-    require('codemirror/addon/fold/comment-fold.js');
-    //括号匹配
-    require('codemirror/addon/edit/matchbrackets.js');
+    require('codemirror/mode/markdown/markdown.js')
+    require('codemirror/mode/xml/xml.js')
+    require('codemirror/addon/hint/javascript-hint.js')
+    require('codemirror/mode/javascript/javascript.js')
+    require('codemirror/addon/selection/active-line')
+    // 编辑器主题
+    require('codemirror/theme/monokai.css')
+    // 代码折叠
+    require('codemirror/addon/fold/foldgutter.css')
+    require('codemirror/addon/fold/foldcode.js')
+    require('codemirror/addon/fold/foldgutter.js')
+    require('codemirror/addon/fold/brace-fold.js')
+    require('codemirror/addon/fold/brace-fold.js')
+    require('codemirror/addon/fold/comment-fold.js')
+    // 括号匹配
+    require('codemirror/addon/edit/matchbrackets.js')
 
     export default {
-        name: "lists",
-        components: {Submit,codemirror},
-        data(){
+        name: 'lists',
+        components: {Submit, codemirror},
+        data () {
             return {
-                //树组件
-                props:{ label:'label', children:'children', isLeaf:false },
-                //文件授权
-                checkBoxArr:[{'id':4,'value':'读取'},{'id':2,'value':'写入'},{'id':1,'value':'执行'}],
-                all:[],
-                user:[],
-                common:[],
-                all_id:0,
-                user_id:0,
-                common_id:0,
-                chmodModel:{ auth:parseInt(this.all_id +''+ this.user_id +''+ this.common_id), path:'' },
-                //文件压缩
-                compressionModel:{docLists:[], resource:'', path:''},
-                mode:{
-                    markdown:"text/markdown",
-                    php:"text/x-php",
-                    xml:"text/xml",
-                    json:"application/ld+json",
-                    sql:"text/x-mysql"
+                // 树组件
+                props: { label: 'label', children: 'children', isLeaf: false },
+                // 文件授权
+                checkBoxArr: [{'id': 4, 'value': '读取'}, {'id': 2, 'value': '写入'}, {'id': 1, 'value': '执行'}],
+                all: [],
+                user: [],
+                common: [],
+                all_id: 0,
+                user_id: 0,
+                common_id: 0,
+                chmodModel: { auth: parseInt(this.all_id + '' + this.user_id + '' + this.common_id), path: '' },
+                // 文件压缩
+                compressionModel: {docLists: [], resource: '', path: ''},
+                mode: {
+                    markdown: 'text/markdown',
+                    php: 'text/x-php',
+                    xml: 'text/xml',
+                    json: 'application/ld+json',
+                    sql: 'text/x-mysql'
                 },
-                //代码编辑器配置
-                options:{
-                    mode: "text/x-php",
-                    //缩进
+                // 代码编辑器配置
+                options: {
+                    mode: 'text/x-php',
+                    // 缩进
                     tabSize: 4,
-                    //显示行号
+                    // 显示行号
                     lineNumbers: true,
-                    //theme
-                    theme:'monokai',
-                    //智能提示
-                    extraKeys:{"Ctrl-Space":"autocomplete"},//ctrl-space唤起智能提示
-                    //自动换行
-                    lineWrapping:false,
-                    //代码折叠
+                    // theme
+                    theme: 'monokai',
+                    // 智能提示
+                    extraKeys: {'Ctrl-Space': 'autocomplete'}, // ctrl-space唤起智能提示
+                    // 自动换行
+                    lineWrapping: false,
+                    // 代码折叠
                     foldGutter: true,
-                    gutters:["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-                    //在缩进时，是否需要把 n*tab宽度个空格替换成n个tab字符，默认为false
+                    gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+                    // 在缩进时，是否需要把 n*tab宽度个空格替换成n个tab字符，默认为false
                     indentWithTabs: true,
-                    //自动缩进，设置是否根据上下文自动缩进（和上一行相同的缩进量）。默认为true。
+                    // 自动缩进，设置是否根据上下文自动缩进（和上一行相同的缩进量）。默认为true。
                     smartIndent: true,
-                    //括号匹配
-                    matchBrackets:true,
+                    // 括号匹配
+                    matchBrackets: true,
                     // 光标高度
-                    cursorHeight:1,
-                    //自动刷新
+                    cursorHeight: 1,
+                    // 自动刷新
                     autoRefresh: true,
-                    //设置光标所在行高亮
-                    styleActiveLine:true,
-                    //只读
-                    readOnly:true,
+                    // 设置光标所在行高亮
+                    styleActiveLine: true,
+                    // 只读
+                    readOnly: true
                 },
-                //展示自定义右键菜单
-                menuVisible:false,
-                //高亮选中的节点
-                highlight:true,
-                //文件列表
-                fileLists:[],
-                //默认目录
-                path:'base_path',
-                //默认显示tabs
-                activeFileTabName:null,
-                title:'default',
-                syncVisible:false, //是否显示弹框
-                labelWidth:'80px',
-                loading:true,
-                loadingText:'玩命加载中。。。',
-                //自定义组件
-                url:'',
-                refs:this.$refs,
-                reFrom:'file',
-                //文件对象
-                fileObject:{},
-                //是否显示按钮
-                showRightBtn:{ add:true, rename:true, remove:true, compression:true, DeCompression:false, auth:true, download:true, upload:true },
-                //文件
-                fileModel:{content:'', path:''},
-                //文件上传
-                fileList:[],
-                fileSyncVisible:false,
-                fileData:{},
-                headers:{},
-                //编辑器显示与否
-                showIdea:true,
-                //地址
-                cgi:{ update:$url.fileUpdate, chmod:$url.fileChmod, uploadUrl:process.env.API_ROOT+$url.fileUpload.replace('/','') },
-                //图片弹框
-                imgVisible:false,
-                dialogImageUrl:'',
-                dialogVideoUrl:'',
-                dialogTitle:'',
-                filterText:'',
-                scrollTop:0,
-                btn:{},
+                // 展示自定义右键菜单
+                menuVisible: false,
+                // 高亮选中的节点
+                highlight: true,
+                // 文件列表
+                fileLists: [],
+                // 默认目录
+                path: 'base_path',
+                // 默认显示tabs
+                activeFileTabName: null,
+                title: 'default',
+                syncVisible: false, // 是否显示弹框
+                labelWidth: '80px',
+                loading: true,
+                loadingText: '玩命加载中。。。',
+                // 自定义组件
+                url: '',
+                refs: this.$refs,
+                reFrom: 'file',
+                // 文件对象
+                fileObject: {},
+                // 是否显示按钮
+                showRightBtn: { add: true, rename: true, remove: true, compression: true, DeCompression: false, auth: true, download: true, upload: true },
+                // 文件
+                fileModel: {content: '', path: ''},
+                // 文件上传
+                fileList: [],
+                fileSyncVisible: false,
+                fileData: {},
+                headers: {},
+                // 编辑器显示与否
+                showIdea: true,
+                // 地址
+                cgi: { update: $url.fileUpdate, chmod: $url.fileChmod, uploadUrl: process.env.API_ROOT + $url.fileUpload.replace('/', '') },
+                // 图片弹框
+                imgVisible: false,
+                dialogImageUrl: '',
+                dialogVideoUrl: '',
+                dialogTitle: '',
+                filterText: '',
+                scrollTop: 0,
+                btn: {}
             }
         },
         watch: {
-            filterText(val) {
-                this.$refs.tree.filter(val);
+            filterText (val) {
+                this.$refs.tree.filter(val)
             }
         },
-        computed:{
-            ...mapGetters(['fileTabs','currFileObj','userInfo','dialogWidth']),
+        computed: {
+            ...mapGetters(['fileTabs', 'currFileObj', 'userInfo', 'dialogWidth'])
         },
-        methods:{
-            ...mapActions(['addFileTabs','deleteFileTabs','addCurrFileObj','saveSystemLog']),
+        methods: {
+            ...mapActions(['addFileTabs', 'deleteFileTabs', 'addCurrFileObj', 'saveSystemLog']),
             /**
              * todo：关闭弹框
              */
-            success:function(){
-                this.addCurrFileObj(this.fileModel);
-                this.getFileLists(this.path);
-                this.syncVisible = false;
+            success: function () {
+                this.addCurrFileObj(this.fileModel)
+                this.getFileLists(this.path)
+                this.syncVisible = false
             },
             /**
              * TODO：搜索文件名称
              * @param value
              * @param data
              */
-            filterNode:function(value, data) {
-                if (!value) return true;
-                return data.label.toLowerCase().indexOf(value.toLowerCase()) !== -1;
+            filterNode: function (value, data) {
+                if (!value) return true
+                return data.label.toLowerCase().indexOf(value.toLowerCase()) !== -1
             },
             /**
              * todo：获取文件列表
              * @param path
              */
-            getFileLists:function (path) {
-                let params = {path:path,basename:'/',sort:'type',sort_order:'asc'};
-                apiLists.FileLists(params).then(response=>{
-                    if (response && response.data.code === 200){
-                        this.fileLists = response.data.item;
-                        this.loading = false;
+            getFileLists: function (path) {
+                let params = {path: path, basename: '/', sort: 'type', sort_order: 'asc'}
+                apiLists.FileLists(params).then(response => {
+                    if (response && response.data.code === 200) {
+                        this.fileLists = response.data.item
+                        this.loading = false
                     }
-                });
+                })
             },
             /**
              * todo：鼠标右击触发事件
@@ -273,41 +273,41 @@
              * @param Node 节点对应的 Node、
              * @param element 节点组件本身。
              */
-            rightClick:function(MouseEvent, object, Node, element) {
-                this.menuVisible = false;
-                this.menuVisible = true;
-                const menu = document.querySelector('#menu');
-                const tree = document.getElementById('tree');
-                this.scrollTop = func.get_scroll_top();
-                document.addEventListener('click', this.foo);
-                menu.style.left = tree.offsetWidth + 50 +'px';
-                if (this.scrollTop>=229) {
-                    menu.style.top = MouseEvent.clientY + this.scrollTop - 235 + 'px';
+            rightClick: function (MouseEvent, object, Node, element) {
+                this.menuVisible = false
+                this.menuVisible = true
+                const menu = document.querySelector('#menu')
+                const tree = document.getElementById('tree')
+                this.scrollTop = func.getScrollTop()
+                document.addEventListener('click', this.foo)
+                menu.style.left = tree.offsetWidth + 50 + 'px'
+                if (this.scrollTop >= 229) {
+                    menu.style.top = MouseEvent.clientY + this.scrollTop - 235 + 'px'
                 } else {
-                    menu.style.top = MouseEvent.clientY + this.scrollTop - 180 + 'px';
+                    menu.style.top = MouseEvent.clientY + this.scrollTop - 180 + 'px'
                 }
-                this.fileObject = object;
+                this.fileObject = object
                 switch (this.fileObject.fileType) {
-                    case 'file':
-                        this.showRightBtn.DeCompression = false;
-                        this.showRightBtn.download = true;
-                        let ext = this.fileObject.label.split(".")[1];
-                        let compressionExt = ['tar','zip','7z','TAR','ZIP','7Z'];
-                        if (compressionExt.includes(ext)){
-                            this.showRightBtn.DeCompression = true;
-                        }
-                        break;
-                    case 'dir':
-                        this.showRightBtn.download = false;
-                        this.showRightBtn.DeCompression = false;
-                        break;
+                case 'file':
+                    this.showRightBtn.DeCompression = false
+                    this.showRightBtn.download = true
+                    let ext = this.fileObject.label.split('.')[1]
+                    let compressionExt = ['tar', 'zip', '7z', 'TAR', 'ZIP', '7Z']
+                    if (compressionExt.includes(ext)) {
+                        this.showRightBtn.DeCompression = true
+                    }
+                    break
+                case 'dir':
+                    this.showRightBtn.download = false
+                    this.showRightBtn.DeCompression = false
+                    break
                 }
             },
             /**
              * todo：取消鼠标监听事件菜单栏
              */
-            foo:function() {
-                this.menuVisible = false;
+            foo: function () {
+                this.menuVisible = false
                 document.removeEventListener('click', this.foo) // 关掉监听
             },
             /**
@@ -318,14 +318,14 @@
              * @val path   tabs 标签的路径
              * @val content tabs 标签下的内容
              */
-            goto:function(tab){
-                let item = this.fileTabs;
-                for (const i in item){
+            goto: function (tab) {
+                let item = this.fileTabs
+                for (const i in item) {
                     if (item[i].label === tab.label) {
-                        this.fileModel.content = item[i].content;
-                        this.fileModel.path = item[i].path;
-                        let currFileObj = {content:this.fileModel.content, path:this.fileModel.path, name:item[i].name};
-                        this.addCurrFileObj(currFileObj);
+                        this.fileModel.content = item[i].content
+                        this.fileModel.path = item[i].path
+                        let currFileObj = {content: this.fileModel.content, path: this.fileModel.path, name: item[i].name}
+                        this.addCurrFileObj(currFileObj)
                     }
                 }
             },
@@ -337,19 +337,19 @@
              * @val path   tabs 标签的路径
              * @val content tabs 标签下的内容
              */
-            removeTabName:function(tabName){
+            removeTabName: function (tabName) {
                 this.fileTabs.forEach((tab, index) => {
                     if (tab.name === tabName) {
-                        let nextTab = this.fileTabs[index + 1] || this.fileTabs[index - 1];
+                        let nextTab = this.fileTabs[index + 1] || this.fileTabs[index - 1]
                         if (nextTab) {
-                            this.activeFileTabName = nextTab.name;
-                            this.fileModel.content = nextTab.content;
-                            let currFileObj = {content:nextTab.content, path:nextTab.path, name:nextTab.name};
-                            this.addCurrFileObj(currFileObj);
-                            this.deleteFileTabs(tabName);
+                            this.activeFileTabName = nextTab.name
+                            this.fileModel.content = nextTab.content
+                            let currFileObj = {content: nextTab.content, path: nextTab.path, name: nextTab.name}
+                            this.addCurrFileObj(currFileObj)
+                            this.deleteFileTabs(tabName)
                         }
                     }
-                });
+                })
             },
             /**
              * todo：获取文件内容
@@ -359,367 +359,368 @@
              * @val path   tabs 标签的路径
              * @val content tabs 标签下的内容
              */
-            getFileContent:function (item) {
+            getFileContent: function (item) {
                 if (item.fileType !== 'file') {
-                    return false;
-                }
-                let ext = item.label.split(".")[1];
-                this.dialogTitle = item.label;
-                //文件地址
-                let commUrl = this.userInfo.local+'storage'+item.path.substr(item.path.indexOf('public')+6,item.path.length-item.path.indexOf('public'));
-                //图片浏览
-                let imgExt = ['png','jpg','jpeg','gif'];
-                if (ext && imgExt.includes(ext.toLowerCase())) {
-                    this.dialogVideoUrl = '';
-                    this.dialogImageUrl = commUrl
-                    this.imgVisible = true;
-                    return false;
-                }
-                //视频浏览
-                let videoExt = ['mp4','flv'];
-                if (ext && videoExt.includes(ext.toLowerCase())) {
-                    this.dialogImageUrl = '';
-                    this.dialogVideoUrl = commUrl
-                    this.imgVisible = true;
-                    return false;
-                }
-                //文件下载
-                let downloadExt = ['xls','csv','docx','word','tar','zip','7z'];
-                if (ext && downloadExt.includes(ext.toLowerCase())) {
-                    this.$confirm('是否下载文件【'+item.label+'】到本地',{showClose:false,center:true}).then(()=>{
-                        window.location.href=commUrl
-                    }).catch(()=>{})
                     return false
                 }
-                this.setOptionsMode(ext);
-                this.showIdea = true;
-                this.activeFileTabName = item.size.toString();
-                let params = {path:item.path},tabs = {};
-                this.url = this.cgi.update;
-                tabs.label = item.label;tabs.name = item.size.toString();tabs.path = item.path;
-                apiLists.FileRead(params).then((response)=> {
-                    if (response && response.data.code === 200){
-                        this.fileModel.content = response.data.item.content;
-                        this.fileModel.path = item.path;
-                        tabs.content = this.fileModel.content;
-                        this.addCurrFileObj(tabs);
+                let ext = item.label.split('.')[1]
+                this.dialogTitle = item.label
+                // 文件地址
+                let commUrl = this.userInfo.local + 'storage' + item.path.substr(item.path.indexOf('public') + 6, item.path.length - item.path.indexOf('public'))
+                // 图片浏览
+                let imgExt = ['png', 'jpg', 'jpeg', 'gif']
+                if (ext && imgExt.includes(ext.toLowerCase())) {
+                    this.dialogVideoUrl = ''
+                    this.dialogImageUrl = commUrl
+                    this.imgVisible = true
+                    return false
+                }
+                // 视频浏览
+                let videoExt = ['mp4', 'flv']
+                if (ext && videoExt.includes(ext.toLowerCase())) {
+                    this.dialogImageUrl = ''
+                    this.dialogVideoUrl = commUrl
+                    this.imgVisible = true
+                    return false
+                }
+                // 文件下载
+                let downloadExt = ['xls', 'csv', 'docx', 'word', 'tar', 'zip', '7z']
+                if (ext && downloadExt.includes(ext.toLowerCase())) {
+                    this.$confirm('是否下载文件【' + item.label + '】到本地', {showClose: false, center: true}).then(() => {
+                        window.location.href = commUrl
+                    }).catch(() => {})
+                    return false
+                }
+                this.setOptionsMode(ext)
+                this.showIdea = true
+                this.activeFileTabName = item.size.toString()
+                let params = {path: item.path}
+                let tabs = {}
+                this.url = this.cgi.update
+                tabs.label = item.label; tabs.name = item.size.toString(); tabs.path = item.path
+                apiLists.FileRead(params).then((response) => {
+                    if (response && response.data.code === 200) {
+                        this.fileModel.content = response.data.item.content
+                        this.fileModel.path = item.path
+                        tabs.content = this.fileModel.content
+                        this.addCurrFileObj(tabs)
                         this.addFileTabs(tabs)
                     }
-                });
+                })
             },
             /**
              * TODO:设置编辑器的mode
              * @param ext
              */
-            setOptionsMode:function(ext) {
+            setOptionsMode: function (ext) {
                 switch (ext) {
-                    case 'xml':
-                        this.options.mode = this.mode.xml;
-                        break;
-                    case 'md':
-                        this.options.mode = this.mode.markdown;
-                        break;
-                    case 'json':
-                    case 'lock':
-                        this.options.mode = this.mode.json;
-                        break;
-                    case 'sql':
-                        this.options.mode = this.mode.sql;
-                        break;
-                    default:
-                        this.options.mode = this.mode.php;
-                        break;
+                case 'xml':
+                    this.options.mode = this.mode.xml
+                    break
+                case 'md':
+                    this.options.mode = this.mode.markdown
+                    break
+                case 'json':
+                case 'lock':
+                    this.options.mode = this.mode.json
+                    break
+                case 'sql':
+                    this.options.mode = this.mode.sql
+                    break
+                default:
+                    this.options.mode = this.mode.php
+                    break
                 }
             },
             /**
              * todo：文件重新命名
              */
-            renameFile:function(){
-                let params = {oldFile:this.fileObject.path};
-                this.$prompt('请输入新的文件名', '['+this.fileObject.label+'] 重命名', { confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
+            renameFile: function () {
+                let params = {oldFile: this.fileObject.path}
+                this.$prompt('请输入新的文件名', '[' + this.fileObject.label + '] 重命名', {confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
                     if (value === '' || value === null || value === 'null' || value === 'undefined') {
-                        this.$message.warning('File name cannot be empty');
-                        return false;
+                        this.$message.warning('File name cannot be empty')
+                        return false
                     }
-                    params.newFile = params.oldFile.replace(this.fileObject.label,value);
-                    apiLists.FileRename(params).then(response=>{
-                        if (response && response.data.code === 200){
-                            this.fileObject.name = value;
-                            this.$message({type: 'success', message: response.data.msg+'：'+ value});
-                            let data = { href:$url.fileSave, msg:response.data.msg+'：'+ value};
-                            this.saveSystemLog(data);
-                            this.getFileLists(this.path);
+                    params.newFile = params.oldFile.replace(this.fileObject.label, value)
+                    apiLists.FileRename(params).then(response => {
+                        if (response && response.data.code === 200) {
+                            this.fileObject.name = value
+                            this.$message({type: 'success', message: response.data.msg + '：' + value})
+                            let data = {href: $url.fileSave, msg: response.data.msg + '：' + value}
+                            this.saveSystemLog(data)
+                            this.getFileLists(this.path)
                         }
-                    });
+                    })
                 }).catch(() => {
-                    this.$message({type: 'info', message: 'cancel entry'});
-                });
+                    this.$message({type: 'info', message: 'cancel entry'})
+                })
             },
             /**
              * todo：文件删除
              */
-            deleteFile:function() {
-                this.$confirm('此操作将永远删除该条记录，是否继续？','删除记录',{
-                    confirmButtonText:'确定',
-                    cancelButtonText:'取消',
-                    type:'warning'
-                }).then(()=> {
-                    let params = {path:this.fileObject.path};
-                    apiLists.FileDelete(params).then((response)=> {
-                       if (response && response.data.code === 200) {
-                           let data = { msg:response.data.msg+'：'+this.fileObject.path,href:$url.fileDelete };
-                           this.saveSystemLog(data);
-                           this.getFileLists(this.path);
-                           this.$message({type:'success',message:response.data.msg+'：'+this.fileObject.label});
-                       }
+            deleteFile: function () {
+                this.$confirm('此操作将永远删除该条记录，是否继续？', '删除记录', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    let params = {path: this.fileObject.path}
+                    apiLists.FileDelete(params).then((response) => {
+                        if (response && response.data.code === 200) {
+                            let data = { msg: response.data.msg + '：' + this.fileObject.path, href: $url.fileDelete }
+                            this.saveSystemLog(data)
+                            this.getFileLists(this.path)
+                            this.$message({type: 'success', message: response.data.msg + '：' + this.fileObject.label})
+                        }
                     })
-                }).catch(()=> {
-                    this.$message({type:'info',message:'cancel remove！'});
-                });
+                }).catch(() => {
+                    this.$message({type: 'info', message: 'cancel remove！'})
+                })
             },
             /**
              * todo：新建文件
              */
-            addFile:function () {
-                let params = {};
-                this.$prompt('请输入文件名', '新建文件', { confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
+            addFile: function () {
+                let params = {}
+                this.$prompt('请输入文件名', '新建文件', {confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
                     if (value === '' || value === null || value === 'null' || value === 'undefined') {
-                        this.$message.warning('File name cannot be empty');
-                        return false;
+                        this.$message.warning('File name cannot be empty')
+                        return false
                     }
-                    //这是一个文件
-                    if(this.fileObject.fileType === 'file'){
-                        params.path = this.fileObject.path.replace(this.fileObject.label,value);
+                    // 这是一个文件
+                    if (this.fileObject.fileType === 'file') {
+                        params.path = this.fileObject.path.replace(this.fileObject.label, value)
                     } else if (this.fileObject.fileType === 'dir') {
-                        params.path = this.fileObject.path+'/'+value;
+                        params.path = this.fileObject.path + '/' + value
                     }
-                    apiLists.FileSave(params).then(response=>{
-                        if (response && response.data.code === 200){
-                            let data = { msg:response.data.msg+'：'+ params.path,href:$url.fileRename };
-                            this.saveSystemLog(data);
-                            this.getFileLists(this.path);
-                            this.$message({type: 'success', message: response.data.msg+'：'+ params.path});
+                    apiLists.FileSave(params).then(response => {
+                        if (response && response.data.code === 200) {
+                            let data = { msg: response.data.msg + '：' + params.path, href: $url.fileRename }
+                            this.saveSystemLog(data)
+                            this.getFileLists(this.path)
+                            this.$message({type: 'success', message: response.data.msg + '：' + params.path})
                         }
-                    });
+                    })
                 }).catch(() => {
-                    this.$message({type: 'info', message: 'cancel entry'});
-                });
+                    this.$message({type: 'info', message: 'cancel entry'})
+                })
             },
             /**
              * todo：文件权限设置
              */
-            authFile:function(){
-                this.syncVisible = true;
-                this.title = '设置权限【'+(this.fileObject.label)+'】';
-                this.chmodModel.auth = parseInt(this.fileObject.auth);
-                this.chmodModel.path = this.fileObject.path;
-                this.all_id = this.fileObject.auth.substr(0,1);
-                this.user_id = this.fileObject.auth.substr(1,1);
-                this.common_id = this.fileObject.auth.substr(2,1);
-                this.all = this.setChmod(this.all_id);
-                this.user = this.setChmod(this.user_id);
-                this.common = this.setChmod(this.common_id);
-                this.url = this.cgi.chmod;
+            authFile: function () {
+                this.syncVisible = true
+                this.title = '设置权限【' + (this.fileObject.label) + '】'
+                this.chmodModel.auth = parseInt(this.fileObject.auth)
+                this.chmodModel.path = this.fileObject.path
+                this.all_id = this.fileObject.auth.substr(0, 1)
+                this.user_id = this.fileObject.auth.substr(1, 1)
+                this.common_id = this.fileObject.auth.substr(2, 1)
+                this.all = this.setChmod(this.all_id)
+                this.user = this.setChmod(this.user_id)
+                this.common = this.setChmod(this.common_id)
+                this.url = this.cgi.chmod
             },
             /**
              * todo：设置权限
              * @param chmod
              */
-            setChmod:function(chmod){
-                let auth = [];
+            setChmod: function (chmod) {
+                let auth = []
                 switch (chmod) {
-                    case '7': auth = ['读取','写入','执行']; break;
-                    case '6': auth = ['读取','写入']; break;
-                    case '5': auth = ['读取','执行']; break;
-                    case '4': auth = ['读取']; break;
-                    case '3': auth = ['写入','执行']; break;
-                    case '2': auth = ['写入']; break;
-                    case '1': auth = ['执行']; break;
+                case '7': auth = ['读取', '写入', '执行']; break
+                case '6': auth = ['读取', '写入']; break
+                case '5': auth = ['读取', '执行']; break
+                case '4': auth = ['读取']; break
+                case '3': auth = ['写入', '执行']; break
+                case '2': auth = ['写入']; break
+                case '1': auth = ['执行']; break
                 }
-                return auth;
+                return auth
             },
             /**
              * todo：根据用户输入设置权限
              */
-            setChmodAuth:function(){
-                this.chmodModel.auth = parseInt(this.chmodModel.auth);
-                if (this.chmodModel.auth>666){
-                    this.$message({type:'warning',message:'Permission setting failed'});
-                    this.chmodModel.auth = parseInt(this.fileObject.auth);
+            setChmodAuth: function () {
+                this.chmodModel.auth = parseInt(this.chmodModel.auth)
+                if (this.chmodModel.auth > 666) {
+                    this.$message({type: 'warning', message: 'Permission setting failed'})
+                    this.chmodModel.auth = parseInt(this.fileObject.auth)
                 }
-                this.all_id = this.chmodModel.auth.toString().substr(0,1);
-                this.user_id = this.chmodModel.auth.toString().substr(1,1);
-                this.common_id = this.chmodModel.auth.toString().substr(2,1);
-                this.all = this.setChmod(this.all_id);
-                this.user = this.setChmod(this.user_id);
-                this.common = this.setChmod(this.common_id);
-                this.url = this.cgi.chmod;
+                this.all_id = this.chmodModel.auth.toString().substr(0, 1)
+                this.user_id = this.chmodModel.auth.toString().substr(1, 1)
+                this.common_id = this.chmodModel.auth.toString().substr(2, 1)
+                this.all = this.setChmod(this.all_id)
+                this.user = this.setChmod(this.user_id)
+                this.common = this.setChmod(this.common_id)
+                this.url = this.cgi.chmod
             },
             /**
              * todo：获取权限
              * @param chmod
              */
-            getChmod:function(chmod){
-                let auth = 0;
-                for (let i in chmod){
-                    if (chmod[i] === '读取'){
-                        auth+=4;
+            getChmod: function (chmod) {
+                let auth = 0
+                for (let i in chmod) {
+                    if (chmod[i] === '读取') {
+                        auth += 4
                     }
-                    if (chmod[i] === '写入'){
-                        auth+=2;
+                    if (chmod[i] === '写入') {
+                        auth += 2
                     }
-                    if (chmod[i] === '执行'){
-                        auth+=1;
+                    if (chmod[i] === '执行') {
+                        auth += 1
                     }
                 }
-                return auth;
+                return auth
             },
             /**
              * todo：所有者权限
              * @param val
              */
-            allChange:function(val){
-                this.all_id = this.getChmod(val);
-                this.chmodModel.auth = parseInt(this.all_id +''+ this.user_id +''+ this.common_id);
+            allChange: function (val) {
+                this.all_id = this.getChmod(val)
+                this.chmodModel.auth = parseInt(this.all_id + '' + this.user_id + '' + this.common_id)
             },
             /**
              * todo：用户组权限
              * @param val
              */
-            userChange:function(val){
-                this.user_id = this.getChmod(val);
-                this.chmodModel.auth = parseInt(this.all_id +''+ this.user_id +''+ this.common_id);
+            userChange: function (val) {
+                this.user_id = this.getChmod(val)
+                this.chmodModel.auth = parseInt(this.all_id + '' + this.user_id + '' + this.common_id)
             },
             /**
              * todo：公共权限
              * @param val
              */
-            commonChange:function(val){
-                this.common_id = this.getChmod(val);
-                this.chmodModel.auth = parseInt(this.all_id +''+ this.user_id +''+ this.common_id);
+            commonChange: function (val) {
+                this.common_id = this.getChmod(val)
+                this.chmodModel.auth = parseInt(this.all_id + '' + this.user_id + '' + this.common_id)
             },
             /**
              * todo：文件压缩
              */
-            compressionFile:function(){
-                this.$prompt('请输入文件名', '压缩包名称', { confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
+            compressionFile: function () {
+                this.$prompt('请输入文件名', '压缩包名称', {confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
                     if (value === '' || value === null || value === 'null' || value === 'undefined') {
-                        this.$message.warning('Archive name must not be empty');
-                        return false;
+                        this.$message.warning('Archive name must not be empty')
+                        return false
                     }
-                    this.compressionModel.resource = value.indexOf('.')>=0 ? value.split(".")[0] : value;
-                    this.compressionModel.docLists.push(this.fileObject.path);
-                    this.compressionModel.path = this.fileObject.path.replace(this.fileObject.label,'');
-                    apiLists.Compression(this.compressionModel).then(response=>{
-                        if (response && response.data.code === 200){
-                            this.$message({type:'success',message:response.data.msg});
-                            let data = { msg:response.data.msg +'：'+ this.fileObject.label,href:$url.fileCompression };
-                            this.saveSystemLog(data);
-                            this.getFileLists(this.path);
+                    this.compressionModel.resource = value.indexOf('.') >= 0 ? value.split('.')[0] : value
+                    this.compressionModel.docLists.push(this.fileObject.path)
+                    this.compressionModel.path = this.fileObject.path.replace(this.fileObject.label, '')
+                    apiLists.Compression(this.compressionModel).then(response => {
+                        if (response && response.data.code === 200) {
+                            this.$message({type: 'success', message: response.data.msg})
+                            let data = { msg: response.data.msg + '：' + this.fileObject.label, href: $url.fileCompression }
+                            this.saveSystemLog(data)
+                            this.getFileLists(this.path)
                         }
-                    });
+                    })
                 }).catch(() => {
-                    this.$message({type: 'info', message: 'cancel entry'});
-                });
+                    this.$message({type: 'info', message: 'cancel entry'})
+                })
             },
             /**
              * todo：文件解压
              */
-            DecompressionFile:function(){
-                this.$prompt('请输入文件名', '解压包名称', { confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
+            DecompressionFile: function () {
+                this.$prompt('请输入文件名', '解压包名称', {confirmButtonText: '确定', cancelButtonText: '取消'}).then(({ value }) => {
                     if (value === '' || value === null || value === 'null' || value === 'undefined') {
-                        this.$message.warning('Extract package name must not be empty');
-                        return false;
+                        this.$message.warning('Extract package name must not be empty')
+                        return false
                     }
-                    let params = {path : this.fileObject.path, resource:value.indexOf('.')>=0 ? value.split(".")[0] : value};
-                    apiLists.Decompression(params).then(response=>{
-                        if (response && response.data.code === 200){
-                            this.$message({type:'success',message:response.data.msg});
-                            let data = { msg:response.data.msg,href:$url.fileDecompression };
-                            this.saveSystemLog(data);
-                            this.getFileLists(this.path);
+                    let params = {path: this.fileObject.path, resource: value.indexOf('.') >= 0 ? value.split('.')[0] : value}
+                    apiLists.Decompression(params).then(response => {
+                        if (response && response.data.code === 200) {
+                            this.$message({type: 'success', message: response.data.msg})
+                            let data = { msg: response.data.msg, href: $url.fileDecompression }
+                            this.saveSystemLog(data)
+                            this.getFileLists(this.path)
                         }
-                    });
+                    })
                 }).catch(() => {
-                    this.$message({type: 'info', message: 'cancel input'});
-                });
+                    this.$message({type: 'info', message: 'cancel input'})
+                })
             },
             /**
              * todo：文件下载
              */
-            downloadFile:function(){
-                this.$alert('确定下载文件：'+this.fileObject.label,'文件下载').then(()=>{
-                    window.open(process.env.API_ROOT+$url.fileDownload.replace('/','')+"?token="+this.userInfo.token+"&path="+this.fileObject.path,'__target');
-                    let data = { msg:'file download successfully：'+this.fileObject.label,href:$url.fileDownload };
-                    this.saveSystemLog(data);
-                    this.$message({type:'success',message:'download file successfully'});
+            downloadFile: function () {
+                this.$alert('确定下载文件：' + this.fileObject.label, '文件下载').then(() => {
+                    window.open(process.env.API_ROOT + $url.fileDownload.replace('/', '') + '?token=' + this.userInfo.token + '&path=' + this.fileObject.path, '__target')
+                    let data = { msg: 'file download successfully：' + this.fileObject.label, href: $url.fileDownload }
+                    this.saveSystemLog(data)
+                    this.$message({type: 'success', message: 'download file successfully'})
                 }).catch(() => {
-                    this.$message({type: 'info', message: 'cancel download'});
-                });
+                    this.$message({type: 'info', message: 'cancel download'})
+                })
             },
             /**
              * todo：文件上传弹出框
              */
-            uploadFile:function(){
-                this.fileSyncVisible = true;
-                this.fileData.token = this.userInfo.token;
-                if (this.fileObject.fileType === 'file'){
-                    this.fileData.path = this.fileObject.path.replace(this.fileObject.label,'');
-                } else if (this.fileObject.fileType === 'dir'){
-                    this.fileData.path = this.fileObject.path;
+            uploadFile: function () {
+                this.fileSyncVisible = true
+                this.fileData.token = this.userInfo.token
+                if (this.fileObject.fileType === 'file') {
+                    this.fileData.path = this.fileObject.path.replace(this.fileObject.label, '')
+                } else if (this.fileObject.fileType === 'dir') {
+                    this.fileData.path = this.fileObject.path
                 }
             },
             /**
              * todo：确定文件上传
              */
-            submitUpload:function() {
-                this.headers.Authorization = `${func.set_password(func.set_random(32),func.set_random(12))}${this.userInfo.token}${func.set_password(func.set_random(32),func.set_random(12))}`
-                this.$refs.upload.submit();
+            submitUpload: function () {
+                this.headers.Authorization = `${func.setPassword(func.setRandom(32), func.setRandom(12))}${this.userInfo.token}${func.setPassword(func.setRandom(32), func.setRandom(12))}`
+                this.$refs.upload.submit()
             },
             /**
              * todo：取消文件上传
              * @param file
              */
-            handleRemove:function(file) {
-                this.$message({type:'warning',message:'cancel file upload：'+file.name});
+            handleRemove: function (file) {
+                this.$message({type: 'warning', message: 'cancel file upload：' + file.name})
             },
             /**
              * todo：文件上传成功回调
              */
-            handleSuccess:function(response){
-                if (response.code === 200){
-                    this.$message({type:'success',message:response.msg});
-                    let data = { msg:response.msg,result:response,href:$url.fileUpload };
-                    this.saveSystemLog(data);
-                    this.getFileLists(this.path);
-                    this.fileSyncVisible = false;
+            handleSuccess: function (response) {
+                if (response.code === 200) {
+                    this.$message({type: 'success', message: response.msg})
+                    let data = { msg: response.msg, result: response, href: $url.fileUpload }
+                    this.saveSystemLog(data)
+                    this.getFileLists(this.path)
+                    this.fileSyncVisible = false
                 }
             },
             /**
              * todo：修改编辑器内容
              * @param content
              */
-            updateContent:function(content){
-                this.fileModel.content = content;
-            },
+            updateContent: function (content) {
+                this.fileModel.content = content
+            }
         },
-        created(){
-            this.activeFileTabName = this.currFileObj.name;
-            this.fileModel = this.currFileObj;
-            if (this.activeFileTabName === null){
-                this.fileModel.content = '';
-                this.showIdea = false; //隐藏编辑器
+        created () {
+            this.activeFileTabName = this.currFileObj.name
+            this.fileModel = this.currFileObj
+            if (this.activeFileTabName === null) {
+                this.fileModel.content = ''
+                this.showIdea = false // 隐藏编辑器
             }
             if (this.userInfo.username === 'admin') {
-                this.options.readOnly = false;
+                this.options.readOnly = false
             }
         },
-        mounted() {
+        mounted () {
             this.$nextTick(function () {
-                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.userInfo.auth);
-                this.url = this.cgi.update;
-                this.getFileLists(this.path);
-            });
+                this.btn = func.setBtnStatus(this.$route.path, this.$route.name, this.userInfo.auth)
+                this.url = this.cgi.update
+                this.getFileLists(this.path)
+            })
         }
     }
 </script>

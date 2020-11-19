@@ -74,132 +74,132 @@
 </template>
 
 <script>
-    import apiLists from '../../api/api';
-    import $url from '../../api/url';
+    import apiLists from '../../api/api'
+    import $url from '../../api/url'
     import Upload from '../common/Upload'
     import {mapGetters} from 'vuex'
     import Submit from '../common/Submit'
     export default {
-        name: "lists",
+        name: 'lists',
         components: {Submit, Upload},
-        data(){
+        data () {
             return {
-                loading:true,
-                loadingText:'玩命加载中。。。',
-                userCenter:{
-                    u_name:'',
-                    local:[],
-                    ip_address:[],
-                    notice_status:'',
-                    user_status:'',
-                    desc:'',
-                    tags:[],
-                    u_type:''
+                loading: true,
+                loadingText: '玩命加载中。。。',
+                userCenter: {
+                    u_name: '',
+                    local: [],
+                    ip_address: [],
+                    notice_status: '',
+                    user_status: '',
+                    desc: '',
+                    tags: [],
+                    u_type: ''
                 },
-                reFrom:'center',
-                refs:this.$refs,
-                url:$url.saveUserCenter,
-                fileData:{},
-                headers:{},
-                rules:{
-                    avatarUrl:[{required:true,message:'用户头像不得为空',trigger:'change'}],
-                    u_name:[{required: true,message:'用户名称不得为空',trigger:'blur'}],
-                    u_type:[{required: true,message:'账户类型不得为空',trigger:'blur'}],
-                    local:[{required: true,message:'居住地址不得为空',trigger:'change'}],
-                    ip_address:[{required: true,message:'用户地址不得为空',trigger:'change'}],
-                    desc:[{required: true,message:'个人介绍不得为空',trigger:'blur'}],
-                    tags:[{required: true,message:'用户标签不得为空',trigger:'blur'}],
-                    notice_status:[{required: true,message:'站内通知',trigger:'change'}],
-                    user_status:[{required: true,message:'账号信息',trigger:'change'}]
+                reFrom: 'center',
+                refs: this.$refs,
+                url: $url.saveUserCenter,
+                fileData: {},
+                headers: {},
+                rules: {
+                    avatarUrl: [{required: true, message: '用户头像不得为空', trigger: 'change'}],
+                    u_name: [{required: true, message: '用户名称不得为空', trigger: 'blur'}],
+                    u_type: [{required: true, message: '账户类型不得为空', trigger: 'blur'}],
+                    local: [{required: true, message: '居住地址不得为空', trigger: 'change'}],
+                    ip_address: [{required: true, message: '用户地址不得为空', trigger: 'change'}],
+                    desc: [{required: true, message: '个人介绍不得为空', trigger: 'blur'}],
+                    tags: [{required: true, message: '用户标签不得为空', trigger: 'blur'}],
+                    notice_status: [{required: true, message: '站内通知', trigger: 'change'}],
+                    user_status: [{required: true, message: '账号信息', trigger: 'change'}]
                 },
                 inputVisible: false,
                 inputValue: '',
-                pid:1,
-                options:[],
-                props:{ value:'name', label:'name' }
+                pid: 1,
+                options: [],
+                props: { value: 'name', label: 'name' }
             }
         },
-        computed:{
+        computed: {
             ...mapGetters(['userInfo'])
         },
-        methods:{
+        methods: {
             /**
              * TODO:关闭标签
              * @param tag
              */
-            handleClose(tag) {
-                this.userCenter.tags.splice( this.userCenter.tags.indexOf(tag), 1);
+            handleClose (tag) {
+                this.userCenter.tags.splice(this.userCenter.tags.indexOf(tag), 1)
             },
             /**
              * TODO:展示文本框
              */
-            showInput:function() {
-                this.inputVisible = true;
+            showInput: function () {
+                this.inputVisible = true
                 this.$nextTick(_ => {
-                    this.$refs.saveTagInput.focus();
-                });
+                    this.$refs.saveTagInput.focus()
+                })
             },
             /**
              * TODO:设置地址显示
              */
-            setLocal:function(item) {
-                if (item.length>0) {
-                    let str = item.join(',');
-                    return str.replace(new RegExp(/,/g),' / ')
+            setLocal: function (item) {
+                if (item.length > 0) {
+                    let str = item.join(',')
+                    return str.replace(new RegExp(/,/g), ' / ')
                 }
-                return item;
+                return item
             },
             /**
              * TODO:文本框输入
              */
-            handleInputConfirm:function() {
-                let inputValue = this.inputValue;
-                if (inputValue && this.userCenter.tags.indexOf(inputValue)<0) {
-                    if ((this.userCenter.tags.length+1)>3) {
-                        this.$message.warning('User tags must not exceed three');
-                        return ;
+            handleInputConfirm: function () {
+                let inputValue = this.inputValue
+                if (inputValue && this.userCenter.tags.indexOf(inputValue) < 0) {
+                    if ((this.userCenter.tags.length + 1) > 3) {
+                        this.$message.warning('User tags must not exceed three')
+                        return
                     }
-                    this.userCenter.tags.push(inputValue);
+                    this.userCenter.tags.push(inputValue)
                 }
-                this.inputVisible = false;
-                this.inputValue = '';
+                this.inputVisible = false
+                this.inputValue = ''
             },
             /**
              * TODO：获取城市列表
              * @param pid
              */
-            getCity:function(pid) {
-                apiLists.AreaLists({parent_id:pid},$url.areaLists).then((response)=>{
+            getCity: function (pid) {
+                apiLists.AreaLists({parent_id: pid}, $url.areaLists).then((response) => {
                     if (response && response.data.code === 200) {
-                        this.setOptions(response.data.item);
+                        this.setOptions(response.data.item)
                     }
-                });
+                })
             },
             /**
              * TODO:设置数据
              * @param data
              */
-            setOptions:function(data) {
+            setOptions: function (data) {
                 for (let i in data) {
                     if (data[i].children.length === 0) {
                         delete data[i].children
                     }
                     this.setOptions(data[i].children)
                 }
-                this.options = data;
+                this.options = data
             },
             /**
              * TODO:获取用户信息
              */
-            getUserCenter:function() {
-                this.loading = true;
-                apiLists.UserCenter([]).then(response=>{
+            getUserCenter: function () {
+                this.loading = true
+                apiLists.UserCenter([]).then(response => {
                     if (response && response.data.code === 200) {
-                        this.loading = false;
-                        this.userCenter = response.data.item;
-                        this.userCenter.user_status = this.userCenter.user_status.toString();
-                        this.userCenter.notice_status = this.userCenter.notice_status.toString();
-                        this.getCity(this.pid);
+                        this.loading = false
+                        this.userCenter = response.data.item
+                        this.userCenter.user_status = this.userCenter.user_status.toString()
+                        this.userCenter.notice_status = this.userCenter.notice_status.toString()
+                        this.getCity(this.pid)
                     }
                 })
             },
@@ -207,14 +207,14 @@
              * TODO:表单重置
              * @param form
              */
-            resetForm:function (form) {
-                this.$refs[form].resetFields();
+            resetForm: function (form) {
+                this.$refs[form].resetFields()
             }
         },
-        mounted() {
+        mounted () {
             this.$nextTick(function () {
-                this.getUserCenter();
-            });
+                this.getUserCenter()
+            })
         }
     }
 </script>

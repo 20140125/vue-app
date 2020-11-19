@@ -28,14 +28,14 @@
 </template>
 <script>
     export default {
-        name: "empty",
-        data(){
+        name: 'empty',
+        data () {
             return {}
         },
-        mounted() {
-            this.$nextTick(()=>{
-                let js = '<script src="https://cdn.zhaolinlang.com/cdn.dnpw.org/project/404/0/common/404.js"></scr' + 'ipt>';
-                document.write(js);
+        mounted () {
+            this.$nextTick(() => {
+                let js = '<script src="https://cdn.zhaolinlang.com/cdn.dnpw.org/project/404/0/common/404.js"></scr' + 'ipt>'
+                document.write(js)
             })
         }
     }

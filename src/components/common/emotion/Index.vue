@@ -17,33 +17,33 @@
 <script>
     import apiLists from '../../../api/api'
     export default {
-        props:{
-            height:{
-                type:Number,
-                default:()=>300
-            },
+        props: {
+            height: {
+                type: Number,
+                default: () => 300
+            }
         },
         data () {
             return {
-                emotionTypeLists:[
-                    {'type':'1','title':'表情','id':'emotion'},
-                    {'type':'2','title':'人物','id':'person'},
-                    {'type':'3','title':'动作','id':'action'},
-                    {'type':'4','title':'家庭','id':'family'},
-                    {'type':'5','title':'自然','id':'natural'},
-                    {'type':'6','title':'食物','id':'food'},
-                    {'type':'7','title':'体育','id':'sport'},
-                    {'type':'8','title':'建筑','id':'building'},
-                    {'type':'9','title':'用品','id':'supplies'},
-                    {'type':'10','title':'符号','id':'symbol'},
-                    {'type':'11','title':'国旗','id':'flag'}
+                emotionTypeLists: [
+                    {'type': '1', 'title': '表情', 'id': 'emotion'},
+                    {'type': '2', 'title': '人物', 'id': 'person'},
+                    {'type': '3', 'title': '动作', 'id': 'action'},
+                    {'type': '4', 'title': '家庭', 'id': 'family'},
+                    {'type': '5', 'title': '自然', 'id': 'natural'},
+                    {'type': '6', 'title': '食物', 'id': 'food'},
+                    {'type': '7', 'title': '体育', 'id': 'sport'},
+                    {'type': '8', 'title': '建筑', 'id': 'building'},
+                    {'type': '9', 'title': '用品', 'id': 'supplies'},
+                    {'type': '10', 'title': '符号', 'id': 'symbol'},
+                    {'type': '11', 'title': '国旗', 'id': 'flag'}
                 ],
-                type:'1',
-                emotionList:[],
-                limit:55,
-                page:1,
-                pages:0,
-                offsetPage:0
+                type: '1',
+                emotionList: [],
+                limit: 55,
+                page: 1,
+                pages: 0,
+                offsetPage: 0
             }
         },
         methods: {
@@ -51,11 +51,11 @@
              * todo:图标切换
              * @param typeObj
              */
-            changeEmotionLists:function(typeObj){
-                this.type = typeObj.name;
-                this.page = 1;
-                this.emotionList = [];
-                this.showEmotionLists(this.page,this.limit);
+            changeEmotionLists: function (typeObj) {
+                this.type = typeObj.name
+                this.page = 1
+                this.emotionList = []
+                this.showEmotionLists(this.page, this.limit)
             },
             /**
              * todo:点击图标
@@ -69,29 +69,29 @@
              * @param page
              * @param limit
              */
-            showEmotionLists:function(page,limit) {
-                apiLists.EmotionLists( {type:this.type,limit:limit,page:page}).then(response=>{
+            showEmotionLists: function (page, limit) {
+                apiLists.EmotionLists({type: this.type, limit: limit, page: page}).then(response => {
                     this.pages = response.data.item.pages
-                    let data = response.data.item.data;
+                    let data = response.data.item.data
                     for (let i in data) {
-                        this.emotionList.push(data[i]);
+                        this.emotionList.push(data[i])
                     }
                 })
             },
             /**
              * TODO:数据流加载
              */
-            scrollEmotion:function () {
-                this.offsetPage = this.offsetPage+1;
-                if (this.offsetPage<=this.pages) {
-                    this.page++;
-                    this.showEmotionLists(this.page,this.limit);
+            scrollEmotion: function () {
+                this.offsetPage = this.offsetPage + 1
+                if (this.offsetPage <= this.pages) {
+                    this.page++
+                    this.showEmotionLists(this.page, this.limit)
                 }
             }
         },
-        mounted(){
+        mounted () {
             this.$nextTick(function () {
-                this.showEmotionLists(this.page,this.limit);
+                this.showEmotionLists(this.page, this.limit)
             })
         }
     }

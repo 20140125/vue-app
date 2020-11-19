@@ -1,3 +1,3 @@
 export default {
-    baseUrl:'http://' + window.location.hostname+'/api/'
-};
+    baseUrl: 'http://' + window.location.hostname + '/api/'
+}

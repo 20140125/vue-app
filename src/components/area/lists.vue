@@ -18,45 +18,45 @@
             </el-table-column>
         </el-table>
         <el-dialog :visible.sync="showCity" :width="dialogWidth" :title="'【'+cityName+'】天气预告'" center>
-            <VueJson :json-data="weather"/>
+            <VueJson :json-data="weather"></VueJson>
         </el-dialog>
     </div>
 </template>
 
 <script>
-    import apiLists from '../../api/api';
+    import apiLists from '../../api/api'
     import $url from '../../api/url'
-    import VueJson from "../common/jsonView/json";
+    import VueJson from '../common/jsonView/json'
     import {mapGetters} from 'vuex'
     export default {
-        name: "lists",
+        name: 'lists',
         components: {VueJson},
-        data(){
+        data () {
             return {
-                areaLists:[],
-                loading:true,
-                loadingText:'玩命加载中。。。',
-                search:'',
-                pid:1,
-                showCity:false,
-                cityName:'',
-                weather:{},
+                areaLists: [],
+                loading: true,
+                loadingText: '玩命加载中。。。',
+                search: '',
+                pid: 1,
+                showCity: false,
+                cityName: '',
+                weather: {}
             }
         },
-        computed:{
+        computed: {
             ...mapGetters(['dialogWidth'])
         },
-        methods:{
+        methods: {
             /**
              * todo：获取城市列表
              */
-            getAreaLists:function (pid) {
-                apiLists.AreaLists({parent_id:pid},$url.areaIndex).then(response=>{
+            getAreaLists: function (pid) {
+                apiLists.AreaLists({parent_id: pid}, $url.areaIndex).then(response => {
                     if (response && response.data.code === 200) {
-                        this.areaLists = response.data.item;
-                        this.loading = false;
+                        this.areaLists = response.data.item
+                        this.loading = false
                     }
-                });
+                })
             },
             /**
              * TODO:懒加载数据
@@ -64,25 +64,25 @@
              * @param treeNode
              * @param resolve
              */
-            load:function (tree, treeNode, resolve) {
-                apiLists.AreaLists({parent_id:tree.id},$url.areaIndex).then(response=>{
+            load: function (tree, treeNode, resolve) {
+                apiLists.AreaLists({parent_id: tree.id}, $url.areaIndex).then(response => {
                     if (response && response.data.code === 200) {
-                        setTimeout(()=>{
-                            resolve(response.data.item);
-                        },500)
+                        setTimeout(() => {
+                            resolve(response.data.item)
+                        }, 500)
                     }
-                });
+                })
             },
             /**
              * TODO:获取城市天气
              * @param areaObj
              */
-            getWeather:function (areaObj) {
-                let params = { code:areaObj.code,id:areaObj.id,parent_id:areaObj.pid };
-                apiLists.AreaWeather(params).then(response=>{
+            getWeather: function (areaObj) {
+                let params = { code: areaObj.code, id: areaObj.id, parent_id: areaObj.pid }
+                apiLists.AreaWeather(params).then(response => {
                     if (response && response.data.code === 200) {
-                        this.$message.success(response.data.msg);
-                        this.getAreaLists(this.pid);
+                        this.$message.success(response.data.msg)
+                        this.getAreaLists(this.pid)
                     }
                 })
             },
@@ -90,16 +90,16 @@
              * todo:天气预告信息展示
              * @param item
              */
-            searchWeather:function (item) {
-                this.showCity = true;
-                this.cityName = item.name;
-                this.weather = JSON.parse(item.forecast);
+            searchWeather: function (item) {
+                this.showCity = true
+                this.cityName = item.name
+                this.weather = JSON.parse(item.forecast)
             }
         },
-        mounted() {
+        mounted () {
             this.$nextTick(function () {
                 this.getAreaLists(this.pid)
-            });
+            })
         }
     }
 </script>

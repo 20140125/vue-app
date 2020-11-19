@@ -120,105 +120,103 @@
 </template>
 
 <script>
-    import { mapGetters,mapActions } from 'vuex'
-    import $url from '../../api/url'
+    import { mapGetters, mapActions } from 'vuex'
     import func from '../../api/func'
     import emotion from '../common/emotion/Index'
-    import Push from "push.js";
+    import Push from 'push.js'
     import Item from './Item'
     import VirtualList from 'vue-virtual-scroll-list'
-    import UserInfo from "./UserInfo";
+    import UserInfo from './UserInfo'
     export default {
-        props:{
-            chatVisible:{
-                type:Boolean,
-                default:()=>true
+        props: {
+            chatVisible: {
+                type: Boolean,
+                default: () => true
             },
-            dialogWidth :{
-                type:String,
-                default:()=>'50%'
+            dialogWidth: {
+                type: String,
+                default: () => '50%'
             },
-            currentPage:{
-                type:Number,
-                default:()=>1
+            currentPage: {
+                type: Number,
+                default: () => 1
             },
-            sizeLimit:{
-                type:Number,
-                default:()=>19,
+            sizeLimit: {
+                type: Number,
+                default: () => 19
             }
         },
-        name: "chatRoom",
-        data(){
+        name: 'chatRoom',
+        data () {
             return {
-                cgi:{uploadUrl:process.env.API_ROOT+'v1/common/upload'},
-                fileData:{},
-                headers:{},
-                inputMsg:'',
-                emotionLists:[],
-                showEmotion:false,
-                chat:{},
+                cgi: {uploadUrl: process.env.API_ROOT + 'v1/common/upload'},
+                fileData: {},
+                headers: {},
+                inputMsg: '',
+                emotionLists: [],
+                showEmotion: false,
+                chat: {},
                 messageComponent: Item,
                 overflow: false,
-                finished:false,
-                visible:this.chatVisible,
-                targetUsers:{},
-                userInfoVisible:false,
-                userInfoDialogWidth:this.dialogWidth
+                finished: false,
+                visible: this.chatVisible,
+                targetUsers: {},
+                userInfoVisible: false,
+                userInfoDialogWidth: this.dialogWidth
             }
         },
-        components:{
+        components: {
             UserInfo,
             emotion,
             VirtualList
         },
-        computed:{
-            ...mapGetters(['oauthConfig','groupAnnouncementConfig','userInfo']),
+        computed: {
+            ...mapGetters(['oauthConfig', 'groupAnnouncementConfig', 'userInfo'])
         },
-        watch:{
-            inputMsg:function () {
-                this.inputMsg = this.$refs.message.innerHTML;
+        watch: {
+            inputMsg: function () {
+                this.inputMsg = this.$refs.message.innerHTML
             },
-            chatVisible:function () {
-                this.visible = this.chatVisible;
+            chatVisible: function () {
+                this.visible = this.chatVisible
                 if (!this.visible) {
-                    this.userInfoVisible = false;
+                    this.userInfoVisible = false
                 }
             }
         },
-        methods:{
-            ...mapActions(['getOauthConfig','saveWeather']),
+        methods: {
+            ...mapActions(['getOauthConfig', 'saveWeather']),
             /**
              * todo:获取目标用户的信息
              * @param item
              */
             menuRightChange (item) {
                 if (item.data.attrs && item.data.attrs.users) {
-                    this.targetUsers = item.data.attrs.users;
+                    this.targetUsers = item.data.attrs.users
                 }
             },
             /**
              * todo:弹框关闭回调
              */
-            closeDialog:function () {
-                this.userInfoVisible = false;
+            closeDialog: function () {
+                this.userInfoVisible = false
             },
             /**
              * todo:发送消息
              */
-            sendToMessage:function () {
-                this.sendUser(this.targetUsers,this.targetUsers.uid)
+            sendToMessage: function () {
+                this.sendUser(this.targetUsers, this.targetUsers.uid)
             },
             /**
              * todo:添加class
              * @param index
              */
             addItemClass (index) {
-                if (this.chat.messageLists.length>0) {
-                    if (this.chat.messageLists[index].to_client_name === 'all') {
-                        return this.userInfo.username === this.chat.messageLists[index].from_client_name ? 'creator' : ''
-                    } else {
-                        return this.userInfo.username === this.chat.messageLists[index].to_client_name ? '' : 'creator'
-                    }
+                if (this.chat.messageLists.length > 0) {
+                    this.userInfo.username = this.chat.messageLists[index].to_client_name === 'all'
+                        ? (this.chat.messageLists[index].from_client_name ? 'creator' : '')
+                        : (this.chat.messageLists[index].to_client_name ? '' : 'creator')
+                    return this.userInfo.username
                 }
             },
             /**
@@ -229,7 +227,6 @@
                     return
                 }
                 if (this.$refs.vsl) {
-                    // this.$refs.vsl.scrollToBottom()
                     const vsl = this.$refs.vsl
                     if (vsl) {
                         this.overflow = vsl.getScrollSize() > vsl.getClientSize()
@@ -239,155 +236,155 @@
             /**
              * todo:向上滚动获取数据
              */
-            onTotop:function () {
-                setTimeout(()=>{
-                    if (this.chat.currentPage <= Math.ceil(this.chat.messageTotal/this.chat.sizeLimit)) {
-                        this.chat.currentPage++;
-                        //获取聊天记录
+            onTotop: function () {
+                setTimeout(() => {
+                    if (this.chat.currentPage <= Math.ceil(this.chat.messageTotal / this.chat.sizeLimit)) {
+                        this.chat.currentPage++
+                        // 获取聊天记录
                         let str = {
-                            type:'history',
-                            from_client_name:this.userInfo.username,
-                            from_client_id:this.userInfo.uuid,
-                            to_client_name:this.chat.to_client_name,
-                            to_client_id:this.chat.to_client_id,
-                            room_id:this.chat.to_client_name === 'all' ? this.chat.room_id : '',
-                            uid:this.userInfo.uuid,
-                            page:this.chat.currentPage,
-                            limit:this.chat.sizeLimit,
-                            source:'user',
-                        };
-                        this.userInfo.websocketServer.send(JSON.stringify(str));
+                            type: 'history',
+                            from_client_name: this.userInfo.username,
+                            from_client_id: this.userInfo.uuid,
+                            to_client_name: this.chat.to_client_name,
+                            to_client_id: this.chat.to_client_id,
+                            room_id: this.chat.to_client_name === 'all' ? this.chat.room_id : '',
+                            uid: this.userInfo.uuid,
+                            page: this.chat.currentPage,
+                            limit: this.chat.sizeLimit,
+                            source: 'user'
+                        }
+                        this.userInfo.websocketServer.send(JSON.stringify(str))
                     }
                     this.finished = true
-                },500)
+                }, 500)
             },
             /**
              * todo:workerMan-chat链接
              * @param ws
              */
-            connect:function(ws){
-                let __this = this;
+            connect: function (ws) {
+                let __this = this
                 // 连接建立时发送登录信息
-                ws.onopen = function(){
+                ws.onopen = function () {
                     let str = {
-                        type:'login',
-                        from_client_id:__this.userInfo.uuid,
-                        client_name:__this.userInfo.username,
-                        room_id:__this.chat.room_id,
-                        client_img:__this.userInfo.avatar_url,
-                        uid:__this.userInfo.uuid,
-                        adcode:__this.userInfo.adcode
-                    };
-                    ws.send(JSON.stringify(str))
-                };
-                ws.onmessage = function(response){
-                    let data = JSON.parse(response.data);
-                    switch (data['type']) {
-                        //心跳
-                        case 'ping':
-                            ws.send('{"type":"pong"}');
-                            break;
-                        //登陆
-                        case 'login':
-                            __this.chat.client_list = data.client_list;
-                            __this.chat.client_list_part = data.client_list;
-                            __this.setUsersLists();
-                            __this.saveWeather(data.weather);
-                            console.log(data);
-                            break;
-                        //发送消息
-                        case 'say':
-                            __this.say(data);
-                            __this.chat.client_list = data.client_list;
-                            __this.chat.client_list_part = data.client_list;
-                            __this.setUsersLists();
-                            __this.$refs.vsl.scrollToBottom()
-                            console.log(data);
-                            break;
-                        //聊天记录
-                        case 'history':
-                            __this.chat.messageTotal = data.total;
-                            __this.chat.client_list = data.client_list;
-                            __this.chat.client_list_part = data.client_list;
-                            if (__this.chat.currentPage > 1) {
-                                __this.chat.messageLists = __this.chat.messageLists.concat(data.message);
-                            } else {
-                                __this.chat.messageLists = data.message;
-                                __this.$refs.vsl.scrollToBottom()
-                            }
-                            __this.chat.messageLists.sort(function (a,b){
-                                return a.time > b.time ? 1 : -1;
-                            })
-                            __this.setUsersLists();
-                            console.log(data);
-                            break;
-                        //消息删除/消息撤回
-                        case 'srem':
-                        case 'recall':
-                            __this.chat.messageLists = data.message;
-                            __this.chat.client_list = data.client_list;
-                            __this.chat.client_list_part = data.client_list;
-                            __this.setUsersLists();
-                            __this.removeMessageList(data);
-                            console.log(data)
-                            break;
-                        case 'logout':
-                            console.log(data);
-                            break;
+                        type: 'login',
+                        from_client_id: __this.userInfo.uuid,
+                        client_name: __this.userInfo.username,
+                        room_id: __this.chat.room_id,
+                        client_img: __this.userInfo.avatar_url,
+                        uid: __this.userInfo.uuid,
+                        adcode: __this.userInfo.adcode
                     }
-                };
-                ws.onclose = function() {
-                    console.log("连接关闭，定时重连");
-                    __this.connect(ws);
-                };
-                ws.onerror = function() {
-                    console.log("出现错误");
-                };
+                    ws.send(JSON.stringify(str))
+                }
+                ws.onmessage = function (response) {
+                    let data = JSON.parse(response.data)
+                    switch (data['type']) {
+                    // 心跳
+                    case 'ping':
+                        ws.send('{"type":"pong"}')
+                        break
+                    // 登陆
+                    case 'login':
+                        __this.chat.client_list = data.client_list
+                        __this.chat.client_list_part = data.client_list
+                        __this.setUsersLists()
+                        __this.saveWeather(data.weather)
+                        console.log(data)
+                        break
+                    // 发送消息
+                    case 'say':
+                        __this.say(data)
+                        __this.chat.client_list = data.client_list
+                        __this.chat.client_list_part = data.client_list
+                        __this.setUsersLists()
+                        __this.$refs.vsl.scrollToBottom()
+                        console.log(data)
+                        break
+                    // 聊天记录
+                    case 'history':
+                        __this.chat.messageTotal = data.total
+                        __this.chat.client_list = data.client_list
+                        __this.chat.client_list_part = data.client_list
+                        if (__this.chat.currentPage > 1) {
+                            __this.chat.messageLists = __this.chat.messageLists.concat(data.message)
+                        } else {
+                            __this.chat.messageLists = data.message
+                            __this.$refs.vsl.scrollToBottom()
+                        }
+                        __this.chat.messageLists.sort(function (a, b) {
+                            return a.time > b.time ? 1 : -1
+                        })
+                        __this.setUsersLists()
+                        console.log(data)
+                        break
+                    // 消息删除/消息撤回
+                    case 'srem':
+                    case 'recall':
+                        __this.chat.messageLists = data.message
+                        __this.chat.client_list = data.client_list
+                        __this.chat.client_list_part = data.client_list
+                        __this.setUsersLists()
+                        __this.removeMessageList(data)
+                        console.log(data)
+                        break
+                    case 'logout':
+                        console.log(data)
+                        break
+                    }
+                }
+                ws.onclose = function () {
+                    console.log('连接关闭，定时重连')
+                    __this.connect(ws)
+                }
+                ws.onerror = function () {
+                    console.log('出现错误')
+                }
             },
             /**
              * todo:用户搜索
              * @param queryString
              * @param cb (回调函数 cb(result))
              */
-            querySearch:function (queryString, cb) {
-                let result = [];
+            querySearch: function (queryString, cb) {
+                let result = []
                 for (let i in this.chat.client_list) {
-                    if (this.chat.client_list[i].client_name.indexOf(queryString)>=0) {
+                    if (this.chat.client_list[i].client_name.indexOf(queryString) >= 0) {
                         result.push(this.chat.client_list[i])
                     }
                 }
-                this.chat.client_list_part = result;
+                this.chat.client_list_part = result
             },
             /**
              * todo:清空搜索内容
              */
-            clearSearch:function () {
-                this.chat.client_list_part = this.chat.client_list;
+            clearSearch: function () {
+                this.chat.client_list_part = this.chat.client_list
             },
             /**
              * todo:设置未读消息数
              */
-            setUsersLists:function () {
-                //展示单个用户未读消息数
-                let unreadMessage = [];
-                this.chat.userOnline = 0;
-                this.chat.userTotal = 0;
+            setUsersLists: function () {
+                // 展示单个用户未读消息数
+                let unreadMessage = []
+                this.chat.userOnline = 0
+                this.chat.userTotal = 0
                 for (let i in this.chat.client_list) {
                     if (this.userInfo.username === this.chat.client_list[i]['client_name']) {
-                        unreadMessage = this.chat.client_list[i]['unread'];
+                        unreadMessage = this.chat.client_list[i]['unread']
                         this.chat.msgCount = this.chat.client_list[i]['unreadCount']
-                        this.$emit('setMsgCount',this.chat.msgCount);
+                        this.$emit('setMsgCount', this.chat.msgCount)
                     }
                     if (this.chat.client_list[i]['online']) {
-                        this.chat.userOnline ++ ;
+                        this.chat.userOnline++
                     }
-                    this.chat.userTotal++;
+                    this.chat.userTotal++
                 }
-                if (unreadMessage.length>0) {
+                if (unreadMessage.length > 0) {
                     for (let i in unreadMessage) {
                         for (let j in this.chat.client_list) {
                             if (unreadMessage[i]['form'] === j) {
-                                this.chat.client_list[j]['total'] = parseInt(unreadMessage[i]['total']);
+                                this.chat.client_list[j]['total'] = parseInt(unreadMessage[i]['total'])
                             }
                         }
                     }
@@ -397,225 +394,226 @@
              * TODO:设置群聊房间号
              * @param room
              */
-            setRoomID:function(room) {
+            setRoomID: function (room) {
                 if (this.chat.room_id !== room.id.toString()) {
-                    this.showEmotion = false;
-                    this.finished = false;
-                    this.chat.room_id = room.id.toString();
-                    this.chat.title = room.name;
-                    this.chat.desc = room.value;
-                    this.chat.currentPage = 1;
-                    this.chat.img = 'https://cdn.pixabay.com/photo/2016/12/13/21/20/alien-1905155_960_720.png';
-                    //加入房间
+                    this.showEmotion = false
+                    this.finished = false
+                    this.chat.room_id = room.id.toString()
+                    this.chat.title = room.name
+                    this.chat.desc = room.value
+                    this.chat.currentPage = 1
+                    this.chat.img = 'https://cdn.pixabay.com/photo/2016/12/13/21/20/alien-1905155_960_720.png'
+                    // 加入房间
                     let login = {
-                        type:'login',
-                        from_client_id:this.userInfo.uuid,
-                        client_name:this.userInfo.username,
-                        room_id:this.chat.room_id,
-                        client_img:this.userInfo.avatar_url,
-                        uid:this.userInfo.uuid,
-                        adcode:this.userInfo.adcode
-                    };
+                        type: 'login',
+                        from_client_id: this.userInfo.uuid,
+                        client_name: this.userInfo.username,
+                        room_id: this.chat.room_id,
+                        client_img: this.userInfo.avatar_url,
+                        uid: this.userInfo.uuid,
+                        adcode: this.userInfo.adcode
+                    }
                     this.userInfo.websocketServer.send(JSON.stringify(login))
                 }
-                //群聊时，接收方为所有用户
-                this.chat.to_client_id = 'all';
-                this.chat.to_client_name = 'all';
-                //获取聊天记录
+                // 群聊时，接收方为所有用户
+                this.chat.to_client_id = 'all'
+                this.chat.to_client_name = 'all'
+                // 获取聊天记录
                 let str = {
-                    type:'history',
-                    from_client_name:this.userInfo.username,
-                    from_client_id:this.chat.from_client_id,
-                    to_client_name:this.chat.to_client_name,
-                    to_client_id:this.chat.to_client_id,
-                    room_id:this.chat.to_client_name === 'all' ? this.chat.room_id : '',
-                    uid:this.userInfo.uuid,
-                    page:this.chat.currentPage,
-                    limit:this.chat.sizeLimit,
-                    source:'room',
-                };
-                this.userInfo.websocketServer.send(JSON.stringify(str));
+                    type: 'history',
+                    from_client_name: this.userInfo.username,
+                    from_client_id: this.chat.from_client_id,
+                    to_client_name: this.chat.to_client_name,
+                    to_client_id: this.chat.to_client_id,
+                    room_id: this.chat.to_client_name === 'all' ? this.chat.room_id : '',
+                    uid: this.userInfo.uuid,
+                    page: this.chat.currentPage,
+                    limit: this.chat.sizeLimit,
+                    source: 'room'
+                }
+                this.userInfo.websocketServer.send(JSON.stringify(str))
             },
             /**
              * TODO:设置发送给谁
              * @param user
-             * @param client_id
+             * @param clientId
              */
-            sendUser:function(user,client_id) {
-                this.finished = false;
-                this.chat.to_client_name = user.client_name;
-                this.chat.to_client_id = client_id === '0' ? 'all' : client_id;
-                this.chat.from_client_id = user.uid;
-                this.chat.uid = this.chat.to_client_id;
-                this.chat.title = user.client_name;
+            sendUser: function (user, clientId) {
+                this.finished = false
+                this.chat.to_client_name = user.client_name
+                this.chat.to_client_id = clientId === '0' ? 'all' : clientId
+                this.chat.from_client_id = user.uid
+                this.chat.uid = this.chat.to_client_id
+                this.chat.title = user.client_name
                 if (this.chat.users) {
-                    this.chat.users = user.client_name;
+                    this.chat.users = user.client_name
                 }
-                this.chat.img = user.client_img;
-                this.chat.desc = user.centerInfo.desc;
-                this.chat.room_id = '';
-                user.total = 0;
-                this.chat.currentPage = 1;
-                //获取聊天记录
+                this.chat.img = user.client_img
+                this.chat.desc = user.centerInfo.desc
+                this.chat.room_id = ''
+                user.total = 0
+                this.chat.currentPage = 1
+                // 获取聊天记录
                 let str = {
-                    type:'history',
-                    from_client_name:this.userInfo.username,
-                    from_client_id:this.userInfo.uuid,
-                    to_client_name:this.chat.to_client_name,
-                    to_client_id:this.chat.to_client_id,
-                    room_id:this.chat.to_client_name === 'all' ? this.chat.room_id : '',
-                    uid:this.userInfo.uuid,
-                    page:this.chat.currentPage,
-                    limit:this.chat.sizeLimit,
-                    source:'user',
-                };
-                this.userInfo.websocketServer.send(JSON.stringify(str));
+                    type: 'history',
+                    from_client_name: this.userInfo.username,
+                    from_client_id: this.userInfo.uuid,
+                    to_client_name: this.chat.to_client_name,
+                    to_client_id: this.chat.to_client_id,
+                    room_id: this.chat.to_client_name === 'all' ? this.chat.room_id : '',
+                    uid: this.userInfo.uuid,
+                    page: this.chat.currentPage,
+                    limit: this.chat.sizeLimit,
+                    source: 'user'
+                }
+                this.userInfo.websocketServer.send(JSON.stringify(str))
             },
             /**
              * TODO:获取发送内容
              */
-            setMsg:function(){
-                this.inputMsg = this.$refs.message.innerHTML;
+            setMsg: function () {
+                this.inputMsg = this.$refs.message.innerHTML
             },
             /**
              * TODO:发送表情
              * @param emotion
              */
-            getEmotion:function (emotion) {
-                this.chat.msg_type = 'text';
-                this.inputMsg+= "<img src='"+emotion.icon+"' width='50px' height='50px' style='object-fit: contain;' alt='"+emotion.emoji+"' title='"+emotion.title+"'>"
-                this.$refs.message.innerHTML = this.inputMsg;
+            getEmotion: function (emotion) {
+                this.chat.msg_type = 'text'
+                this.inputMsg += "<img src='" + emotion.icon + "' width='50px' height='50px' style='object-fit: contain;' alt='" + emotion.emoji + "' title='" + emotion.title + "'>"
+                this.$refs.message.innerHTML = this.inputMsg
             },
             /**
              * TODO：图片上传成功
              * @param response
              */
-            uploadSuccess:function(response){
-                if (response && response.code === 200){
+            uploadSuccess: function (response) {
+                if (response && response.code === 200) {
                     switch (this.chat.msg_type) {
-                        case 'img':
-                            this.inputMsg+= "<img src='"+response.item.src+"' width='100px' height='100px' style='object-fit: contain;' alt='"+this.chat.from_client_name+"'>";
-                            break;
-                        case 'video':
-                            this.inputMsg+= "<video src='"+response.item.src+"' width='200px' height='200px' controls='controls'>";
-                            break;
+                    case 'img':
+                        this.inputMsg += "<img src='" + response.item.src + "' width='100px' height='100px' style='object-fit: contain;' alt='" + this.chat.from_client_name + "'>"
+                        break
+                    case 'video':
+                        this.inputMsg += "<video src='" + response.item.src + "' width='200px' height='200px' controls='controls'>"
+                        break
                     }
-                    this.$refs.message.innerHTML = this.inputMsg;
-                    return ;
+                    this.$refs.message.innerHTML = this.inputMsg
+                    return
                 }
-                this.$message({type:'warning',message:response.msg});
+                this.$message({type: 'warning', message: response.msg})
             },
             /**
              * TODO：图片上传前
              * @param file
              */
-            beforeUpload:function(file){
-                let ext = file.name.split('.')[1];
+            beforeUpload: function (file) {
+                let ext = file.name.split('.')[1]
                 switch (ext.toLocaleLowerCase()) {
-                    case 'jpg':
-                    case 'gif':
-                    case 'png':
-                    case 'jpeg':
-                        this.chat.msg_type = 'img';
-                        if (file.size>2*1024*1024){
-                            this.$message({type:'warning',message:'upload image size error'});
-                        }
-                        break;
-                    case 'mp4':
-                        this.chat.msg_type = 'video';
-                        if (file.size>5*1024*1024){
-                            this.$message({type:'warning',message:'upload video size error'});
-                        }
-                        break;
-                    default:
-                        this.$message({type:'warning',message:'Unsupported file format'});
-                        break;
+                case 'jpg':
+                case 'gif':
+                case 'png':
+                case 'jpeg':
+                    this.chat.msg_type = 'img'
+                    if (file.size > 2 * 1024 * 1024) {
+                        this.$message({type: 'warning', message: 'upload image size error'})
+                    }
+                    break
+                case 'mp4':
+                    this.chat.msg_type = 'video'
+                    if (file.size > 5 * 1024 * 1024) {
+                        this.$message({type: 'warning', message: 'upload video size error'})
+                    }
+                    break
+                default:
+                    this.$message({type: 'warning', message: 'Unsupported file format'})
+                    break
                 }
             },
             /**
              * TODO:发送消息
              * @param data
              */
-            say:function(data){
-                if (this.userInfo.username!==data['from_client_name']){
-                    if (data['to_client_id']!=='all') {
-                        this.chat.title = data['from_client_name'];
-                        this.chat.to_client_name = data['from_client_name'];
-                        this.chat.to_client_id = data['from_client_id'];
+            say: function (data) {
+                if (this.userInfo.username !== data['from_client_name']) {
+                    if (data['to_client_id'] !== 'all') {
+                        this.chat.title = data['from_client_name']
+                        this.chat.to_client_name = data['from_client_name']
+                        this.chat.to_client_id = data['from_client_id']
                     }
-                    this.chat.messageLists.push(data);
-                    this.pushMessage(data['content']);
+                    this.chat.messageLists.push(data)
+                    this.pushMessage(data['content'])
                 }
-                if (this.chatVisible && this.userInfo.username===data['from_client_name']) {
-                    if (data['to_client_id']!=='all') {
-                        this.chat.title = data['to_client_name'];
-                        this.chat.to_client_name = data['to_client_name'];
-                        this.chat.to_client_id = data['to_client_id'];
+                if (this.chatVisible && this.userInfo.username === data['from_client_name']) {
+                    if (data['to_client_id'] !== 'all') {
+                        this.chat.title = data['to_client_name']
+                        this.chat.to_client_name = data['to_client_name']
+                        this.chat.to_client_id = data['to_client_id']
                     }
                 }
             },
             /**
              * TODO:消息发送
              */
-            sendMsg:function(){
-                this.showEmotion = false;
-                this.inputMsg= this.$refs.message !== undefined ? this.$refs.message.innerHTML : '';
+            sendMsg: function () {
+                this.showEmotion = false
+                this.inputMsg = this.$refs.message !== undefined ? this.$refs.message.innerHTML : ''
                 if (this.inputMsg.trim() !== '') {
-                    //发送消息
+                    // 发送消息
                     let str = {
-                        type:'say',
-                        to_client_id:this.chat.to_client_id,
-                        to_client_name:this.chat.to_client_name,
-                        from_client_name:this.userInfo.username,
-                        from_client_id:this.userInfo.uuid,
-                        msg_type:this.chat.msg_type,
-                        content:this.inputMsg,
-                        client_img:this.userInfo.avatar_url,
-                        room_id:this.chat.to_client_name === 'all' ? this.chat.room_id : '',
-                        uid:this.chat.uid,
-                        time:func.set_time(func.get_timestamp()*1000)
-                    };
-                    this.userInfo.websocketServer.send(JSON.stringify(str));
-                    this.chat.messageLists.push(str);
+                        type: 'say',
+                        to_client_id: this.chat.to_client_id,
+                        to_client_name: this.chat.to_client_name,
+                        from_client_name: this.userInfo.username,
+                        from_client_id: this.userInfo.uuid,
+                        msg_type: this.chat.msg_type,
+                        content: this.inputMsg,
+                        client_img: this.userInfo.avatar_url,
+                        room_id: this.chat.to_client_name === 'all' ? this.chat.room_id : '',
+                        uid: this.chat.uid,
+                        time: func.setTime(func.getTimestamp() * 1000)
+                    }
+                    this.userInfo.websocketServer.send(JSON.stringify(str))
+                    this.chat.messageLists.push(str)
                     this.$refs.vsl.scrollToBottom()
-                    this.$refs.message.innerHTML = '';
-                    this.inputMsg = '';
-                    return ;
+                    this.$refs.message.innerHTML = ''
+                    this.inputMsg = ''
+                    return
                 }
                 if (this.chatVisible) {
-                    this.$refs.message.focus();
-                    this.$message({type:'info',message:'Please enter message'})
+                    this.$refs.message.focus()
+                    this.$message({type: 'info', message: 'Please enter message'})
                 }
             },
             /**
              * todo:推送弹框消息
              * @param message
              */
-            pushMessage:function (message){
-                Push.create("你有未读消息", {
+            pushMessage: function (message) {
+                Push.create('你有未读消息', {
                     body: message,
                     requireInteraction: true,
                     icon: 'https://www.fanglonger.com/favicon.ico',
-                    timeout: 600000,
-                });
+                    timeout: 60000
+                })
             },
             /**
              * todo:删除消息
              */
-            removeMessageList:function (targetMessage) {
-                if (this.chat.messageLists.length>0) {
+            removeMessageList: function (targetMessage) {
+                if (this.chat.messageLists.length > 0) {
                     let i = 0
-                    this.chat.messageLists.map((item,index)=>{
-                        if (this.compareJson(item,targetMessage)) {
-                            i = index;
+                    this.chat.messageLists.map((item, index) => {
+                        if (this.compareJson(item, targetMessage)) {
+                            i = index
                         }
-                    });
-                    let __this = this,messageLists = [];
+                    })
+                    let __this = this
+                    let messageLists = []
                     Object.keys(__this.chat.messageLists).forEach(function (message) {
-                        messageLists.push(__this.chat.messageLists[message]);
-                    });
-                    messageLists.splice(i,1);
-                    this.chat.messageLists = messageLists;
+                        messageLists.push(__this.chat.messageLists[message])
+                    })
+                    messageLists.splice(i, 1)
+                    this.chat.messageLists = messageLists
                 }
             },
             /**
@@ -625,88 +623,91 @@
              * @param field
              * @returns {boolean}
              */
-            compareJson:function (jsonA,jsonB,field=['type']) {
-                let a = Object.keys(jsonA),b = Object.keys(jsonB);
-                if (a.length!== b.length) {
-                    return false;
+            compareJson: function (jsonA, jsonB, field = ['type']) {
+                let a = Object.keys(jsonA)
+                let b = Object.keys(jsonB)
+                if (a.length !== b.length) {
+                    return false
                 }
-                let total = a.length,num = field.length;
+                let total = a.length
+                let num = field.length
                 for (let i in jsonA) {
                     if (!field.includes(i) && jsonA[i] === jsonB[i]) {
-                        num++;
+                        num++
                     }
                 }
-                return num === total;
-            },
+                return num === total
+            }
         },
         /**
          * todo：生命周期
          */
-        created(){
-            //初始化聊天系统参数
+        created () {
+            // 初始化聊天系统参数
             this.chat = {
-                to_client_name:'all',
-                to_client_id:'all',
+                to_client_name: 'all',
+                to_client_id: 'all',
                 from_client_id: this.userInfo.uuid,
-                from_client_name:this.userInfo.username,
-                uid:this.userInfo.uuid,
-                room_id:this.userInfo.room_id,
-                title:this.userInfo.room_name,
-                msgCount:0,
-                client_list:[],
-                client_list_part:[],
-                img:'https://cdn.pixabay.com/photo/2016/12/13/21/20/alien-1905155_960_720.png',
-                desc:'',
-                messageLists:[],
-                msg_type:'text',
-                users:'',
-                userTotal:0,
-                userOnline:0,
-                currentPage:this.currentPage,
-                sizeLimit:this.sizeLimit,
-                messageTotal:0
-            };
-            //浏览器消息推送
-            try {
-                Push.Permission.request();
-            } catch (e) {
-                e ? this.$message.error(JSON.stringify(e)) : '';
+                from_client_name: this.userInfo.username,
+                uid: this.userInfo.uuid,
+                room_id: this.userInfo.room_id,
+                title: this.userInfo.room_name,
+                msgCount: 0,
+                client_list: [],
+                client_list_part: [],
+                img: 'https://cdn.pixabay.com/photo/2016/12/13/21/20/alien-1905155_960_720.png',
+                desc: '',
+                messageLists: [],
+                msg_type: 'text',
+                users: '',
+                userTotal: 0,
+                userOnline: 0,
+                currentPage: this.currentPage,
+                sizeLimit: this.sizeLimit,
+                messageTotal: 0
             }
-            //图片上传参数
-            this.fileData.token = this.userInfo.token;
-            this.fileData.rand = false;
-            this.headers.Authorization = `${func.set_password(func.set_random(32),func.set_random(12))}${this.userInfo.token}${func.set_password(func.set_random(32),func.set_random(12))}`
-            //客服系统初始化
-            this.connect(this.userInfo.websocketServer);
-            this.getOauthConfig('RoomLists');
-            this.getOauthConfig('GroupAnnouncementConfig');
-            let __this = this;
-            //键盘事件
+            // 浏览器消息推送
+            try {
+                Push.Permission.request()
+            } catch (e) {
+                // eslint-disable-next-line no-unused-expressions
+                e ? this.$message.error(JSON.stringify(e)) : ''
+            }
+            // 图片上传参数
+            this.fileData.token = this.userInfo.token
+            this.fileData.rand = false
+            this.headers.Authorization = `${func.setPassword(func.setRandom(32), func.setRandom(12))}${this.userInfo.token}${func.setPassword(func.setRandom(32), func.setRandom(12))}`
+            // 客服系统初始化
+            this.connect(this.userInfo.websocketServer)
+            this.getOauthConfig('RoomLists')
+            this.getOauthConfig('GroupAnnouncementConfig')
+            let __this = this
+            // 键盘事件
             document.onkeydown = function (e) {
                 if (e.code === 'Enter' && e.shiftKey) {
-                    e.preventDefault();
-                    __this.sendMsg();
-                    return false;
+                    e.preventDefault()
+                    __this.sendMsg()
+                    return false
                 }
             }
-            //撤回消息
-            this.$on('recallMessage', (newMessage,oldMessage) => {
-                //消息撤回
-                newMessage.type = 'recall';
-                newMessage['recall_message'] = JSON.parse(JSON.stringify(oldMessage));
-                this.removeMessageList(oldMessage);
-                //消息推送
-                this.userInfo.websocketServer.send(JSON.stringify(newMessage));
-                this.chat.messageLists.push(newMessage);
+            // 撤回消息
+            this.$on('recallMessage', (newMessage, oldMessage) => {
+                // 消息撤回
+                newMessage.type = 'recall'
+                newMessage['recall_message'] = JSON.parse(JSON.stringify(oldMessage))
+                this.removeMessageList(oldMessage)
+                // 消息推送
+                this.userInfo.websocketServer.send(JSON.stringify(newMessage))
+                this.chat.messageLists.push(newMessage)
             })
-            //删除消息
-            this.$on('deleteMessage', (newMessage,oldMessage) => {
-                //删除消息
-                newMessage.type = 'srem';
-                this.removeMessageList(oldMessage);
-                this.userInfo.websocketServer.send(JSON.stringify(newMessage));
+            // 删除消息
+            this.$on('deleteMessage', (newMessage, oldMessage) => {
+                // 删除消息
+                newMessage.type = 'srem'
+                this.removeMessageList(oldMessage)
+                this.userInfo.websocketServer.send(JSON.stringify(newMessage))
             })
-        },
+        }
     }
 </script>
 <style>

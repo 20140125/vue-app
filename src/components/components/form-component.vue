@@ -39,60 +39,60 @@
     export default {
         name: 'form-component',
         components: {Submit},
-        props:{
-            formData:{
-                type:Object,
-                default:()=>{}
+        props: {
+            formData: {
+                type: Object,
+                default: () => {}
             },
-            searchOptions:{
-                type:Array,
-                default:()=>[]
+            searchOptions: {
+                type: Array,
+                default: () => []
             },
-            rules:{
-                type:Object,
-                default:()=>{}
+            rules: {
+                type: Object,
+                default: () => {}
             },
-            labelWidth:{
-                type:String,
-                default:'0',
+            labelWidth: {
+                type: String,
+                default: '0'
             },
-            //更新
-            update:{
-                type:String,
-                default:$url.componentAction
-            },
+            // 更新
+            update: {
+                type: String,
+                default: $url.componentAction
+            }
         },
-        data(){
+        data () {
             return {
             }
         },
-        methods:{
+        methods: {
             ...mapActions(['saveSystemLog']),
-            submitForm:function(ref){
-                this.$refs[ref].validate((valid)=>{
-                    if (valid){
+            submitForm: function (ref) {
+                this.$refs[ref].validate((valid) => {
+                    if (valid) {
                         for (let i in this.searchOptions) {
                             this.formData[this.searchOptions[i].prop] = this.searchOptions[i].model
                         }
-                        this.formData.token = this.$store.state.login.token;
-                        apiLists.SaveData(this.formData,this.update).then(response=>{
+                        this.formData.token = this.$store.state.login.token
+                        apiLists.SaveData(this.formData, this.update).then(response => {
                             if (response && response.data.code === 200) {
-                                let data = { href:$url.componentAction, msg:response.data.msg, token:this.$store.state.login.token };
-                                this.saveSystemLog(data);
-                                this.$message({type:'success',message:response.data.msg});
-                                this.$emit('success');
-                                return false;
+                                let data = {href: $url.componentAction, msg: response.data.msg, token: this.$store.state.login.token}
+                                this.saveSystemLog(data)
+                                this.$message({type: 'success', message: response.data.msg})
+                                this.$emit('success')
+                                return false
                             }
-                        },error=>{
-                            console.log(error);
-                        });
-                        return true;
+                        }, error => {
+                            console.log(error)
+                        })
+                        return true
                     }
-                    this.$message({type:'warning',message:'Please check field integrity ~'});
-                });
+                    this.$message({type: 'warning', message: 'Please check field integrity ~'})
+                })
             },
-            resetForm:function (ref) {
-                this.$refs[ref].resetFields();
+            resetForm: function (ref) {
+                this.$refs[ref].resetFields()
             }
         },
         mounted () {

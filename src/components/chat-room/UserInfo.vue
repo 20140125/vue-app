@@ -34,71 +34,71 @@
 </template>
 
 <script>
-export default {
-    name: "UserInfo",
-    props:{
-        userInfoVisible:{
-            type:Boolean,
-            default:()=>false
-        },
-        userInfo:{
-            type:[Object,Array],
-            default:()=>{},
-        },
-        closeDialog:{
-            type:Function|Boolean,
-        },
-        dialogWidth:{
-            type:String,
-            default:()=>'40%'
-        },
-        id:{
-            type:String,
-            default:()=>'userInfo'
-        }
-    },
-    data(){
-        return {
-            visible:this.userInfoVisible,
-            userInfoDialogWidth:this.dialogWidth,
-            randomNum:0,
-            transformStyle:{}
-        }
-    },
-    watch:{
-        userInfoVisible:function () {
-            this.visible = this.userInfoVisible;
-            this.userInfoDialogWidth = (parseInt(this.dialogWidth.replace('%','')) - 15)+"%";
-            this.getUserInfo();
-        },
-    },
-    created() {
-        this.userInfoDialogWidth = (parseInt(this.dialogWidth.replace('%','')) - 15)+"%";
-        this.randomNum = Math.ceil(Math.random()*5|0)
-        this.transformStyle = {transform: 'rotate('+this.randomNum+'deg)'}
-    },
-    methods:{
-        /**
-         * todo:获取用户信息
-         */
-        getUserInfo:function () {
-            this.userInfo.desc = this.userInfo.centerInfo.desc || '';
-            this.userInfo.tags = JSON.parse(this.userInfo.centerInfo.tags) || '';
-            this.userInfo.ip_address = this.setLocal(JSON.parse(this.userInfo.centerInfo.ip_address)) || '';
-            this.userInfo.local = this.setLocal(JSON.parse(this.userInfo.centerInfo.local)) || '';
-        },
-        /**
-         * TODO:设置地址显示
-         */
-        setLocal:function(item) {
-            if (item.length>0) {
-                let str = item.join(',');
-                return str.replace(new RegExp(/,/g),' / ')
+    export default {
+        name: 'UserInfo',
+        props: {
+            userInfoVisible: {
+                type: Boolean,
+                default: () => false
+            },
+            userInfo: {
+                type: [Object, Array],
+                default: () => {}
+            },
+            closeDialog: {
+                type: Function | Boolean
+            },
+            dialogWidth: {
+                type: String,
+                default: () => '40%'
+            },
+            id: {
+                type: String,
+                default: () => 'userInfo'
             }
-            return item;
         },
-    },
-}
+        data () {
+            return {
+                visible: this.userInfoVisible,
+                userInfoDialogWidth: this.dialogWidth,
+                randomNum: 0,
+                transformStyle: {}
+            }
+        },
+        watch: {
+            userInfoVisible: function () {
+                this.visible = this.userInfoVisible
+                this.userInfoDialogWidth = (parseInt(this.dialogWidth.replace('%', '')) - 15) + '%'
+                this.getUserInfo()
+            }
+        },
+        created () {
+            this.userInfoDialogWidth = (parseInt(this.dialogWidth.replace('%', '')) - 15) + '%'
+            this.randomNum = Math.ceil(Math.random() * 5 | 0)
+            this.transformStyle = { transform: 'rotate(' + this.randomNum + 'deg)' }
+        },
+        methods: {
+            /**
+             * todo:获取用户信息
+             */
+            getUserInfo: function () {
+                this.userInfo.desc = this.userInfo.centerInfo.desc || ''
+                this.userInfo.tags = JSON.parse(this.userInfo.centerInfo.tags) || ''
+                this.userInfo.ip_address = this.setLocal(JSON.parse(this.userInfo.centerInfo.ip_address)) || ''
+                this.userInfo.local = this.setLocal(JSON.parse(this.userInfo.centerInfo.local)) || ''
+            },
+            /**
+             * TODO:设置地址显示
+             */
+            setLocal: function (item) {
+                if (item.length > 0) {
+                    let str = item.join(',')
+                    return str.replace(new RegExp(/,/g), ' / ')
+                }
+                return item
+            }
+        }
+    }
 </script>
 
 <style lang="less">

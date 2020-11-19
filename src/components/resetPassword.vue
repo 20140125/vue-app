@@ -30,84 +30,84 @@
 </template>
 
 <script>
-    import $url from '../api/url';
+    import $url from '../api/url'
     import apiLists from '../api/api'
     export default {
-        name: "resetPassword",
-        props:{
-            userEmail:{
-                type:String,
-                default:()=>''
+        name: 'resetPassword',
+        props: {
+            userEmail: {
+                type: String,
+                default: () => ''
             },
-            rememberToken:{
-                type:String,
-                default:()=>''
+            rememberToken: {
+                type: String,
+                default: () => ''
             }
         },
-        data(){
+        data () {
             const validatePass = (rule, value, callback) => {
                 if (value === '') {
-                    callback(new Error('请输入密码'));
+                    callback(new Error('请输入密码'))
                 } else {
                     if (this.resetPass.confirmPassword !== '') {
-                        this.$refs.resetPass.validateField('confirmPassword');
+                        this.$refs.resetPass.validateField('confirmPassword')
                     }
-                    callback();
+                    callback()
                 }
-            };
+            }
             const validatePass2 = (rule, value, callback) => {
                 if (value === '') {
-                    callback(new Error('请再次输入密码'));
+                    callback(new Error('请再次输入密码'))
                 } else if (value !== this.resetPass.password) {
-                    callback(new Error('两次输入密码不一致!'));
+                    callback(new Error('两次输入密码不一致!'))
                 } else {
-                    callback();
+                    callback()
                 }
-            };
+            }
             return {
-                resetPass:{
-                    password:'',
-                    confirmPassword:'',
-                    email:'',
-                    remember_token:''
+                resetPass: {
+                    password: '',
+                    confirmPassword: '',
+                    email: '',
+                    remember_token: ''
                 },
-                rules:{
-                    password: [{ validator: validatePass, trigger: 'blur',required:true }],
-                    confirmPassword: [{ validator: validatePass2, trigger: 'blur',required: true }],
-                    email:{required:true,message:'用户邮箱获取失败',type:'email'},
-                    verify_code:{required:true,message:'请输入邮箱验证码',trigger:'blur'}
-                },
+                rules: {
+                    password: [{ validator: validatePass, trigger: 'blur', required: true }],
+                    confirmPassword: [{ validator: validatePass2, trigger: 'blur', required: true }],
+                    email: {required: true, message: '用户邮箱获取失败', type: 'email'},
+                    verify_code: {required: true, message: '请输入邮箱验证码', trigger: 'blur'}
+                }
             }
         },
-        created() {
-            this.resetPass.email = this.userEmail || this.resetPass.email;
+        created () {
+            this.resetPass.email = this.userEmail || this.resetPass.email
             this.resetPass.remember_token = this.rememberToken || this.resetPass.remember_token
         },
-        methods:{
+        methods: {
             /**
              * todo:关闭弹框
              * @param resetPass
              */
-            cancelDialog:function (resetPass) {
-                this.$refs[resetPass].resetFields();
+            cancelDialog: function (resetPass) {
+                this.$refs[resetPass].resetFields()
                 this.$emit('close')
             },
             /**
              * todo:修改密码
              * @param resetPass
              */
-            submitPassword:function (resetPass) {
+            submitPassword: function (resetPass) {
                 this.$refs[resetPass].validate((valid) => {
                     if (!valid) {
-                        return false;
+                        return false
                     }
-                    apiLists.SaveData(this.resetPass,$url.resetPass).then(response=>{
+                    apiLists.SaveData(this.resetPass, $url.resetPass).then(response => {
                         if (response && response.data.code === 200) {
-                            this.$message.success(response.data.msg);
-                            this.$emit('autoLoginSys',this.resetPass);
+                            this.$message.success(response.data.msg)
+                            this.$emit('autoLoginSys', this.resetPass)
                         }
                     })
-                });
+                })
             }
         }
     }

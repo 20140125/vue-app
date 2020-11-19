@@ -7,71 +7,71 @@
     export default {
         name: 'forms',
         components: {FormComponent},
-        data(){
+        data () {
             return {
-                dialogVisible:true,
-                formData:{
-                    datetime:[],
-                    name:'',
-                    radio:'1',
-                    select:''
+                dialogVisible: true,
+                formData: {
+                    datetime: [],
+                    name: '',
+                    radio: '1',
+                    select: ''
                 },
-                searchOptions:[
+                searchOptions: [
                     {
-                        type:'datetime',
-                        label:'DateTime',
-                        prop:'datetime',
-                        model:[],
-                        datetype:'daterange',
-                        format:'yyyy-MM-dd',
-                        tips:'Please select params - Please select params'
+                        type: 'datetime',
+                        label: 'DateTime',
+                        prop: 'datetime',
+                        model: [],
+                        datetype: 'daterange',
+                        format: 'yyyy-MM-dd',
+                        tips: 'Please select params - Please select params'
                     },
                     {
-                        type:'input',
-                        label:'Name',
-                        prop:'name',
-                        model:'',
-                        tips:'Please input params'
+                        type: 'input',
+                        label: 'Name',
+                        prop: 'name',
+                        model: '',
+                        tips: 'Please input params'
                     },
                     {
-                        type:'radio',
-                        label:'Radio',
-                        prop:'radio',
-                        model:'1',
-                        tips:'Please select params',
-                        options:[
+                        type: 'radio',
+                        label: 'Radio',
+                        prop: 'radio',
+                        model: '1',
+                        tips: 'Please select params',
+                        options: [
                             {
-                                label:'1',
-                                value:'Close',
+                                label: '1',
+                                value: 'Close'
                             },
                             {
-                                label:'2',
-                                value:'Open',
+                                label: '2',
+                                value: 'Open'
+                            }
+                        ]
+                    },
+                    {
+                        type: 'select',
+                        label: 'Select',
+                        prop: 'select',
+                        model: '',
+                        options: [
+                            {
+                                label: 'Successfully',
+                                value: '1'
                             },
+                            {
+                                label: 'Offline',
+                                value: '2'
+                            },
+                            {
+                                label: 'Failed',
+                                value: '3'
+                            }
                         ],
-                    },
-                    {
-                        type:'select',
-                        label:'Select',
-                        prop:'select',
-                        model:'',
-                        options:[
-                            {
-                                label:'Successfully',
-                                value:'1',
-                            },
-                            {
-                                label:'Offline',
-                                value:'2',
-                            },
-                            {
-                                label:'Failed',
-                                value:'3',
-                            },
-                        ],
-                        tips:'Please select params'
-                    },
-                ],
+                        tips: 'Please select params'
+                    }
+                ]
             }
         }
     }

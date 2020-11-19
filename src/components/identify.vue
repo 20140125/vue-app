@@ -7,41 +7,41 @@
     export default{
         name: 'SIdentify',
         props: {
-            identifyCode: { //默认注册码
+            identifyCode: { // 默认注册码
                 type: String,
-                default: ()=>'1234'
+                default: () => '1234'
             },
             fontSizeMin: { // 字体最小值
                 type: Number,
-                default:()=>25
+                default: () => 25
             },
             fontSizeMax: { // 字体最大值
                 type: Number,
-                default: ()=>35
+                default: () => 35
             },
             backgroundColorMin: { // 验证码图片背景色最小值
                 type: Number,
-                default: ()=>200
+                default: () => 200
             },
-            backgroundColorMax: {  // 验证码图片背景色最大值
+            backgroundColorMax: { // 验证码图片背景色最大值
                 type: Number,
-                default: ()=>220
+                default: () => 220
             },
             dotColorMin: { // 背景干扰点最小值
                 type: Number,
-                default: ()=>60
+                default: () => 60
             },
             dotColorMax: { // 背景干扰点最大值
                 type: Number,
-                default: ()=>120
+                default: () => 120
             },
-            contentWidth: { //容器宽度
+            contentWidth: { // 容器宽度
                 type: Number,
-                default: ()=>120
+                default: () => 120
             },
-            contentHeight: { //容器高度
+            contentHeight: { // 容器高度
                 type: Number,
-                default: ()=>38
+                default: () => 38
             }
         },
         methods: {
@@ -91,7 +91,7 @@
              */
             drawText (ctx, txt, i) {
                 ctx.fillStyle = this.randomColor(50, 160)
-                ctx.font = this.randomNum(this.fontSizeMin, this.fontSizeMax) + 'px SimHei' //随机生成字体大小
+                ctx.font = this.randomNum(this.fontSizeMin, this.fontSizeMax) + 'px SimHei' // 随机生成字体大小
                 let x = (i + 1) * (this.contentWidth / (this.identifyCode.length + 1))
                 let y = this.randomNum(this.fontSizeMax, this.contentHeight - 5)
                 var deg = this.randomNum(-30, 30)

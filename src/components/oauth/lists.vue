@@ -41,12 +41,12 @@
         <!--table 分页-->
         <!---弹框-->
         <el-dialog :title="title" :visible.sync="syncVisible" :modal="true" :width="dialogWidth" :center="true" :destroy-on-close="true">
-            <el-form :label-width="labelWidth" :model="OauthModel" label-position="left" label-width="100px" :ref="reFrom" :rules="rules">
+            <el-form :label-width="labelWidth" :model="OauthModel" label-position="left" :ref="reFrom" :rules="rules">
                 <el-form-item label="用户名称：" prop="username">
                     <el-input v-model="OauthModel.username"/>
                 </el-form-item>
                 <el-form-item label="用户头像：" prop="avatar_url" id="avatar" style="display: flex;align-items: center;position: relative;">
-                    <Upload :avatar_url="OauthModel.avatar_url" :username="OauthModel.username" @uploadSuccess="uploadSuccess"/>
+                    <Upload :avatar_url="OauthModel.avatar_url" :username="OauthModel.username" @uploadSuccess="uploadSuccess"></Upload>
                 </el-form-item>
                 <el-form-item label="邮箱账号：" prop="email">
                     <el-input v-model="OauthModel.email">
@@ -71,190 +71,188 @@
 </template>
 
 <script>
-    import apiLists from '../../api/api';
-    import $url from '../../api/url';
+    import apiLists from '../../api/api'
+    import $url from '../../api/url'
     import func from '../../api/func'
-    import Radio from "../common/Radio";
-    import Delete from "../common/Delete";
-    import Submit from "../common/Submit";
+    import Radio from '../common/Radio'
+    import Delete from '../common/Delete'
+    import Submit from '../common/Submit'
     import Upload from '../common/Upload'
-    import {mapGetters,mapActions} from 'vuex'
+    import {mapGetters, mapActions} from 'vuex'
     export default {
-        name: "lists",
-        components: {Submit, Delete, Radio,Upload},
-        data(){
-            let verifyCode =  (rule,value,callback) => {
+        name: 'lists',
+        components: {Submit, Delete, Radio, Upload},
+        data () {
+            let verifyCode = (rule, value, callback) => {
                 try {
                     if (!Number.isInteger(value)) {
-                        callback(new Error('验证码格式错误'));
+                        callback(new Error('验证码格式错误'))
                     }
-                    if (value.toString().length!==8) {
-                        callback(new Error('请输入8位长度的验证码'));
+                    if (value.toString().length !== 8) {
+                        callback(new Error('请输入8位长度的验证码'))
                     }
-                    callback();
-                }catch (e) {
+                    callback()
+                } catch (e) {
                     callback(new Error('验证码格式错误'))
                 }
             }
             return {
-                oauthLists:[],
-                page:1,
-                limit:15,
-                total:0,
-                search:'',
-                title:'',
-                syncVisible:false, //是否显示弹框
-                labelWidth:'80px',
-                loading:true,
-                loadingText:'玩命加载中。。。',
-                url:'',
-                refs:this.$refs,
-                reFrom:'role',
-                OauthModel:{},
-                showCode:false,
-                showPassword:false,
-                oauthVisible:false,
-                cgi:{ remove:$url.oauthDelete, status:$url.oauthUpdate, update:$url.oauthUpdate, uploadUrl:process.env.API_ROOT+$url.fileUpload },
-                rules:{
-                    username:[{required:true,message:'请输入用户名',trigger:'blur'}],
-                    avatar_url:[{required:true,message:'请上传用户头像',trigger:'blur'}],
-                    email:[{required:true,message:'请输入邮箱',trigger:'blur'},{type:'email',message: '邮箱格式不正确'}],
-                    code:[{required:true,message:'请输入验证码',trigger:'blur'},{validator:verifyCode,trigger: 'blur'}],
-                    remember_token:[{required:true,message:'请输入用户标识',trigger:'blur'}],
+                oauthLists: [],
+                page: 1,
+                limit: 15,
+                total: 0,
+                search: '',
+                title: '',
+                syncVisible: false, // 是否显示弹框
+                labelWidth: '80px',
+                loading: true,
+                loadingText: '玩命加载中。。。',
+                url: '',
+                refs: this.$refs,
+                reFrom: 'role',
+                OauthModel: {},
+                showCode: false,
+                showPassword: false,
+                oauthVisible: false,
+                cgi: {remove: $url.oauthDelete, status: $url.oauthUpdate, update: $url.oauthUpdate, uploadUrl: process.env.API_ROOT + $url.fileUpload},
+                rules: {
+                    username: [{required: true, message: '请输入用户名', trigger: 'blur'}],
+                    avatar_url: [{required: true, message: '请上传用户头像', trigger: 'blur'}],
+                    email: [{required: true, message: '请输入邮箱', trigger: 'blur'}, {type: 'email', message: '邮箱格式不正确'}],
+                    code: [{required: true, message: '请输入验证码', trigger: 'blur'}, {validator: verifyCode, trigger: 'blur'}],
+                    remember_token: [{required: true, message: '请输入用户标识', trigger: 'blur'}]
                 },
-                btn:{}
+                btn: {}
             }
         },
-        computed:{
-            ...mapGetters(['userInfo','oauthConfig','dialogWidth']),
+        computed: {
+            ...mapGetters(['userInfo', 'oauthConfig', 'dialogWidth'])
         },
-        methods:{
-            ...mapActions(['getOauthConfig','addTabs','addCurrTabs']),
+        methods: {
+            ...mapActions(['getOauthConfig', 'addTabs', 'addCurrTabs']),
             /**
              * TODO:第三方登录
              */
-            oauthLogin:function(){
-                this.oauthVisible = true;
-                this.getOauthConfig('Oauth');
+            oauthLogin: function () {
+                this.oauthVisible = true
+                this.getOauthConfig('Oauth')
             },
             /**
              * TODO:页面跳转
              */
-            goto:function(href) {
-                apiLists.OauthBind({oauth_type:href,remember_token:this.userInfo.token}).then(response=>{
+            goto: function (href) {
+                apiLists.OauthBind({oauth_type: href, remember_token: this.userInfo.token}).then(response => {
                     if (response && response.data.code === 200) {
                         if (response.data.item.oauth_url) {
-                            window.open(response.data.item.oauth_url,'_self');
-                            return false;
+                            window.open(response.data.item.oauth_url, '_self')
+                            return false
                         }
-                        let pushParams = {label:'账户绑定',name:response.data.item.local};
-                        this.activeName = pushParams.name;
-                        this.addCurrTabs(pushParams);
-                        this.addTabs(pushParams);
-                        this.$router.push({path:pushParams.name});
+                        let pushParams = {label: '账户绑定', name: response.data.item.local}
+                        this.activeName = pushParams.name
+                        this.addCurrTabs(pushParams)
+                        this.addTabs(pushParams)
+                        this.$router.push({path: pushParams.name})
                     }
                 })
             },
             /**
              * todo：关闭弹框
              */
-            success:function(){
-                this.syncVisible = false;
-                this.getOauthLists(this.page,this.limit)
+            success: function () {
+                this.syncVisible = false
+                this.getOauthLists(this.page, this.limit)
             },
             /**
              * TODO:图片上传回调
              * @param src
              */
-            uploadSuccess:function(src) {
-                this.OauthModel.avatar_url = src;
+            uploadSuccess: function (src) {
+                this.OauthModel.avatar_url = src
             },
             /**
              * todo：获取角色列表
              * @param page
              * @param limit
              */
-            getOauthLists:function (page,limit) {
-                let params = { page:page,limit:limit };
-                apiLists.OauthLists(params).then(response=>{
-                    if (response && response.data.code === 200){
-                        this.oauthLists = response.data.item.data;
-                        this.total = response.data.item.total;
-                        this.loading = false;
+            getOauthLists: function (page, limit) {
+                let params = {page: page, limit: limit}
+                apiLists.OauthLists(params).then(response => {
+                    if (response && response.data.code === 200) {
+                        this.oauthLists = response.data.item.data
+                        this.total = response.data.item.total
+                        this.loading = false
                     }
-                });
+                })
             },
             /**
              * TODO:发送邮件获取验证码
              * @param oauthObject
              */
-            sendMail:function(oauthObject){
-                this.$refs[this.reFrom].validate((valid)=>{
+            sendMail: function (oauthObject) {
+                this.$refs[this.reFrom].validate((valid) => {
                     if (valid) {
-                        let params = {email:oauthObject.email, id:oauthObject.id, username:oauthObject.username, remember_token:oauthObject.remember_token};
-                        apiLists.SendEmail(params).then(response=>{
+                        let params = {email: oauthObject.email, id: oauthObject.id, username: oauthObject.username, remember_token: oauthObject.remember_token}
+                        apiLists.SendEmail(params).then(response => {
                             if (response && response.data.code === 200) {
-                                this.$message({type:'success',message:response.data.msg});
-                                this.showCode = true;
+                                this.$message({type: 'success', message: response.data.msg})
+                                this.showCode = true
                             }
-                        });
+                        })
                     }
-                });
+                })
             },
             /**
              * TODO：校验邮箱验证码
              * @param oauthObject
              */
-            checkCode:function(oauthObject) {
-                let params = {code:oauthObject.code, email:oauthObject.email};
-                apiLists.VerifyCode(params).then(response=>{
+            checkCode: function (oauthObject) {
+                let params = {code: oauthObject.code, email: oauthObject.email}
+                apiLists.VerifyCode(params).then(response => {
                     if (response && response.data.code === 200) {
-                        this.$message({type:'success',message:response.data.msg});
-                        return ;
+                        this.$message({type: 'success', message: response.data.msg})
+                        return
                     }
-                    oauthObject.code = '';
-                });
+                    oauthObject.code = ''
+                })
             },
             /**
              * todo：每页记录数
              * @param val
              */
-            sizeChange:function(val){
-                this.limit = val;
-                this.getOauthLists(this.page,this.limit)
+            sizeChange: function (val) {
+                this.limit = val
+                this.getOauthLists(this.page, this.limit)
             },
             /**
              * todo：当前页码
              * @param val
              */
-            currentChange:function(val){
-                this.page = val;
-                this.getOauthLists(this.page,this.limit)
+            currentChange: function (val) {
+                this.page = val
+                this.getOauthLists(this.page, this.limit)
             },
             /**
              * todo：修改
              * @param item
              */
-            updateOauth:function (item) {
-                this.title='修改授权用户';
-                this.syncVisible = true;
-                this.OauthModel = item;
-                this.showCode = false;
-                this.url = this.cgi.update;
+            updateOauth: function (item) {
+                this.title = '修改授权用户'
+                this.syncVisible = true
+                this.OauthModel = item
+                this.showCode = false
+                this.url = this.cgi.update
             }
         },
-        mounted() {
+        mounted () {
             this.$nextTick(function () {
-                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.userInfo.auth);
-                this.getOauthLists(this.page,this.limit);
-            });
+                this.btn = func.setBtnStatus(this.$route.path, this.$route.name, this.userInfo.auth)
+                this.getOauthLists(this.page, this.limit)
+            })
         }
     }
 </script>
-
 <style>
 #oauth .el-dialog--center .el-dialog__body{
-        text-align: center!important;
-
+    text-align: center!important;
 }
 </style>

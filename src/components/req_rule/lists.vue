@@ -77,198 +77,198 @@
 </template>
 
 <script>
-    import apiLists from '../../api/api';
-    import $url from '../../api/url';
+    import apiLists from '../../api/api'
+    import $url from '../../api/url'
     import func from '../../api/func'
-    import Radio from "../common/Radio";
-    import Delete from "../common/Delete";
-    import Submit from "../common/Submit";
-    import {mapGetters} from 'vuex';
-    import Status from "../common/Status";
+    import Radio from '../common/Radio'
+    import Delete from '../common/Delete'
+    import Submit from '../common/Submit'
+    import {mapGetters} from 'vuex'
+    import Status from '../common/Status'
     export default {
-        name: "lists",
+        name: 'lists',
         components: {Status, Submit, Delete, Radio},
-        data(){
+        data () {
             return {
-                reqRuleLists:[],
-                ruleLists:[], //权限列表
-                userLists:[], //授权用户列表
-                page:1,
-                limit:15,
-                total:0,
-                search:'',
-                title:'',
-                syncVisible:false, //是否显示弹框
-                loading:true,
-                loadingText:'玩命加载中。。。',
-                url:'',
-                refs:this.$refs,
-                reFrom:'created',
-                reqRuleModel:{},
-                cgi:{ remove:$url.reqRuleDelete, status:$url.reqRuleUpdate, update:$url.reqRuleUpdate, insert:$url.reqRuleSave },
-                rules:{
-                    user_id:[{required:true,message:'申请人不得为空',trigger:'blur'}],
-                    href:[{required:true,message:'授权地址不得为空',trigger:'change'}],
-                    expires: [{required:true,message:'授权时效不得为空',trigger:'change'}],
-                    desc:[{required:true,message:'授权说明不得为空',trigger:'blur'}],
-                    status:[{required:true,message:'授权状态不得为空',trigger:'blur'}]
+                reqRuleLists: [],
+                ruleLists: [], // 权限列表
+                userLists: [], // 授权用户列表
+                page: 1,
+                limit: 15,
+                total: 0,
+                search: '',
+                title: '',
+                syncVisible: false, // 是否显示弹框
+                loading: true,
+                loadingText: '玩命加载中。。。',
+                url: '',
+                refs: this.$refs,
+                reFrom: 'created',
+                reqRuleModel: {},
+                cgi: { remove: $url.reqRuleDelete, status: $url.reqRuleUpdate, update: $url.reqRuleUpdate, insert: $url.reqRuleSave },
+                rules: {
+                    user_id: [{required: true, message: '申请人不得为空', trigger: 'blur'}],
+                    href: [{required: true, message: '授权地址不得为空', trigger: 'change'}],
+                    expires: [{required: true, message: '授权时效不得为空', trigger: 'change'}],
+                    desc: [{required: true, message: '授权说明不得为空', trigger: 'blur'}],
+                    status: [{required: true, message: '授权状态不得为空', trigger: 'blur'}]
                 },
-                //提前七天通知用户续期
-                time:Date.parse(new Date())/1000 + 3600 * 7 * 24,
-                //日期快捷键
+                // 提前七天通知用户续期
+                time: Date.parse(new Date()) / 1000 + 3600 * 7 * 24,
+                // 日期快捷键
                 pickerOptions: {
-                    disabledDate(time) {
-                        return time.getTime() < Date.now();
+                    disabledDate (time) {
+                        return time.getTime() < Date.now()
                     },
                     shortcuts: [{
                         text: '一星期',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() + 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
+                        onClick (picker) {
+                            const date = new Date()
+                            date.setTime(date.getTime() + 3600 * 1000 * 24 * 7)
+                            picker.$emit('pick', date)
                         }
                     }, {
                         text: '一个月',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() + 3600 * 1000 * 24 * 30);
-                            picker.$emit('pick', date);
+                        onClick (picker) {
+                            const date = new Date()
+                            date.setTime(date.getTime() + 3600 * 1000 * 24 * 30)
+                            picker.$emit('pick', date)
                         }
-                    },{
+                    }, {
                         text: '三个月',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() + 3600 * 1000 * 24 * 30 * 3);
-                            picker.$emit('pick', date);
+                        onClick (picker) {
+                            const date = new Date()
+                            date.setTime(date.getTime() + 3600 * 1000 * 24 * 30 * 3)
+                            picker.$emit('pick', date)
                         }
-                    },{
+                    }, {
                         text: '六个月',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() + 3600 * 1000 * 24 * 30 * 6);
-                            picker.$emit('pick', date);
+                        onClick (picker) {
+                            const date = new Date()
+                            date.setTime(date.getTime() + 3600 * 1000 * 24 * 30 * 6)
+                            picker.$emit('pick', date)
                         }
-                    },{
+                    }, {
                         text: '一年',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() + 3600 * 1000 * 24 * 30 * 12);
-                            picker.$emit('pick', date);
+                        onClick (picker) {
+                            const date = new Date()
+                            date.setTime(date.getTime() + 3600 * 1000 * 24 * 30 * 12)
+                            picker.$emit('pick', date)
                         }
                     }]
                 },
-                //细化权限按钮
-                btn:{}
+                // 细化权限按钮
+                btn: {}
             }
         },
-        computed:{
-            ...mapGetters(['userInfo','dialogWidth'])
+        computed: {
+            ...mapGetters(['userInfo', 'dialogWidth'])
         },
-        methods:{
+        methods: {
             /**
              * todo:修改状态
              * @param status
              */
-            changeStatus:function (status) {
+            changeStatus: function (status) {
                 this.reqRuleModel.status = status
             },
             /**
              * todo：关闭弹框
              */
-            success:function(){
-                this.getReqRuleLists(this.page,this.limit)
+            success: function () {
+                this.getReqRuleLists(this.page, this.limit)
             },
             /**
              * todo：设置时间
              * @param timestamp
              */
-            setTimes:function(timestamp){
-                return func.set_time(timestamp*1000);
+            setTimes: function (timestamp) {
+                return func.setTime(timestamp * 1000)
             },
             /**
              * todo：获取角色列表
              * @param page
              * @param limit
              */
-            getReqRuleLists:function (page,limit) {
-                let params = { page:page,limit:limit };
-                this.syncVisible = false;
-                this.loading = true;
-                apiLists.ReqRuleLists(params).then(response=>{
-                    if (response && response.data.code === 200){
-                        this.reqRuleLists = response.data.item.data;
-                        this.total = response.data.item.total;
-                        this.userLists = response.data.item.userLists;
-                        this.loading = false;
+            getReqRuleLists: function (page, limit) {
+                let params = {page: page, limit: limit}
+                this.syncVisible = false
+                this.loading = true
+                apiLists.ReqRuleLists(params).then(response => {
+                    if (response && response.data.code === 200) {
+                        this.reqRuleLists = response.data.item.data
+                        this.total = response.data.item.total
+                        this.userLists = response.data.item.userLists
+                        this.loading = false
                     }
-                });
+                })
             },
             /**
              * 设置权限名称
              * @param item
              * @return {String}
              */
-            setAuthName:function(item){
-                return Array(item.level+1).join('　　')+item.name;
+            setAuthName: function (item) {
+                return Array(item.level + 1).join('　　') + item.name
             },
             /**
              * todo：每页记录数
              * @param val
              */
-            sizeChange:function(val){
-                this.limit = val;
-                this.getReqRuleLists(this.page,this.limit)
+            sizeChange: function (val) {
+                this.limit = val
+                this.getReqRuleLists(this.page, this.limit)
             },
             /**
              * todo：当前页码
              * @param val
              */
-            currentChange:function(val) {
-                this.page = val;
-                this.getReqRuleLists(this.page,this.limit)
+            currentChange: function (val) {
+                this.page = val
+                this.getReqRuleLists(this.page, this.limit)
             },
             /**
              * todo：权限申请
              */
-            addReqRule:function() {
-                this.title='权限申请';
-                this.syncVisible = true;
-                this.reqRuleModel = { user_id:this.userInfo.user_id, href:[], desc:'', expires:'', status:1,username:this.userInfo.username };
-                this.getAuth(this.userInfo.user_id);
-                this.url = this.cgi.insert;
+            addReqRule: function () {
+                this.title = '权限申请'
+                this.syncVisible = true
+                this.reqRuleModel = { user_id: this.userInfo.user_id, href: [], desc: '', expires: '', status: 1, username: this.userInfo.username }
+                this.getAuth(this.userInfo.user_id)
+                this.url = this.cgi.insert
                 this.reFrom = 'created'
             },
             /**
              * TODO:获取权限
              */
-            getAuth:function(user_id){
-                let params = {user_id:user_id}
-                apiLists.GetAuthByToken(params).then(response=>{
+            getAuth: function (userId) {
+                let params = {user_id: userId}
+                apiLists.GetAuthByToken(params).then(response => {
                     if (response && response.data.code === 200) {
-                        this.ruleLists = response.data.item;
+                        this.ruleLists = response.data.item
                     }
-                });
+                })
             },
             /**
              * todo：权限续期
              * @param item
              */
-            updateReqRule:function (item) {
-                this.title='权限续期';
-                this.syncVisible = true;
-                this.reqRuleModel = item;
-                this.getAuth(item.user_id);
-                this.reqRuleModel.href = [this.reqRuleModel.href];
+            updateReqRule: function (item) {
+                this.title = '权限续期'
+                this.syncVisible = true
+                this.reqRuleModel = item
+                this.getAuth(item.user_id)
+                this.reqRuleModel.href = [this.reqRuleModel.href]
                 this.ruleLists = this.reqRuleModel.ruleLists
-                this.url = this.cgi.update;
+                this.url = this.cgi.update
                 this.reFrom = 'update'
             }
         },
-        mounted() {
+        mounted () {
             this.$nextTick(function () {
-                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.userInfo.auth);
-                this.getReqRuleLists(this.page,this.limit)
-            });
+                this.btn = func.setBtnStatus(this.$route.path, this.$route.name, this.userInfo.auth)
+                this.getReqRuleLists(this.page, this.limit)
+            })
         }
     }
 </script>

@@ -33,7 +33,7 @@
 
         <!---弹框-->
         <el-dialog :title="title" :visible.sync="syncVisible" :modal="true" :center="true" :width="dialogWidth">
-            <el-form :label-width="labelWidth" :model="authModel" :ref="reFrom" :rules="rules" label-width="100px" label-position="left">
+            <el-form :label-width="labelWidth" :model="authModel" :ref="reFrom" :rules="rules" label-position="left">
                 <el-form-item label="权限名称：" prop="name">
                     <el-input v-model="authModel.name" placeholder="权限名称"></el-input>
                 </el-form-item>
@@ -59,86 +59,86 @@
 </template>
 
 <script>
-    import Submit from "../common/Submit";
-    import Radio from "../common/Radio";
-    import Delete from "../common/Delete";
-    import apiLists from '../../api/api';
+    import Submit from '../common/Submit'
+    import Radio from '../common/Radio'
+    import Delete from '../common/Delete'
+    import apiLists from '../../api/api'
     import func from '../../api/func'
-    import $url from '../../api/url';
+    import $url from '../../api/url'
     import {mapGetters} from 'vuex'
-    import Status from "../common/Status";
+    import Status from '../common/Status'
     export default {
-        name: "lists",
+        name: 'lists',
         components: {Status, Delete, Radio, Submit},
-        data(){
+        data () {
             return {
-                authLists:[],
-                authLevel:[],
-                search:'',
-                syncVisible:false, //是否显示弹框
-                labelWidth:'80px',
-                title:'',
-                loading:true,
-                loadingText:'玩命加载中。。。',
-                url:'',
-                refs:this.$refs,
-                reFrom:'created',
-                //权限默认数据
-                authModel:{},
-                //URL
-                cgi:{ insert:$url.authSave, update:$url.authUpdate, remove:$url.authDelete, status:$url.authUpdate },
-                //表单验证规则
-                rules:{
-                    name:[ { required:true,message:'权限名称不得为空',trigger:'blur' } ],
-                    href:[ { required:true,message:'权限链接不得为空',trigger:'blur' } ],
-                    pid:[ { required:true,message:'权限上级不得为空',trigger:'change' } ],
-                    status:[ { required:true,message:'权限状态不得为空',trigger:'change' } ]
+                authLists: [],
+                authLevel: [],
+                search: '',
+                syncVisible: false, // 是否显示弹框
+                labelWidth: '100px',
+                title: '',
+                loading: true,
+                loadingText: '玩命加载中。。。',
+                url: '',
+                refs: this.$refs,
+                reFrom: 'created',
+                // 权限默认数据
+                authModel: {},
+                // URL
+                cgi: { insert: $url.authSave, update: $url.authUpdate, remove: $url.authDelete, status: $url.authUpdate },
+                // 表单验证规则
+                rules: {
+                    name: [{required: true, message: '权限名称不得为空', trigger: 'blur'}],
+                    href: [{required: true, message: '权限链接不得为空', trigger: 'blur'}],
+                    pid: [{required: true, message: '权限上级不得为空', trigger: 'change'}],
+                    status: [{required: true, message: '权限状态不得为空', trigger: 'change'}]
                 },
-                //权限按钮细化
-                btn:{},
-                id:0
+                // 权限按钮细化
+                btn: {},
+                id: 0
             }
         },
-        computed:{
-            ...mapGetters(['userInfo','dialogWidth'])
+        computed: {
+            ...mapGetters(['userInfo', 'dialogWidth'])
         },
-        methods:{
+        methods: {
             /**
              * todo:修改状态
              * @param status
              */
-            changeStatus:function (status) {
+            changeStatus: function (status) {
                 this.authModel.status = status
             },
             /**
              * todo：关闭弹框
              * @param item
              */
-            success:function(item){
-                this.getAuthLists(this.id);
+            success: function (item) {
+                this.getAuthLists(this.id)
             },
             /**
              * todo：获取权限
              */
-            getAuthLists:function (id) {
-                this.syncVisible = false;
-                apiLists.AuthLists({id:id}).then(response=>{
-                    if (response && response.data.code===200){
-                        this.authLists = response.data.item.authLists;
-                        this.authLevel = response.data.item.selectAuth;
-                        this.loading = false;
+            getAuthLists: function (id) {
+                this.syncVisible = false
+                apiLists.AuthLists({id: id}).then(response => {
+                    if (response && response.data.code === 200) {
+                        this.authLists = response.data.item.authLists
+                        this.authLevel = response.data.item.selectAuth
+                        this.loading = false
                     }
-                });
+                })
             },
             /**
              * todo:远程检索数据
              */
-            load:function (tree, treeNode, resolve) {
-                apiLists.AuthLists({id:tree.id}).then(response=>{
+            load: function (tree, treeNode, resolve) {
+                apiLists.AuthLists({id: tree.id}).then(response => {
                     if (response && response.data.code === 200) {
-                        setTimeout(()=>{
-                            resolve(response.data.item.authLists);
-                        },500)
+                        setTimeout(() => {
+                            resolve(response.data.item.authLists)
+                        }, 500)
                     }
                 })
             },
@@ -147,41 +147,39 @@
              * @param item
              * @return {String}
              */
-            setAuthName:function(item){
-                return Array(item.level+1).join('　　')+item.name;
+            setAuthName: function (item) {
+                return Array(item.level + 1).join('　　') + item.name
             },
             /**
              * todo：权限添加
              * @param scope
              */
-            addAuth:function (scope = {}) {
-                this.syncVisible = true;
-                this.title = '添加权限';
-                this.url = this.cgi.insert;
-                this.reFrom = 'created';
-                this.authModel = { name:'', href:'', status:1, pid:'0', level:0, path:'1' };
-                if (scope.name) {
-                    this.authModel.pid = scope.id.toString();
-                }
+            addAuth: function (scope = {}) {
+                this.syncVisible = true
+                this.title = '添加权限'
+                this.url = this.cgi.insert
+                this.reFrom = 'created'
+                this.authModel = {name: '', href: '', status: 1, pid: '0', level: 0, path: '1'}
+                this.authModel.pid = scope.name ? scope.id.toString() : ''
             },
             /**
              * todo：权限保存
              * @param item
              */
-            updateAuth:function (item) {
-                this.syncVisible = true;
-                this.title = '修改权限';
-                this.url = this.cgi.update;
-                this.authModel = item;
-                this.reFrom = 'update';
-                this.authModel.pid = this.authModel.pid.toString();
+            updateAuth: function (item) {
+                this.syncVisible = true
+                this.title = '修改权限'
+                this.url = this.cgi.update
+                this.authModel = item
+                this.reFrom = 'update'
+                this.authModel.pid = this.authModel.pid.toString()
             }
         },
-        mounted() {
+        mounted () {
             this.$nextTick(function () {
-                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.userInfo.auth);
-                this.getAuthLists(this.id);
-            });
+                this.btn = func.setBtnStatus(this.$route.path, this.$route.name, this.userInfo.auth)
+                this.getAuthLists(this.id)
+            })
         }
     }
 </script>

@@ -75,106 +75,106 @@
 </template>
 
 <script>
-    import apiLists from '../api/api';
-    import {set_random} from '../api/func'
+    import apiLists from '../api/api'
+    import {setRandom} from '../api/func'
     import $url from '../api/url'
-    import { mapActions,mapGetters } from 'vuex'
-    import SendEmail from "./sendEmail";
-    import ResetPassword from "./resetPassword";
-    import SIdentify from "./identify";
+    import { mapActions, mapGetters } from 'vuex'
+    import SendEmail from './sendEmail'
+    import ResetPassword from './resetPassword'
+    import SIdentify from './identify'
     export default {
-        name: "login",
+        name: 'login',
         components: {SIdentify, ResetPassword, SendEmail},
-        data(){
+        data () {
             return {
-                passwordLogin:{
-                    email:'',
-                    password:'',
-                    verify_code:'',
-                    remember_token:'',
-                    loginType:'password'
+                passwordLogin: {
+                    email: '',
+                    password: '',
+                    verify_code: '',
+                    remember_token: '',
+                    loginType: 'password'
                 },
-                passwordRules:{
-                    email:[{required:true,message:'请输入用户名',trigger:'blur'},{type:'email',message: '用户名格式不正确'}],
-                    password:[{required:true,message:'请输入密码',trigger:'blur'}],
-                    verify_code:[{required:true,message:'请输入验证码',trigger:'blur'}],
+                passwordRules: {
+                    email: [{required: true, message: '请输入用户名', trigger: 'blur'}, {type: 'email', message: '用户名格式不正确'}],
+                    password: [{required: true, message: '请输入密码', trigger: 'blur'}],
+                    verify_code: [{required: true, message: '请输入验证码', trigger: 'blur'}]
                 },
-                mailLogin:{
-                    email:'',
-                    verify_code:'',
-                    loginType:'mail'
+                mailLogin: {
+                    email: '',
+                    verify_code: '',
+                    loginType: 'mail'
                 },
-                mailRules:{
-                    email:[{required:true,message:'请输入邮箱',trigger:'blur'},{type:'email',message: '邮箱格式不正确'}],
-                    verify_code:[{required:true,message:'请输入验证码',trigger:'blur'}],
+                mailRules: {
+                    email: [{required: true, message: '请输入邮箱', trigger: 'blur'}, {type: 'email', message: '邮箱格式不正确'}],
+                    verify_code: [{required: true, message: '请输入验证码', trigger: 'blur'}]
                 },
-                bgStyle:{
-                    'background':'url('+require('../assets/u0.jpg')+')',
-                    'background-repeat':'no-repeat',
-                    'height':(window.innerHeight)+'px',
+                bgStyle: {
+                    'background': 'url(' + require('../assets/u0.jpg') + ')',
+                    'background-repeat': 'no-repeat',
+                    'height': (window.innerHeight) + 'px'
                 },
-                dialogWidth:'32%',
-                styleWidth:{width:'76%'},
-                innerWidth:window.innerWidth,
-                activeModel:'password',
-                //邮箱验证码
-                codeValue:'获取验证码',
-                times:60,
-                disabled:false,
-                //登录验证码
-                verifyCode:'',
-                headerTitle:'账号密码登录',
-                emailSendVisible:false,
-                resetPasswordVisible:false
+                dialogWidth: '32%',
+                styleWidth: {width: '76%'},
+                innerWidth: window.innerWidth,
+                activeModel: 'password',
+                // 邮箱验证码
+                codeValue: '获取验证码',
+                times: 60,
+                disabled: false,
+                // 登录验证码
+                verifyCode: '',
+                headerTitle: '账号密码登录',
+                emailSendVisible: false,
+                resetPasswordVisible: false
             }
         },
-        computed:{
+        computed: {
             ...mapGetters(['oauthConfig'])
         },
-        mounted() {
+        mounted () {
             this.$nextTick(function () {
-                this.refreshCode();
-                if (this.innerWidth<768) {
-                    this.styleWidth = {width: '55%'};
-                    this.dialogWidth = '100%';
-                } else if (this.innerWidth>=768 && this.innerWidth<992) {
-                    this.dialogWidth = '83.3333%';
-                    this.styleWidth = {width: '79%'};
-                } else if (this.innerWidth>=992 && this.innerWidth<1200) {
-                    this.dialogWidth = '65.3333%';
-                    this.styleWidth = {width: '78%'};
-                } else if (this.innerWidth>=1200 && this.innerWidth<1920) {
-                    this.dialogWidth = '49.3333%';
-                    this.styleWidth = {width: '79%'};
-                } else if (this.innerWidth>=1920) {
-                    this.dialogWidth = '32.3333%';
-                    this.styleWidth = {width: '76%'};
+                this.refreshCode()
+                if (this.innerWidth < 768) {
+                    this.styleWidth = {width: '55%'}
+                    this.dialogWidth = '100%'
+                } else if (this.innerWidth >= 768 && this.innerWidth < 992) {
+                    this.dialogWidth = '83.3333%'
+                    this.styleWidth = {width: '79%'}
+                } else if (this.innerWidth >= 992 && this.innerWidth < 1200) {
+                    this.dialogWidth = '65.3333%'
+                    this.styleWidth = {width: '78%'}
+                } else if (this.innerWidth >= 1200 && this.innerWidth < 1920) {
+                    this.dialogWidth = '49.3333%'
+                    this.styleWidth = {width: '79%'}
+                } else if (this.innerWidth >= 1920) {
+                    this.dialogWidth = '32.3333%'
+                    this.styleWidth = {width: '76%'}
                 }
             })
         },
-        methods:{
-            ...mapActions(['loginSystem','getOauthConfig']),
+        methods: {
+            ...mapActions(['loginSystem', 'getOauthConfig']),
             /**
              * todo:用户登录
              * @param formName
              */
-            onSubmit:function (formName) {
-                this.$refs[formName].validate((valid)=>{
-                    if (valid){
+            onSubmit: function (formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
                         switch (formName) {
-                            case 'password':
-                                this.loginSystem(this.passwordLogin);
-                                break;
-                            case 'mail':
-                                let params = {verify_code:this.mailLogin.verify_code,email:this.mailLogin.email};
-                                apiLists.VerifyCode(params).then(response=>{
-                                    if (response && response.data.code === 200) {
-                                        this.loginSystem(this.mailLogin);
-                                        return ;
-                                    }
-                                    this.mailLogin.verify_code = '';
-                                });
-                                break
+                        case 'password':
+                            this.loginSystem(this.passwordLogin)
+                            break
+                        case 'mail':
+                            let params = {verify_code: this.mailLogin.verify_code, email: this.mailLogin.email}
+                            apiLists.VerifyCode(params).then(response => {
+                                if (response && response.data.code === 200) {
+                                    this.loginSystem(this.mailLogin)
+                                    return
+                                }
+                                this.mailLogin.verify_code = ''
+                            })
+                            break
                         }
                     }
                 })
@@ -183,84 +183,84 @@
              * TODO:tabs切换
              * @param row
              */
-            getTabs:function(row){
-                this.headerTitle = row.label;
+            getTabs: function (row) {
+                this.headerTitle = row.label
                 if (row.name === 'oauth') {
-                    this.getOauthConfig('Oauth');
+                    this.getOauthConfig('Oauth')
                 }
             },
             /**
              * todo:验证码刷新
              */
-            refreshCode:function () {
-                this.verifyCode = set_random(6,'number');
-                //验证码上报
-                apiLists.ReportSys($url.reportCode,{verify_code:this.verifyCode})
+            refreshCode: function () {
+                this.verifyCode = setRandom(6, 'number')
+                // 验证码上报
+                apiLists.ReportSys($url.reportCode, {verify_code: this.verifyCode})
             },
-                /**
+            /**
              * TODO:获取验证码
              */
-            getEmailCode:function() {
+            getEmailCode: function () {
                 if (this.disabled) {
-                    this.codeValue = this.times-- +' s';
-                    return;
+                    this.codeValue = this.times-- + ' s'
+                    return
                 }
-                let params = {email:this.mailLogin.email};
-                apiLists.SendEmail(params).then(response=>{
+                let params = {email: this.mailLogin.email}
+                apiLists.SendEmail(params).then(response => {
                     if (response && response.data.code === 200) {
-                        this.$message({type:'success',message:response.data.msg});
-                        this.disabled = true;
+                        this.$message({type: 'success', message: response.data.msg})
+                        this.disabled = true
                     }
-                });
+                })
             },
             /**
              * TODO:授权登录
              * @param href
              */
-            oauthLogin:function(href) {
-                window.open(href,'_self');
+            oauthLogin: function (href) {
+                window.open(href, '_self')
             },
             /**
              * todo：表单重置
              * @param formName
              */
-            resetForm(formName) {
-                this.$refs[formName].resetFields();
+            resetForm (formName) {
+                this.$refs[formName].resetFields()
             },
             /**
              * todo:修改密码
              * @param item
              */
-            resetPassword:function (item) {
-                this.emailSendVisible = false;
-                this.resetPasswordVisible = true;
-                this.passwordLogin.email = item.email;
-                this.passwordLogin.remember_token = item.remember_token;
+            resetPassword: function (item) {
+                this.emailSendVisible = false
+                this.resetPasswordVisible = true
+                this.passwordLogin.email = item.email
+                this.passwordLogin.remember_token = item.remember_token
             },
             /**
              * todo:系统登录
              * @param item
              */
-            autoLoginSys:function (item) {
-                this.passwordLogin.email = item.email;
-                this.passwordLogin.password = item.password;
-                this.passwordLogin.remember_token = item.remember_token;
-                this.resetPasswordVisible = false;
+            autoLoginSys: function (item) {
+                this.passwordLogin.email = item.email
+                this.passwordLogin.password = item.password
+                this.passwordLogin.remember_token = item.remember_token
+                this.resetPasswordVisible = false
             }
         },
-        created() {
+        created () {
             /**
              * todo:邮箱验证码定时器
              */
-            setInterval(()=>{
-                 if (this.times>=0 && this.disabled) {
-                     this.getEmailCode();
-                 } else {
-                     this.codeValue = '获取验证码';
-                     this.disabled = false;
-                     this.times = 60;
-                 }
-            },1000);
+            setInterval(() => {
+                if (this.times >= 0 && this.disabled) {
+                    this.getEmailCode()
+                } else {
+                    this.codeValue = '获取验证码'
+                    this.disabled = false
+                    this.times = 60
+                }
+            }, 1000)
         }
     }
 </script>

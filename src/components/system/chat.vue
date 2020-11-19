@@ -57,96 +57,92 @@
 </template>
 
 <script>
-    import apiLists from '../../api/api';
-    import $url from '../../api/url';
+    import apiLists from '../../api/api'
+    import $url from '../../api/url'
     import func from '../../api/func'
-    import Delete from "../common/Delete";
+    import Delete from '../common/Delete'
     export default {
-        name: "lists",
+        name: 'lists',
         components: {Delete},
-        data(){
+        data () {
             return {
-                chatLists:[],
-                page:1,
-                limit:10,
-                total:0,
-
-                title:'',
-                syncVisible:false, //是否显示弹框
-                modal:true, //遮盖层是否需要
-                labelWidth:'80px',
-                loading:true,
-                destroy_on_close:true,
-                center:true,
-                loadingText:'玩命加载中。。。',
-
-                cgi:{
-                    remove:$url.remove,
-                    status:$url.status
-                },
-                rules:{},
+                chatLists: [],
+                page: 1,
+                limit: 10,
+                total: 0,
+                title: '',
+                syncVisible: false, // 是否显示弹框
+                modal: true, // 遮盖层是否需要
+                labelWidth: '80px',
+                loading: true,
+                destroy_on_close: true,
+                center: true,
+                loadingText: '玩命加载中。。。',
+                cgi: {remove: $url.remove, status: $url.status},
+                rules: {}
             }
         },
-        methods:{
+        methods: {
             /**
              * TODO:字符串标签转换
              * @param html
              */
-            unescape:function (html) {
+            unescape: function (html) {
                 return html
-                  .replace(html ? /&(?!#?\w+;)/g : /&/g, '&amp;')
-                  .replace(/&lt;/g, "<")
-                  .replace(/&gt;/g, ">")
-                  .replace(/&quot;/g, "\"")
-                  .replace(/&amp;nbsp;/g," ")
-                  .replace(/&#39;/g, "\'");
+                    .replace(html ? /&(?!#?\w+;)/g : /&/g, '&amp;')
+                    .replace(/&lt;/g, '<')
+                    .replace(/&gt;/g, '>')
+                    .replace(/&quot;/g, '"')
+                    .replace(/&amp;nbsp;/g, ' ')
+                    // eslint-disable-next-line no-useless-escape
+                    .replace(/&#39;/g, "\'")
             },
             /**
              * todo：关闭弹框
              */
-            success:function(){
-                this.syncVisible = false;
+            success: function () {
+                this.syncVisible = false
             },
             /**
              * todo：设置时间
              * @param timestamp
              */
-            setTimes:function(timestamp){
-                return func.set_time(timestamp*1000);
+            setTimes: function (timestamp) {
+                return func.setTime(timestamp * 1000)
             },
             /**
              * todo：获取角色列表
              * @param page
              * @param limit
              */
-            getChatLists:function (page,limit) {
-                apiLists.ChatLists({ page:page,limit:limit }).then(response=>{
-                    this.loading = false;
-                    this.chatLists = response.data.item.data;
-                    this.total = response.data.item.total;
-                });
+            getChatLists: function (page, limit) {
+                apiLists.ChatLists({ page: page, limit: limit }).then(response => {
+                    this.loading = false
+                    this.chatLists = response.data.item.data
+                    this.total = response.data.item.total
+                })
             },
             /**
              * todo：每页记录数
              * @param val
              */
-            sizeChange:function(val){
-                this.limit = val;
-                this.getChatLists(this.page,this.limit)
+            sizeChange: function (val) {
+                this.limit = val
+                this.getChatLists(this.page, this.limit)
             },
             /**
              * todo：当前页码
              * @param val
              */
-            currentChange:function(val){
-                this.page = val;
-                this.getChatLists(this.page,this.limit)
-            },
+            currentChange: function (val) {
+                this.page = val
+                this.getChatLists(this.page, this.limit)
+            }
         },
-        mounted() {
+        mounted () {
             this.$nextTick(function () {
-                this.getChatLists(this.page,this.limit)
-            });
+                this.getChatLists(this.page, this.limit)
+            })
         }
     }
 </script>

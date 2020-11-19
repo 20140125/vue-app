@@ -4,22 +4,22 @@
 <script>
     export default {
         name: 'App',
-        provide(){
+        provide () {
             return {
-                reload:this.reload,
+                reload: this.reload
             }
         },
-        data(){
+        data () {
             return {
-                ClassName:'clear_box',
-                isRouterAlive:true
+                ClassName: 'clear_box',
+                isRouterAlive: true
             }
         },
-        methods:{
-            reload:function () {
-                this.isRouterAlive = false;
+        methods: {
+            reload: function () {
+                this.isRouterAlive = false
                 this.$nextTick(function () {
-                    this.isRouterAlive = true;
+                    this.isRouterAlive = true
                 })
             }
         }

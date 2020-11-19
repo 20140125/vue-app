@@ -16,24 +16,24 @@
         data () {
             return {
                 messages: '',
-                avatar_url:'',
-                editorOption:editorOption,
+                avatar_url: '',
+                editorOption: editorOption
             }
         },
         methods: {
-            onEditorBlur () {
+            onEditorBlur: function () {
                 console.log('blur', this.messages)
             },
-            onEditorFocus () {
+            onEditorFocus: function () {
                 console.log('focus', this.messages)
             },
-            onEditorReady () {
+            onEditorReady: function () {
                 console.log('ready', this.messages)
             },
-            onEditorChange({ quill, html, text }) {
+            onEditorChange: function ({ quill, html, text }) {
                 console.log({ quill, html, text })
-            },
-        },
+            }
+        }
     }
 </script>
 <style>

@@ -63,123 +63,115 @@
 </template>
 
 <script>
-    import apiLists from '../../api/api';
-    import $url from '../../api/url';
+    import apiLists from '../../api/api'
+    import $url from '../../api/url'
     import func from '../../api/func'
-    import Delete from "../common/Delete";
-    import Submit from "../common/Submit";
+    import Delete from '../common/Delete'
+    import Submit from '../common/Submit'
     import {mapGetters} from 'vuex'
     export default {
-        name: "timeline",
-        components: {Delete,Submit},
-        data(){
+        name: 'timeline',
+        components: {Delete, Submit},
+        data () {
             return {
-                timeLineList:[],
-                page:1,
-                limit:15,
-                total:0,
-                search:'',
-
-                title:'',
-                syncVisible:false, //是否显示弹框
-                modal:true, //遮盖层是否需要
-                labelWidth:'80px',
-                loading:true,
-                destroy_on_close:true,
-                center:true,
-                loadingText:'玩命加载中。。。',
-                reFrom:'timeline',
-                timeLineModel:{},
-                refs:this.$refs,
-                url:'',
-
-                cgi:{
-                    save:$url.timeLineSave,
-                    update:$url.timeLineUpdate
-                },
-                rules:{
-                    content:[{required:true,message:'文案不得为空',trigger:'blur'}],
-                    timestamp:[{required:true,message:'时间不得为空',trigger:'change'}]
-                },
-                //权限细化按钮
-                btn:{},
-                typeLists:[
-                    {'key':'SUCCESS','val':'success'},
-                    {'key':'INFO','val':'info'},
-                    {'key':'PRIMARY','val':'primary'},
-                    {'key':'DANGER','val':'danger'},
-                    {'key':'WARNING','val':'warning'},
-                ],
+                timeLineList: [],
+                page: 1,
+                limit: 15,
+                total: 0,
+                search: '',
+                title: '',
+                syncVisible: false, // 是否显示弹框
+                modal: true, // 遮盖层是否需要
+                labelWidth: '80px',
+                loading: true,
+                destroy_on_close: true,
+                center: true,
+                loadingText: '玩命加载中。。。',
+                reFrom: 'timeline',
+                timeLineModel: {},
+                refs: this.$refs,
+                url: '',
+                cgi: {save: $url.timeLineSave, update: $url.timeLineUpdate},
+                rules: {content: [{required: true, message: '文案不得为空', trigger: 'blur'}], timestamp: [{required: true, message: '时间不得为空', trigger: 'change'}]},
+                // 权限细化按钮
+                btn: {},
+                typeLists: [
+                    {'key': 'SUCCESS', 'val': 'success'},
+                    {'key': 'INFO', 'val': 'info'},
+                    {'key': 'PRIMARY', 'val': 'primary'},
+                    {'key': 'DANGER', 'val': 'danger'},
+                    {'key': 'WARNING', 'val': 'warning'}
+                ]
             }
         },
-        computed:{
-            ...mapGetters(['userInfo','dialogWidth'])
+        computed: {
+            ...mapGetters(['userInfo', 'dialogWidth'])
         },
-        methods:{
+        methods: {
             /**
              * todo：关闭弹框
              */
-            success:function(){
-                this.syncVisible = false;
-                this.getTimeLineList(this.page,this.limit)
+            success: function () {
+                this.syncVisible = false
+                this.getTimeLineList(this.page, this.limit)
             },
             /**
              * todo：获取列表
              * @param page
              * @param limit
              */
-            getTimeLineList:function (page,limit) {
-                apiLists.TimeLineLists({ page:page,limit:limit }).then(response=>{
-                    this.loading = false;
-                    this.timeLineList = response.data.item.data;
-                    this.total = response.data.item.total;
-                });
+            getTimeLineList: function (page, limit) {
+                apiLists.TimeLineLists({ page: page, limit: limit }).then(response => {
+                    this.loading = false
+                    this.timeLineList = response.data.item.data
+                    this.total = response.data.item.total
+                })
             },
             /**
              * TODO：添加时间线
              */
-            addTimeLine:function() {
-                this.syncVisible = true;
-                this.title = '添加时间线';
+            addTimeLine: function () {
+                this.syncVisible = true
+                this.title = '添加时间线'
                 this.timeLineModel = {
-                    content:'',
-                    type:'success',
-                    timestamp:func.set_time(func.get_timestamp()*1000)
-                };
+                    content: '',
+                    type: 'success',
+                    timestamp: func.setTime(func.getTimestamp() * 1000)
+                }
                 this.url = this.cgi.save
             },
             /**
              * TODO:修改时间线
              * @param row
              */
-            editTimeLine:function(row) {
-                this.title = '修改时间线';
-                this.timeLineModel = row;
-                this.syncVisible = true;
+            editTimeLine: function (row) {
+                this.title = '修改时间线'
+                this.timeLineModel = row
+                this.syncVisible = true
                 this.url = this.cgi.update
             },
             /**
              * todo：每页记录数
              * @param val
              */
-            sizeChange:function(val){
-                this.limit = val;
-                this.getTimeLineList(this.page,this.limit)
+            sizeChange: function (val) {
+                this.limit = val
+                this.getTimeLineList(this.page, this.limit)
             },
             /**
              * todo：当前页码
              * @param val
              */
-            currentChange:function(val){
-                this.page = val;
-                this.getTimeLineList(this.page,this.limit)
-            },
+            currentChange: function (val) {
+                this.page = val
+                this.getTimeLineList(this.page, this.limit)
+            }
         },
-        mounted() {
+        mounted () {
             this.$nextTick(function () {
-                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.userInfo.auth);
-                this.getTimeLineList(this.page,this.limit);
-            });
+                this.btn = func.setBtnStatus(this.$route.path, this.$route.name, this.userInfo.auth)
+                this.getTimeLineList(this.page, this.limit)
+            })
         }
     }
 </script>

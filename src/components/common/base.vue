@@ -86,273 +86,268 @@
 </template>
 
 <script>
-    import { mapGetters,mapActions} from 'vuex'
+    import {mapGetters, mapActions} from 'vuex'
     import apiLists from '../../api/api'
     import func from '../../api/func'
-    import VueJson from "./jsonView/json";
-    import chatRoom from "../chat-room/Main";
+    import VueJson from './jsonView/json'
+    import chatRoom from '../chat-room/Main'
     export default {
-        name: "baseModule",
-        data(){
+        name: 'baseModule',
+        data () {
             return {
-                isCollapse:false,
-                activeName:'/admin/index',
-                showCity:false,
-                chatVisible:false,
-                activeIndex:'1',
-                menuClass:'el-icon-s-unfold',
-                asideWidth:"200px",
-                asideHeight:{},
-                headerStyle:{'margin-left':'200px'},
-                noticeLength:0,
-                notice:[],
-                online:0,
-                chat:{},
-                chatMsgClass:'el-icon-chat-dot-round',
-                noticeArr:[],
-                mainStyle:{margin:'60px 0 60px 200px'},
-                innerWidth:window.innerWidth,
-                chatDialogWidth:'65%'
+                isCollapse: false,
+                activeName: '/admin/index',
+                showCity: false,
+                chatVisible: false,
+                activeIndex: '1',
+                menuClass: 'el-icon-s-unfold',
+                asideWidth: '200px',
+                asideHeight: {},
+                headerStyle: {'margin-left': '200px'},
+                noticeLength: 0,
+                notice: [],
+                online: 0,
+                chat: {},
+                chatMsgClass: 'el-icon-chat-dot-round',
+                noticeArr: [],
+                mainStyle: {margin: '60px 0 60px 200px'},
+                innerWidth: window.innerWidth,
+                chatDialogWidth: '65%'
             }
         },
-        components:{
+        components: {
             VueJson,
             chatRoom
         },
-        computed:{
-            ...mapGetters(['tabs','menuLists','userInfo','weather','dialogWidth','currTabs']),
+        computed: {
+            ...mapGetters(['tabs', 'menuLists', 'userInfo', 'weather', 'dialogWidth', 'currTabs'])
         },
-        methods:{
-            ...mapActions(['addTabs','deleteTabs','addCurrTabs','logoutSystem','getAuthMenu','addDialogWidth']),
+        methods: {
+            ...mapActions(['addTabs', 'deleteTabs', 'addCurrTabs', 'logoutSystem', 'getAuthMenu', 'addDialogWidth']),
             /**
              * todo:设置未读消息数
              * @param msgCount
              */
-            setMsgCount:function (msgCount) {
-                this.chat.msgCount = msgCount;
+            setMsgCount: function (msgCount) {
+                this.chat.msgCount = msgCount
             },
             /**
              * TODO：设置tabs
              * @param item
              */
-            setAttr:function(item){
-                let params = {label:item.name,name:item.href};
-                this.addCurrTabs(params);
-                this.addTabs(params);
-                this.asideHeight = {
-                    'min-height':(window.innerHeight - 60)+'px'
-                };
-                this.$router.push({path:params.name});
+            setAttr: function (item) {
+                let params = {label: item.name, name: item.href}
+                this.addCurrTabs(params)
+                this.addTabs(params)
+                this.asideHeight = { 'min-height': (window.innerHeight - 60) + 'px' }
+                this.$router.push({path: params.name})
             },
             /**
              * TODO：路由追加
              * @param tab
              */
-            goto:function(tab){
-                this.$router.push({path:tab.name});
+            goto: function (tab) {
+                this.$router.push({path: tab.name})
             },
             /**
              * TODO：删除tabs
              * @param tabName
              */
-            remove:function(tabName){
+            remove: function (tabName) {
                 this.tabs.forEach((tab, index) => {
                     if (tab.name === tabName) {
-                        let nextTab = this.tabs[index + 1] || this.tabs[index - 1];
+                        let nextTab = this.tabs[index + 1] || this.tabs[index - 1]
                         if (nextTab) {
-                            this.deleteTabs(tabName);
-                            this.$router.push({path:nextTab.name});
-                            this.addCurrTabs(nextTab);
+                            this.deleteTabs(tabName)
+                            this.$router.push({path: nextTab.name})
+                            this.addCurrTabs(nextTab)
                         }
                     }
-                });
+                })
             },
             /**
              * TODO：用户基础设置
              * @param key
              * @param keyPath
              */
-            handleSelect(key, keyPath) {
+            handleSelect (key, keyPath) {
                 switch (key) {
-                    case '2-1':
-                        let userParams = {label:'个人中心',name:'/admin/center/index'};
-                        this.addCurrTabs(userParams);
-                        this.addTabs(userParams);
-                        this.$router.push({path:userParams.name});
-                        break;
-                    case '2-2':
-                        this.logoutSystem(this.token);
-                        break;
-                    default:
-                        break;
+                case '2-1':
+                    let userParams = {label: '个人中心', name: '/admin/center/index'}
+                    this.addCurrTabs(userParams)
+                    this.addTabs(userParams)
+                    this.$router.push({path: userParams.name})
+                    break
+                case '2-2':
+                    this.logoutSystem(this.token)
+                    break
+                default:
+                    break
                 }
             },
             /**
              * TODO:站内通知读取
              * @param noticeObj
              */
-            readNotice:function(noticeObj) {
+            readNotice: function (noticeObj) {
                 if (noticeObj === 'more') {
-                    let pushParams = {label:'站内通知',name:'/admin/push/index'};
-                    this.addCurrTabs(pushParams);
-                    this.addTabs(pushParams);
-                    this.$router.push({path:pushParams.name});
-                    return false;
+                    let pushParams = {label: '站内通知', name: '/admin/push/index'}
+                    this.addCurrTabs(pushParams)
+                    this.addTabs(pushParams)
+                    this.$router.push({path: pushParams.name})
+                    return false
                 }
-                let params = {};
-                params.see = parseInt(noticeObj.see)+1;
-                params.id = noticeObj.id;
+                let params = {}
+                params.see = parseInt(noticeObj.see) + 1
+                params.id = noticeObj.id
                 params.type = noticeObj.type
                 apiLists.PushRead(params)
             },
             /**
              * TODO：设置导航栏
              */
-            hideMenu:function(){
-                this.isCollapse =  !this.isCollapse;
-                if (!this.isCollapse){
-                    this.menuClass ='el-icon-s-unfold';
-                    this.asideWidth = "200px";
-                    this.headerStyle = {'margin-left':'200px'};
-                    this. mainStyle = {margin:'60px 0 60px 200px'}
+            hideMenu: function () {
+                this.isCollapse = !this.isCollapse
+                if (!this.isCollapse) {
+                    this.menuClass = 'el-icon-s-unfold'
+                    this.asideWidth = '200px'
+                    this.headerStyle = {'margin-left': '200px'}
+                    this.mainStyle = {margin: '60px 0 60px 200px'}
                 } else {
-                    this.menuClass = 'el-icon-s-fold';
-                    this.asideWidth = "65px";
-                    this.headerStyle = {'margin-left':'65px'};
-                    this. mainStyle = {margin:'60px 0 60px 60px'}
+                    this.menuClass = 'el-icon-s-fold'
+                    this.asideWidth = '65px'
+                    this.headerStyle = {'margin-left': '65px'}
+                    this.mainStyle = {margin: '60px 0 60px 60px'}
                 }
             },
             /**
              * TODO:弹出框展示
              */
-            getMsgDialog:function(){
-                this.chatVisible = !this.chatVisible;
+            getMsgDialog: function () {
+                this.chatVisible = !this.chatVisible
                 if (!this.chatVisible) {
-                    this.chatMsgClass = 'el-icon-chat-dot-round';
+                    this.chatMsgClass = 'el-icon-chat-dot-round'
                 } else {
-                    this.chatMsgClass = 'el-icon-close';
+                    this.chatMsgClass = 'el-icon-close'
                 }
             },
             /**
              * TODO：站内消息推送
              */
-            webPush:function () {
-                //站内消息推送
-                this.userInfo.socketServer.on('connect', ()=>{
+            webPush: function () {
+                // 站内消息推送
+                this.userInfo.socketServer.on('connect', () => {
                     // 连接后登录
-                    this.userInfo.socketServer.emit('login', this.userInfo.uuid);
-                });
+                    this.userInfo.socketServer.emit('login', this.userInfo.uuid)
+                })
                 // 服务端（http）推送站内通知信息
-                this.userInfo.socketServer.on('new_msg', (msg)=>{
-                    this.noticeArr.push({time:func.get_timestamp(),message:msg})
-                });
-                //用户站内通知
-                this.userInfo.socketServer.on('notice',(response)=>{
-                    let j = 1;
-                    this.noticeLength = 0;
+                this.userInfo.socketServer.on('new_msg', (msg) => {
+                    this.noticeArr.push({time: func.getTimestamp(), message: msg})
+                })
+                // 用户站内通知
+                this.userInfo.socketServer.on('notice', (response) => {
+                    let j = 1
+                    this.noticeLength = 0
                     for (let i in response) {
-                        response[i].disabled = true;
+                        response[i].disabled = true
                         if (response[i].status !== 'successfully' && response[i].see === 0) {
                             response[i].disabled = false
-                            this.noticeLength = j++;
+                            this.noticeLength = j++
                         }
                     }
-                    this.notice = response;
-                });
-                //在线人数
-                this.userInfo.socketServer.on('online',(response)=>{
-                    this.online = response;
-                });
+                    this.notice = response
+                })
+                // 在线人数
+                this.userInfo.socketServer.on('online', (response) => {
+                    this.online = response
+                })
             },
             /**
              * TODO:移除通知
              * @param item
              */
-            closeNotice:function(item){
+            closeNotice: function (item) {
                 for (let i in this.noticeArr) {
                     if (this.noticeArr[i].time === item.time) {
-                        this.noticeArr.splice(i,1);
+                        this.noticeArr.splice(i, 1)
                     }
                 }
             },
             /**
              * todo:设置弹框大小
              */
-            setDialogWidth:function () {
-                if (this.innerWidth<768) {
+            setDialogWidth: function () {
+                if (this.innerWidth < 768) {
                     this.addDialogWidth('100%')
-                } else if (this.innerWidth>=768 && this.innerWidth<992) {
+                } else if (this.innerWidth >= 768 && this.innerWidth < 992) {
                     this.addDialogWidth('85%')
-                } else if (this.innerWidth>=992 && this.innerWidth<1200) {
+                } else if (this.innerWidth >= 992 && this.innerWidth < 1200) {
                     this.addDialogWidth('70%')
-                } else if (this.innerWidth>=1200 && this.innerWidth<1920) {
+                } else if (this.innerWidth >= 1200 && this.innerWidth < 1920) {
                     this.addDialogWidth('65%')
-                } else if (this.innerWidth>=1920) {
-                    this.addDialogWidth('50%');
-                    this.isCollapse = false;
-                    this.menuClass ='el-icon-s-unfold';
-                    this.asideWidth = "200px";
-                    this.headerStyle = {'margin-left':'200px'};
-                    this. mainStyle = {margin:'60px 0 60px 200px'}
+                } else if (this.innerWidth >= 1920) {
+                    this.addDialogWidth('50%')
+                    this.isCollapse = false
+                    this.menuClass = 'el-icon-s-unfold'
+                    this.asideWidth = '200px'
+                    this.headerStyle = {'margin-left': '200px'}
+                    this.mainStyle = {margin: '60px 0 60px 200px'}
                     this.chatDialogWidth = '65%'
                 }
-            },
+            }
         },
         /**
          * TODO:Vue生命周期
          */
-        created(){
-            //初始化聊天系统参数
+        created () {
+            // 初始化聊天系统参数
             this.chat = {
-                msgCount:0,
-                total:0,
-                online:0
-            };
-            this.asideHeight = {
-                'min-height':(window.innerHeight - 60)+'px'
-            };
+                msgCount: 0,
+                total: 0,
+                online: 0
+            }
+            this.asideHeight = {'min-height': (window.innerHeight - 60) + 'px'}
         },
         /**
          * TODO:Vue生命周期
          */
-        watch:{
-            chatVisible:function () {
+        watch: {
+            chatVisible: function () {
                 if (!this.chatVisible) {
-                    this.chatMsgClass = 'el-icon-chat-dot-round';
+                    this.chatMsgClass = 'el-icon-chat-dot-round'
                 }
             },
-            weather:function () {
+            weather: function () {
                 if (this.weather) {
-                    this.noticeArr.push({time:func.get_timestamp(),message:this.weather['info'] ? JSON.stringify(this.weather['info']) : JSON.stringify(['welcome'])})
+                    this.noticeArr.push({time: func.getTimestamp(), message: this.weather['info'] ? JSON.stringify(this.weather['info']) : JSON.stringify(['welcome'])})
                 }
             },
-            currTabs:function () {
+            currTabs: function () {
                 this.activeName = this.currTabs.name
             }
-
         },
         /**
          * TODO:Vue生命周期
          */
-        mounted() {
+        mounted () {
             this.$nextTick(function () {
-                let params = {label:this.$route.meta.title,name:this.$route.path};
-                if (params.label !== '欢迎页' || func.str_count(params.name,'/') !== 3) {
-                    this.addCurrTabs(params);
-                    this.addTabs(params);
+                let params = {label: this.$route.meta.title, name: this.$route.path}
+                if (params.label !== '欢迎页' || func.strCount(params.name, '/') !== 3) {
+                    this.addCurrTabs(params)
+                    this.addTabs(params)
                 }
-                //导航栏
-                this.getAuthMenu();
-                //消息推送
-                this.webPush();
-                //侧边栏隐藏
-                this.isCollapse = true;
-                this.menuClass = 'el-icon-s-fold';
-                this.asideWidth = "65px";
-                this.headerStyle = {'margin-left':'65px'};
-                this. mainStyle = {margin:'60px 0 60px 60px'}
-                this.setDialogWidth();
-            });
+                // 导航栏
+                this.getAuthMenu()
+                // 消息推送
+                this.webPush()
+                // 侧边栏隐藏
+                this.isCollapse = true
+                this.menuClass = 'el-icon-s-fold'
+                this.asideWidth = '65px'
+                this.headerStyle = {'margin-left': '65px'}
+                this.mainStyle = {margin: '60px 0 60px 60px'}
+                this.setDialogWidth()
+            })
         }
     }
 </script>

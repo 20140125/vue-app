@@ -117,122 +117,122 @@
 </template>
 
 <script>
-    import apiLists from '../../api/api';
+    import apiLists from '../../api/api'
     import func from '../../api/func'
-    import $url from '../../api/url';
-    import Radio from "../common/Radio";
-    import Delete from "../common/Delete";
-    import Submit from "../common/Submit";
+    import $url from '../../api/url'
+    import Radio from '../common/Radio'
+    import Delete from '../common/Delete'
+    import Submit from '../common/Submit'
     import VueJson from '../common/jsonView/json'
-    import {mapGetters,mapActions} from 'vuex'
+    import {mapGetters, mapActions} from 'vuex'
     export default {
-        name: "lists",
-        components: { Submit, Delete, Radio,VueJson},
-        data(){
+        name: 'lists',
+        components: {Submit, Delete, Radio, VueJson},
+        data () {
             return {
-                categoryLists:[],
-                props:{label:'name', children:'children', id:'id'},
-                filterText:'',
-                //弹框配置值
-                title:'',
-                syncVisible:false, //是否显示弹框
-                labelWidth:'80px',
-                loading:true,
-                loadingText:'玩命加载中。。。',
-                url:'',
-                refs:this.$refs,
-                reFrom:'created',
-                //接口名称
-                apiName:'',
-                //右键功能显示与否
-                menuVisible:false,
-                categoryModel:{},
-                apiCategory:[],
-                //是否展示编辑器
-                apiStatus:false,
-                //方法集合
-                methodLists:{POST:'POST', GET:'GET', PUT:'PUT', DELETE:'DELETE'},
-                //参数类型
-                typeLists:{String:'String', Float:'Float', Number:'Number', Object:'Object', Array:'Array', Timestamp:'Timestamp'},
-                cgi:{
-                    insert:$url.apiSave,
-                    update:$url.apiUpdate,
-                    categoryInsert:$url.categorySave,
-                    categoryUpdate:$url.categoryUpdate,
-                    remove:$url.categoryDelete,
+                categoryLists: [],
+                props: {label: 'name', children: 'children', id: 'id'},
+                filterText: '',
+                // 弹框配置值
+                title: '',
+                syncVisible: false, // 是否显示弹框
+                labelWidth: '80px',
+                loading: true,
+                loadingText: '玩命加载中。。。',
+                url: '',
+                refs: this.$refs,
+                reFrom: 'created',
+                // 接口名称
+                apiName: '',
+                // 右键功能显示与否
+                menuVisible: false,
+                categoryModel: {},
+                apiCategory: [],
+                // 是否展示编辑器
+                apiStatus: false,
+                // 方法集合
+                methodLists: {POST: 'POST', GET: 'GET', PUT: 'PUT', DELETE: 'DELETE'},
+                // 参数类型
+                typeLists: {String: 'String', Float: 'Float', Number: 'Number', Object: 'Object', Array: 'Array', Timestamp: 'Timestamp'},
+                cgi: {
+                    insert: $url.apiSave,
+                    update: $url.apiUpdate,
+                    categoryInsert: $url.categorySave,
+                    categoryUpdate: $url.categoryUpdate,
+                    remove: $url.categoryDelete
                 },
-                //表单规则
-                rules:{
-                    type:[{required:true,message:'请输入权限名称', trigger: 'change'}],
-                    href:[{required:true,message:'请输入权限地址', trigger: 'blur'},],
-                    method:[{required:true,message:'请输入请求方法', trigger: 'change'},],
-                    desc:[{required:true,message:'请输入接口描述', trigger: 'blur'},],
-                    response_string:[{required:true,message:'请输入返回参数', trigger: 'blur'},],
+                // 表单规则
+                rules: {
+                    type: [{required: true, message: '请输入权限名称', trigger: 'change'}],
+                    href: [{required: true, message: '请输入权限地址', trigger: 'blur'}],
+                    method: [{required: true, message: '请输入请求方法', trigger: 'change'}],
+                    desc: [{required: true, message: '请输入接口描述', trigger: 'blur'}],
+                    response_string: [{required: true, message: '请输入返回参数', trigger: 'blur'}]
                 },
-                //细化权限按钮
-                btn:{},
-                scrollTop:0,
+                // 细化权限按钮
+                btn: {},
+                scrollTop: 0
             }
         },
         watch: {
-            filterText(val) {
-                this.$refs.tree.filter(val);
+            filterText (val) {
+                this.$refs.tree.filter(val)
             }
         },
-        computed:{
-            ...mapGetters(['apiVisible','apiModel','interfaceName','userInfo','dialogWidth'])
+        computed: {
+            ...mapGetters(['apiVisible', 'apiModel', 'interfaceName', 'userInfo', 'dialogWidth'])
         },
-        methods:{
-            ...mapActions(['addApiVisible','addApiModel','saveSystemLog']),
+        methods: {
+            ...mapActions(['addApiVisible', 'addApiModel', 'saveSystemLog']),
             /**
              * todo：关闭弹框
              */
-            success:function(){
-                this.getCategoryLists();
-                this.syncVisible = false;
+            success: function () {
+                this.getCategoryLists()
+                this.syncVisible = false
             },
             /**
              * todo:接口数据请求
              */
-            requestApiDetails:function () {
-                let params = {};
-                this.apiModel.request.map(item=>{
-                    params[item.name] = item.type === Number ? parseInt(item.val) : item.val;
-                });
-                apiLists.ReportSys(this.apiModel.href,params).then(response=>{
-                    if (response && response.data.code === 200){
-                        this.apiModel.response_string = response.data;
+            requestApiDetails: function () {
+                let params = {}
+                this.apiModel.request.map(item => {
+                    params[item.name] = item.type === Number ? parseInt(item.val) : item.val
+                })
+                apiLists.ReportSys(this.apiModel.href, params).then(response => {
+                    if (response && response.data.code === 200) {
+                        this.apiModel.response_string = response.data
                     }
-                });
+                })
             },
             /**
              * TODO：搜索接口名称
              * @param value
              * @param data
              */
-            filterNode:function(value, data) {
-                if (!value) return true;
-                return data.name.indexOf(value) !== -1;
+            filterNode: function (value, data) {
+                if (!value) return true
+                return data.name.indexOf(value) !== -1
             },
             /**
              * todo:设置API名称
              * @param item
              * @return {String}
              */
-            setName:function(item){
-                return Array(item.level+1).join('　　')+item.name;
+            setName: function (item) {
+                return Array(item.level + 1).join('　　') + item.name
             },
             /**
              * todo：获取API分类列表
              */
-            getCategoryLists:function () {
-                apiLists.CategoryLists().then(response=>{
-                    if (response && response.data.code === 200){
-                        this.apiCategory = response.data.item.category;
-                        this.categoryLists = response.data.item.category_tree;
-                        this.loading = false;
+            getCategoryLists: function () {
+                apiLists.CategoryLists().then(response => {
+                    if (response && response.data.code === 200) {
+                        this.apiCategory = response.data.item.category
+                        this.categoryLists = response.data.item.category_tree
+                        this.loading = false
                     }
-                });
+                })
             },
             /**
              * todo：鼠标右击触发事件
@@ -241,56 +241,56 @@
              * @param Node 节点对应的 Node、
              * @param element 节点组件本身。
              */
-            rightClick:function(MouseEvent, object, Node, element) {
-                this.menuVisible = false;
-                this.menuVisible = true;
-                const menu = document.querySelector('#menu');
-                const tree = document.getElementById('tree');
-                this.scrollTop = func.get_scroll_top();
-                document.addEventListener('click', this.foo);
-                menu.style.left = tree.offsetWidth + 50 +'px';
-                if (this.scrollTop>=229) {
-                    menu.style.top = MouseEvent.clientY + this.scrollTop - 235 + 'px';
+            rightClick: function (MouseEvent, object, Node, element) {
+                this.menuVisible = false
+                this.menuVisible = true
+                const menu = document.querySelector('#menu')
+                const tree = document.getElementById('tree')
+                this.scrollTop = func.getScrollTop()
+                document.addEventListener('click', this.foo)
+                menu.style.left = tree.offsetWidth + 50 + 'px'
+                if (this.scrollTop >= 229) {
+                    menu.style.top = MouseEvent.clientY + this.scrollTop - 235 + 'px'
                 } else {
-                    menu.style.top = MouseEvent.clientY + this.scrollTop - 180 + 'px';
+                    menu.style.top = MouseEvent.clientY + this.scrollTop - 180 + 'px'
                 }
-                this.categoryModel = object;
+                this.categoryModel = object
             },
             /**
              * todo：取消鼠标监听事件菜单栏
              */
-            foo:function() {
-                this.menuVisible = false;
-                document.removeEventListener('click', this.foo);
+            foo: function () {
+                this.menuVisible = false
+                document.removeEventListener('click', this.foo)
             },
             /**
              * todo：添加API分类
              */
-            addCategory:function () {
-                this.title='添加接口';
-                this.syncVisible = true;
+            addCategory: function () {
+                this.title = '添加接口'
+                this.syncVisible = true
                 this.reFrom = 'created'
-                this.url = this.cgi.categoryInsert;
-                this.categoryModel = {name:'', pid:this.categoryModel.id === undefined ? '0':this.categoryModel.id, path:'1', level:1};
+                this.url = this.cgi.categoryInsert
+                this.categoryModel = {name: '', pid: this.categoryModel.id === undefined ? '0' : this.categoryModel.id, path: '1', level: 1}
             },
             /**
              * todo：修改API分类
              */
-            updateCategory:function () {
-                this.title = this.categoryModel.name;
-                this.syncVisible = true;
+            updateCategory: function () {
+                this.title = this.categoryModel.name
+                this.syncVisible = true
                 this.reFrom = 'update'
-                this.url = this.cgi.categoryUpdate;
+                this.url = this.cgi.categoryUpdate
             },
             /**
              * TODO:删除API分类
              */
-            deleteCategory:function(){
-                apiLists.CategoryDelete({id:this.categoryModel.id}).then(response=>{
-                    if (response && response.data.code === 200){
-                        let data = { href:this.cgi.remove, msg:response.data.msg,token:this.$store.state.login.token };
-                        this.saveSystemLog(data);
-                        this.$message({type:'success',message:response.data.msg});
+            deleteCategory: function () {
+                apiLists.CategoryDelete({id: this.categoryModel.id}).then(response => {
+                    if (response && response.data.code === 200) {
+                        let data = { href: this.cgi.remove, msg: response.data.msg, token: this.$store.state.login.token }
+                        this.saveSystemLog(data)
+                        this.$message({type: 'success', message: response.data.msg})
                         this.getCategoryLists()
                     }
                 })
@@ -299,90 +299,97 @@
              * 获取接口详情
              * @param data
              */
-            getApiDetail:function(data){
-                if (data.level<=1){
-                    this.$notify({title: '通知', message: '该接口暂时不允许访问', type: 'success'});
-                    return;
+            getApiDetail: function (data) {
+                if (data.level <= 1) {
+                    this.$notify({title: '通知', message: '该接口暂时不允许访问', type: 'success'})
+                    return
                 }
-                const obj = { 'apiVisible':true,'interfaceName':data.name };
-                //设置
-                this.addApiVisible(obj);
-                this.apiName = this.interfaceName;
-                apiLists.ApiLists( {type:data.id} ).then(response=>{
-                    if (response && response.data.code===200){
-                        this.addApiModel(response.data.item);
-                        this.apiModel.request = JSON.parse(this.apiModel.request);
-                        this.apiModel.response = JSON.parse(this.apiModel.response);
-                        this.apiModel.response_string = JSON.parse(this.apiModel.response_string);
+                let obj = { apiVisible: true, interfaceName: data.name }
+                // 设置
+                this.addApiVisible(obj)
+                this.apiName = this.interfaceName
+                apiLists.ApiLists({type: data.id}).then(response => {
+                    if (response && response.data.code === 200) {
+                        this.addApiModel(response.data.item)
+                        this.apiModel.request = JSON.parse(this.apiModel.request)
+                        this.apiModel.response = JSON.parse(this.apiModel.response)
+                        this.apiModel.response_string = JSON.parse(this.apiModel.response_string)
                         this.url = this.cgi.update
                     } else {
-                        this.url = this.cgi.insert;
-                        let apiModel = {desc:'', type:data.id, href:'', method:'POST', request:[{"name":"token","desc":"用户token","required":"1","type":"String","val":this.userInfo.token}],
-                            response:[{"name":"code","desc":"200 成功","type":"Number"},{"name":"msg","desc":"Success","type":"String"}],
-                            response_string:[], remark:'接口调用必须添加header头Authorization以便验证用户的合法性'};
-                        this.addApiModel(apiModel);
+                        this.url = this.cgi.insert
+                        let apiModel = {desc: '',
+                                        type: data.id,
+                                        href: '',
+                                        method: 'POST',
+                                        request: [{name: 'token', desc: '用户token', required: '1', type: 'String', val: this.userInfo.token}],
+                                        response: [{name: 'code', desc: '200 成功', type: 'Number'}, {name: 'msg', desc: 'Success', type: 'String'}],
+                                        response_string: [],
+                                        remark: '接口调用必须添加header头Authorization以便验证用户的合法性'}
+                        this.addApiModel(apiModel)
                     }
-                });
+                })
             },
             /**
              * todo：删除请求字段
              * @param item
              * @param index
              */
-            requestRemove:function(item,index){
-                let request=[],that = this;
+            requestRemove: function (item, index) {
+                let request = []
+                let that = this
                 Object.keys(that.apiModel.request).forEach(function (item) {
-                    request.push(that.apiModel.request[item]);
-                });
-                request.splice(index,1);
-                that.apiModel.request = request;
+                    request.push(that.apiModel.request[item])
+                })
+                request.splice(index, 1)
+                that.apiModel.request = request
             },
             /**
              * todo：动态添加表单数据
              */
-            requestAdd:function(){
-                this.apiModel.request.push({name:'', desc:'', required:'', type:'', val:''});
+            requestAdd: function () {
+                this.apiModel.request.push({name: '', desc: '', required: '', type: '', val: ''})
             },
             /**
              * todo：删除返回字段
              * @param item
              * @param index
              */
-            responseRemove:function(item,index){
-                let response=[],that = this;
+            responseRemove: function (item, index) {
+                let response = []
+                let that = this
                 Object.keys(that.apiModel.response).forEach(function (item) {
-                    response.push(that.apiModel.response[item]);
-                });
-                response.splice(index,1);
-                that.apiModel.response = response;
+                    response.push(that.apiModel.response[item])
+                })
+                response.splice(index, 1)
+                that.apiModel.response = response
             },
             /**
              * todo：动态添加表单数据
              */
-            responseAdd:function(){
-                this.apiModel.response.push({name:'', desc:'',  type:'' });
-            },
+            responseAdd: function () {
+                this.apiModel.response.push({name: '', desc: '', type: ''})
+            }
         },
-        created(){
-            this.apiName = this.interfaceName;
+        created () {
+            this.apiName = this.interfaceName
             if (this.apiModel.id) {
                 this.url = this.cgi.update
             } else {
                 this.url = this.cgi.insert
             }
             this.$notify({
-                type:'success',
+                type: 'success',
                 title: '特别注意',
                 dangerouslyUseHTMLString: true,
                 message: '接口调用必须添加header头Authorization以便验证用户的合法性',
-                offset: 150,
-            });
+                offset: 150
+            })
         },
-        mounted() {
+        mounted () {
             this.$nextTick(function () {
-                this.btn = func.set_btn_status(this.$route.path,this.$route.name,this.userInfo.auth);
-                this.getCategoryLists();
-            });
+                this.btn = func.setBtnStatus(this.$route.path, this.$route.name, this.userInfo.auth)
+                this.getCategoryLists()
+            })
         }
     }
 </script>

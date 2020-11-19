@@ -52,105 +52,103 @@
     export default {
         name: 'Table',
         components: {Delete},
-        props:{
-            //表格数据
-            tableData:{
-                type:Array,
-                default:()=>[]
+        props: {
+            // 表格数据
+            tableData: {
+                type: Array,
+                default: () => []
             },
-            //表头参数
-            columns:{
-                type:Array,
-                default:()=>[]
+            // 表头参数
+            columns: {
+                type: Array,
+                default: () => []
             },
-            //表格数据为空时的说明
-            empty:{
-                type:String,
-                default:'暂无数据'
+            // 表格数据为空时的说明
+            empty: {
+                type: String,
+                default: '暂无数据'
             },
-            //搜索规则
-            searchOptionsRules:{
-                type:Object,
-                default:()=>{},
+            // 搜索规则
+            searchOptionsRules: {
+                type: Object,
+                default: () => {}
             },
-            //搜索组件
-            searchOptions:{
-                type:Array,
-                default:()=>[],
+            // 搜索组件
+            searchOptions: {
+                type: Array,
+                default: () => []
             },
-            //搜索组件对应的prop
-            searchOption:{
-                type:Object,
-                default:()=>{},
+            // 搜索组件对应的prop
+            searchOption: {
+                type: Object,
+                default: () => {}
             },
-            //删除
-            remove:{
-                type:String,
-                default:$url.componentAction
+            // 删除
+            remove: {
+                type: String,
+                default: $url.componentAction
             }
         },
-        methods:{
+        methods: {
             ...mapActions(['saveSystemLog']),
             /**
              * todo:数据检索
              */
-            search:function () {
+            search: function () {
                 for (let i in this.searchOptions) {
                     this.searchOption[this.searchOptions[i].prop] = this.searchOptions[i].model
                 }
-                this.$emit("search",this.searchOption);
+                this.$emit('search', this.searchOption)
             },
             /**
              * todo:语言切换
              */
-            handleCommand:function (item) {
-                this.searchOption.lan = item;
-                this.$emit("search",this.searchOption);
+            handleCommand: function (item) {
+                this.searchOption.lan = item
+                this.$emit('search', this.searchOption)
             },
             /**
              * TODO：excelExport
              */
-            ExcelExport:function() {
-                apiLists.ExcelExport(this.searchOption).then(response=>{
+            ExcelExport: function () {
+                apiLists.ExcelExport(this.searchOption).then(response => {
                     if (response && response.data.code === 200) {
-                        let data = { href:$url.excelExport, msg:response.data.msg, token:this.$store.state.login.token };
-                        this.saveSystemLog(data);
-                        this.$message({type:'success',message:response.data.msg});
-                        window.open(process.env.API_ROOT+$url.fileDownload.replace('/','')+"?token="+this.$store.state.login.token+"&path="+response.data.item.href+"&name="+response.data.item.name,'__target');
-                        return false;
+                        let data = {href: $url.excelExport, msg: response.data.msg, token: this.$store.state.login.token}
+                        this.saveSystemLog(data)
+                        this.$message({type: 'success', message: response.data.msg})
+                        window.open(process.env.API_ROOT + $url.fileDownload.replace('/', '') + '?token=' + this.$store.state.login.token + '&path=' + response.data.item.href + '&name=' + response.data.item.name, '__target')
+                        return false
                     }
-                    this.$message({type:'warning',message:response.data.msg});
-                });
+                    this.$message({type: 'warning', message: response.data.msg})
+                })
             },
             /**
              * todo：删除记录
              * @param item
              * @param index
              */
-            removeResource:function (item,index) {
-                this.$confirm('This operation will always delete the record, whether to continue？','Delete Record',{confirmButtonText:'Confirm', cancelButtonText:'Cancel', type:'warning'}).then(()=>{
-                    apiLists.RemoveData({id:item.id},this.remove).then(response=>{
+            removeResource: function (item, index) {
+                this.$confirm('This operation will always delete the record, whether to continue？', 'Delete Record', {confirmButtonText: 'Confirm', cancelButtonText: 'Cancel', type: 'warning'}).then(() => {
+                    apiLists.RemoveData({id: item.id}, this.remove).then(response => {
                         if (response && response.data.code === 200) {
-                            this.tableData.splice(index,1);
-                            let data = { href:this.remove, msg:response.data.msg, token:this.$store.state.login.token };
-                            this.saveSystemLog(data);
-                            this.$message({type:'success',message:response.data.msg});
-                            this.$emit('removeSuccess');
-                            return false;
+                            this.tableData.splice(index, 1)
+                            let data = { href: this.remove, msg: response.data.msg, token: this.$store.state.login.token }
+                            this.saveSystemLog(data)
+                            this.$message({type: 'success', message: response.data.msg})
+                            this.$emit('removeSuccess')
+                            return false
                         }
-                        this.$message({type:'warning',message:response.data.msg});
-                    },error=>{
-                        console.log(error);
+                        this.$message({type: 'warning', message: response.data.msg})
+                    }, error => {
+                        console.log(error)
                     })
-                }).catch(()=>{
-                    this.$message({type:'info',message:'Cancelled！'});
+                }).catch(() => {
+                    this.$message({type: 'info', message: 'Cancelled！'})
                 })
             }
         },
         mounted () {
-            this.$nextTick(function () {
-
-            })
+            this.$nextTick(function () {})
         }
     }
 </script>

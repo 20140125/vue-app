@@ -15,51 +15,50 @@
 </template>
 
 <script>
-    import $url from '../api/url';
     import apiLists from '../api/api'
     export default {
-        name: "sendEmail",
-        props:{
-            userEmail:{
-                type:String,
-                default:()=>''
+        name: 'sendEmail',
+        props: {
+            userEmail: {
+                type: String,
+                default: () => ''
             }
         },
-        data() {
+        data () {
             return {
-                users:{ email:'' },
-                rules:{
-                    email:[{required:true,type:'email',message:'请输入正确的邮箱账号',trigger:'blur'}]
-                },
+                users: { email: '' },
+                rules: {
+                    email: [{required: true, type: 'email', message: '请输入正确的邮箱账号', trigger: 'blur'}]
+                }
             }
         },
-        created() {
-            this.users.email = this.userEmail ? this.userEmail : this.users.email;
+        created () {
+            this.users.email = this.userEmail ? this.userEmail : this.users.email
         },
-        methods:{
+        methods: {
             /**
              * todo:关闭弹框
              * @param userForm
              */
-            cancelDialog:function (userForm) {
-                this.$refs[userForm].resetFields();
+            cancelDialog: function (userForm) {
+                this.$refs[userForm].resetFields()
                 this.$emit('close')
             },
             /**
              * todo:发送邮件
              * @param userForm
              */
-            sendEmail:function (userForm) {
-                this.$refs[userForm].validate(valid=>{
-                   if (!valid) {
-                       return false;
-                   }
-                   apiLists.SendEmail(this.users).then(response=>{
-                       if (response && response.data.code === 200) {
-                           this.$message.success(response.data.msg);
-                           this.$emit('resetPassword',response.data.item);
-                       }
-                   });
+            sendEmail: function (userForm) {
+                this.$refs[userForm].validate(valid => {
+                    if (!valid) {
+                        return false
+                    }
+                    apiLists.SendEmail(this.users).then(response => {
+                        if (response && response.data.code === 200) {
+                            this.$message.success(response.data.msg)
+                            this.$emit('resetPassword', response.data.item)
+                        }
+                    })
                 })
             }
         }
