@@ -12,7 +12,7 @@
         name: 'Status',
         props: {
             status: {
-                type: Number,
+                type: [Number, String],
                 default: () => 1 // 1 是 2 否
             },
             size: {
@@ -23,6 +23,11 @@
         data () {
             return {
                 showIcon: this.status
+            }
+        },
+        watch: {
+            status: function () {
+                this.showIcon = this.status
             }
         },
         methods: {

@@ -38,7 +38,7 @@
                                 <el-input v-model="userCenter.u_name" readonly placeholder="用户名"></el-input>
                             </el-form-item>
                             <el-form-item label="居住地址：" prop="local">
-                                <el-cascader :props="props" :options="options" filterable v-model="userCenter.local" style="width: 100%"/>
+                                <el-cascader :props="props" :options="options" filterable v-model="userCenter.local" style="width: 100%"></el-cascader>
                             </el-form-item>
                             <el-form-item label="所在地：" prop="ip_address">
                                 <el-cascader :props="props" :options="options" filterable v-model="userCenter.ip_address" style="width: 100%"></el-cascader>
@@ -55,12 +55,12 @@
                             </el-form-item>
                             <el-form-item label="站内通知：" prop="notice_status">
                                 <el-tooltip effect="dark" content="系统性的通知或者更新消息" placement="top-start">
-                                    <el-switch active-value="1" inactive-value="2" v-model="userCenter.notice_status"></el-switch>
+                                    <Status :status="userCenter.notice_status" @changeStatus="changeStatus('notice_status')"></Status>
                                 </el-tooltip>
                             </el-form-item>
                             <el-form-item label="账号信息：" prop="user_status">
                                 <el-tooltip effect="dark" content="帐号变更的通知消息" placement="top-start">
-                                    <el-switch active-value="1" inactive-value="2" v-model="userCenter.user_status"></el-switch>
+                                    <Status :status="userCenter.user_status" @changeStatus="changeStatus('user_status')"></Status>
                                 </el-tooltip>
                             </el-form-item>
                             <el-form-item style="text-align: center">
@@ -79,9 +79,10 @@
     import Upload from '../common/Upload'
     import {mapGetters} from 'vuex'
     import Submit from '../common/Submit'
+    import Status from '../common/Status'
     export default {
         name: 'lists',
-        components: {Submit, Upload},
+        components: {Status, Submit, Upload},
         data () {
             return {
                 loading: true,
@@ -124,16 +125,27 @@
         },
         methods: {
             /**
+             * todo:修改通知状态
+             * @param act
+             */
+            changeStatus: function (act) {
+                this.userCenter[act] = this.userCenter[act] === 1 ? 2 : 1
+            },
+            /**
              * TODO:关闭标签
              * @param tag
              */
-            handleClose (tag) {
+            handleClose: function (tag) {
                 this.userCenter.tags.splice(this.userCenter.tags.indexOf(tag), 1)
             },
             /**
              * TODO:展示文本框
              */
             showInput: function () {
+                if (this.userCenter.tags.length >= 3) {
+                    this.$message.warning('User tags must not exceed three')
+                    return
+                }
                 this.inputVisible = true
                 this.$nextTick(_ => {
                     this.$refs.saveTagInput.focus()
@@ -154,11 +166,11 @@
              */
             handleInputConfirm: function () {
                 let inputValue = this.inputValue
+                if (inputValue.length > 7) {
+                    this.$message.warning('User single tags length must not exceed 7')
+                    return
+                }
                 if (inputValue && this.userCenter.tags.indexOf(inputValue) < 0) {
-                    if ((this.userCenter.tags.length + 1) > 3) {
-                        this.$message.warning('User tags must not exceed three')
-                        return
-                    }
                     this.userCenter.tags.push(inputValue)
                 }
                 this.inputVisible = false
@@ -197,8 +209,6 @@
                     if (response && response.data.code === 200) {
                         this.loading = false
                         this.userCenter = response.data.item
-                        this.userCenter.user_status = this.userCenter.user_status.toString()
-                        this.userCenter.notice_status = this.userCenter.notice_status.toString()
                         this.getCity(this.pid)
                     }
                 })
