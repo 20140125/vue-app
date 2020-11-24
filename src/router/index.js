@@ -1,33 +1,33 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Index from '../components/index'
-import Welcome from '../components/common/index'
-import Login from '../components/login'
-import AuthLists from '../components/auth/lists'
-import RoleLists from '../components/role/lists'
-import UserLists from '../components/user/lists'
-import UserCenter from '../components/user/center'
-import UserBind from '../components/user/bind'
-import LogLists from '../components/log/lists'
-import SystemLog from '../components/system/log'
-import SystemFile from '../components/system/file'
-import ImagePreview from '../components/system/imageView'
-import ConfigLists from '../components/system/config'
-import ApiLists from '../components/interface/api'
-import APIDoc from '../components/interface/doc'
-import DatabaseLists from '../components/database/lists'
-import OauthLists from '../components/oauth/lists'
-import ReqRuleLists from '../components/req_rule/lists'
-import AreaLists from '../components/area/lists'
-import PushList from '../components/system/push'
-import ChatLists from '../components/system/chat'
-import MarkDown from '../components/editor/markdown'
-import UEditor from '../components/editor/ueditor'
-import TimeLine from '../components/system/timeline'
-import chatRoom from '../components/chat-room/Main'
-import Empty from '../components/empty'
-import TableExample from '../components/components/example/tables'
-import FormExample from '../components/components/example/forms'
+import Index from '../pages/index'
+import Welcome from '../pages/base/index'
+import Login from '../pages/login/login'
+import AuthLists from '../pages/auth/lists'
+import RoleLists from '../pages/role/lists'
+import UserLists from '../pages/user/lists'
+import UserCenter from '../pages/user/center'
+import UserBind from '../pages/user/bind'
+import LogLists from '../pages/log/lists'
+import SystemLog from '../pages/system/log'
+import SystemFile from '../pages/system/file'
+import ImagePreview from '../pages/system/imageView'
+import ConfigLists from '../pages/system/config'
+import ApiLists from '../pages/interface/api'
+import APIDoc from '../pages/interface/doc'
+import DatabaseLists from '../pages/database/lists'
+import OauthLists from '../pages/oauth/lists'
+import ReqRuleLists from '../pages/req_rule/lists'
+import AreaLists from '../pages/area/lists'
+import PushList from '../pages/system/push'
+import ChatLists from '../pages/system/chat'
+import MarkDown from '../pages/editor/markdown'
+import UEditor from '../pages/editor/ueditor'
+import TimeLine from '../pages/system/timeline'
+import chatRoom from '../components/chatRoom/Main'
+import Empty from '../pages/error/empty'
+import TableExample from '../pages/example/tables'
+import FormExample from '../pages/example/forms'
 
 Vue.use(Router)
 
@@ -64,9 +64,7 @@ export default new Router({
               { path: 'editor/quill', name: 'UEditor', component: UEditor, meta: { mode: 'push', title: 'Quill' } },
               { path: 'timeline/index', name: 'TimeLine', component: TimeLine, meta: { mode: 'timeline', title: '时间线' } },
               { path: 'example/table', name: 'TableExample', component: TableExample, meta: { mode: '', title: '表格组件' } },
-              { path: 'example/form', name: 'FormExample', component: FormExample, meta: { mode: '', title: '表单组件' } }
-
-          ]
+              { path: 'example/form', name: 'FormExample', component: FormExample, meta: { mode: '', title: '表单组件' } }]
         },
         { path: '/chat', name: 'chatRoom', component: chatRoom, meta: { mode: 'chat', title: '聊天室' } },
         {path: '*', redirect: '/404'}
