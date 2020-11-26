@@ -12,15 +12,11 @@ import {Message} from 'element-ui'
  */
 const errorHandle = (status, msg, url) => {
     // 状态码判断
-    switch (status) {
-    // 401: 未登录状态，跳转登录页
-    case 401:
+    if (status === 401) {
         store.commit('setToken', '')
         router.push({path: '/login'})
         Message.warning(msg)
-        break
-    // 没有权限访问
-    case 403:
+    } else if (status === 403) {
         let tabs = store.state.tabs.tabs
         let key = 0
         tabs.map((item, index) => {
@@ -33,15 +29,11 @@ const errorHandle = (status, msg, url) => {
         store.commit('setCurrTabs', nextTab)
         router.push({path: nextTab.name})
         Message.warning(msg)
-        break
-    // 404请求不存在
-    case 404:
+    } else if (status === 404) {
         router.push({path: '/404'})
         Message.warning(msg)
-        break
-    default:
+    } else {
         Message.error('network error, please try again later')
-        break
     }
 }
 const instance = axios.create({ timeout: 0 })

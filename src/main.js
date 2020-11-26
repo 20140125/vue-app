@@ -36,7 +36,7 @@ router.beforeEach((to, from, next) => {
         store.commit('setToken', to.params.access_token)
     }
     // 404页面
-    if (to.name === 'Empty') {
+    if (to.name === 'Empty' || to.name === '/') {
         next()
         return
     }

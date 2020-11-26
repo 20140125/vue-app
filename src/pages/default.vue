@@ -10,6 +10,7 @@
                          :default-expanded-keys="defaultExpanded"
                          :filter-node-method="filterNode"
                          :node-key="props.id"
+                         accordion
                          @node-click="getImageList"
                          ref="tree"
                          style="background-color: #393d49">
@@ -42,12 +43,18 @@
             </el-col>
             <!--文件内容-->
         </el-row>
+        <el-dialog :visible.sync="visible" title="修改密码" width="625px" center top="25vh" :show-close="false">
+            <el-button style="margin-bottom: 10px" plain v-for="(oauth,index) in oauthConfig" type="primary" :key="index" v-if="oauth.status === 1" @click="oauthLogin(oauth.value)">
+                {{oauth.name.toUpperCase()}}
+            </el-button>
+        </el-dialog>
     </div>
 </template>
 
 <script>
     import apiLists from '../api/api'
     import $urls from '../api/url'
+    import {mapActions, mapGetters} from 'vuex'
     export default {
         name: 'lists',
         data () {
@@ -59,12 +66,16 @@
                 sooGifTypeLists: [],
                 fileLists: [],
                 filtersListsPart: [],
-                pagination: {limit: 30, page: 1, total: 0},
+                pagination: {limit: 28, page: 1, total: 0},
                 loading: true,
                 loadingText: '玩命加载中。。。',
                 filterText: '',
-                defaultExpanded: [1, 9, 45]
+                defaultExpanded: [1, 9, 45],
+                visible: false
             }
+        },
+        computed: {
+            ...mapGetters(['oauthConfig'])
         },
         watch: {
             filterText (val) {
@@ -72,6 +83,7 @@
             }
         },
         methods: {
+            ...mapActions(['getOauthConfig']),
             /**
              * TODO：搜索文件名称
              * @param value
@@ -86,14 +98,13 @@
              * @param node
              */
             getImageList: function (node) {
-                if (this.defaultExpanded.indexOf(parseInt(node.id)) < 0) {
-                    console.log(node.id, this.defaultExpanded)
-                }
-                apiLists.ImageBed({id: node.id}, $urls.imageBed).then(response => {
+                apiLists.ImageBed({id: node.id}, $urls.sooGif).then(response => {
                     if (response && response.data.code === 200) {
                         this.fileLists = response.data.item.data
                         this.pagination.total = this.fileLists.length
                         this.filtersListsPart = this.fileLists.slice(0, this.pagination.total > this.pagination.limit ? this.pagination.limit : this.pagination.total)
+                    } else {
+                        this.visible = true
                     }
                 })
             },
@@ -101,9 +112,10 @@
              * todo:获取图床列表
              */
             getSooGifType: function () {
-                apiLists.ImageBed({id: 0}, $urls.imageBed).then(response => {
+                apiLists.ImageBed({id: 0}, $urls.sooGif).then(response => {
                     if (response && response.data.code === 200) {
                         this.sooGifTypeLists = response.data.item
+                        this.getOauthConfig('Oauth')
                         this.loading = false
                     }
                 })
@@ -116,7 +128,13 @@
                 this.pagination.page = page
                 this.getTransactionData()
             },
-
+            /**
+             * TODO:授权登录
+             * @param href
+             */
+            oauthLogin: function (href) {
+                window.open(href, '_self')
+            },
             /**
              * todo：数据分页
              */

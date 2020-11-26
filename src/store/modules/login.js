@@ -127,17 +127,12 @@ const actions = {
     getOauthConfig: function ({state, commit}, name) {
         apiLists.GetConfig({name: name}).then((response) => {
             if (response && response.data.code === code.SUCCESS) {
-                switch (name) {
-                case 'RobotConfig':
+                if (name === 'RobotConfig') {
                     commit('setRobotConfig', response.data.item)
-                    break
-                case 'Oauth':
-                case 'RoomLists':
+                } else if (name === 'Oauth' || name === 'RoomLists') {
                     commit('setOauthConfig', response.data.item)
-                    break
-                case 'GroupAnnouncementConfig':
+                } else if (name === 'GroupAnnouncementConfig') {
                     commit('setGroupAnnouncementConfig', response.data.item)
-                    break
                 }
             }
         })
