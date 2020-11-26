@@ -253,12 +253,13 @@ const decompressionFile = function (params = {}) {
     return request.post(url.fileDecompression, qs.stringify(Object.assign(params, access_token)))
 }
 /**
- * TODO:图片查看
+ * TODO:图床列表
  * @param params
+ * @param href
  * @returns {Promise<AxiosResponse<T>>}
  */
-const imagePreview = function (params = {}) {
-    return request.post(url.imagePreview, qs.stringify(Object.assign(params, access_token)))
+const imageBed = function (params = {}, href) {
+    return request.post(href, qs.stringify(Object.assign(params, access_token)))
 }
 /**
  * TODO:配置列表
@@ -274,7 +275,7 @@ const configLists = function (params = {}) {
  * @returns {Promise<AxiosResponse<T>>}
  */
 const configValUpdate = function (params = {}) {
-    return request.post(url.configValUpdate, qs.stringify(Object.assign(params, access_token)))
+    return request.post(url.configUpdate, qs.stringify(Object.assign(params, access_token)))
 }
 /**
  * TODO:授权用户列表
@@ -472,7 +473,7 @@ const interfaceLists = {
     CategoryDelete: categoryDelete,
     Compression: compressionFile,
     Decompression: decompressionFile,
-    ImagePreview: imagePreview,
+    ImageBed: imageBed,
     ConfigLists: configLists,
     ConfigValUpdate: configValUpdate,
     GetConfig: getConfig,

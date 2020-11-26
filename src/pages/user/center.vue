@@ -9,19 +9,22 @@
                             <el-avatar :src="userInfo.avatar_url" fit="fill" :size="100" :alt="userInfo.username"></el-avatar>
                         </el-form-item>
                         <el-form-item>
-                            <i class="el-icon-user"></i> <span v-html="userCenter.u_name"></span>
+                            <i class="el-icon-user-solid"></i> <span v-html="userCenter.u_name"></span>
                         </el-form-item>
                         <el-form-item>
-                            <i class="el-icon-message"></i> <span v-html="userCenter.email"></span>
+                            <i class="el-icon-message-solid"></i> <span v-html="userCenter.email"></span>
                         </el-form-item>
                         <el-form-item>
-                            <i class="el-icon-location-information"></i> <span v-html="setLocal(userCenter.local)"></span>
+                            <i class="el-icon-s-home"></i> <span v-html="setLocal(userCenter.local)"></span>
                         </el-form-item>
                         <el-form-item>
-                            <i class="el-icon-aim"></i> <span v-html="userCenter.desc"></span>
+                            <i class="el-icon-location"></i> <span v-html="setLocal(userCenter.ip_address)"></span>
                         </el-form-item>
                         <el-form-item>
-                            <i class="el-icon-collection-tag"></i>
+                            <i class="el-icon-s-comment"></i> <span v-html="userCenter.desc"></span>
+                        </el-form-item>
+                        <el-form-item>
+                            <i class="el-icon-s-claim"></i>
                             <el-tag style="margin-right: 5px" :key="tag" v-for="tag in userCenter.tags"  effect="plain" type="success">{{tag}}</el-tag>
                         </el-form-item>
                     </el-form>
@@ -155,11 +158,7 @@
              * TODO:设置地址显示
              */
             setLocal: function (item) {
-                if (item.length > 0) {
-                    let str = item.join(',')
-                    return str.replace(new RegExp(/,/g), ' / ')
-                }
-                return item
+                return item.length > 0 ? item.join(',').replace(new RegExp(/,/g), ' / ') : item
             },
             /**
              * TODO:文本框输入

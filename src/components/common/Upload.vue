@@ -6,7 +6,7 @@
                :index="index"
                :on-success="uploadSuccess"
                :before-upload="beforeUpload">
-        <el-avatar :src="avatar_url" :alt="username" fit="cover" :size="size"/>
+        <el-avatar :src="avatar_url" :alt="username" fit="cover" :size="size"></el-avatar>
     </el-upload>
 </template>
 
@@ -35,6 +35,7 @@
                 type: Boolean,
                 default: () => false
             },
+            /* 上传图片的大小 */
             sizeLimit: {
                 type: Number,
                 default: () => 2

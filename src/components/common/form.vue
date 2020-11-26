@@ -1,7 +1,7 @@
 <template>
     <el-form :model="formData" ref="reFrom" :rules="rules" :label-width="labelWidth">
         <el-form-item v-for="(search,index) in searchOptions" v-if="search.type === 'input'" :key="index" :label="search.label" :prop="search.prop">
-            <el-input :placeholder="search.tips" v-model="search.model"/>
+            <el-input :placeholder="search.tips" v-model="search.model"></el-input>
         </el-form-item>
         <el-form-item v-for="(search,index) in searchOptions" v-if="search.type === 'datetime'" :key="index" :label="search.label" :prop="search.prop">
             <el-date-picker :type="search.datetype || 'daterange'"

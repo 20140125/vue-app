@@ -5,7 +5,7 @@
                 <el-tab-pane v-for="(emotionType,index) in emotionTypeLists" :name="emotionType.type" :key="index" :label="emotionType.title">
                     <div class="emotion-box-line" v-for="(emotion, index) in emotionList" :key="index">
                         <div class="emotion-item" >
-                            <el-image :src="emotion.icon" :alt="emotion.title" style="width: 30px;height: 30px;" lazy @click.native="clickHandler(emotion)"/>
+                            <el-image :src="emotion.icon" :alt="emotion.title" style="width: 30px;height: 30px;" lazy @click.native="clickHandler(emotion)"></el-image>
                         </div>
                     </div>
                 </el-tab-pane>
@@ -101,7 +101,7 @@
         position: absolute;
         bottom: 310px;
         width: 500px;
-        /*left: 300px;px*/
+        /*left: 300px;*/
     }
     .emotion-box {
         margin: 0 auto;

@@ -7,11 +7,6 @@
     import baseModule from './base/Base'
     export default{
         name: 'index',
-        data () {
-            return {
-
-            }
-        },
         components: {
             baseModule
         }

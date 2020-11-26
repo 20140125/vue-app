@@ -45,7 +45,7 @@ router.beforeEach((to, from, next) => {
         return
     }
     // 登录页
-    if (to.name === 'Login' || to.name === '/') {
+    if (to.name === 'Login') {
         if (!store.state.login.token) {
             next()
             return

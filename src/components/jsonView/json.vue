@@ -1,7 +1,5 @@
 <template>
-    <div id="app">
-        <json-viewer :value="jsonData" :expand-depth=expand copyable boxed sort/>
-    </div>
+    <json-viewer :value="jsonData" :expand-depth=expand copyable boxed sort></json-viewer>
 </template>
 
 <script>
