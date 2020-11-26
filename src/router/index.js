@@ -36,7 +36,7 @@ Vue.use(Router)
 export default new Router({
     mode: 'history',
     routes: [
-        {path: '/', name: '/', component: Default, meta: { mode: '', title: '瀑布流' }},
+        {path: '/', name: '/', component: Default, meta: { mode: '', title: '表情包' }},
         {path: '/login', name: 'Login', component: Login, meta: { mode: '', title: '登录' }},
         {path: '/404', name: 'Empty', component: Empty, meta: { mode: '', title: '404' }},
         {path: '/admin', name: 'Admin', component: Index, meta: { mode: '', title: '首页' }},

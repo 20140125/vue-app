@@ -16,7 +16,7 @@
                 <el-menu-item index="3" style="float: right">
                     <el-dropdown trigger="hover" @command="readNotice" :hide-on-click="false" :show-timeout="100">
                         <i class="el-icon-message-solid" style="color: #fff;font-size: 22px"> </i>
-                        <el-badge :value="noticeLength" style="margin-top: -30px;margin-left: -18px" v-if="noticeLength"/>
+                        <el-badge :value="noticeLength" style="margin-top: -30px;margin-left: -18px" v-if="noticeLength"></el-badge>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item style="text-align: center;color: #66b1ff">站内通知</el-dropdown-item>
                             <el-dropdown-item :command="item" divided v-for="(item,index) in notice" :key="index" :disabled="item.disabled">
@@ -30,6 +30,9 @@
                     <a href="https://gitee.com/f_longer/vue-app" target="_blank">
                         <img src="https://gitee.com/f_longer/longer/widgets/widget_5.svg?color=C71D24" alt="gitee"/>
                     </a>
+                </el-menu-item>
+                <el-menu-item index="6" style="float: right">
+                    <a href="/"><i style="color: #fff;font-size: 22px" class="el-icon-s-home"></i></a>
                 </el-menu-item>
             </el-menu>
         </el-header>
