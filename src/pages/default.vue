@@ -7,6 +7,14 @@
                 {{oauth.name.toUpperCase()}}
             </el-button>
         </el-dialog>
+        <i class="msg-icon" @click="getMsgDialog" v-show="token">
+            <i :class="chatMsgClass" style="margin:13px 15px;">
+                <el-badge :value="chat.msgCount" v-if="chat.msgCount" type="danger" class="msg-count"></el-badge>
+            </i>
+        </i>
+        <!---chatRoom Start-->
+        <chat-room :chat-visible="chatVisible" :dialog-width="dialogWidth" @setMsgCount="setMsgCount" v-if="showMessageDialog"></chat-room>
+        <!---chatRoom End-->
     </div>
 </template>
 
@@ -15,9 +23,12 @@
     import $urls from '../api/url'
     import {mapActions, mapGetters} from 'vuex'
     import imageBed from '../components/image/bed'
+    import ChatRoom from '../components/chatRoom/Main'
+    import store from '../store'
+    import code from '../api/code'
     export default {
         name: 'default',
-        components: {imageBed},
+        components: {ChatRoom, imageBed},
         data () {
             return {
                 sooGifTypeLists: [],
@@ -29,11 +40,16 @@
                 visible: false,
                 tabChange: false,
                 numArr: [2, 3, 4, 5, 6, 7, 8],
-                id: 0
+                id: 0,
+                chatMsgClass: 'el-icon-chat-dot-round',
+                chatVisible: false,
+                chat: {},
+                token: localStorage.getItem('token'),
+                showMessageDialog: false
             }
         },
         computed: {
-            ...mapGetters(['oauthConfig'])
+            ...mapGetters(['oauthConfig', 'dialogWidth'])
         },
         created () {
             let __this = this
@@ -43,9 +59,41 @@
                     __this.getImageList([null, __this.id])
                 }
             })
+            // 初始化聊天系统参数
+            this.chat = {
+                msgCount: 0,
+                total: 0,
+                online: 0
+            }
+            if (this.token) {
+                apiLists.CheckToken({token: localStorage.getItem('token')}).then(response => {
+                    if (response && response.data.code === code.SUCCESS) {
+                        this.showMessageDialog = true
+                        store.commit('setUserInfo', response.data.item)
+                    }
+                })
+            }
         },
         methods: {
             ...mapActions(['getOauthConfig']),
+            /**
+             * todo:设置未读消息数
+             * @param msgCount
+             */
+            setMsgCount: function (msgCount) {
+                this.chat.msgCount = msgCount
+            },
+            /**
+             * TODO:弹出框展示
+             */
+            getMsgDialog: function () {
+                this.chatVisible = !this.chatVisible
+                if (!this.chatVisible) {
+                    this.chatMsgClass = 'el-icon-chat-dot-round'
+                } else {
+                    this.chatMsgClass = 'el-icon-close'
+                }
+            },
             /**
              * todo:获取图床信息
              * @param node
@@ -61,7 +109,10 @@
                         this.fileLists = response.data.item.data
                         this.pagination.total = response.data.item.total
                     } else {
+                        localStorage.setItem('token', '')
                         this.visible = true
+                        this.showMessageDialog = false
+                        this.chatVisible = false
                     }
                 })
             },
@@ -109,10 +160,30 @@
     }
 </script>
 
-<style>
+<style scoped>
 .el-cascader{width: 100%; margin-bottom: 20px !important;}
 .el-cascader-panel{width: 96% !important;}
 @media screen and (max-width: 1024px) and (min-width: 768px) {
     .el-cascader-panel{width: 98% !important;}
+}
+.msg-icon{
+    font-size: 50px;
+    color:#ffffff;
+    position:fixed;
+    cursor: pointer;
+    right:10px;
+    bottom:10%;
+    width: 80px;
+    height: 80px;
+    background: #409EFF;
+    border-radius: 40px;
+    -moz-border-radius:40px;
+    -webkit-border-radius:40px;
+    z-index: 20004;
+}
+.msg-count{
+    position:absolute;
+    right:9px;
+    bottom:54%;
 }
 </style>
