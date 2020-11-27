@@ -22,7 +22,7 @@
             return {
                 sooGifTypeLists: [],
                 fileLists: [],
-                pagination: {limit: 30, page: 1, total: 0},
+                pagination: {limit: 30, page: 0, total: 0},
                 loading: true,
                 loadingText: '玩命加载中。。。',
                 value: '',
@@ -40,7 +40,6 @@
                 let scrollTop = document.documentElement.scrollTop || document.body.scrollTop
                 if (scrollTop + window.innerHeight >= document.body.clientHeight) {
                     __this.getImageList([null, __this.id])
-                    __this.pagination.page++
                 }
             })
         },
@@ -52,7 +51,8 @@
              */
             getImageList: function (node) {
                 this.tabChange = node[0] !== null
-                this.pagination.page = this.tabChange ? 1 : this.pagination.page
+                this.pagination.page = this.tabChange ? 0 : this.pagination.page
+                this.pagination.page++
                 console.log(this.tabChange, this.pagination.page)
                 this.id = node[1]
                 apiLists.ImageBed({id: node[1], page: this.pagination.page, limit: this.pagination.limit}, $urls.sooGif).then(response => {
