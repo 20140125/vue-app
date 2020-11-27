@@ -101,7 +101,7 @@
         mounted () {
             this.$nextTick(function () {
                 this.getSooGifType()
-                this.$message.success('所有图片资源均来自soogif')
+                this.$message({type: 'success', message: '所有图片资源均来自96编辑器', offset: 120})
             })
         }
     }
