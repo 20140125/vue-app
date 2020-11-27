@@ -161,12 +161,11 @@
              */
             addConfig: function () {
                 this.title = '添加配置'
-                this.configValModel = {name: '', status: 1}
+                this.configValModel = {name: '', status: 1, created_at: func.setTime(new Date()), updated_at: func.setTime(new Date())}
                 this.configModel = this.configValModel
-                this.configModel.hasChildren = false
                 this.syncVisible = true
-                this.showValue = true
-                this.url = this.cgi.update
+                this.showValue = false
+                this.url = this.cgi.insert
                 this.reFrom = 'created'
             },
             /**
@@ -179,10 +178,10 @@
                     name: '',
                     value: '',
                     status: 1,
-                    pid: item.children[item.children.length - 1].pid,
+                    pid: item.id,
                     created_at: func.setTime(new Date()),
                     updated_at: func.setTime(new Date()),
-                    id: item.children[item.children.length - 1].id + 1 || item.children[item.children.length - 1].pid * 100
+                    id: item.children.length > 0 ? item.children[item.children.length - 1].id + 1 : item.id * 100
                 }
                 item.children.push(this.configValModel)
                 this.configModel = item
@@ -202,11 +201,10 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    item.act = 'remove'
-                    apiLists.ConfigValUpdate(item).then(response => {
+                    apiLists.RemoveData(item, this.cgi.remove).then(response => {
                         if (response && response.data.code === 200) {
                             this.getConfigLists(this.page, this.limit)
-                            let data = { href: this.cgi.update, msg: response.data.msg, token: this.$store.state.login.token }
+                            let data = { href: this.cgi.remove, msg: response.data.msg, token: this.$store.state.login.token }
                             this.saveSystemLog(data)
                             this.$message({type: 'success', message: response.data.msg})
                             return false

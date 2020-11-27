@@ -14,7 +14,11 @@
                 :height="item.height || 100"
                 :order="index"
                 :key="index">
-                <el-image lazy fit="contain" :title="item.name"  :alt="item.name"  :src="item.href" :preview-src-list="[item.href]"></el-image>
+                <el-image lazy fit="contain" :alt="item.name"  :src="item.href" :preview-src-list="[item.href]">
+                    <div slot="placeholder" class="image-slot">
+                        <span style="text-align: center">{{item.name}}</span>
+                    </div>
+                </el-image>
             </waterfall-slot>
         </waterfall>
     </div>

@@ -1,6 +1,6 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText" style="padding: 20px !important;">
-        <el-cascader v-model="value" :options="sooGifTypeLists" filterable :props="{ value: 'id', label: 'name' }" clearable @change="getImageList"></el-cascader>
+        <el-cascader v-model="value" :options="sooGifTypeLists" filterable :props="{ value: 'id', label: 'name' }" clearable @change="getImageList" placeholder="请选择需要的表情包"></el-cascader>
         <image-bed :file-lists="fileLists" :pagination="pagination" :tab-change="tabChange"></image-bed>
         <el-dialog :visible.sync="visible" title="修改密码" width="625px" center top="25vh" :show-close="false">
             <el-button style="margin-bottom: 10px" plain v-for="(oauth,index) in oauthConfig" type="primary" :key="index" v-if="oauth.status === 1" @click="oauthLogin(oauth.value)">

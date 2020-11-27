@@ -270,14 +270,6 @@ const configLists = function (params = {}) {
     return request.post(url.configLists, qs.stringify(Object.assign(params, access_token)))
 }
 /**
- * TODO:修改配置值
- * @param params
- * @returns {Promise<AxiosResponse<T>>}
- */
-const configValUpdate = function (params = {}) {
-    return request.post(url.configUpdate, qs.stringify(Object.assign(params, access_token)))
-}
-/**
  * TODO:授权用户列表
  * @param params
  * @returns {Promise<AxiosResponse<T>>}
@@ -475,7 +467,6 @@ const interfaceLists = {
     Decompression: decompressionFile,
     ImageBed: imageBed,
     ConfigLists: configLists,
-    ConfigValUpdate: configValUpdate,
     GetConfig: getConfig,
     OauthLists: oauthLists,
     OauthBind: oauthBind,
