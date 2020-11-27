@@ -161,7 +161,7 @@
              */
             addConfig: function () {
                 this.title = '添加配置'
-                this.configValModel = {name: '', status: 1, created_at: func.setTime(new Date()), updated_at: func.setTime(new Date())}
+                this.configValModel = {name: '', status: 1, created_at: func.getTimestamp(), updated_at: func.getTimestamp()}
                 this.configModel = this.configValModel
                 this.syncVisible = true
                 this.showValue = false
