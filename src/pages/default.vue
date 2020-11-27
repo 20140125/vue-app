@@ -1,7 +1,7 @@
 <template>
     <div v-loading="loading" :element-loading-text="loadingText" style="padding: 20px !important;">
-        <el-cascader v-model="value" :options="sooGifTypeLists" filterable :props="{ value: 'id', label: 'name' }" clearable @change="getImageList" placeholder="请选择需要的表情包"></el-cascader>
-        <image-bed :file-lists="fileLists" :pagination="pagination" :tab-change="tabChange"></image-bed>
+        <el-cascader v-if="showSearch" v-model="value" :options="sooGifTypeLists" filterable :props="{ value: 'id', label: 'name' }" clearable @change="getImageList" placeholder="请选择需要的表情包"></el-cascader>
+        <image-bed :file-lists="fileLists" :pagination="pagination" :tab-change="tabChange" class="image-bed" @getFileListsTotal="getFileListsTotal"></image-bed>
         <el-dialog :visible.sync="visible" title="修改密码" width="625px" center top="25vh" :show-close="false">
             <el-button style="margin-bottom: 10px" plain v-for="(oauth,index) in oauthConfig" type="primary" :key="index" v-if="oauth.status === 1" @click="oauthLogin(oauth.value)">
                 {{oauth.name.toUpperCase()}}
@@ -12,6 +12,7 @@
                 <el-badge :value="chat.msgCount" v-if="chat.msgCount" type="danger" class="msg-count"></el-badge>
             </i>
         </i>
+        <i class="el-icon-search search-icon" v-if="showSearchIcon" @click="showSearch = !showSearch"></i>
         <!---chatRoom Start-->
         <chat-room :chat-visible="chatVisible" :dialog-width="dialogWidth" @setMsgCount="setMsgCount" v-if="showMessageDialog"></chat-room>
         <!---chatRoom End-->
@@ -45,7 +46,10 @@
                 chatVisible: false,
                 chat: {},
                 token: localStorage.getItem('token'),
-                showMessageDialog: false
+                showMessageDialog: false,
+                fileListsTotal: 1,
+                showSearchIcon: false,
+                showSearch: true
             }
         },
         computed: {
@@ -58,13 +62,15 @@
                 if (scrollTop + window.innerHeight >= document.body.clientHeight) {
                     __this.getImageList([null, __this.id])
                 }
+                __this.showSearch = true
+                __this.showSearchIcon = false
+                if (scrollTop >= 100) {
+                    __this.showSearch = false
+                    __this.showSearchIcon = true
+                }
             })
             // 初始化聊天系统参数
-            this.chat = {
-                msgCount: 0,
-                total: 0,
-                online: 0
-            }
+            this.chat = {msgCount: 0, total: 0, online: 0}
             if (this.token) {
                 apiLists.CheckToken({token: localStorage.getItem('token')}).then(response => {
                     if (response && response.data.code === code.SUCCESS) {
@@ -76,6 +82,13 @@
         },
         methods: {
             ...mapActions(['getOauthConfig']),
+            /**
+             * todo:获取当前图片的总数量
+             * @param fileListsTotal
+             */
+            getFileListsTotal: function (fileListsTotal) {
+                this.fileListsTotal = fileListsTotal
+            },
             /**
              * todo:设置未读消息数
              * @param msgCount
@@ -101,9 +114,13 @@
             getImageList: function (node) {
                 this.tabChange = node[0] !== null
                 this.pagination.page = this.tabChange ? 0 : this.pagination.page
+                this.pagination.total = this.tabChange ? 0 : this.pagination.total
                 this.pagination.page++
-                console.log(this.tabChange, this.pagination.page)
                 this.id = node[1]
+                if (this.fileListsTotal === this.pagination.total) {
+                    this.$message.success('已经没有更新的数据')
+                    return false
+                }
                 apiLists.ImageBed({id: node[1], page: this.pagination.page, limit: this.pagination.limit}, $urls.sooGif).then(response => {
                     if (response && response.data.code === 200) {
                         this.fileLists = response.data.item.data
@@ -161,10 +178,17 @@
 </script>
 
 <style scoped>
-.el-cascader{width: 100%; margin-bottom: 20px !important;}
+.el-cascader{width: 98%; margin-bottom: 20px !important; position: fixed;z-index: 4;}
+.image-bed{margin-top: 60px}
+.search-icon{font-size: 30px;position:fixed;cursor: pointer;right:30px;top:20%;z-index: 20004;color: #0747fd; font-weight: 1000}
 .el-cascader-panel{width: 96% !important;}
-@media screen and (max-width: 1024px) and (min-width: 768px) {
-    .el-cascader-panel{width: 98% !important;}
+@media screen and (max-width: 1024px) and (min-width: 812px) {
+    .el-cascader-panel{width: 96% !important;}
+}
+@media screen and (max-width: 812px)  {
+    .el-cascader{width: 90%; margin-top: 0 !important;}
+    .search-icon{top:40%;right:15px}
+
 }
 .msg-icon{
     font-size: 50px;

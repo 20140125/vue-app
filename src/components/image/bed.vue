@@ -52,10 +52,9 @@
             }
         },
         created () {
-            let __this = this
-            document.body.addEventListener('click', function () {
-                __this.shuffle()
-            }, false)
+            setInterval(() => {
+                this.shuffle()
+            }, Math.random() * 60000 | 0)
         },
         watch: {
             fileLists: function () {
@@ -73,6 +72,7 @@
                 if (!this.isBusy && this.fileListsPart.length < this.pagination.total) {
                     this.isBusy = true
                     this.fileListsPart = this.fileListsPart.concat(this.fileLists)
+                    this.$emit('getFileListsTotal', this.fileListsPart.length)
                 }
             },
             shuffle: function () {
