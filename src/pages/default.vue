@@ -101,6 +101,7 @@
         mounted () {
             this.$nextTick(function () {
                 this.getSooGifType()
+                this.$message.success('所有图片资源均来自soogif')
             })
         }
     }
