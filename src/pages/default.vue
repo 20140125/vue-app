@@ -28,6 +28,7 @@
                 value: '',
                 visible: false,
                 tabChange: false,
+                numArr: [2, 3, 4, 5, 6, 7, 8],
                 id: 0
             }
         },
@@ -102,6 +103,7 @@
             this.$nextTick(function () {
                 this.getSooGifType()
                 this.$message({type: 'success', message: '所有图片资源均来自96编辑器', offset: 120})
+                this.getImageList([1, this.numArr[(Math.random() * 7 | 0) + 1]])
             })
         }
     }
