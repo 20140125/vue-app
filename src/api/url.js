@@ -66,7 +66,6 @@ let url = {
     fileUpload: '/v1/file/upload',
     fileCompression: '/v1/file/zip',
     fileDecompression: '/v1/file/unzip',
-    imageBed: '/v1/image/bed',
     // 城市地区
     areaIndex: '/v1/area/index',
     areaWeather: '/v1/area/weather',

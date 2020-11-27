@@ -166,7 +166,7 @@
                 this.configModel.hasChildren = false
                 this.syncVisible = true
                 this.showValue = true
-                this.url = this.cgi.insert
+                this.url = this.cgi.update
                 this.reFrom = 'created'
             },
             /**
