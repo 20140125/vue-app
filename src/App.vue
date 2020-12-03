@@ -12,7 +12,8 @@
         data () {
             return {
                 ClassName: 'clear_box',
-                isRouterAlive: true
+                isRouterAlive: true,
+                wxProgram: require('./assets/wx_program.jpg')
             }
         },
         methods: {
@@ -22,11 +23,27 @@
                     this.isRouterAlive = true
                 })
             }
+        },
+        mounted () {
+            this.$notify({
+                title: '小程序码',
+                dangerouslyUseHTMLString: true,
+                duration: 5000,
+                offset: 150,
+                showClose: false,
+                message: '<img src="' + this.wxProgram + '" width="150px" height="150px">'
+            })
         }
     }
 </script>
 
 <style>
+    .el-notification {
+        width: 200px !important;
+    }
+    .el-notification__title{
+        text-align: center !important;
+    }
     .el-loading-mask {
         z-index: 2!important;
     }

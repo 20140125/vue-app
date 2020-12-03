@@ -34,7 +34,7 @@
             return {
                 sooGifTypeLists: [],
                 fileLists: [],
-                pagination: {limit: 30, page: 0, total: 0},
+                pagination: {limit: 100, page: 0, total: 0},
                 loading: true,
                 loadingText: '玩命加载中。。。',
                 value: '',
@@ -56,17 +56,17 @@
             ...mapGetters(['oauthConfig', 'dialogWidth'])
         },
         created () {
-            let __this = this
-            window.addEventListener('scroll', function () {
+            window.addEventListener('scroll', () => {
                 let scrollTop = document.documentElement.scrollTop || document.body.scrollTop
                 if (scrollTop + window.innerHeight >= document.body.clientHeight) {
-                    __this.getImageList([null, __this.id])
+                    this.loading = true
+                    this.getImageList([null, this.id])
                 }
-                __this.showSearch = true
-                __this.showSearchIcon = false
+                this.showSearch = true
+                this.showSearchIcon = false
                 if (scrollTop >= 100) {
-                    __this.showSearch = false
-                    __this.showSearchIcon = true
+                    this.showSearch = false
+                    this.showSearchIcon = true
                 }
             })
             // 初始化聊天系统参数
@@ -112,12 +112,14 @@
              * @param node
              */
             getImageList: function (node) {
+                this.loading = true
                 this.tabChange = node[0] !== null
                 this.pagination.page = this.tabChange ? 0 : this.pagination.page
                 this.pagination.total = this.tabChange ? 0 : this.pagination.total
                 this.pagination.page++
                 this.id = node[1]
                 if (this.fileListsTotal === this.pagination.total) {
+                    this.loading = false
                     this.$message.success('已经没有更新的数据')
                     return false
                 }
@@ -125,6 +127,7 @@
                     if (response && response.data.code === 200) {
                         this.fileLists = response.data.item.data
                         this.pagination.total = response.data.item.total
+                        this.loading = false
                     } else {
                         localStorage.setItem('token', '')
                         this.visible = true

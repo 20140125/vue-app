@@ -90,12 +90,14 @@ const setTree = function (item, pid = 0) {
  */
 const setRandom = function (length = 8, type = 'all') {
     let str
-    switch (type) {
-    case 'all': str = 'MNBVCXZASDFGHJKLPOIUYTREWQ0123456789qwertyuioplkjhgfdsazxcvbnm'; break
-    case 'number': str = '0123456789'; break
-    case 'l': str = 'QWERTYUIOPLKJHGFDSAZXCVBNM'; break
-    case 's': str = 'zxcvbnmlkjhgfdsaqwertyuiop'; break
-    default:break
+    if (type === 'all') {
+        str = 'MNBVCXZASDFGHJKLPOIUYTREWQ0123456789qwertyuioplkjhgfdsazxcvbnm'
+    } else if (type === 'number') {
+        str = '0123456789'
+    } else if (type === 'l') {
+        str = 'QWERTYUIOPLKJHGFDSAZXCVBNM'
+    } else if (type === 's') {
+        str = 'zxcvbnmlkjhgfdsaqwertyuiop'
     }
     let char = ''
     for (let i = 0; i < length; i++) {
@@ -131,7 +133,6 @@ const setPassword = function (pass, slat) {
  * todo:获取滚动条高度
  * @returns {number}
  */
-// eslint-disable-next-line camelcase
 const getScrollTop = function () {
     let scrollTop = 0
     if (document.documentElement && document.documentElement.scrollTop) {
@@ -161,8 +162,7 @@ const setBtnStatus = function (currUrl, name, authLists) {
     if (authLists.indexOf(prefix + 'delete') >= 0) {
         btn.del = true
     }
-    switch (name) {
-    case 'SystemFile':
+    if (name === 'SystemFile') {
         btn.chmod = false
         btn.gzip = false
         btn.unzip = false
@@ -187,8 +187,7 @@ const setBtnStatus = function (currUrl, name, authLists) {
         if (authLists.indexOf(prefix + 'upload') >= 0) {
             btn.upload = true
         }
-        break
-    case 'DatabaseLists':
+    } else if (name === 'DatabaseLists') {
         btn.backup = false
         btn.repair = false
         btn.optimize = false
@@ -205,7 +204,6 @@ const setBtnStatus = function (currUrl, name, authLists) {
         if (authLists.indexOf(prefix + 'comment') >= 0) {
             btn.comment = true
         }
-        break
     }
     return btn
 }
