@@ -54,7 +54,7 @@
         created () {
             setInterval(() => {
                 this.shuffle()
-            }, Math.random() * 60000 | 0)
+            }, Math.random() * 360000 | 0)
         },
         watch: {
             fileLists: function () {
