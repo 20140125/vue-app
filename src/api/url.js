@@ -99,7 +99,8 @@ let url = {
     areaLists: '/v1/common/area',
     emotionLists: '/v1/common/emotion',
     fileDownload: '/v1/common/download',
-    sooGif: '/v1/common/image_bed'
+    sooGif: '/v1/common/image_bed',
+    defaultImage: '/v1/wx/image/keyword'
 
 }
 export default url

@@ -40,7 +40,7 @@
                 value: '',
                 visible: false,
                 tabChange: false,
-                numArr: [2, 3, 4, 5, 6, 7, 8],
+                numArr: [],
                 id: 0,
                 chatMsgClass: 'el-icon-chat-dot-round',
                 chatVisible: false,
@@ -82,6 +82,15 @@
         },
         methods: {
             ...mapActions(['getOauthConfig']),
+            getDefaultImage: async function () {
+                let response = await apiLists.ImageBed({num: 2}, $urls.defaultImage).catch(error => {
+                    console.log(error)
+                })
+                if (response.data.code === 200) {
+                    this.numArr = response.data.item
+                    this.getImageList([1, this.numArr[(Math.random() * 7 | 0) + 1]])
+                }
+            },
             /**
              * todo:获取当前图片的总数量
              * @param fileListsTotal
@@ -173,8 +182,8 @@
         mounted () {
             this.$nextTick(function () {
                 this.getSooGifType()
+                this.getDefaultImage()
                 this.$message({type: 'success', message: '所有图片资源均来自96编辑器', offset: 120})
-                this.getImageList([1, this.numArr[(Math.random() * 7 | 0) + 1]])
             })
         }
     }
