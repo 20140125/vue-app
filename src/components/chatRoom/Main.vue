@@ -213,10 +213,11 @@
              */
             addItemClass (index) {
                 if (this.chat.messageLists.length > 0) {
-                    this.userInfo.username = this.chat.messageLists[index].to_client_name === 'all'
-                        ? (this.chat.messageLists[index].from_client_name ? 'creator' : '')
-                        : (this.chat.messageLists[index].to_client_name ? '' : 'creator')
-                    return this.userInfo.username
+                    if (this.chat.messageLists[index].to_client_name === 'all') {
+                        return this.userInfo.username === this.chat.messageLists[index].from_client_name ? 'creator' : ''
+                    } else {
+                        return this.userInfo.username === this.chat.messageLists[index].to_client_name ? '' : 'creator'
+                    }
                 }
             },
             /**
@@ -431,6 +432,7 @@
                     limit: this.chat.sizeLimit,
                     source: 'room'
                 }
+                console.log(this.userInfo)
                 this.userInfo.websocketServer.send(JSON.stringify(str))
             },
             /**
