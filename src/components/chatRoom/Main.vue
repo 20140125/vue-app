@@ -211,7 +211,7 @@
              * todo:添加class
              * @param index
              */
-            addItemClass (index) {
+            addItemClass: function (index) {
                 if (this.chat.messageLists.length > 0) {
                     if (this.chat.messageLists[index].to_client_name === 'all') {
                         return this.userInfo.username === this.chat.messageLists[index].from_client_name ? 'creator' : ''
@@ -223,7 +223,7 @@
             /**
              * todo:记录读取
              */
-            onItemRendered () {
+            onItemRendered: function () {
                 if (!this.$refs.vsl) {
                     return
                 }

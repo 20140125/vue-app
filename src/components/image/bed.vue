@@ -42,6 +42,10 @@
             tabChange: {
                 type: Boolean,
                 default: () => false
+            },
+            showPagination: {
+                type: Boolean,
+                default: () => false
             }
         },
         data () {
@@ -71,7 +75,7 @@
             getImageList: function () {
                 if (!this.isBusy && this.fileListsPart.length < this.pagination.total) {
                     this.isBusy = true
-                    this.fileListsPart = this.fileListsPart.concat(this.fileLists)
+                    this.fileListsPart = this.showPagination ? this.fileLists : this.fileListsPart.concat(this.fileLists)
                     this.$emit('getFileListsTotal', this.fileListsPart.length)
                 }
             },

@@ -13,6 +13,7 @@ import LogLists from '../pages/log/lists'
 import SystemLog from '../pages/system/log'
 import SystemFile from '../pages/system/file'
 import ImagePreview from '../pages/image/view'
+import ImageBed from '../pages/image/bed'
 import ConfigLists from '../pages/system/config'
 import ApiLists from '../pages/interface/api'
 import APIDoc from '../pages/interface/doc'
@@ -57,6 +58,7 @@ export default new Router({
                 {path: 'system/log', name: 'SystemLog', component: SystemLog, meta: { mode: 'log', title: '系统日志' }},
                 {path: 'file/index', name: 'SystemFile', component: SystemFile, meta: { mode: 'file', title: '文件列表' }},
                 {path: 'image/preview', name: 'ImagePreview', component: ImagePreview, meta: { mode: 'image', title: '图片预览' }},
+                {path: 'image/bed', name: 'ImageBed', component: ImageBed, meta: { mode: 'image', title: '图床列表' }},
                 {path: 'config/index', name: 'ConfigLists', component: ConfigLists, meta: { mode: 'config', title: '基础配置' }},
                 {path: 'category/index', name: 'ApiLists', component: ApiLists, meta: { mode: 'api_lists', title: '项目列表' }},
                 {path: 'api_doc/index', name: 'APIDoc', component: APIDoc, meta: { mode: 'api_lists', title: 'APIDoc' }},

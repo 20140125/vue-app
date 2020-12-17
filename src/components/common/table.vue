@@ -31,7 +31,7 @@
             </el-form-item>
         </el-form>
         <el-table :data="tableData" :empty-text="empty" border>
-            <el-table-column v-for="(column,index) in columns" align="center" show-overflow-tooltip :label="column.label" :prop="column.prop" :key="index"/>
+            <el-table-column v-for="(column,index) in columns" align="center" show-overflow-tooltip :label="column.label" :prop="column.prop" :key="index"></el-table-column>
             <el-table-column align="center"  fixed="right" label="Action" width="200px">
                 <template slot-scope="scope">
                     <el-button size="mini" plain type="primary" icon="el-icon-edit">{{searchOption.lan === 'zh' ? '修改' : 'Edit'}}</el-button>

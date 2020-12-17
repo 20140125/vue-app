@@ -100,7 +100,7 @@ let url = {
     emotionLists: '/v1/common/emotion',
     fileDownload: '/v1/common/download',
     sooGif: '/v1/common/image_bed',
-    defaultImage: '/v1/wx/image/keyword'
-
+    defaultImage: '/v1/wx/image/keyword',
+    newImage: '/v1/wx/image/new'
 }
 export default url
