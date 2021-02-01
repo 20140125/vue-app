@@ -104,7 +104,7 @@
                 search: '',
                 title: '',
                 syncVisible: false, // 是否显示弹框
-                labelWidth: '80px',
+                labelWidth: '100px',
                 loading: true,
                 loadingText: '玩命加载中。。。',
                 url: '',

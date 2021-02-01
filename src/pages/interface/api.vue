@@ -153,21 +153,15 @@
                 // 方法集合
                 methodLists: {POST: 'POST', GET: 'GET', PUT: 'PUT', DELETE: 'DELETE'},
                 // 参数类型
-                typeLists: {String: 'String', Float: 'Float', Number: 'Number', Object: 'Object', Array: 'Array', Timestamp: 'Timestamp'},
-                cgi: {
-                    insert: $url.apiSave,
-                    update: $url.apiUpdate,
-                    categoryInsert: $url.categorySave,
-                    categoryUpdate: $url.categoryUpdate,
-                    remove: $url.categoryDelete
-                },
+                typeLists: { String: 'String', Float: 'Float', Number: 'Number', Object: 'Object', Array: 'Array', Timestamp: 'Timestamp' },
+                cgi: { insert: $url.apiSave, update: $url.apiUpdate, categoryInsert: $url.categorySave, categoryUpdate: $url.categoryUpdate, remove: $url.categoryDelete },
                 // 表单规则
                 rules: {
-                    type: [{required: true, message: '请输入权限名称', trigger: 'change'}],
-                    href: [{required: true, message: '请输入权限地址', trigger: 'blur'}],
-                    method: [{required: true, message: '请输入请求方法', trigger: 'change'}],
-                    desc: [{required: true, message: '请输入接口描述', trigger: 'blur'}],
-                    response_string: [{required: true, message: '请输入返回参数', trigger: 'blur'}]
+                    type: [{ required: true, message: '请输入权限名称', trigger: 'change' }],
+                    href: [{ required: true, message: '请输入权限地址', trigger: 'blur' }],
+                    method: [{ required: true, message: '请输入请求方法', trigger: 'change' }],
+                    desc: [{ required: true, message: '请输入接口描述', trigger: 'blur' }],
+                    response_string: [{ required: true, message: '请输入返回参数', trigger: 'blur' }]
                 },
                 // 细化权限按钮
                 btn: {},
@@ -175,8 +169,14 @@
             }
         },
         watch: {
-            filterText (val) {
+            filterText: function (val) {
                 this.$refs.tree.filter(val)
+            },
+            /* api接口实时查询 */
+            'apiModel.href': function () {
+                if (this.apiModel.href) {
+                    this.requestApiDetails()
+                }
             }
         },
         computed: {

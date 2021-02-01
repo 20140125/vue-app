@@ -35,7 +35,7 @@
         </div>
         <!--table 分页-->
         <!---弹框-->
-        <el-dialog :title="title"  :width="dialogWidth":visible.sync="syncVisible" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
+        <el-dialog :title="title" :width="dialogWidth" :visible.sync="syncVisible" :modal="modal" :center="center" :destroy-on-close="destroy_on_close">
             <el-form :label-width="labelWidth" :model="authModel" :ref="reFrom" :rules="rules">
             </el-form>
             <div slot="footer" class="dialog-footer">
