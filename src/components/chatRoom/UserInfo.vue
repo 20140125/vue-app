@@ -133,16 +133,5 @@
     .clearfix:after {
         clear: both
     }
-    //.el-row{
-    //    line-height: 40px;
-    //    .userInfo{
-    //        div{
-    //            display: flex;
-    //            align-items: center;
-    //            position: relative;
-    //            color: #000;
-    //        }
-    //    }
-    //}
 }
 </style>

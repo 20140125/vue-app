@@ -44,7 +44,7 @@
                 if (response.data.code === 200) {
                     this.numArr = response.data.item
                     this.name = this.numArr[(Math.random() * 7 | 0) + 1]
-                    this.getImageLists(this.name)
+                    this.getImageLists()
                 }
             },
             /**
@@ -52,7 +52,7 @@
              */
             getImageLists: function () {
                 this.loading = true
-                apiLists.ImageBed({name: this.name, page: this.pagination.page, limit: this.pagination.limit}, $urls.newImage).then(response => {
+                apiLists.ImageBed({ name: this.name, page: this.pagination.page, limit: this.pagination.limit, source: 'mini_program' }, $urls.newImage).then(response => {
                     if (response && response.data.code === 200) {
                         this.fileLists = response.data.item.data
                         this.pagination.total = response.data.item.total

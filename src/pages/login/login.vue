@@ -99,11 +99,7 @@
                     password: [{required: true, message: '请输入密码', trigger: 'blur'}],
                     verify_code: [{required: true, message: '请输入验证码', trigger: 'blur'}]
                 },
-                mailLogin: {
-                    email: '',
-                    verify_code: '',
-                    loginType: 'mail'
-                },
+                mailLogin: { email: '', verify_code: '', loginType: 'mail' },
                 mailRules: {
                     email: [{required: true, message: '请输入邮箱', trigger: 'blur'}, {type: 'email', message: '邮箱格式不正确'}],
                     verify_code: [{required: true, message: '请输入验证码', trigger: 'blur'}]
@@ -114,7 +110,7 @@
                     'height': (window.innerHeight) + 'px'
                 },
                 dialogWidth: '32%',
-                styleWidth: {width: '76%'},
+                styleWidth: { width: '76%' },
                 innerWidth: window.innerWidth,
                 activeModel: 'password',
                 // 邮箱验证码
