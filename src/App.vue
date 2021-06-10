@@ -1,5 +1,5 @@
 <template>
-    <router-view :class="ClassName"/>
+    <router-view :class="ClassName"></router-view>
 </template>
 <script>
     export default {
@@ -19,20 +19,20 @@
         methods: {
             reload: function () {
                 this.isRouterAlive = false
-                this.$nextTick(function () {
+                this.$nextTick(() => {
                     this.isRouterAlive = true
                 })
             }
         },
         mounted () {
-            this.$notify({
-                title: '小程序码',
-                dangerouslyUseHTMLString: true,
-                duration: 5000,
-                offset: 150,
-                showClose: false,
-                message: '<img src="' + this.wxProgram + '" width="150px" height="150px">'
-            })
+            // this.$notify({
+            //     title: '小程序码',
+            //     dangerouslyUseHTMLString: true,
+            //     duration: 5000,
+            //     offset: 150,
+            //     showClose: false,
+            //     message: '<img src="' + this.wxProgram + '" width="150px" height="150px" alt="">'
+            // })
         }
     }
 </script>
@@ -64,7 +64,7 @@
     #avatar .el-form-item__content {
         margin-left: 0!important;
     }
-    .el-avatar>img {
+    .el-avatar > img {
         width: 100%;
     }
     .CodeMirror {

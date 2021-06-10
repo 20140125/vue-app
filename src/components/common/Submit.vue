@@ -41,22 +41,22 @@
             ...mapActions(['saveSystemLog', 'checkAuth']),
             /**
              * todo:表单提交
-             * @param ref
+             * @param reFrom
              */
-            submitForm: function (ref) {
-                this.refs[ref].validate((valid) => {
+            submitForm: function (reFrom) {
+                this.refs[reFrom].validate((valid) => {
                     if (!valid) {
                         this.$message({type: 'warning', message: '请检查字段完整性~'})
                         return false
                     }
-                    this.checkAuth({url: this.url})
+                    this.checkAuth({ url: this.url })
                     this.model.token = this.$store.state.login.token
                     apiLists.SaveData(this.model, this.url).then((response) => {
                         if (response && response.data.code === 200) {
                             let data = {href: this.url, msg: response.data.msg, token: this.$store.state.login.token}
                             this.saveSystemLog(data)
                             this.$message({type: 'success', message: response.data.msg})
-                            this.$emit('success', this.model)
+                            this.$emit('saveSuccess', this.model)
                         }
                     })
                 })
@@ -67,6 +67,7 @@
              */
             resetForm: function (ref) {
                 this.refs[ref].resetFields()
+                this.$emit('closeDialog')
             }
         }
     }

@@ -1,6 +1,7 @@
 let url = {
     // 权限操作接口
     authLists: '/v1/auth/index',
+    getAuth: '/v1/auth/get',
     authSave: '/v1/auth/save',
     authUpdate: '/v1/auth/update',
     authDelete: '/v1/auth/delete',

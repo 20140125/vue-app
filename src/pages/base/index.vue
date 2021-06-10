@@ -2,7 +2,7 @@
     <el-row :gutter="24">
         <el-col :span="chartsNum">
             <el-card shadow="hover" :style="chartsStyle"><div id="charts"/></el-card>
-            <el-card shadow="hover" :style="innerWidth>=1920 ? 'margin-top:30px' : 'margin-bottom:20px'">
+            <el-card shadow="hover" :style="innerWidth >= 1920 ? 'margin-top:30px' : 'margin-bottom:20px'">
                 <el-calendar v-model="value" :first-day-of-week="7">
                     <template slot="dateCell" slot-scope="{date, data}">
                         <p :class="data.isSelected ? 'is-selected' : ''">
@@ -53,7 +53,7 @@
                 },
                 innerWidth: window.innerWidth,
                 reverse: false,
-                activities: '',
+                activities: [],
                 value: new Date(),
                 chartsNum: 14,
                 timestampNum: 10,
@@ -68,21 +68,21 @@
                 this.totalCharts()
                 if (this.access_token) {
                     this.setToken(this.access_token)
-                    // 删除tabs，避免token暴露在连接中。
+                    /* 删除tabs，避免token暴露在链接中。 */
                     this.defaultTabs([{label: '欢迎页', name: '/admin/index'}])
                     this.$router.push({path: '/admin/index'})
                 }
-                // 图表初始化
+                /* 图表初始化 */
                 this.echarts = echarts.init(document.getElementById('charts'))
-                // 用户通知
+                /* 用户通知 */
                 this.userInfo.socketServer.on('charts', (response) => {
-                    // 日期
+                    /* 日期 */
                     this.xAxisData = response.day
-                    // 系统日志总量
+                    /* 系统日志总量 */
                     this.seriesData.log = response.total.log
-                    // 站内通知总量
+                    /* 站内通知总量 */
                     this.seriesData.notice = response.total.push
-                    // 授权用户
+                    /* 授权用户 */
                     this.seriesData.oauth = response.total.oauth
                     this.echarts.setOption({
                         title: {
@@ -161,10 +161,11 @@
             /**
              * todo:数据总量
              */
-            totalCharts: function () {
-                apiLists.TimeLineLists({page: 1, limit: 10}).then(response => {
-                    this.activities = response.data.item.data
+            totalCharts: async function () {
+                let response = await apiLists.TimeLineLists({ page: 1, limit: 10 }).catch(() => {
+                    this.$message.error('网络异常')
                 })
+                this.activities = ((response.data || {}).item || {}).data || []
             }
         },
         created () {

@@ -14,7 +14,7 @@ const errorHandle = (status, msg, url) => {
     // 状态码判断
     if (status === 401) {
         store.commit('setToken', '')
-        router.push({path: '/login'})
+        router.push({ path: '/login' })
         Message.warning(msg)
     } else if (status === 403) {
         let tabs = store.state.tabs.tabs

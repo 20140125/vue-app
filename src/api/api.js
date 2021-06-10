@@ -9,7 +9,7 @@ const access_token = {'token': localStorage.getItem('token')}
  * @param params
  * @returns {Promise<AxiosResponse<T>>}
  */
-const reportSys = function (url, params = {}) {
+const reportSys = async function (url, params = {}) {
     return request.post(url, qs.stringify(Object.assign(params, access_token)))
 }
 /**
@@ -17,7 +17,7 @@ const reportSys = function (url, params = {}) {
  * @param params
  * @returns {Promise<AxiosResponse<T>>}
  */
-const loginSys = function (params = {}) {
+const loginSys = async function (params = {}) {
     return request.post(url.login, qs.stringify(Object.assign(params, access_token)))
 }
 /**
@@ -33,7 +33,7 @@ const getConfig = function (params = {}) {
  * @param params
  * @returns {Promise<AxiosResponse<T>>}
  */
-const logoutSys = function (params = {}) {
+const logoutSys = async function (params = {}) {
     return request.post(url.logout, qs.stringify(Object.assign(params, access_token)))
 }
 /**
@@ -41,7 +41,7 @@ const logoutSys = function (params = {}) {
  * @param params
  * @returns {Promise<AxiosResponse<T>>}
  */
-const logSave = function (params = {}) {
+const logSave = async function (params = {}) {
     return request.post(url.logSave, qs.stringify(Object.assign(params, access_token)))
 }
 /**
@@ -57,15 +57,23 @@ const checkToken = function (params = {}) {
  * @param params
  * @returns {Promise<AxiosResponse<T>>}
  */
-const authLists = function (params = {}) {
+const authLists = async function (params = {}) {
     return request.post(url.authLists, qs.stringify(Object.assign(params, access_token)))
+}
+/**
+ * TODO:权限列表
+ * @param params
+ * @returns {Promise<AxiosResponse<T>>}
+ */
+const getAuth = async function (params = {}) {
+    return request.post(url.getAuth, qs.stringify(Object.assign(params, access_token)))
 }
 /**
  * TODO:角色列表
  * @param params
  * @returns {Promise<AxiosResponse<T>>}
  */
-const roleLists = function (params = {}) {
+const roleLists = async function (params = {}) {
     return request.post(url.roleLists, qs.stringify(Object.assign(params, access_token)))
 }
 /**
@@ -73,7 +81,7 @@ const roleLists = function (params = {}) {
  * @param params
  * @returns {Promise<AxiosResponse<T>>}
  */
-const authMenu = function (params = {}) {
+const authMenu = async function (params = {}) {
     return request.post(url.menu, qs.stringify(Object.assign(params, access_token)))
 }
 /**
@@ -315,7 +323,7 @@ const getAuthByToken = function (params = {}) {
  * @param href
  * @returns {Promise<AxiosResponse<T>>}
  */
-const sendEmail = function (params = {}, href = url.sendEmail) {
+const sendEmail = async function (params = {}, href = url.sendEmail) {
     return request.post(href, qs.stringify(Object.assign(params, access_token)))
 }
 /**
@@ -441,6 +449,7 @@ const interfaceLists = {
     LogSave: logSave,
     CheckToken: checkToken,
     AuthLists: authLists,
+    GetAuth: getAuth,
     RoleLists: roleLists,
     AuthMenu: authMenu,
     UserLists: userLists,

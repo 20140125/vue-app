@@ -43,12 +43,12 @@
                     <el-submenu v-for="(menu,index) in menuLists" :key="index" :index="menu.id.toString()">
                         <template slot="title">
                             <i class="el-icon-menu" v-if="menu.id!==2"> </i>
-                            <span v-html="menu.name"/>
+                            <span v-html="menu.name"></span>
                         </template>
                         <el-menu-item :index="child.id.toString()"  v-for="(child,index) in menu.__child" @click="setAttr(child)" :key="index">
                             <template slot="title">
                                 <i class="el-icon-s-home"> </i>
-                                <span v-html="child.name"/>
+                                <span v-html="child.name"></span>
                             </template>
                         </el-menu-item>
                     </el-submenu>
@@ -58,14 +58,13 @@
                 <el-main :style="mainStyle">
                     <el-carousel :interval="2000" arrow="never" height="65px" direction="vertical" indicator-position="none" v-if="noticeArr.length>0">
                         <el-carousel-item v-for="(item,index) in noticeArr" :key="index">
-                            <el-alert type="success" show-icon :title="item.message" effect="light"
-                                      @close="closeNotice(item)"/>
+                            <el-alert type="success" show-icon :title="item.message" effect="light" @close="closeNotice(item)"></el-alert>
                         </el-carousel-item>
                     </el-carousel>
                     <el-tabs type="border-card" closable lazy v-model="activeName" @tab-click="goto" @tab-remove="remove">
-                        <el-tab-pane v-for="item in tabs" :tab="item" :label="item.label" :key="item.name" :name="item.name"/>
+                        <el-tab-pane v-for="item in tabs" :tab="item" :label="item.label" :key="item.name" :name="item.name"></el-tab-pane>
                         <el-card shadow="always">
-                            <router-view/>
+                            <router-view></router-view>
                         </el-card>
                     </el-tabs>
                 </el-main>
@@ -74,16 +73,16 @@
                 </el-footer>
                 <i class="msg-icon" @click="getMsgDialog">
                     <i :class="chatMsgClass" style="margin:13px 15px;">
-                        <el-badge :value="chat.msgCount" v-if="chat.msgCount" type="danger" class="msg-count"/>
+                        <el-badge :value="chat.msgCount" v-if="chat.msgCount" type="danger" class="msg-count"></el-badge>
                     </i>
                 </i>
             </el-container>
         </el-container>
         <!---chatRoom Start-->
-        <chat-room :chat-visible="chatVisible" :dialog-width="dialogWidth" @setMsgCount="setMsgCount"/>
+        <chat-room :chat-visible="chatVisible" :dialog-width="dialogWidth" @setMsgCount="setMsgCount"></chat-room>
         <!---chatRoom End-->
         <el-dialog :visible.sync="showCity" :width="dialogWidth" :title="'【'+userInfo.city+'】天气预告'" center>
-            <VueJson :json-data="weather.forecast"/>
+            <VueJson :json-data="weather.forecast"></VueJson>
         </el-dialog>
     </el-container>
 </template>
@@ -293,8 +292,8 @@
                     this.isCollapse = false
                     this.menuClass = 'el-icon-s-unfold'
                     this.asideWidth = '200px'
-                    this.headerStyle = {'margin-left': '200px'}
-                    this.mainStyle = {margin: '60px 0 60px 200px'}
+                    this.headerStyle = { 'margin-left': '200px' }
+                    this.mainStyle = { margin: '60px 0 60px 200px' }
                     this.chatDialogWidth = '65%'
                 }
             }
@@ -303,12 +302,8 @@
          * TODO:Vue生命周期
          */
         created () {
-            // 初始化聊天系统参数
-            this.chat = {
-                msgCount: 0,
-                total: 0,
-                online: 0
-            }
+            /* 初始化聊天系统参数 */
+            this.chat = { msgCount: 0, total: 0, online: 0 }
             this.asideHeight = {'min-height': (window.innerHeight - 60) + 'px'}
         },
         /**

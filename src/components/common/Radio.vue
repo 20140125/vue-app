@@ -1,9 +1,10 @@
 <template>
-    <el-button :icon="item.status === 1 ? 'el-icon-success' : 'el-icon-error'"
-               circle
-               :type="item.status === 1 ? 'success' : 'danger'"
-               @click="setStatus(item)"
-               size="medium">
+    <el-button
+        :icon="item.status === 1 ? 'el-icon-success' : 'el-icon-error'"
+        circle
+        :type="item.status === 1 ? 'success' : 'danger'"
+        @click="setStatus(item)"
+        size="medium">
     </el-button>
 </template>
 
@@ -31,18 +32,19 @@
              * todo：修改状态
              * @param item
              */
-            setStatus: function (item) {
-                this.checkAuth({url: this.url})
+            setStatus: async function (item) {
+                await this.checkAuth({ url: this.url })
                 item.status = item.status === 1 ? 2 : 1
-                let params = {status: item.status, id: item.id, token: this.$store.state.login.token, 'act': 'status'}
-                apiLists.SaveData(params, this.url).then(response => {
-                    if (response && response.data.code === 200) {
-                        let data = {href: this.url, msg: response.data.msg, token: this.$store.state.login.token}
-                        this.saveSystemLog(data)
-                        this.$message({type: 'success', message: response.data.msg})
-                        this.$emit('success', item)
-                    }
+                let params = { status: item.status, id: item.id, token: this.$store.state.login.token, 'act': 'status' }
+                let response = await apiLists.SaveData(params, this.url).catch(() => {
+                    this.$message.error('网络错误')
                 })
+                if (response && response.data.code === 200) {
+                    let data = { href: this.url, msg: response.data.msg, token: this.$store.state.login.token }
+                    await this.saveSystemLog(data)
+                    this.$message.success(response.data.msg)
+                    this.$emit('success', item)
+                }
             }
         }
     }

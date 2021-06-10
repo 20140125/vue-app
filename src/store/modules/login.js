@@ -1,5 +1,4 @@
-// eslint-disable-next-line standard/object-curly-even-spacing
-import {Message, MessageBox } from 'element-ui'
+import { MessageBox } from 'element-ui'
 import apiLists from '../../api/api'
 import code from '../../api/code'
 import router from '../../router'
@@ -110,13 +109,14 @@ const actions = {
      * @param commit
      * @param users
      */
-    loginSystem: function ({state, commit}, users) {
-        apiLists.LoginSys(users).then((response) => {
-            if (response && response.data.code === code.SUCCESS) {
-                commit('setUserInfo', response.data.item)
-                router.push({path: '/admin/index'})
-            }
+    loginSystem: async function ({state, commit}, users) {
+        let response = await apiLists.LoginSys(users).catch(() => {
+            this.$message.error('网络异常')
         })
+        if (response && response.data.code === code.SUCCESS) {
+            commit('setUserInfo', response.data.item)
+            router.push({path: '/admin/index'})
+        }
     },
     /**
      * TODO：获取配置
@@ -124,18 +124,21 @@ const actions = {
      * @param commit
      * @param name
      */
-    getOauthConfig: function ({state, commit}, name) {
-        apiLists.GetConfig({name: name}).then((response) => {
-            if (response && response.data.code === code.SUCCESS) {
-                if (name === 'RobotConfig') {
-                    commit('setRobotConfig', response.data.item)
-                } else if (name === 'Oauth' || name === 'RoomLists') {
-                    commit('setOauthConfig', response.data.item)
-                } else if (name === 'GroupAnnouncementConfig') {
-                    commit('setGroupAnnouncementConfig', response.data.item)
-                }
-            }
+    getOauthConfig: async function ({state, commit}, name) {
+        let response = await apiLists.GetConfig({name: name}).catch(() => {
+            this.$message.error('网络异常')
         })
+        if (response && response.data.code === code.SUCCESS) {
+            if (name === 'RobotConfig') {
+                commit('setRobotConfig', response.data.item)
+            }
+            if (name === 'Oauth' || name === 'RoomLists') {
+                commit('setOauthConfig', response.data.item)
+            }
+            if (name === 'GroupAnnouncementConfig') {
+                commit('setGroupAnnouncementConfig', response.data.item)
+            }
+        }
     },
     /**
      * todo：获取权限菜单
@@ -143,16 +146,17 @@ const actions = {
      * @param commit
      * @param username
      */
-    getAuthMenu: function ({state, commit}) {
+    getAuthMenu: async function ({state, commit}) {
         if (state.menuLists.length > 0) {
             commit('setMenuLists', state.menuLists)
         }
         if (state.userInfo.username) {
-            apiLists.AuthMenu([]).then((response) => {
-                if (response && response.data.code === code.SUCCESS) {
-                    commit('setMenuLists', func.setTree(response.data.item))
-                }
+            let response = await apiLists.AuthMenu([]).catch(() => {
+                this.$message.error('网络错误')
             })
+            if (response && response.data.code === code.SUCCESS) {
+                commit('setMenuLists', func.setTree(response.data.item))
+            }
         } else {
             router.push({path: '/login'})
         }
@@ -163,13 +167,14 @@ const actions = {
      * @param commit
      * @param token
      */
-    logoutSystem: function ({state, commit}, token) {
-        apiLists.LogoutSys({token: token}).then((response) => {
-            if (response && response.data.code === code.SUCCESS) {
-                commit('setToken', '')
-                router.push({path: '/login'})
-            }
+    logoutSystem: async function ({state, commit}, token) {
+        let response = await apiLists.LogoutSys({token: token}).catch(() => {
+            this.$message.error('网络错误')
         })
+        if (response && response.data.code === code.SUCCESS) {
+            commit('setToken', '')
+            router.push({path: '/login'})
+        }
     },
     /**
      * todo:保存城市天气
@@ -195,12 +200,10 @@ const actions = {
      * @param commit
      * @param params
      */
-    saveSystemLog: function ({state, commit}, params) {
+    saveSystemLog: async function ({state, commit}, params) {
         params.username = state.username
-        apiLists.LogSave(params).then((response) => {
-            if (response && response.data.code === code.SUCCESS) {
-                Message.success(response.data.msg)
-            }
+        await apiLists.LogSave(params).catch(() => {
+            this.$message.error('网络错误')
         })
     },
     /**
@@ -209,11 +212,11 @@ const actions = {
      * @param commit
      * @param params
      */
-    checkAuth: function ({state, commit}, params) {
+    checkAuth: async function ({state, commit}, params) {
         params.url = params.url.replace('v1', 'admin')
         if (state.userInfo.auth.indexOf(params.url) === -1) {
             let info = '你没有访问权限，请联系管理员【' + code.QQ + '】检验数据的正确性！'
-            MessageBox.alert(info).then(() => {
+            await MessageBox.alert(info).then(() => {
                 let req = {user_id: state.user_id, href: [params.url]}
                 apiLists.ReqRuleSave(req).then((res) => {
                     if (res && res.data.code === code.SUCCESS) {
