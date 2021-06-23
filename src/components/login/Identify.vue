@@ -1,45 +1,54 @@
 <template>
     <div class="s-canvas">
-        <canvas id="s-canvas" :width="contentWidth" :height="contentHeight"/>
+        <canvas id="s-canvas" :width="contentWidth" :height="contentHeight"></canvas>
     </div>
 </template>
 <script>
     export default{
         name: 'Identify',
         props: {
-            identifyCode: { // 默认注册码
+            // 默认注册码
+            identifyCode: {
                 type: String,
                 default: () => '1234'
             },
-            fontSizeMin: { // 字体最小值
+            // 字体最小值
+            fontSizeMin: {
                 type: Number,
                 default: () => 25
             },
-            fontSizeMax: { // 字体最大值
+            // 字体最大值
+            fontSizeMax: {
                 type: Number,
                 default: () => 35
             },
-            backgroundColorMin: { // 验证码图片背景色最小值
+            // 验证码图片背景色最小值
+            backgroundColorMin: {
                 type: Number,
                 default: () => 200
             },
-            backgroundColorMax: { // 验证码图片背景色最大值
+            // 验证码图片背景色最大值
+            backgroundColorMax: {
                 type: Number,
                 default: () => 220
             },
-            dotColorMin: { // 背景干扰点最小值
+            // 背景干扰点最小值
+            dotColorMin: {
                 type: Number,
                 default: () => 60
             },
-            dotColorMax: { // 背景干扰点最大值
+            // 背景干扰点最大值
+            dotColorMax: {
                 type: Number,
                 default: () => 120
             },
-            contentWidth: { // 容器宽度
+            // 容器宽度
+            contentWidth: {
                 type: Number,
                 default: () => 120
             },
-            contentHeight: { // 容器高度
+            // 容器高度
+            contentHeight: {
                 type: Number,
                 default: () => 38
             }
@@ -51,7 +60,7 @@
              * @param max
              * @returns {number}
              */
-            randomNum (min, max) {
+            randomNum: function (min, max) {
                 return Math.floor(Math.random() * (max - min) + min)
             },
             /**
@@ -60,7 +69,7 @@
              * @param max
              * @returns {string}
              */
-            randomColor (min, max) {
+            randomColor: function (min, max) {
                 let r = this.randomNum(min, max)
                 let g = this.randomNum(min, max)
                 let b = this.randomNum(min, max)
@@ -69,7 +78,7 @@
             /**
              * todo:绘制图层
              */
-            drawPic () {
+            drawPic: function () {
                 let canvas = document.getElementById('s-canvas')
                 let ctx = canvas.getContext('2d')
                 ctx.textBaseline = 'bottom'
@@ -89,12 +98,13 @@
              * @param txt
              * @param i
              */
-            drawText (ctx, txt, i) {
+            drawText: function (ctx, txt, i) {
                 ctx.fillStyle = this.randomColor(50, 160)
-                ctx.font = this.randomNum(this.fontSizeMin, this.fontSizeMax) + 'px SimHei' // 随机生成字体大小
+                // 随机生成字体大小
+                ctx.font = this.randomNum(this.fontSizeMin, this.fontSizeMax) + 'px SimHei'
                 let x = (i + 1) * (this.contentWidth / (this.identifyCode.length + 1))
                 let y = this.randomNum(this.fontSizeMax, this.contentHeight - 5)
-                var deg = this.randomNum(-30, 30)
+                let deg = this.randomNum(-30, 30)
                 // 修改坐标原点和旋转角度
                 ctx.translate(x, y)
                 ctx.rotate(deg * Math.PI / 180)
@@ -107,7 +117,7 @@
              * todo:绘制干扰线
              * @param ctx
              */
-            drawLine (ctx) {
+            drawLine: function (ctx) {
                 for (let i = 0; i < 4; i++) {
                     ctx.strokeStyle = this.randomColor(100, 200)
                     ctx.beginPath()
@@ -120,7 +130,7 @@
              * todo:绘制干扰点
              * @param ctx
              */
-            drawDot (ctx) {
+            drawDot: function (ctx) {
                 for (let i = 0; i < 30; i++) {
                     ctx.fillStyle = this.randomColor(0, 255)
                     ctx.beginPath()
@@ -130,12 +140,14 @@
             }
         },
         watch: {
-            identifyCode () {
+            identifyCode: function () {
                 this.drawPic()
             }
         },
         mounted () {
-            this.drawPic()
+            this.$nextTick(() => {
+                this.drawPic()
+            })
         }
     }
 </script>

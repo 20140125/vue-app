@@ -1,20 +1,22 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import tabs from './modules/tabs'
-import fileTabs from './modules/fileTabs'
-import api from './modules/api'
-import login from './modules/login'
-Vue.use(Vuex)
+import { createStore, createLogger } from 'vuex'
+import login from '@/store/modules/login'
+import home from '@/store/modules/home'
+import getters from '@/store/getters'
+import mutations from '@/store/mutaions'
+import state from '@/store/state'
 /**
  * Vuex全局状态管理
- * @param options {Array} 用于渲染tabs的数组
+ * @param options {Array}
  */
-const store = new Vuex.Store({
+const debug = process.env.NODE_ENV !== 'production'
+export default createStore({
     modules: {
-        tabs,
-        fileTabs,
-        api,
-        login
-    }
+        login,
+        home
+    },
+    getters,
+    mutations,
+    state,
+    strict: debug,
+    plugins: debug ? [createLogger()] : []
 })
-export default store
