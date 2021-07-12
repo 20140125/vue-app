@@ -1,18 +1,30 @@
 <template>
-    <router-view></router-view>
+    <el-skeleton :rows="18"  :loading="loading" animated :throttle="throttle">
+        <router-view></router-view>
+    </el-skeleton>
 </template>
 
 <script>
 
 export default {
     name: 'App',
-    data(){
-        return {}
+    data () {
+        return {
+            loading: true,
+            throttle: 1500
+        }
+    },
+    mounted() {
+        this.$nextTick(() => {
+            setTimeout(() => {
+                this.loading = false
+            }, this.throttle)
+        })
     }
 }
 </script>
 
-<style>
+<style lang="less">
 body{
     margin: 0 !important;
     padding: 0 !important;
@@ -21,30 +33,49 @@ body{
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
-}
-/* 滚动槽 */
-::-webkit-scrollbar {
-    -webkit-box-shadow:inset 0 0 5px rgb(255, 255, 255);
-    opacity:0.3;
-    width:5px;
-}
-/* 滚动槽 */
-::-webkit-scrollbar-track {
-    -webkit-box-shadow:inset 0 0 0 rgb(255, 255, 255);
-    opacity:0.3;
-    border-radius:1px;
-}
-/* 滚动条滑块 */
-::-webkit-scrollbar-thumb {
-    border-radius:1px;
-    background: #a7b2b8;
-    opacity:0.3;
-    -webkit-box-shadow:inset 0 0 0 #fff;
-}
-/* 滚动条滑块 */
-::-webkit-scrollbar-thumb:window-inactive {
-    background: #a7b2b8;
-    opacity:0.3;
-    border-radius:1px;
+    .el-overlay{
+        background-color: rgba(0, 0, 0, 0.9);
+    }
+    .el-dialog {
+        margin-top: 10vh;
+        .el-dialog__header {
+            background-color: #272822;
+        }
+        .el-dialog__title {
+            color: #FFFFFF;
+            font-size: 16px;
+        }
+        .el-dialog__body {
+            .el-select {
+                width: 100%;
+            }
+        }
+    }
+    #app {}
+    /* 滚动槽 */
+    ::-webkit-scrollbar {
+        -webkit-box-shadow:inset 0 0 5px rgb(255, 255, 255);
+        opacity:0.3;
+        width:5px;
+    }
+    /* 滚动槽 */
+    ::-webkit-scrollbar-track {
+        -webkit-box-shadow:inset 0 0 0 rgb(255, 255, 255);
+        opacity:0.3;
+        border-radius:1px;
+    }
+    /* 滚动条滑块 */
+    ::-webkit-scrollbar-thumb {
+        border-radius:1px;
+        background: #a7b2b8;
+        opacity:0.3;
+        -webkit-box-shadow:inset 0 0 0 #fff;
+    }
+    /* 滚动条滑块 */
+    ::-webkit-scrollbar-thumb:window-inactive {
+        background: #a7b2b8;
+        opacity:0.3;
+        border-radius:1px;
+    }
 }
 </style>

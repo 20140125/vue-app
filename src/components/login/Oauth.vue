@@ -9,15 +9,17 @@ export default {
     name: 'OAuth',
     props: ['oauthLogin'],
     data () {
-        return {
-            oAuthConfig: {}
+        return {}
+    },
+    computed: {
+        oAuthConfig() {
+            return this.$store.state.login.oauthConfig
         }
     },
     watch: {
         async oauthLogin () {
             if (this.oauthLogin) {
                 await this.$store.dispatch('login/getOauthConfig', { name: 'Oauth', login: 'before' })
-                this.oAuthConfig = this.$store.state.login.oauthConfig
             }
         }
     }

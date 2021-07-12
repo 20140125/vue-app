@@ -1,6 +1,6 @@
 import axios from 'axios/index'
 import { ElMessage } from 'element-plus';
-import store from '../store'
+import store from '@/store'
 
 /**
  * todo：请求失败后的错误统一处理
@@ -43,7 +43,7 @@ const instance = axios.create({
     timeout: TIMEOUT,
     headers: {
         common: {
-            Accept: 'application/json, text/plain, */*',
+            'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json'
         }
     }
@@ -51,20 +51,25 @@ const instance = axios.create({
 instance.defaults.baseURL = process.env.NODE_ENV !== 'production' ? 'http://www.laravel.com/api' : 'https://www.fanglonger.com/api'
 // http request 拦截器
 instance.interceptors.request.use(config => {
-    let token = store.state.login.token ? store.state.login.token : localStorage.getItem('token')
-    if (token) {
-        config.headers.Authorization = token
-    }
+    config.headers.Authorization = store.state.token || ''
     return config
 }, error => {
     return Promise.reject(error)
 })
 // http response 拦截器
 instance.interceptors.response.use(response => {
-    response.data.item.code !== 20000 ? ElMessage.warning(response.data.item.message) : (response.data.item.message !== 'successfully' ? ElMessage.success(response.data.item.message) : '')
-    return response
+    if (response.data.item.code !== 20000) {
+        ElMessage.warning(response.data.item.message)
+        return Promise.reject(response)
+    }
+    try {
+        response.data.item.message !== 'successfully' ? ElMessage.success(response.data.item.message) : ''
+        return Promise.resolve(response)
+    } catch (error) {
+        return Promise.reject(error)
+    }
 }, error => {
-    console.log(error.response.data)
-   // errorHandle(error.response.data.code, error.response.data.msg, error.response.data.url)
+    ElMessage.success('network error, please try again later')
+    return Promise.reject({ code: error.response.data.code, message: 'network error, please try again later', item: error })
 })
 export default instance

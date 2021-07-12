@@ -60,7 +60,7 @@
              * @param max
              * @returns {number}
              */
-            randomNum: function (min, max) {
+            randomNum(min, max) {
                 return Math.floor(Math.random() * (max - min) + min)
             },
             /**
@@ -69,7 +69,7 @@
              * @param max
              * @returns {string}
              */
-            randomColor: function (min, max) {
+            randomColor(min, max) {
                 let r = this.randomNum(min, max)
                 let g = this.randomNum(min, max)
                 let b = this.randomNum(min, max)
@@ -78,7 +78,7 @@
             /**
              * todo:绘制图层
              */
-            drawPic: function () {
+            drawPic() {
                 let canvas = document.getElementById('s-canvas')
                 let ctx = canvas.getContext('2d')
                 ctx.textBaseline = 'bottom'
@@ -98,7 +98,7 @@
              * @param txt
              * @param i
              */
-            drawText: function (ctx, txt, i) {
+            drawText(ctx, txt, i) {
                 ctx.fillStyle = this.randomColor(50, 160)
                 // 随机生成字体大小
                 ctx.font = this.randomNum(this.fontSizeMin, this.fontSizeMax) + 'px SimHei'
@@ -117,7 +117,7 @@
              * todo:绘制干扰线
              * @param ctx
              */
-            drawLine: function (ctx) {
+            drawLine(ctx) {
                 for (let i = 0; i < 4; i++) {
                     ctx.strokeStyle = this.randomColor(100, 200)
                     ctx.beginPath()
@@ -130,7 +130,7 @@
              * todo:绘制干扰点
              * @param ctx
              */
-            drawDot: function (ctx) {
+            drawDot(ctx) {
                 for (let i = 0; i < 30; i++) {
                     ctx.fillStyle = this.randomColor(0, 255)
                     ctx.beginPath()
@@ -140,7 +140,7 @@
             }
         },
         watch: {
-            identifyCode: function () {
+            identifyCode () {
                 this.drawPic()
             }
         },

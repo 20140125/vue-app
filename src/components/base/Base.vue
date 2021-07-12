@@ -65,7 +65,7 @@ export default {
     height: 64px;
     position: fixed;
     width: 100%;
-    z-index: 4
+    z-index: 2002
 }
 .el-footer {
     background-color: #cccccc;
@@ -77,14 +77,14 @@ export default {
     width: 100%;
     height: 100%;
     bottom: 0;
-    z-index:2
+    z-index: 2001
 }
 .el-aside {
     background-color: #393d49;
     color: #333;
     line-height: 200px;
     position: fixed;
-    z-index: 3;
+    z-index: 2002;
     margin-top: 60px;
 }
 </style>

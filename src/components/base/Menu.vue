@@ -1,14 +1,14 @@
 <template>
     <el-aside :width="asideStyle.width" :style="asideStyle">
-        <el-menu unique-opened  background-color="#393d49" text-color="#fff" active-text-color="#ffd04b" :collapse="isCollapse">
+        <el-menu unique-opened  background-color="#393d49" text-color="#fff" active-text-color="#ff69b4" :collapse="isCollapse">
             <el-submenu v-for="(menu,index) in menuLists" :key="index" :index="menu.id.toString()">
                 <template #title>
-                    <i class="el-icon-menu"></i>
+                    <i class="el-icon-monitor"></i>
                     <span v-html="menu.name"></span>
                 </template>
                 <el-menu-item :index="child.id.toString()"  v-for="(child,index) in menu.__children" @click="goto(child)" :key="index">
                     <template #title>
-                        <i class="el-icon-s-home"></i>
+                        <i class="el-icon-house"></i>
                         <span v-html="child.name"></span>
                     </template>
                 </el-menu-item>
@@ -21,22 +21,27 @@
 export default {
     name: 'Menu',
     props: ['asideStyle', 'isCollapse'],
-    data () {
-        return {
-            menuLists: this.$store.state.menuLists
+    computed: {
+        menuLists() {
+            return this.$store.state.home.menuLists
         }
     },
     mounted() {
         this.$nextTick(async () => {
             await this.$store.dispatch('home/getMenu')
-            this.menuLists = this.$store.state.menuLists
         })
     },
     methods: {
+        /**
+         * todo:窗口切换
+         * @param item
+         * @return {Promise<void>}
+         */
         async goto (item) {
             let params = { label: item.name, value: item.href }
-            await this.$store.dispatch('home/addTabs', params)
-            await this.$router.push({ path: params.value })
+            await this.$store.dispatch('home/addTabs', params).then(() => {
+                this.$router.push({ path: params.value })
+            })
         }
     }
 }

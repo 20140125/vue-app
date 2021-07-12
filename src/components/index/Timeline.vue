@@ -18,8 +18,8 @@ export default {
         }
     },
     mounted() {
-        this.$nextTick(() => {
-            this.$store.dispatch('home/getTimeLine')
+        this.$nextTick(async () => {
+            await this.$store.dispatch('home/getTimeLine')
         })
     }
 }

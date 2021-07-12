@@ -8,16 +8,15 @@ export default {
     props:['xAxisData','seriesData','legendData', 'chartsId'],
     name: "Charts",
     data() {
-        return {
-            charts:''
-        }
+        return {}
     },
     mounted() {
         this.$nextTick(function () {
             this.getCharts(this.chartsId)
         });
+        let charts = echarts.init(document.getElementById(this.chartsId))
         window.addEventListener('resize',() => {
-            this.charts.resize()
+            charts.resize()
         })
     },
     watch: {
@@ -25,15 +24,16 @@ export default {
             this.$nextTick(function() {
                 this.getCharts(this.chartsId)
             })
+            let charts = echarts.init(document.getElementById(this.chartsId))
             window.addEventListener('resize',() => {
-                this.charts.resize()
+                charts.resize()
             })
         }
     },
     methods:{
         getCharts:function (chartsId) {
-            this.charts = echarts.init(document.getElementById(chartsId))
-            this.charts.setOption({
+            let charts = echarts.init(document.getElementById(chartsId))
+            charts.setOption({
                 title: {
                     text: ''
                 },

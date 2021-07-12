@@ -8,7 +8,7 @@
                         <Account :account-attr="accountAttr" @refreshCode="refreshCode" @loginSYS="loginSYS"></Account>
                     </el-tab-pane>
                     <el-tab-pane label="邮箱验证码登录/注册" name="email">
-                        <Mail :account-attr="accountAttr" @refreshCode="refreshCode" @loginSYS="loginSYS"></Mail>
+                        <Mail :account-attr="accountAttr" @loginSYS="loginSYS"></Mail>
                     </el-tab-pane>
                     <el-tab-pane label="账户授权登录/注册" name="oauth" style="text-align: center">
                         <OAuth :oauth-login="oauthLogin"></OAuth>
@@ -29,7 +29,7 @@ export default {
     data(){
         return {
             bgStyle: {
-                'background': 'url(' + require('../assets/u0.jpg') + ')',
+                'background': 'url(' + require('../assets/chat/u0.jpg') + ')',
                 'background-repeat': 'no-repeat',
                 'height': (window.innerHeight) + 'px'
             },

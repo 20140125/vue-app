@@ -1,0 +1,38 @@
+<template>
+    <el-table :data="lists" row-key="md5" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" @selection-change="$emit('getMultipleSelection', $event)">
+        <el-table-column type="selection" width="60"></el-table-column>
+        <el-table-column label="文件名" prop="filename" width="600"></el-table-column>
+        <el-table-column label="类型" width="100">
+            <template #default="scope">
+                <span v-html="scope.row.file_type.replace(/^\S/, s => s.toUpperCase())"></span>
+            </template>
+        </el-table-column>
+        <el-table-column label="权限" prop="auth" width="100"></el-table-column>
+        <el-table-column label="大小" prop="size" width="100"></el-table-column>
+        <el-table-column label="修改时间" prop="time" width="150"></el-table-column>
+        <el-table-column label="操作" align="right">
+            <template #default="scope">
+                <el-button size="mini" type="text" v-if="scope.row.file_type !== 'file'" @click="$emit('addFile',scope.row)">添加</el-button>
+                <el-button size="mini" type="text" v-if="scope.row.filename.split('.')[1] !== 'zip'" @click="$emit('getFiles',scope.row)">编辑</el-button>
+                <el-button size="mini" type="text" @click="$emit('renameFile',scope.row)">重命名</el-button>
+                <el-button size="mini" type="text" @click="$emit('chmodFile',scope.row)">权限</el-button>
+                <el-button size="mini" type="text" @click="$emit('composeFile',scope.row)">压缩</el-button>
+                <el-button size="mini" type="text" v-if="scope.row.file_type === 'file' && scope.row.filename.split('.')[1] === 'zip'" @click="$emit('unComposeFile',scope.row)">解压</el-button>
+                <el-button size="mini" type="text" @click="$emit('getFiles',scope.row)">下载</el-button>
+                <el-button size="mini" type="text" @click="$emit('uploadFile',scope.row)">上传</el-button>
+                <el-button size="mini" type="text" @click="$emit('deleteFile',scope.row)">删除</el-button>
+            </template>
+        </el-table-column>
+    </el-table>
+</template>
+
+<script>
+export default {
+    name: 'FileLists',
+    props: ['lists']
+}
+</script>
+
+<style scoped>
+
+</style>

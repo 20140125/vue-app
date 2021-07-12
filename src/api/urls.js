@@ -18,7 +18,8 @@ let urls  = {
     /* todo:用户管理 */
     user: {
         lists: '/v1/user/index',
-        update: '/v1/user/update'
+        update: '/v1/user/update',
+        cache: '/v1/user/cache'
     },
     /* todo:授权优惠 */
     oauth: {
@@ -98,5 +99,13 @@ let urls  = {
         repair: '/v1/database/repair',
         alter: '/v1/database/alter'
     },
+    /* todo:站内通知 */
+    push: {
+        lists: '/v1/push/index',
+        save: '/v1/push/save',
+        update: '/v1/push/update'
+    },
+    /* todo:域名 */
+    baseURL: process.env.NODE_ENV !== 'production' ? 'http://www.laravel.com/api' : 'https://www.fanglonger.com/api'
 }
 export default urls
