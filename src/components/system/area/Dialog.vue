@@ -1,0 +1,64 @@
+<template>
+    <div>
+        <el-dialog v-model="visible" :title="localForm.name" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false" center>
+            <el-form ref="area">
+                <el-form-item>
+                    <JsonView :items="localForm.forecast"></JsonView>
+                </el-form-item>
+            </el-form>
+            <SubmitButton v-if="showSubmitButton" :form="submitForm" reForm="area" @closeDialog="$emit('getAreaLists', { parent_id: 1 })"></SubmitButton>
+            <el-main style="text-align: center" v-else>
+                <el-button type="primary" plain size="medium" @click="$emit('closeDialog')">取消</el-button>
+            </el-main>
+        </el-dialog>
+    </div>
+</template>
+
+<script>
+import JsonView from '@/components/common/JsonView'
+import URLS from '@/api/urls'
+import SubmitButton from '@/components/common/SubmitForm'
+export default {
+    name: 'AreaDialog',
+    components: { SubmitButton, JsonView },
+    props: {
+        form: {
+            type: Object,
+            default: () => {}
+        },
+        syncVisible: {
+            type: Boolean,
+            default: () => false
+        },
+        showSubmitButton: {
+            type: Boolean,
+            default: () => true
+        }
+    },
+    data () {
+        return {
+            visible: this.syncVisible,
+            localForm: this.form,
+            submitForm: {}
+        }
+    },
+    watch: {
+        form() {
+            this.localForm = this.form
+            this.$nextTick(() => {
+                setTimeout(() => {
+                    this.submitForm = { model: this.localForm, $refs: this.$refs, url: URLS.area.weather }
+                }, 1000)
+            })
+        },
+        syncVisible() {
+            this.visible = this.syncVisible
+        }
+    }
+
+}
+</script>
+
+<style scoped>
+
+</style>

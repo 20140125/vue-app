@@ -3,6 +3,7 @@ import 'element-plus/lib/theme-chalk/index.css'
 import 'dayjs/locale/zh-cn'
 import installElementPlus from './plugins/element'
 import locale from 'element-plus/lib/locale/lang/zh-cn'
+import JsonViewer from 'vue3-json-viewer'
 
 import store from '@/store/index'
 /* 引入组件 */
@@ -17,6 +18,8 @@ app.use(router)
 app.use(store)
 /* 引入element */
 app.use(installElementPlus, { locale })
+/* 引入JsonViewer */
+app.use(JsonViewer)
 
 // 权限拦截
 router.beforeEach(async (to, from, next) => {

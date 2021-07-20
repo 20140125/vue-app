@@ -1,26 +1,25 @@
 <template>
     <el-container>
         <el-header>
-            <!--Header头部 Start-->
+            <!--Header头部-->
             <Header @setLayout="setLayout" ref="header"></Header>
-            <!--Header头部 End-->
         </el-header>
         <el-container>
-            <!--导航栏 Start-->
-            <Menu :aside-style="asideStyle" :is-collapse="isCollapse"></Menu>
-            <!--导航栏 End-->
             <el-container direction="vertical">
-                <el-main :style="mainStyle">
-                    <!--站内通知 Start-->
-                    <WebPush ref='webPush'></WebPush>
-                    <!--站内通知 End-->
-                    <!--详细内容 Start-->
-                    <Content></Content>
-                    <!--详细内容 End-->
-                </el-main>
-                <!--底部 Start-->
-                <el-footer><el-link href="mailto:fl140125@gmail.com">fl140125@gmail.com</el-link></el-footer>
-                <!--底部 End-->
+                <el-row :gutter="24">
+                    <el-col :span="layoutNums.aside" class="el-aside" :style="layoutNums.style">
+                        <!-- 导航栏 -->
+                        <Menu :is-collapse="isCollapse"></Menu>
+                    </el-col>
+                    <el-col :span="layoutNums.content" class="content">
+                        <!-- 站内通知 -->
+                        <WebPush ref='webPush'></WebPush>
+                        <!-- 详细内容 -->
+                        <Content></Content>
+                        <!-- 返回顶部 -->
+                        <ToUp></ToUp>
+                    </el-col>
+                </el-row>
             </el-container>
         </el-container>
     </el-container>
@@ -31,32 +30,30 @@ import WebPush from '@/components/base/WebPush'
 import Header from '@/components/base/Header'
 import Menu from '@/components/base/Menu'
 import Content from '@/components/base/Content'
+import ToUp from '@/components/common/ToUp'
 export default {
     name: 'BaseLayout',
-    components: { Content, Menu, Header, WebPush },
+    components: {ToUp, Content, Menu, Header, WebPush },
     data () {
         return {
-            mainStyle: { margin: '60px 0 60px 200px', 'line-height': '35px'},
-            asideStyle: { width: '200px', 'min-height': (window.innerHeight - 60) + 'px' },
-            isCollapse: false
+            isCollapse: false,
+            layoutNums: { aside: 3, content: 21, style: { 'min-height': `${window.innerHeight > window.outerHeight ? (window.innerHeight - 130) : (window.outerHeight - 130)}px` } }
         }
     },
     methods: {
         /**
          * todo:设置布局
-         * @param item
          * @param isCollapse
          */
-        setLayout(item, isCollapse) {
-            this.mainStyle = item.mainStyle
-            this.asideStyle = item.asideStyle
+        setLayout(isCollapse) {
+            this.layoutNums = isCollapse ? { aside: 1, content: 23 } : { aside: 3, content: 21 }
             this.isCollapse = isCollapse
         }
     }
 }
 </script>
 
-<style scoped>
+<style lang="less">
 .el-header {
     background-color: #393d49;
     color: #333;
@@ -65,26 +62,23 @@ export default {
     height: 64px;
     position: fixed;
     width: 100%;
-    z-index: 2002
-}
-.el-footer {
-    background-color: #cccccc;
-    color: #333;
-    text-align: center;
-    line-height: 60px;
-    /*固定底部布局*/
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    bottom: 0;
-    z-index: 2001
+    z-index: 2002;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
 }
 .el-aside {
-    background-color: #393d49;
-    color: #333;
-    line-height: 200px;
-    position: fixed;
-    z-index: 2002;
     margin-top: 60px;
+    overflow:hidden;
+    background-color: #393d49;
+    padding: 0 !important;
+    i {
+        margin-right: 15px !important;
+    }
+}
+.content {
+    margin: 80px 0;
+}
+.el-row {
+    margin: 0 !important;
+    padding: 0 !important
 }
 </style>

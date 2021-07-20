@@ -16,25 +16,21 @@ export const mutations = {
 
 export const actions = {
     /**
-     * todo:获取配置
+     * todo:获取数据表
      * @param commit
      * @param state
      * @param payload
      * @return {Promise<boolean>}
      */
-    async getConfigLists({ commit, state }, payload) {
+    async getDatabaseLists({ commit, state }, payload) {
         /* 如果页码没有变，直接读取vuex里面的数据 */
-        if (state.page === payload.page && !payload.refresh) {
-            commit('UPDATE_MUTATIONS', { configLists: state.configLists })
+        if (state.databaseLists && !payload.refresh) {
+            commit('UPDATE_MUTATIONS', { databaseLists: state.databaseLists })
             return false
         }
         return new Promise((resolve, reject) => {
-            requestMethods.__commonMethods(URLS.config.lists, payload).then(result => {
-                commit('UPDATE_MUTATIONS', {
-                    configLists: (((result.data || {}).item || {}).lists || {}).data || [],
-                    total: (((result.data || {}).item || {}).lists || {}).total || 0,
-                    page: payload.page || 1
-                })
+            requestMethods.__commonMethods(URLS.database.lists, payload).then(result => {
+                commit('UPDATE_MUTATIONS', { databaseLists: ((result.data || {}).item || {}).lists ||  [] })
                 resolve(result)
             }).catch(error => {
                 commit('UPDATE_MUTATIONS', { error: error }, { root: true })

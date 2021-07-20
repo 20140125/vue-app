@@ -10,7 +10,7 @@
         <el-table-column label="推送内容" prop="info" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="实时推送" width="100px" align="center">
             <template #default="scope">
-                <el-tag effect="plain" :type="scope.row.status === '1' ? 'success' : 'info'">{{scope.row.status === 1 ? '是' : '否'}}</el-tag>
+                <el-tag effect="dark" :type="scope.row.status === 1 ? 'success' : 'info'">{{scope.row.status === 1 ? '是' : '否'}}</el-tag>
             </template>
         </el-table-column>
         <el-table-column label="推送状态" align="center" width="150px" >

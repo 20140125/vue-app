@@ -1,7 +1,5 @@
 <template>
-    <el-skeleton :rows="18"  :loading="loading" animated :throttle="throttle">
-        <router-view></router-view>
-    </el-skeleton>
+    <router-view></router-view>
 </template>
 
 <script>
@@ -50,8 +48,25 @@ body{
                 width: 100%;
             }
         }
+        .el-date-editor--datetime {
+            width: 100%;
+        }
+        .el-main {
+            padding: 0 !important
+        }
     }
-    #app {}
+    #app {
+        .el-cascader {
+            width: 100%;
+        }
+        .el-tabs__header{
+            background-color: #FFFFFF;
+        }
+        .el-carousel__container {
+            height: 60px;
+            line-height: 30px;
+        }
+    }
     /* 滚动槽 */
     ::-webkit-scrollbar {
         -webkit-box-shadow:inset 0 0 5px rgb(255, 255, 255);

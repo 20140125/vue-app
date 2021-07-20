@@ -6,7 +6,7 @@
             </el-form-item>
         </template>
         <template #body>
-            <PushLists :push-lists="pushLists" @runPusher="runPusher"></PushLists>
+            <PushLists :push-lists="pushLists" @runPusher="runPusher" ref="pushLists"></PushLists>
         </template>
         <template #dialog>
             <PushDialog :sync-visible="syncVisible" :re-form="reForm" :form="form" :user-lists="userLists" @getPushLists="getPushLists"></PushDialog>
@@ -16,12 +16,12 @@
 
 <script>
 import BaseLayout from '@/components/BaseLayout'
-import PushLists from '@/components/push/Lists'
-import PushDialog from '@/components/push/Dialog'
+import PushLists from '@/components/system/push/Lists'
+import PushDialog from '@/components/system/push/Dialog'
 import func from '@/utils/func'
 export default {
     name: 'Push',
-    components: {PushDialog, PushLists, BaseLayout },
+    components: { PushDialog, PushLists, BaseLayout },
     data() {
         return {
             loading: true,
@@ -72,8 +72,8 @@ export default {
             this.form = { username: '', uuid: '', title: '', info: '', status: 1, state: 'failed', created_at: func.setTime(Date.parse(new Date()), 'en') }
             this.reForm = 'created'
             this.syncVisible = true
-            await this.$store.dispatch('push/getCacheUserLists', {}).then(() => {
-                this.userLists = this.$store.state.push.cacheUsers
+            await this.$store.dispatch('users/getCacheUserLists', {}).then(() => {
+                this.userLists = this.$store.state.users.cacheUsers
             })
         },
         /**
@@ -85,8 +85,8 @@ export default {
             this.form = JSON.parse(JSON.stringify(form))
             this.reForm = 'updated'
             this.syncVisible = true
-            await this.$store.dispatch('push/getCacheUserLists', {}).then(() => {
-                this.userLists = this.$store.state.push.cacheUsers
+            await this.$store.dispatch('users/getCacheUserLists', {}).then(() => {
+                this.userLists = this.$store.state.users.cacheUsers
             })
         },
     }

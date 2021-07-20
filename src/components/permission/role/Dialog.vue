@@ -42,13 +42,15 @@ export default {
     },
     watch: {
         form() {
-            this.localForm = { ...this.form }
+            this.localForm = this.form
+            this.$nextTick(() => {
+                setTimeout(() => {
+                    this.submitForm = { model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.role.save : URLS.role.update }
+                }, 1000)
+            })
         },
         syncVisible() {
             this.visible = this.syncVisible
-            if (this.visible) {
-                this.submitForm = { model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.role.save : URLS.role.update }
-            }
         },
         authAttr() {
             this.authMode = { ...this.authAttr }
@@ -77,7 +79,6 @@ export default {
                     break
             }
             this.localForm.auth_ids = [...new Set(this.authMode.defaultChecked)]
-            this.submitForm = { model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.role.save : URLS.role.update }
         }
     }
 }

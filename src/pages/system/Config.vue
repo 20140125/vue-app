@@ -41,6 +41,10 @@ export default {
         })
     },
     methods: {
+        /**
+         * todo:获取列表
+         * @param pagination
+         */
         async getConfigLists(pagination) {
             this.syncVisible = false
             this.loading = true

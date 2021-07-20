@@ -9,21 +9,15 @@
             <RoleLists :role-lists="roleLists" @updateRole="updateRoles"></RoleLists>
         </template>
         <template #dialog>
-            <RoleDialog
-                :sync-visible="syncVisible"
-                :form="form"
-                :re-form="reForm"
-                :auth-attr="authAttr"
-                @getRoleLists="getRoleLists">
-            </RoleDialog>
+            <RoleDialog :sync-visible="syncVisible" :form="form" :reForm="reForm" :authAttr="authAttr" @getRoleLists="getRoleLists"></RoleDialog>
         </template>
     </BaseLayout>
 </template>
 
 <script>
 import BaseLayout from '@/components/BaseLayout'
-import RoleLists from '@/components/role/Lists'
-import RoleDialog from '@/components/role/Dialog'
+import RoleLists from '@/components/permission/role/Lists'
+import RoleDialog from '@/components/permission/role/Dialog'
 export default {
     name: 'Role',
     components: { RoleDialog, RoleLists, BaseLayout },
@@ -73,7 +67,7 @@ export default {
          * todo:获取角色权限
          * @return {Promise<void>}
          */
-        async getAuthLists() {
+        async getRoleAuth() {
             return await this.$store.dispatch('role/getRoleAuth', {})
         },
         /**
@@ -84,7 +78,7 @@ export default {
             this.reForm = 'created'
             this.form = { role_name: '', auth_ids: [], status: 1 }
             this.syncVisible = true
-            await this.getAuthLists().then(() => {
+            await this.getRoleAuth().then(() => {
                 this.authAttr = { authLists: this.$store.state.role.authLists, defaultChecked: [] }
             })
         },
@@ -94,11 +88,12 @@ export default {
          * @return {Promise<void>}
          */
         async updateRoles(form) {
-            this.form = form
+            this.form = { ...form }
             this.reForm = 'updated'
             this.syncVisible = true
-            await this.getAuthLists().then(() => {
-                this.authAttr = { authLists: this.$store.state.role.authLists, defaultChecked: JSON.parse(form.auth_ids) }
+            await this.getRoleAuth().then(() => {
+                this.authAttr = { authLists: this.$store.state.role.authLists, defaultChecked: form.auth_ids ? JSON.parse(form.auth_ids) : [] }
+                this.form.auth_ids = this.authAttr.defaultChecked
             })
         },
     }

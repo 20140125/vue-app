@@ -4,7 +4,9 @@ import func from '@/utils/func'
 
 export const state = {
     tabs: [{ label: '欢迎页', value: '/admin/home/index' }],
-    tabModel: { label: '欢迎页', value: '/admin/home/index' }
+    tabModel: { label: '欢迎页', value: '/admin/home/index' },
+    notice: [],
+    seriesData: { log: [], oauth: [], notice: [] },
 }
 export const mutations = {
     /**
@@ -39,6 +41,15 @@ export const actions = {
                 reject(error)
             })
         })
+    },
+    /**
+     * todo:保存长链接通知信息
+     * @param commit
+     * @param payload
+     * @return {Promise<void>}
+     */
+    async saveSocketMessage({ commit }, payload) {
+        commit('UPDATE_MUTATIONS', payload)
     },
     /**
      * todo:获取时间线

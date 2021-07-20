@@ -69,7 +69,7 @@ instance.interceptors.response.use(response => {
         return Promise.reject(error)
     }
 }, error => {
-    ElMessage.success('network error, please try again later')
+    ElMessage.error('network error, please try again later')
     return Promise.reject({ code: error.response.data.code, message: 'network error, please try again later', item: error })
 })
 export default instance

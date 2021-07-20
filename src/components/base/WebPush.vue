@@ -1,5 +1,5 @@
 <template>
-    <el-carousel :interval="2000" arrow="never" height="65px" direction="vertical" indicator-position="none" v-if="pushMessage.length > 0">
+    <el-carousel :interval="2000" arrow="never" direction="vertical" indicator-position="none" v-if="pushMessage.length > 0">
         <el-carousel-item v-for="(item,index) in pushMessage" :key="index">
             <el-alert type="success" show-icon :title="item.message" effect="light"></el-alert>
         </el-carousel-item>
@@ -15,7 +15,7 @@ export default {
     name: 'WebPush',
     data () {
         return {
-            pushMessage: [{ message: this.$store.state.login.userInfo.weather, timestamp: Date.parse(new Date()) / 1000 }],
+            pushMessage: [{ message: JSON.stringify(this.$store.state.login.userInfo.weather), timestamp: Date.parse(new Date()) / 1000 }],
         }
     },
     mounted() {
@@ -27,13 +27,26 @@ export default {
                 /* todo:用户登录 */
                 SocketService.emit('login', this.$store.state.login.userInfo.uuid)
             })
-            /* todo:链接断开 */
-            SocketService.on('disconnect', ($error) => {
-                console.info(`【系统断开】${func.setTime(Date.parse(new Date()))}${JSON.stringify($error)}`)
+            /* todo:获取站内推送信息 */
+            SocketService.on('notice', ($response) => {
+                if ($response.length > 0 && $response.length !== this.$store.state.home.notice.length) {
+                    $response.forEach(item => {
+                        item.disabled = (item.state !== 'successfully' && item.see === 0)
+                    })
+                    this.$store.dispatch('home/saveSocketMessage', { notice: $response })
+                }
+            })
+            /* todo：获取图表信息 */
+            SocketService.on('charts', ($response) => {
+                this.$store.dispatch('home/saveSocketMessage', { xAxisData: $response.day, seriesData: $response.total })
             })
             /* todo:站内消息推送 */
             SocketService.on('new_message', ($message) => {
                 this.pushMessage.push({ message: $message, timestamp: Date.parse(new Date()) / 1000 })
+            })
+            /* todo:链接断开 */
+            SocketService.on('disconnect', ($error) => {
+                console.info(`【系统断开】${func.setTime(Date.parse(new Date()))}${JSON.stringify($error)}`)
             })
             /* todo:链接错误 */
             SocketService.on('connect_error',  ($error) => {

@@ -1,7 +1,7 @@
 let urls  = {
     /* todo:登录 */
     login: {
-        loginSystem: '/v1/common/login',
+        loginSystem: '/v1/account/login',
         reportCode: '/v1/report/code',
         checkAuthorized: '/v1/check/authorized',
         sendMail: '/v1/mail/send',
@@ -16,10 +16,10 @@ let urls  = {
         lists: '/v1/timeline/index'
     },
     /* todo:用户管理 */
-    user: {
-        lists: '/v1/user/index',
-        update: '/v1/user/update',
-        cache: '/v1/user/cache'
+    users: {
+        lists: '/v1/users/index',
+        update: '/v1/users/update',
+        cache: '/v1/users/cache'
     },
     /* todo:授权优惠 */
     oauth: {
@@ -28,7 +28,7 @@ let urls  = {
     },
     /* todo:个人中心 */
     userCenter: {
-        get: '/v1/userCenter/detail',
+        get: '/v1/userCenter/index',
         update: '/v1/userCenter/update'
     },
     /* todo:权限 */
@@ -50,12 +50,12 @@ let urls  = {
         update: '/v1/role/update',
         save: '/v1/role/save'
     },
-    /* todo:申请权限 */
-    requestAuth: {
-        lists: '/v1/requestAuth/index',
-        get: '/v1/requestAuth/get',
-        save: '/v1/requestAuth/save',
-        update: '/v1/requestAuth/update'
+    /* todo:权限申请 */
+    permission: {
+        lists: '/v1/permission/index',
+        get: '/v1/permission/get',
+        save: '/v1/permission/save',
+        update: '/v1/permission/update'
     },
     /* todo:文件 */
     file: {

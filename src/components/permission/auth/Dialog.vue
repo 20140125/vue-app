@@ -6,7 +6,7 @@
                     <el-input placeholder="请输入权限名称" v-model.trim="localForm.name"></el-input>
                 </el-form-item>
                 <el-form-item label="权限地址：" prop="href">
-                    <el-input placeholder="请输入权限名称" v-model.trim="localForm.href"></el-input>
+                    <el-input placeholder="请输入权限名称(/admin/auth/index)" v-model.trim="localForm.href" :readonly="reForm === 'updated'"></el-input>
                 </el-form-item>
                 <el-form-item label="权限上级：" prop="pid">
                     <el-select placeholder="请选择权限上级" filterable v-model.number="localForm.pid">
@@ -14,7 +14,10 @@
                         <el-option v-for="(item, index) in authLists" :disabled="item.id === localForm.id" :key="index" :label="setAuthName(item)" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
-                <SubmitButton :form="submitForm" :reForm="reForm" @closeDialog="$emit('getAuthLists')"></SubmitButton>
+                <el-form-item label="权限状态：" class="is-required">
+                    <el-switch v-model.number="localForm.status" active-color="#13ce66" inactive-color="#ff4949" :active-value="1" :inactive-value="2"></el-switch>
+                </el-form-item>
+                <SubmitButton :form="submitForm" :reForm="reForm" @closeDialog="$emit('getAuthLists', true)"></SubmitButton>
             </el-form>
         </el-dialog>
     </div>
@@ -47,21 +50,26 @@ export default {
     data () {
         return {
             visible: this.syncVisible,
-            localForm: {...this.form},
+            localForm: this.form,
             submitForm: {},
             rules: {
                 name: [{ required: true, message: '请输入权限名称', trigger: 'blur' }],
-                href: [{ required: true, message: '请输入权限名称', trigger: 'blur' }],
-                pid: [{ required: true, message: '请输入权限名称', trigger: 'blur', type: 'number' }],
+                href: [{ required: true, message: '请输入权限链接', trigger: 'blur' }],
+                pid: [{ required: true, message: '请选择上级权限', trigger: 'blur', type: 'number' }],
             }
         }
     },
     watch: {
+        form() {
+            this.localForm = this.form
+            this.$nextTick(() => {
+                setTimeout(() => {
+                    this.submitForm = { model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.auth.save : URLS.auth.update }
+                }, 1000)
+            })
+        },
         syncVisible() {
             this.visible = this.syncVisible
-        },
-        form() {
-            this.localForm = {...this.form}
         }
     },
     methods: {
@@ -71,7 +79,6 @@ export default {
          * @return {String}
          */
         setAuthName(item) {
-            this.submitForm = { model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.auth.save : URLS.auth.update }
             return Array(item.level + 1).join('　　') + item.name
         }
     }

@@ -11,15 +11,15 @@
         </template>
         <!--权限修改-->
         <template #dialog>
-            <AuthDialog :form="form" :auth-lists="authLists" :reForm="reForm" :sync-visible="syncVisible" @getAuthLists="getAuthLists(true)"></AuthDialog>
+            <AuthDialog :form="form" :auth-lists="authLists" :reForm="reForm" :sync-visible="syncVisible" @getAuthLists="getAuthLists"></AuthDialog>
         </template>
     </BaseLayout>
 </template>
 
 <script>
 import BaseLayout from '@/components/BaseLayout'
-import AuthLists from '@/components/auth/Lists'
-import AuthDialog from '@/components/auth/Dialog'
+import AuthLists from '@/components/permission/auth/Lists'
+import AuthDialog from '@/components/permission/auth/Dialog'
 export default {
     name: 'Auth',
     components: { AuthLists, AuthDialog, BaseLayout },
@@ -73,7 +73,7 @@ export default {
          * @param form
          */
         updateAuth(form) {
-            this.form = form
+            this.form = { ...form }
             this.reForm = 'updated'
             this.syncVisible = true
         },

@@ -1,13 +1,12 @@
 <template>
-    <div v-loading="loading" :element-loading-text="loadingText">
-        <!--头部信息-->
-        <el-form :inline="true" style="margin-top: 10px">
+    <el-skeleton :rows="5" animated :loading="loading">
+        <el-form :inline="true" class="form">
             <slot name="header"></slot>
         </el-form>
         <!--主题信息-->
         <el-main>
             <slot name="body"></slot>
-            <div style="margin-top: 20px" v-if="T_pagination.show_page">
+            <div class="pagination" v-if="T_pagination.show_page">
                 <el-pagination
                     @current-change="__currentChange"
                     :page-size="T_pagination.limit"
@@ -19,7 +18,7 @@
         </el-main>
         <!--弹框信息-->
         <slot name="dialog"></slot>
-    </div>
+    </el-skeleton>
 </template>
 
 <script>
@@ -35,11 +34,6 @@ export default {
         pagination: {
             type: Object,
             default: () => {}
-        },
-        /* 加载文案 */
-        loadingText: {
-            type: String,
-            default: () => '数据加载中...'
         }
     },
     watch: {
@@ -65,6 +59,11 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="less">
+.form {
+    margin: 10px 0 -30px 20px !important;
+}
+.pagination {
+    margin-top: 20px
+}
 </style>

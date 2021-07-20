@@ -74,21 +74,21 @@ export default {
                         type: 'line',
                         stack: '总量',
                         areaStyle: { normal: {} },
-                        data: this.seriesData.oauth
+                        data: (this.seriesData || {}).oauth || []
                     },
                     {
                         name: this.legendData[1],
                         type: 'line',
                         stack: '总量',
                         areaStyle: { normal: {} },
-                        data: this.seriesData.notice
+                        data: (this.seriesData || {}).push || []
                     },
                     {
                         name: this.legendData[2],
                         type: 'line',
                         stack: '总量',
                         areaStyle: { normal: {} },
-                        data: this.seriesData.log
+                        data: (this.seriesData || {}).log || []
                     }
                 ]
             })

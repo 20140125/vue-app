@@ -1,5 +1,5 @@
 <template>
-    <div id="push">
+    <div>
         <el-dialog v-model="visible" :title="reForm === 'created' ? '添加站内通知' : '修改站内通知'" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false" center>
             <el-form :model="localForm" :ref="reForm" label-position="left" label-width="100px" :rules="rules">
                 <el-form-item label="目标用户：" prop="username">
@@ -46,20 +46,21 @@ export default {
                 uuid: [{ required: true, message: '请输入站内标识', trigger: 'blur' }],
                 title: [{ required: true, message: '请输入推送标题', trigger: 'blur' }],
                 info: [{ required: true, message: '请输入推送内容', trigger: 'blur' }],
-                created_at: [{ required: true, message: '请选择推送时间', trigger: 'change' }],
+                created_at: [{ required: true, message: '请选择推送时间', trigger: 'change', type: 'date' }],
             }
         }
     },
     watch: {
         form() {
             this.localForm = this.form
+            this.$nextTick(() => {
+                setTimeout(() => {
+                    this.submitForm = { model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.push.save : URLS.push.update }
+                }, 1000)
+            })
         },
         syncVisible() {
             this.visible = this.syncVisible
-            if (this.visible) {
-                this.submitForm = { model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.push.save : URLS.push.update }
-                console.log(this.submitForm)
-            }
         },
         'localForm.status'() {
             this.localForm.created_at =  this.localForm.status === 1 ?  func.setTime(Date.parse(new Date())) : this.form.created_at
@@ -77,16 +78,11 @@ export default {
                     this.localForm.username = row.username
                 }
             })
-            this.submitForm = { model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.push.save : URLS.push.update }
-        },
+        }
     }
 }
 </script>
 
 <style lang="less">
-#push {
-    .el-date-editor--datetime {
-        width: 100%;
-    }
-}
+
 </style>

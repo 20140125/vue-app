@@ -10,12 +10,19 @@
         :before-upload="beforeUpload"
         :on-remove="handleRemove"
         :limit="uploadLimit"
+        :show-file-list="uploadControls.show_file_list"
         :file-list="fileList"
         :list-type="listType">
-        <el-button size="small" type="primary" v-if="listType === 'picture'">点击上传</el-button>
-        <i class="el-icon-plus" v-if="listType === 'picture-card'"></i>
-        <span v-if="showTips" class="el-upload__tip" style="margin-left: 20px;">{{`请上传${imgWidth}*${imgHeight}的jpg/png 图片`}}</span>
+        <!--todo:用户图像上传-->
+        <el-avatar v-if="uploadControls.button_type === 'avatar'" :src="avatarImage.avatar_url" :alt="avatarImage.username" fit="cover" :size="avatarImage.size"></el-avatar>
+        <!--todo:按钮形式上传-->
+        <el-button size="small" type="primary" v-if="uploadControls.button_type === 'picture'">点击上传</el-button>
+        <!--todo:卡片形式上传-->
+        <i class="el-icon-plus" v-if="uploadControls.button_type === 'card'"></i>
+        <!--todo:上传提示文案-->
+        <span v-if="uploadControls.show_tips" class="el-upload__tip" style="margin-left: 20px;">{{ tips ? tips :`请上传${imgWidth}*${imgHeight}的jpg/png 图片`}}</span>
     </el-upload>
+    <!--todo:点击上传-->
     <el-button v-if="!autoUpload" style="margin-top: 20px" plain type="primary" size="medium" @click="submitUpload">上传到服务器</el-button>
 </template>
 
@@ -61,15 +68,10 @@ export default {
             type: Number,
             default: () => 1
         },
-        /* 图片名称 */
-        data: {
-            type: Object,
-            default: () => {}
-        },
-        /* 是否展示说明 */
-        showTips: {
-            type: Boolean,
-            default: false
+        /* 上传文案 */
+        tips: {
+            type: String,
+            default: ''
         },
         /* 卡片类型 */
         listType: {
@@ -85,6 +87,27 @@ export default {
         autoUpload: {
             type: Boolean,
             default: () => true
+        },
+        /* 用户头像 */
+        avatarImage: {
+            type: Object,
+            default() {
+                return { avatar_url: '', username: '', size: 100 }
+            }
+        },
+        /* 图片上传属性 */
+        data: {
+            type: Object,
+            default() {
+                return { name: 'file', round_name: true, file: {} }
+            }
+        },
+        /* 上传控件 */
+        uploadControls: {
+            type: Object,
+            default() {
+                return { button_type: 'picture', show_tips: true, show_file_list: true }
+            }
         }
     },
     methods:{
@@ -99,14 +122,17 @@ export default {
          * @param file
          */
         uploadFile(file) {
-            /* 创建form对象 */
+            /* todo:创建form对象 */
             let param = new FormData()
             param.append('file', file.file)
             param.append('filename', file.file.name)
             param.append('token', this.$store.getters.token)
             param.append('round_name', this.data.round_name || false)
-            param.append('path', this.data.file.path.replace(this.data.file.filename, ''))
-            /* 添加请求头 */
+            /* todo:名字随机时不需要传入路径 */
+            if (!this.data.round_name) {
+                param.append('path', this.data.file.path.replace(this.data.file.filename, ''))
+            }
+            /* todo:添加请求头 */
             let config = { headers: { 'Content-Type': 'multipart/form-data' } }
             $http.post(file.action, param, config).then(response => {
                 response.data.filename = file.filename

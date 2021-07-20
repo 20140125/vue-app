@@ -23,12 +23,6 @@
 <script>
 export default {
     name: 'Mail',
-    props: {
-        accountAttr: {
-            type: Object,
-            default: () => {}
-        },
-    },
     data () {
         return {
             form: { email: '', verify_code: '', loginType: 'mail' },

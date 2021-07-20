@@ -57,12 +57,14 @@ export default {
     watch: {
         form() {
             this.localForm = this.form
+            this.$nextTick(() => {
+                setTimeout(() => {
+                    this.submitForm = { model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.config.save : URLS.config.update }
+                }, 1000)
+            })
         },
         syncVisible() {
             this.visible = this.syncVisible
-            if (this.visible) {
-                this.submitForm = { model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.config.save : URLS.config.update }
-            }
         }
     },
     methods: {
@@ -74,7 +76,6 @@ export default {
             let items = JSON.parse(JSON.stringify(children))
             items.push({ name: '', value: '', status: '', pid: this.localForm.children[this.localForm.children.length - 1].pid, id: this.localForm.children[this.localForm.children.length - 1].id + 1 })
             this.localForm.children = items
-            this.submitForm = { model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.config.save : URLS.config.update }
         },
         /**
          * todo:移除配置值
@@ -83,7 +84,6 @@ export default {
          */
         deleteChildren(children, index) {
             children.length > 1 ? children.splice(index, 1) : ''
-            this.submitForm = { model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.config.save : URLS.config.update }
         }
     }
 }

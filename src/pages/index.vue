@@ -15,14 +15,15 @@
             </el-card>
         </el-col>
         <el-col :span="24-chartsNum">
-            <el-card shadow="hover"><Timeline></Timeline></el-card>
+            <el-card shadow="hover">
+                <Timeline></Timeline>
+            </el-card>
         </el-col>
     </el-row>
 </template>
 
 <script>
 import Charts from '@/components/index/Charts'
-import SocketIO from 'socket.io-client'
 import Timeline from '@/components/index/Timeline'
 export default {
     name: 'Index',
@@ -32,18 +33,16 @@ export default {
             value: new Date(),
             chartsNum: 14,
             innerWidth: window.innerWidth,
-            chartsStyle: { display: 'block' },
-            xAxisData: [],
-            seriesData: [],
+            chartsStyle: { display: 'block' }
         }
     },
-    mounted() {
-        const SocketService = SocketIO(this.$store.getters.userInfo.socket, { transports: ['websocket'], autoConnect: true })
-        /* 获取图表信息 */
-        SocketService.on('charts', (response) => {
-            this.xAxisData = response.day
-            this.seriesData = response.total
-        })
+    computed: {
+        xAxisData() {
+            return this.$store.state.home.xAxisData
+        },
+        seriesData() {
+            return this.$store.state.home.seriesData
+        }
     }
 }
 </script>
