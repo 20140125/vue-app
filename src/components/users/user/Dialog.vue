@@ -40,14 +40,15 @@
 <script>
 import SubmitButton from '@/components/common/SubmitForm'
 import URLS from '@/api/urls'
-import CommonUpload from "@/components/common/CommonUpload";
+import CommonUpload from '@/components/common/CommonUpload'
+import { toggle } from '@/components/mixins/toggle'
 export default {
     name: 'UsersDialog',
     components: { CommonUpload, SubmitButton },
-    props: ['syncVisible', 'form', 'reForm', 'usersAttr'],
+    mixins: [toggle],
+    props: ['form', 'reForm', 'usersAttr'],
     data() {
         return {
-            visible: this.syncVisible,
             localForm: this.form,
             submitForm: {},
             rules: {
@@ -68,9 +69,6 @@ export default {
                     this.submitForm = { model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.users.save : URLS.users.update }
                 }, 1000)
             })
-        },
-        syncVisible() {
-            this.visible = this.syncVisible
         }
     },
     methods: {

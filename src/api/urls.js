@@ -77,13 +77,18 @@ let urls  = {
         update: '/v1/config/update',
         get: '/v1/config/get'
     },
-    /* todo:接口 */
+    /* todo:接口分类 */
+    interfaceCategory: {
+        lists: '/v1/interfaceCategory/index',
+        save: '/v1/interfaceCategory/save',
+        update: '/v1/interfaceCategory/update',
+        delete: '/v1/interfaceCategory/delete',
+    },
+    /* todo:接口详情 */
     interface: {
-        lists: '/v1/interface/index',
         save: '/v1/interface/save',
         update: '/v1/interface/update',
         get: '/v1/interface/detail',
-        delete: '/v1/interface/delete'
     },
     /* todo:地区 */
     area: {

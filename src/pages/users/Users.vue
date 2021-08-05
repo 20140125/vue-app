@@ -1,8 +1,6 @@
 <template>
     <BaseLayout :loading="loading" :pagination="pagination">
-        <template #header>
-
-        </template>
+        <template #header></template>
         <template #body>
             <UsersLists :users-lists="usersLists" @updatedUsers="updatedUsers" ref="usersLists"></UsersLists>
         </template>

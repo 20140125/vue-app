@@ -133,7 +133,7 @@ export default {
                 param.append('path', this.data.file.path.replace(this.data.file.filename, ''))
             }
             /* todo:添加请求头 */
-            let config = { headers: { 'Content-Type': 'multipart/form-data' } }
+            let config = { headers: {'Content-Type': 'multipart/form-data', 'Authorization': this.$store.getters.token }}
             $http.post(file.action, param, config).then(response => {
                 response.data.filename = file.filename
                 file.onSuccess(response.data)

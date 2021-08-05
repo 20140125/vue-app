@@ -19,7 +19,7 @@
                 </el-col>
                 <!--文件列表-->
                 <!--文件内容-->
-                <el-col :span="18">
+                <el-col :span="18" class="details">
                     <el-form :model="form.model" ref="fileSave">
                         <el-form-item>
                             <el-tabs type="border-card" lazy closable v-model="tabModel.name"  @tab-click="goto" @tab-remove="removeTab" style="text-align: left!important;">
@@ -246,6 +246,13 @@ export default {
     .CodeMirror-hscrollbar{
         left: 30px !important;
         height: 5px !important;
+    }
+    .details {
+        .el-form-item__content {
+            .el-tabs--border-card {
+                width: 1120px !important;
+            }
+        }
     }
 }
 </style>

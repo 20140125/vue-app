@@ -1,9 +1,11 @@
 <template>
-    <el-carousel :interval="2000" arrow="never" direction="vertical" indicator-position="none" v-if="pushMessage.length > 0">
-        <el-carousel-item v-for="(item,index) in pushMessage" :key="index">
-            <el-alert type="success" show-icon :title="item.message" effect="light"></el-alert>
-        </el-carousel-item>
-    </el-carousel>
+    <div id="wenPush">
+        <el-carousel :interval="2000" arrow="never" direction="vertical" indicator-position="none" v-if="pushMessage.length > 0">
+            <el-carousel-item v-for="(item,index) in pushMessage" :key="index">
+                <el-alert type="success" show-icon :title="item.message" effect="light"></el-alert>
+            </el-carousel-item>
+        </el-carousel>
+    </div>
 </template>
 
 <script>
@@ -57,6 +59,11 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="less">
+#wenPush {
+    .el-carousel__container {
+        height: 80px !important;
+        line-height: 25px;
+    }
+}
 </style>

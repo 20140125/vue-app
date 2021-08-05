@@ -17,6 +17,8 @@ import area from '@/store/modules/system/area'
 import database from '@/store/modules/system/database'
 import log from '@/store/modules/system/log'
 
+import category from '@/store/modules/interface/category'
+
 import mutations from '@/store/mutaions'
 import state from '@/store/state'
 import actions from '@/store/actions'
@@ -26,7 +28,7 @@ import actions from '@/store/actions'
  */
 const debug = process.env.NODE_ENV !== 'production'
 export default createStore({
-    modules: { login, home, chat, file, auth, role, apply, push, users, oauth, config, area, database,log },
+    modules: { login, home, chat, file, auth, role, apply, push, users, oauth, config, area, database,log, category },
     mutations,
     state,
     actions,

@@ -1,6 +1,6 @@
 <template>
     <div style="margin: 20px 0">
-        <el-button type="primary" plain v-for="(item, index) in oAuthConfig.children" :key="index">{{item.name.toUpperCase()}}</el-button>
+        <el-button @click="toLogin(item)" type="primary" plain v-for="(item, index) in (oAuthConfig || {}).children" :key="index">{{item.name.toUpperCase()}}</el-button>
     </div>
 </template>
 
@@ -21,6 +21,11 @@ export default {
             if (this.oauthLogin) {
                 await this.$store.dispatch('login/getOauthConfig', { name: 'Oauth', login: 'before' })
             }
+        }
+    },
+    methods: {
+        toLogin(item) {
+            window.open(item.value, '_self')
         }
     }
 }

@@ -26,14 +26,12 @@
 <script>
 import SubmitButton from '@/components/common/SubmitForm'
 import URLS from '@/api/urls'
+import { toggle } from '@/components/mixins/toggle'
+
 export default {
     name: 'AuthDialog',
     components: { SubmitButton },
     props: {
-        syncVisible: {
-            type: Boolean,
-            default: () => false
-        },
         reForm: {
             type: String,
             default: () => 'created'
@@ -47,9 +45,9 @@ export default {
             default: () => {}
         }
     },
+    mixins: [toggle],
     data () {
         return {
-            visible: this.syncVisible,
             localForm: this.form,
             submitForm: {},
             rules: {
@@ -67,9 +65,6 @@ export default {
                     this.submitForm = { model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.auth.save : URLS.auth.update }
                 }, 1000)
             })
-        },
-        syncVisible() {
-            this.visible = this.syncVisible
         }
     },
     methods: {

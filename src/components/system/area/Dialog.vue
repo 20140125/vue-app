@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-dialog v-model="visible" :title="localForm.name" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false" center>
-            <el-form ref="area">
+            <el-form ref="area" :model="localForm">
                 <el-form-item>
                     <JsonView :items="localForm.forecast"></JsonView>
                 </el-form-item>
@@ -18,6 +18,8 @@
 import JsonView from '@/components/common/JsonView'
 import URLS from '@/api/urls'
 import SubmitButton from '@/components/common/SubmitForm'
+import { toggle } from '@/components/mixins/toggle'
+
 export default {
     name: 'AreaDialog',
     components: { SubmitButton, JsonView },
@@ -26,18 +28,14 @@ export default {
             type: Object,
             default: () => {}
         },
-        syncVisible: {
-            type: Boolean,
-            default: () => false
-        },
         showSubmitButton: {
             type: Boolean,
             default: () => true
         }
     },
+    mixins: [toggle],
     data () {
         return {
-            visible: this.syncVisible,
             localForm: this.form,
             submitForm: {}
         }
@@ -50,9 +48,6 @@ export default {
                     this.submitForm = { model: this.localForm, $refs: this.$refs, url: URLS.area.weather }
                 }, 1000)
             })
-        },
-        syncVisible() {
-            this.visible = this.syncVisible
         }
     }
 

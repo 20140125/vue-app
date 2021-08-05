@@ -25,14 +25,15 @@
 
 <script>
 import SubmitButton from '@/components/common/SubmitForm'
+import { toggle } from '@/components/mixins/toggle'
 import URLS from '@/api/urls'
 export default {
     name: 'OAuthDialog',
     components: { SubmitButton },
-    props: ['syncVisible', 'form', 'reForm'],
+    mixins: [toggle],
+    props: ['form', 'reForm'],
     data() {
         return {
-            visible: this.syncVisible,
             localForm: this.form,
             codeValue: '获取验证码',
             mailLogin: this.$store.state.login.mailLogin,
@@ -51,9 +52,6 @@ export default {
                     this.submitForm = { model: { email: this.localForm.email, code: this.localForm.code, id: this.localForm.id }, $refs: this.$refs, url:  URLS.oauth.update }
                 }, 1000)
             })
-        },
-        syncVisible() {
-            this.visible = this.syncVisible
         }
     },
     created () {

@@ -24,13 +24,14 @@
 <script>
 import SubmitButton from '@/components/common/SubmitForm'
 import URLS from '@/api/urls'
+import { toggle } from '@/components/mixins/toggle'
+
 export default {
     name: 'RoleDialog',
     components: { SubmitButton },
-    props: ['syncVisible', 'form', 'reForm', 'authAttr'],
+    props: ['form', 'reForm', 'authAttr'],
     data() {
         return {
-            visible: this.syncVisible,
             localForm: { ...this.form },
             submitForm: {},
             rules: {
@@ -40,6 +41,7 @@ export default {
             authMode: { ...this.authAttr }
         }
     },
+    mixins: [toggle],
     watch: {
         form() {
             this.localForm = this.form
@@ -48,9 +50,6 @@ export default {
                     this.submitForm = { model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.role.save : URLS.role.update }
                 }, 1000)
             })
-        },
-        syncVisible() {
-            this.visible = this.syncVisible
         },
         authAttr() {
             this.authMode = { ...this.authAttr }

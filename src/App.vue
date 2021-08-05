@@ -62,10 +62,6 @@ body{
         .el-tabs__header{
             background-color: #FFFFFF;
         }
-        .el-carousel__container {
-            height: 60px;
-            line-height: 30px;
-        }
     }
     /* 滚动槽 */
     ::-webkit-scrollbar {

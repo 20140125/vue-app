@@ -32,13 +32,15 @@
 import SubmitButton from '@/components/common/SubmitForm'
 import URLS from '@/api/urls'
 import func from '@/utils/func'
+import { toggle } from '@/components/mixins/toggle'
+
 export default {
     name: 'PushDialog',
     components: { SubmitButton },
-    props: ['syncVisible', 'form', 'reForm', 'userLists'],
+    props: [ 'form', 'reForm', 'userLists'],
+    mixins: [toggle],
     data() {
         return {
-            visible: this.syncVisible,
             localForm: this.form,
             submitForm: {},
             rules: {
@@ -58,9 +60,6 @@ export default {
                     this.submitForm = { model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.push.save : URLS.push.update }
                 }, 1000)
             })
-        },
-        syncVisible() {
-            this.visible = this.syncVisible
         },
         'localForm.status'() {
             this.localForm.created_at =  this.localForm.status === 1 ?  func.setTime(Date.parse(new Date())) : this.form.created_at

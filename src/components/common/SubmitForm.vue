@@ -14,7 +14,6 @@ export default {
          * todo:数据保存
          */
         async saveForm() {
-            console.log(this.form)
             await this.form.$refs[this.reForm].validate(valid => {
                 if (!valid) {
                     return false

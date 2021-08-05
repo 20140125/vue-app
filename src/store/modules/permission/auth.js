@@ -25,7 +25,7 @@ export const actions = {
      */
     async getAuthLists({ commit, state }, payload) {
         if (state.authLists && !payload.refresh) {
-            commit('UPDATE_MUTATIONS', { authTree: func.setTree(JSON.parse(JSON.stringify(state.authLists)), 0, 'children' ),  authLists: state.authLists })
+            commit('UPDATE_MUTATIONS', { authTree: func.setTree(JSON.parse(JSON.stringify(state.authLists)), 0, 'children'),  authLists: state.authLists })
             return false
         }
         return new Promise((resolve, reject) => {
