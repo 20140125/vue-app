@@ -1,44 +1,10 @@
 import axios from 'axios/index'
-import { ElMessage } from 'element-plus';
+import { ElMessage } from 'element-plus'
 import store from '@/store'
+import router from '@/route/index.js'
+import URLS from '@/api/urls'
 
-/**
- * todo：请求失败后的错误统一处理
- * @param {Number} status 请求失败的状态码
- * @param msg
- * @param url
- */
-// const errorHandle = (status, msg, url) => {
-//     // 状态码判断
-//     switch (status) {
-//
-//     }
-//     if (status === 401) {
-//         // store.commit('setToken', '')
-//         // router.push({ path: '/login' })
-//         ElMessage.warning(msg)
-//     } else if (status === 403) {
-//         // let tabs = store.state.tabs.tabs
-//         // let key = 0
-//         // tabs.map((item, index) => {
-//         //     if (item.name === window.location.pathname) {
-//         //         key = index
-//         //         return tabs.splice(index, 1)
-//         //     }
-//         // })
-//         // let nextTab = tabs[key + 1] || tabs[key - 1]
-//         // store.commit('setCurrTabs', nextTab)
-//         // router.push({path: nextTab.name})
-//         ElMessage.warning(msg)
-//     } else if (status === 404) {
-//         // router.push({path: '/404'})
-//         ElMessage.warning(msg)
-//     } else {
-//         ElMessage.error('network error, please try again later')
-//     }
-// }
-const TIMEOUT = 10000
-
+const TIMEOUT = 0
 const instance = axios.create({
     timeout: TIMEOUT,
     headers: {
@@ -48,7 +14,7 @@ const instance = axios.create({
         }
     }
 })
-instance.defaults.baseURL = process.env.NODE_ENV !== 'production' ? 'http://www.laravel.com/api' : 'https://www.fanglonger.com/api'
+instance.defaults.baseURL = URLS.baseURL
 // http request 拦截器
 instance.interceptors.request.use(config => {
     config.headers.Authorization = store.state.token || ''
@@ -69,7 +35,15 @@ instance.interceptors.response.use(response => {
         return Promise.reject(error)
     }
 }, error => {
-    ElMessage.error('network error, please try again later')
-    return Promise.reject({ code: error.response.data.code, message: 'network error, please try again later', item: error })
+    if(!store.state.token && [401, 500].indexOf(error.response.status) > -1) {
+        router.push({path: '/login'}).then(() => { console.log(error) })
+    } else {
+        ElMessage.error(error.response.status === 403 ? 'Permission denied login system' : 'network error, please try again later')
+        return Promise.reject({
+            code: error.response.status,
+            message: error.response.status === 403 ? 'Permission denied login system' : 'Network error, Please try again later',
+            item: error
+        })
+    }
 })
 export default instance

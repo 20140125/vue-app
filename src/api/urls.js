@@ -1,116 +1,116 @@
 let urls  = {
     /* todo:登录 */
     login: {
-        loginSystem: '/v1/account/login',
-        reportCode: '/v1/report/code',
-        checkAuthorized: '/v1/check/authorized',
-        sendMail: '/v1/mail/send',
-        oauthConfig: '/v1/oauth/config'
+        loginSystem: '/api/v1/account/login',
+        reportCode: '/api/v1/report/code',
+        checkAuthorized: '/api/v1/check/authorized',
+        sendMail: '/api/v1/mail/send',
+        oauthConfig: '/api/v1/oauth/config'
     },
     /* todo:导航栏 */
     home: {
-        getMenu: '/v1/common/menu'
+        getMenu: '/api/v1/common/menu'
     },
     /* todo:时间线 */
     timeline: {
-        lists: '/v1/timeline/index'
+        lists: '/api/v1/timeline/index'
     },
     /* todo:用户管理 */
     users: {
-        lists: '/v1/users/index',
-        update: '/v1/users/update',
-        cache: '/v1/users/cache'
+        lists: '/api/v1/users/index',
+        update: '/api/v1/users/update',
+        cache: '/api/v1/users/cache'
     },
     /* todo:授权优惠 */
     oauth: {
-        lists: '/v1/oauth/index',
-        update: '/v1/oauth/update'
+        lists: '/api/v1/oauth/index',
+        update: '/api/v1/oauth/update'
     },
     /* todo:个人中心 */
     userCenter: {
-        get: '/v1/userCenter/index',
-        update: '/v1/userCenter/update'
+        get: '/api/v1/userCenter/index',
+        update: '/api/v1/userCenter/update'
     },
     /* todo:权限 */
     auth: {
-        lists: '/v1/auth/index',
-        save: '/v1/auth/save',
-        update: '/v1/auth/update',
-        tree: '/v1/auth/tree'
+        lists: '/api/v1/auth/index',
+        save: '/api/v1/auth/save',
+        update: '/api/v1/auth/update',
+        tree: '/api/v1/auth/tree'
     },
     /* todo:日志 */
     log: {
-        lists: '/v1/log/index',
-        delete: '/v1/log/delete'
+        lists: '/api/v1/log/index',
+        delete: '/api/v1/log/delete'
     },
     /* todo:角色 */
     role: {
-        lists: 'v1/role/index',
-        auth: '/v1/role/auth',
-        update: '/v1/role/update',
-        save: '/v1/role/save'
+        lists: '/api/v1/role/index',
+        auth: '/api/v1/role/auth',
+        update: '/api/v1/role/update',
+        save: '/api/v1/role/save'
     },
     /* todo:权限申请 */
     permission: {
-        lists: '/v1/permission/index',
-        get: '/v1/permission/get',
-        save: '/v1/permission/save',
-        update: '/v1/permission/update'
+        lists: '/api/v1/permission/index',
+        get: '/api/v1/permission/get',
+        save: '/api/v1/permission/save',
+        update: '/api/v1/permission/update'
     },
     /* todo:文件 */
     file: {
-        lists: '/v1/file/index',
-        read: '/v1/file/read',
-        update: '/v1/file/update',
-        zip: '/v1/file/zip',
-        unzip: '/v1/file/unzip',
-        delete: '/v1/file/delete',
-        upload: '/v1/file/upload',
-        chmod: '/v1/file/chmod',
-        rename: '/v1/file/rename',
-        save: '/v1/file/save'
+        lists: '/api/v1/file/index',
+        read: '/api/v1/file/read',
+        update: '/api/v1/file/update',
+        zip: '/api/v1/file/zip',
+        unzip: '/api/v1/file/unzip',
+        delete: '/api/v1/file/delete',
+        upload: '/api/v1/file/upload',
+        chmod: '/api/v1/file/chmod',
+        rename: '/api/v1/file/rename',
+        save: '/api/v1/file/save'
     },
     /* todo:配置 */
     config: {
-        lists: '/v1/config/index',
-        save: '/v1/config/save',
-        update: '/v1/config/update',
-        get: '/v1/config/get'
+        lists: '/api/v1/config/index',
+        save: '/api/v1/config/save',
+        update: '/api/v1/config/update',
+        get: '/api/v1/config/get'
     },
     /* todo:接口分类 */
     interfaceCategory: {
-        lists: '/v1/interfaceCategory/index',
-        save: '/v1/interfaceCategory/save',
-        update: '/v1/interfaceCategory/update',
-        delete: '/v1/interfaceCategory/delete',
+        lists: '/api/v1/interfaceCategory/index',
+        save: '/api/v1/interfaceCategory/save',
+        update: '/api/v1/interfaceCategory/update',
+        delete: '/api/v1/interfaceCategory/delete',
     },
     /* todo:接口详情 */
     interface: {
-        save: '/v1/interface/save',
-        update: '/v1/interface/update',
-        get: '/v1/interface/detail',
+        save: '/api/v1/interface/save',
+        update: '/api/v1/interface/update',
+        get: '/api/v1/interface/detail',
     },
     /* todo:地区 */
     area: {
-        lists: '/v1/area/index',
-        cache: '/v1/area/cache',
-        weather: '/v1/area/weather'
+        lists: '/api/v1/area/index',
+        cache: '/api/v1/area/cache',
+        weather: '/api/v1/area/weather'
     },
     /* todo:数据库 */
     database: {
-        lists: '/v1/database/index',
-        backup: '/v1/database/backup',
-        optimize: '/v1/database/optimize',
-        repair: '/v1/database/repair',
-        alter: '/v1/database/alter'
+        lists: '/api/v1/database/index',
+        backup: '/api/v1/database/backup',
+        optimize: '/api/v1/database/optimize',
+        repair: '/api/v1/database/repair',
+        alter: '/api/v1/database/alter'
     },
     /* todo:站内通知 */
     push: {
-        lists: '/v1/push/index',
-        save: '/v1/push/save',
-        update: '/v1/push/update'
+        lists: '/api/v1/push/index',
+        save: '/api/v1/push/save',
+        update: '/api/v1/push/update'
     },
     /* todo:域名 */
-    baseURL: process.env.NODE_ENV !== 'production' ? 'http://www.laravel.com/api' : 'https://www.fanglonger.com/api'
+    baseURL: process.env.NODE_ENV !== 'production' ? 'http://www.laravel.com' : 'https://www.fanglonger.com'
 }
 export default urls

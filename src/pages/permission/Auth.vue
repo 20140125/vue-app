@@ -2,7 +2,7 @@
     <BaseLayout :loading="loading">
         <template #header>
             <el-form-item>
-                <el-button plain type="primary" size="mini" icon="el-icon-plus" @click="addAuth">添加</el-button>
+                <el-button v-if="Permission.auth.indexOf(savePermission) > -1" plain type="primary" size="mini" icon="el-icon-plus" @click="addAuth">添加</el-button>
             </el-form-item>
         </template>
         <!--权限列表-->
@@ -20,6 +20,8 @@
 import BaseLayout from '@/components/BaseLayout'
 import AuthLists from '@/components/permission/auth/Lists'
 import AuthDialog from '@/components/permission/auth/Dialog'
+import URLS from '@/api/urls'
+
 export default {
     name: 'Auth',
     components: { AuthLists, AuthDialog, BaseLayout },
@@ -28,7 +30,8 @@ export default {
             loading: true,
             form: { name: '', href: '', pid: '',  status: 1 },
             syncVisible: false,
-            reForm: 'created'
+            reForm: 'created',
+            savePermission: URLS.auth.save
         }
     },
     computed: {

@@ -2,7 +2,7 @@
     <BaseLayout :loading="loading" :pagination="pagination">
         <template #header>
             <el-form-item>
-                <el-button type="primary" plain size="mini" @click='permissionApply' icon="el-icon-plus">权限申请</el-button>
+                <el-button v-if="Permission.auth.indexOf(savePermission) > -1" type="primary" plain size="mini" @click='permissionApply' icon="el-icon-plus">权限申请</el-button>
             </el-form-item>
         </template>
         <template #body>
@@ -36,7 +36,8 @@ export default {
             syncVisible: false,
             reForm: 'created',
             form: {},
-            permissionAttr: { userLists: [], authList: [] }
+            permissionAttr: { userLists: [], authList: [] },
+            savePermission: URLS.permission.save
         }
     },
     computed: {

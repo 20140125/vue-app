@@ -2,7 +2,7 @@
     <BaseLayout :loading="loading" :pagination="pagination">
         <template #header>
             <el-form-item>
-                <el-button type="primary" plain size="mini" @click='addPush' icon="el-icon-plus">新增</el-button>
+                <el-button v-if="Permission.auth.indexOf(savePermission) > -1" type="primary" plain size="mini" @click='addPush' icon="el-icon-plus">新增</el-button>
             </el-form-item>
         </template>
         <template #body>
@@ -19,6 +19,8 @@ import BaseLayout from '@/components/BaseLayout'
 import PushLists from '@/components/system/push/Lists'
 import PushDialog from '@/components/system/push/Dialog'
 import func from '@/utils/func'
+import URLS from '@/api/urls'
+
 export default {
     name: 'Push',
     components: { PushDialog, PushLists, BaseLayout },
@@ -29,7 +31,8 @@ export default {
             syncVisible: false,
             reForm: 'created',
             form: {},
-            userLists: []
+            userLists: [],
+            savePermission: URLS.push.save
         }
     },
     computed: {

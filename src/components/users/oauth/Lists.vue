@@ -23,7 +23,7 @@
         <el-table-column label="操作" align="right">
             <template #default="scope">
                 <el-tooltip class="item" effect="dark" content="绑定邮箱账号可以使用邮箱登录" placement="top-start">
-                    <el-button plain size="mini" icon="el-icon-edit" type="primary" @click="$emit('bindEmail', scope.row)">邮箱绑定</el-button>
+                    <el-button v-if="Permission.auth.indexOf(URL) > -1"  plain size="mini" icon="el-icon-edit" type="primary" @click="$emit('bindEmail', scope.row)">邮箱绑定</el-button>
                 </el-tooltip>
             </template>
         </el-table-column>

@@ -8,18 +8,18 @@
         <el-table-column label="字符集编码" prop="collation" :show-tooltip-when-overflow="true" min-width="120" align="center"></el-table-column>
         <el-table-column label="备注" align="center" min-width="150" :show-tooltip-when-overflow="true">
             <template #default="scope">
-                <el-input v-model="scope.row.comment" :ref="scope.row.name" v-if="scope.row.name === name && edit" placeholder="请输入数据表备注"></el-input>
+                <el-input v-model="scope.row.comment" :ref="scope.row.name" v-if="scope.row.name === name" placeholder="请输入数据表备注"></el-input>
                 <div v-html="scope.row.comment" v-else></div>
             </template>
         </el-table-column>
         <el-table-column label="创建时间" sortable prop="create_time" align="center" min-width="160"></el-table-column>
         <el-table-column width="300" align="right" label="操作">
             <template #default="scope">
-                <el-button type="primary" plain size="mini" @click="updateComment(scope.row)" icon="el-icon-edit-outline" v-if="scope.row.name === name && edit">更新</el-button>
+                <el-button type="primary" plain size="mini" @click="updateComment(scope.row)" icon="el-icon-edit-outline" v-if="scope.row.name === name">更新</el-button>
                 <el-button type="primary" plain size="mini" @click="setComment(scope.row)" v-else icon="el-icon-edit">修改</el-button>
-                <el-button type="primary" plain size="mini" @click="backupTable(scope.row)">备份</el-button>
-                <el-button type="primary" plain size="mini" @click="repairTable(scope.row)">修复</el-button>
-                <el-button type="primary" plain size="mini" @click="optimizeTable(scope.row)">优化</el-button>
+                <el-button v-if="Permission.auth.indexOf(URLS.backup) > -1" type="primary" plain size="mini" @click="backupTable(scope.row)">备份</el-button>
+                <el-button v-if="Permission.auth.indexOf(URLS.repair) > -1" type="primary" plain size="mini" @click="repairTable(scope.row)">修复</el-button>
+                <el-button v-if="Permission.auth.indexOf(URLS.optimize) > -1" type="primary" plain size="mini" @click="optimizeTable(scope.row)">优化</el-button>
             </template>
         </el-table-column>
     </el-table>
@@ -34,6 +34,7 @@ export default {
         return {
             edit: false,
             name: '',
+            URLS: URLS.database
         }
     },
     methods: {

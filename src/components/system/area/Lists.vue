@@ -20,7 +20,7 @@ export default {
     props: ['areaLists'],
     data() {
         return {
-            search: ''
+            search: '',
         }
     },
     methods: {

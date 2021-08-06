@@ -29,7 +29,10 @@
                                 </el-card>
                             </el-tabs>
                         </el-form-item>
-                        <SubmitButton :form="form" re-form="fileSave" @closeDialog="$emit('getFileLists')"></SubmitButton>
+                        <SubmitButton v-if="Permission.auth.indexOf(savePermission) > -1" :form="form" re-form="fileSave" @closeDialog="$emit('getFileLists')"></SubmitButton>
+                        <el-main style="text-align: center" v-else>
+                            <el-button type="default" size="medium" @click="$emit('getFileLists')" plain>取消</el-button>
+                        </el-main>
                     </el-form>
                 </el-col>
                 <!--文件内容-->
@@ -107,11 +110,16 @@ export default {
                 readOnly: false
             },
             mode: { markdown: 'text/markdown', php: 'text/x-php', xml: 'text/xml', json: 'application/ld+json', sql: 'text/x-mysql' },
+            savePermission: URLS.file.update
         }
     },
     watch: {
         detailVisible() {
             this.visible.detail = this.detailVisible
+            /* 编辑器只读 */
+            if (this.visible.detail) {
+                this.options.readOnly = this.Permission.auth.indexOf(this.savePermission) < 0
+            }
         },
         filterText (val) {
             this.$refs.tree.filter(val)

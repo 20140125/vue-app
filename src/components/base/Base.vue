@@ -1,5 +1,5 @@
 <template>
-    <el-container>
+    <el-container id="base">
         <el-header>
             <!--Header头部-->
             <Header @setLayout="setLayout" ref="header"></Header>
@@ -54,31 +54,33 @@ export default {
 </script>
 
 <style lang="less">
-.el-header {
-    background-color: #393d49;
-    color: #333;
-    text-align: center;
-    line-height: 60px;
-    height: 64px;
-    position: fixed;
-    width: 100%;
-    z-index: 2002;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
-}
-.el-aside {
-    margin-top: 60px;
-    overflow:hidden;
-    background-color: #393d49;
-    padding: 0 !important;
-    i {
-        margin-right: 15px !important;
+#base {
+    .el-header {
+        background-color: #393d49;
+        color: #333;
+        text-align: center;
+        line-height: 60px;
+        height: 64px;
+        position: fixed;
+        width: 100%;
+        z-index: 2002;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
     }
-}
-.content {
-    margin: 80px 0;
-}
-.el-row {
-    margin: 0 !important;
-    padding: 0 !important
+    .el-aside {
+        margin-top: 60px;
+        overflow:hidden;
+        background-color: #393d49;
+        padding: 0 !important;
+        i {
+            margin-right: 15px !important;
+        }
+    }
+    .content {
+        margin: 80px 0;
+    }
+    .el-row {
+        margin: 0 !important;
+        padding: 0 !important
+    }
 }
 </style>

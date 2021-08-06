@@ -14,7 +14,7 @@
                 <el-input placeholder="请输入关键词搜索" suffix-icon="el-icon-search"></el-input>
             </template>
             <template #default="scope">
-                <el-button type="primary" icon="el-icon-edit" plain size="mini" @click="$emit('updateRole', scope.row)">编辑</el-button>
+                <el-button v-if="Permission.auth.indexOf(URL) > -1" type="primary" icon="el-icon-edit" plain size="mini" @click="$emit('updateRole', scope.row)">编辑</el-button>
             </template>
         </el-table-column>
     </el-table>

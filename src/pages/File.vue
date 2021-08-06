@@ -2,13 +2,14 @@
     <BaseLayout :loading="loading">
         <template #header>
             <el-form-item>
-                <el-button size="mini" type="primary" plain icon="el-icon-s-management" v-if="fileAtt.multipleSelection.length > 0" @click="composerFile">压缩</el-button>
-                <el-button size="mini" type="primary" plain icon="el-icon-plus" @click="addFile">添加</el-button>
+                <el-button size="mini" type="primary" plain icon="el-icon-s-management" v-if="fileAtt.multipleSelection.length > 0 && Permission.auth.indexOf(fileURL.zip) > -1" @click="composerFile">压缩</el-button>
+                <el-button v-if="Permission.auth.indexOf(fileURL.save) > -1" size="mini" type="primary" plain icon="el-icon-plus" @click="addFile">添加</el-button>
             </el-form-item>
         </template>
         <template #body>
             <!--文件列表-->
             <FileLists :lists="fileLists"
+                       :fileURL="fileURL"
                        @addFile="addFile"
                        @getFiles="getFiles"
                        @deleteFile="deleteFile"
@@ -56,7 +57,8 @@ export default {
             staticSource: { image: [], video: [], title: '', file: '' },
             chmod: {},
             loading: true,
-            fileAtt: { multipleSelection: [] }
+            fileAtt: { multipleSelection: [] },
+            fileURL: URLS.file
         }
     },
     mounted() {

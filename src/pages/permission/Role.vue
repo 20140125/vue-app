@@ -2,7 +2,7 @@
     <BaseLayout :loading="loading" :pagination="pagination">
         <template #header>
             <el-form-item>
-                <el-button type="primary" plain size="mini" @click='addRoles' icon="el-icon-plus">新增</el-button>
+                <el-button type="primary" v-if="Permission.auth.indexOf(savePermission) > -1" plain size="mini" @click='addRoles' icon="el-icon-plus">新增</el-button>
             </el-form-item>
         </template>
         <template #body>
@@ -18,6 +18,8 @@
 import BaseLayout from '@/components/BaseLayout'
 import RoleLists from '@/components/permission/role/Lists'
 import RoleDialog from '@/components/permission/role/Dialog'
+import URLS from '@/api/urls'
+
 export default {
     name: 'Role',
     components: { RoleDialog, RoleLists, BaseLayout },
@@ -28,13 +30,14 @@ export default {
             syncVisible: false,
             reForm: 'created',
             form: {},
+            savePermission: URLS.role.save,
             authAttr: { authLists: [], defaultChecked: [] }
         }
     },
     computed: {
         roleLists() {
             return this.$store.state.role.roleLists
-        }
+        },
     },
     mounted() {
         this.$nextTick(async () => {

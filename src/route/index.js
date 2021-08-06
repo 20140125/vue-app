@@ -2,6 +2,7 @@ import { createWebHistory, createRouter } from 'vue-router'
 const router = createRouter({
     history: createWebHistory(),
     routes: [
+        { path: '/', name: 'IndexManage', component: () => import('@/pages/Login'), meta: { title: '登录页' } },
         { path: '/login', name: 'LoginManage', component: () => import('@/pages/Login'), meta: { title: '登录页' } },
         { path: '/chat', name: 'ChatManage', component: () => import('@/components/chat/Main'), meta: { title: '聊天窗口' } },
         {
@@ -25,7 +26,7 @@ const router = createRouter({
                 { path: 'area/index', name: 'AreaManage', component: () => import('@/pages/system/Area'), meta: { title: '城市列表' } },
                 /* 用户管理 */
                 { path: 'users/index', name: 'UsersManage', component: () => import('@/pages/users/Users'),  meta: { title: '管理员列表' } },
-                { path: 'userCenter/detail', name: 'CenterManage', component: () => import('@/pages/users/Center'),  meta: { title: '个人中心' } },
+                { path: 'userCenter/index', name: 'CenterManage', component: () => import('@/pages/users/Center'),  meta: { title: '个人中心' } },
                 { path: 'oauth/index', name: 'OAuthManage', component: () => import('@/pages/users/OAuth'),  meta: { title: '授权用户' } },
                 /* 接口管理 */
                 { path: 'interfaceCategory/index', name: 'InterfaceManage', component: () => import('@/pages/Interface'),  meta: { title: '接口列表' } }

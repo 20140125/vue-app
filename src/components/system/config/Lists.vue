@@ -4,7 +4,7 @@
         <el-table-column label="配置名称" prop="name"></el-table-column>
         <el-table-column label="配置状态">
             <template #default="scope">
-                <StatusRadio :url="URL" :status-model="scope.row" v-if="scope.row.id < 1000"></StatusRadio>
+                <StatusRadio :url="URL" :status-model="scope.row" v-if="scope.row.id < 1000 && Permission.auth.indexOf(URL) > -1"></StatusRadio>
                 <el-button v-else :icon="['el-icon-check', 'el-icon-close'][scope.row.status - 1]" circle :type="['success', 'danger'][scope.row.status - 1]" size="medium"></el-button>
             </template>
         </el-table-column>
@@ -15,7 +15,7 @@
                 <el-input placeholder="请输入关键词搜索" suffix-icon="el-icon-search"></el-input>
             </template>
             <template #default="scope">
-                <el-button v-if="scope.row.id < 1000" type="primary" icon="el-icon-edit" plain size="mini" @click="$emit('updateConfig', scope.row)">编辑</el-button>
+                <el-button v-if="scope.row.id < 1000 && Permission.auth.indexOf(URL) > -1" type="primary" icon="el-icon-edit" plain size="mini" @click="$emit('updateConfig', scope.row)">编辑</el-button>
             </template>
         </el-table-column>
     </el-table>
