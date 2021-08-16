@@ -4,6 +4,7 @@
             <el-form :model="localForm" :ref="reForm" label-position="left" label-width="100px" :rules="rules">
                 <el-form-item label="目标用户：" prop="username">
                     <el-select v-model="localForm.username" @change="handleChange" filterable placeholder="请选择目标用户">
+                        <el-option label="站内所有用户" :value="Permission.default_client_id"></el-option>
                         <el-option v-for="(item,index) in userLists" :key="index" :label="item.username" :value="item.uuid"></el-option>
                     </el-select>
                 </el-form-item>

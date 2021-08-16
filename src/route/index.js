@@ -24,6 +24,8 @@ const router = createRouter({
                 { path: 'database/index', name: 'DatabaseManage', component: () => import('@/pages/system/Database'), meta: { title: '数据表列表' } },
                 { path: 'log/index', name: 'SystemLogManage', component: () => import('@/pages/system/Log'), meta: { title: '日志列表' } },
                 { path: 'area/index', name: 'AreaManage', component: () => import('@/pages/system/Area'), meta: { title: '城市列表' } },
+                { path: 'tools/index', name: 'SystemTools', component: () => import('@/pages/system/Tools'), meta: { title: '系统工具' } },
+
                 /* 用户管理 */
                 { path: 'users/index', name: 'UsersManage', component: () => import('@/pages/users/Users'),  meta: { title: '管理员列表' } },
                 { path: 'userCenter/index', name: 'CenterManage', component: () => import('@/pages/users/Center'),  meta: { title: '个人中心' } },

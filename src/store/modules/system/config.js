@@ -41,6 +41,29 @@ export const actions = {
                 reject(error)
             })
         })
+    },
+    /**
+     * todo：获取系统配置
+     * @param commit
+     * @param state
+     * @param payload
+     * @return {Promise<unknown>}
+     */
+    async getConfigDetails({ commit, state }, payload) {
+        /* 如果页码没有变，直接读取vuex里面的数据 */
+        if (state.systemConfig) {
+            commit('UPDATE_MUTATIONS', { systemConfig: state.systemConfig })
+            return false
+        }
+        return new Promise((resolve, reject) => {
+            requestMethods.__commonMethods(URLS.login.oauthConfig, payload).then(result => {
+                commit('UPDATE_MUTATIONS', { systemConfig: ((result.data || {}).item || {}).lists || {} })
+                resolve(result)
+            }).catch(error => {
+                commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true })
+                reject(error)
+            })
+        })
     }
 }
 export default {

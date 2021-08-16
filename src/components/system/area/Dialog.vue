@@ -8,7 +8,7 @@
             </el-form>
             <SubmitButton v-if="showSubmitButton && Permission.auth.indexOf(savePermission) > -1" :form="submitForm" reForm="area" @closeDialog="$emit('getAreaLists', { parent_id: 1 })"></SubmitButton>
             <el-main style="text-align: center" v-else>
-                <el-button type="primary" plain size="medium" @click="$emit('getAreaLists', { parent_id: 1 })">取消</el-button>
+                <el-button type="primary" plain size="medium" @click="$emit('closeDialog')">取消</el-button>
             </el-main>
         </el-dialog>
     </div>

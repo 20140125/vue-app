@@ -4,6 +4,36 @@ import store from '@/store'
 import router from '@/route/index.js'
 import URLS from '@/api/urls'
 
+/**
+ * todo:错误跳转
+ * @param status
+ * @param error
+ * @return {Promise<never>}
+ * @constructor
+ */
+const ErrorHandler = (status, error) => {
+    if (!store.state.token) {
+        switch (status) {
+            case 401:
+                router.push({ path: '/login' }).then(() => {
+                    ElMessage.error('Unauthenticated login system')
+                })
+                break
+            case 403:
+            case 500:
+                router.push({ path: '/login' }).then(() => { console.log(error) })
+                break
+        }
+    } else {
+        ElMessage.error(status === 403 ? 'Permission denied login system' : 'Network error, please try again later')
+        return Promise.reject({
+            code: status,
+            message: status === 403 ? 'Permission denied login system' : 'Network error, Please try again later',
+            item: error
+        })
+    }
+}
+
 const TIMEOUT = 0
 const instance = axios.create({
     timeout: TIMEOUT,
@@ -35,15 +65,6 @@ instance.interceptors.response.use(response => {
         return Promise.reject(error)
     }
 }, error => {
-    if(!store.state.token && [401, 500].indexOf(error.response.status) > -1) {
-        router.push({path: '/login'}).then(() => { console.log(error) })
-    } else {
-        ElMessage.error(error.response.status === 403 ? 'Permission denied login system' : 'network error, please try again later')
-        return Promise.reject({
-            code: error.response.status,
-            message: error.response.status === 403 ? 'Permission denied login system' : 'Network error, Please try again later',
-            item: error
-        })
-    }
+    ErrorHandler(error.response.status, error).then(() => console.log(error))
 })
 export default instance

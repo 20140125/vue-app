@@ -74,8 +74,7 @@ let urls  = {
     config: {
         lists: '/api/v1/config/index',
         save: '/api/v1/config/save',
-        update: '/api/v1/config/update',
-        get: '/api/v1/config/get'
+        update: '/api/v1/config/update'
     },
     /* todo:接口分类 */
     interfaceCategory: {
@@ -110,7 +109,14 @@ let urls  = {
         save: '/api/v1/push/save',
         update: '/api/v1/push/update'
     },
+    tools: {
+        getAddress: '/api/v1/tools/getAddress',
+        getWeather: '/api/v1/tools/getWeather',
+        getImageLists: '/api/v1/tools/getImageLists'
+    },
     /* todo:域名 */
-    baseURL: process.env.NODE_ENV !== 'production' ? 'http://www.laravel.com' : 'https://www.fanglonger.com'
+    // baseURL: process.env.NODE_ENV !== 'production' ? 'http://www.laravel.com' : 'https://www.fanglonger.com'
+    baseURL: 'https://www.fanglonger.com'
+
 }
 export default urls
