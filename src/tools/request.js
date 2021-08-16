@@ -48,6 +48,7 @@ instance.defaults.baseURL = URLS.baseURL
 // http request 拦截器
 instance.interceptors.request.use(config => {
     config.headers.Authorization = store.state.token || ''
+    config.data.token = store.state.token || ''
     return config
 }, error => {
     return Promise.reject(error)

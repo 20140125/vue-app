@@ -1,7 +1,5 @@
 import request from '../tools/request.js'
-import qs from 'qs'
 
-const access_token = {'token': localStorage.getItem('token')}
 /**
  * todo:POST方法
  * @param url
@@ -10,7 +8,7 @@ const access_token = {'token': localStorage.getItem('token')}
  * @private
  */
 const __commonMethods = async function(url, params = {}) {
-    return request.post(url, qs.stringify(Object.assign(params, access_token)))
+    return request.post(url, params)
 }
 /**
  *

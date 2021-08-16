@@ -64,16 +64,16 @@ router.beforeEach(async (to, from, next) => {
     /* todo:登录页校验权限 */
     if (to.name === 'LoginManage') {
         !store.state.token ? next () : await store.dispatch('login/checkAuthorized', { token: store.state.token }).then(() => {
-            store.state.login.isAuthorized ? next({ path: '/admin/home/index', redirect: to.path }) : next()
             /*todo:挂载全局属性*/
             app.config.globalProperties.Permission = store.state.login.isAuthorized ? store.state.login.userInfo : {}
+            store.state.login.isAuthorized ? next({ path: '/admin/home/index', redirect: to.path }) : next()
         })
     } else {
         /* todo:登录后校验权限 */
         await store.dispatch('login/checkAuthorized', { token: store.state.token }).then(() => {
-            !store.state.login.isAuthorized ? next({ path: '/login', redirect: to.path }) : next()
             /*todo:挂载全局属性*/
             app.config.globalProperties.Permission = store.state.login.isAuthorized ? store.state.login.userInfo : {}
+            !store.state.login.isAuthorized ? next({ path: '/login', redirect: to.path }) : next()
         })
     }
 })
