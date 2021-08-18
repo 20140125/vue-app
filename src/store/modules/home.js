@@ -1,6 +1,7 @@
 import requestMethods from '@/api/methods'
 import URLS from '@/api/urls'
 import func from '@/utils/func'
+import store from "@/store";
 
 export const state = {
     tabs: [{ label: '欢迎页', value: '/admin/home/index' }],
@@ -33,7 +34,7 @@ export const actions = {
             return false
         }
         return new Promise((resolve, reject) => {
-            requestMethods.__commonMethods(URLS.home.getMenu).then(result => {
+            requestMethods.__commonMethods(URLS.home.getMenu, { token: store.state.token }).then(result => {
                 commit('UPDATE_MUTATIONS', { menuLists: func.setTree(((result.data || {}).item || {}).lists || {}) })
                 resolve(result)
             }).catch(error => {
@@ -63,7 +64,7 @@ export const actions = {
             return false
         }
         return new Promise((resolve, reject) => {
-            requestMethods.__commonMethods(URLS.timeline.lists).then(result => {
+            requestMethods.__commonMethods(URLS.timeline.lists, { token: store.state.token }).then(result => {
                 commit('UPDATE_MUTATIONS', { timeline: (((result.data || {}).item || {}).lists || {}).data  || []})
                 resolve(result)
             }).catch(error => {

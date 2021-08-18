@@ -31,26 +31,14 @@
 </template>
 
 <script>
-import func from '@/utils/func'
-import SocketIO from 'socket.io-client'
 
 export default {
     name: 'RightBar',
-    props: ['clientUsers', 'userInfo', 'clientLog'],
-    data () {
-        return {
-
+    props: ['clientUsers', 'userInfo'],
+    computed: {
+        clientLog() {
+            return this.$store.state.chat.clientLog
         }
-    },
-    mounted() {
-        this.$nextTick(() => {
-            const SocketService = SocketIO(this.$store.state.login.userInfo.socket, { transports: ['websocket'], autoConnect: true })
-            /* todo:站内消息推送 */
-            SocketService.on('new_message', ($message) => {
-                let clientLog = { time: func.setTime(Date.parse(new Date()), 'ch'), message: $message, username: '系统公告' }
-                this.$store.dispatch('chat/addClientLog', clientLog)
-            })
-        })
     },
     methods: {
         /**

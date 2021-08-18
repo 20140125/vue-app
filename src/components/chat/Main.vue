@@ -18,7 +18,7 @@
                     <!--所有用户-->
                     <el-col :span="6" v-if="showRightBar" class="right-bar">
                         <el-card shadow="hover">
-                            <RightBar :client-users="clientUsers" :user-info="userInfo" :client-log="clientLog" @getReceiver="getReceiver"></RightBar>
+                            <RightBar :client-users="clientUsers" :user-info="userInfo" @getReceiver="getReceiver"></RightBar>
                         </el-card>
                     </el-col>
                 </el-row>

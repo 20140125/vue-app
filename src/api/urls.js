@@ -112,7 +112,10 @@ let urls  = {
     tools: {
         getAddress: '/api/v1/tools/getAddress',
         getWeather: '/api/v1/tools/getWeather',
-        getImageLists: '/api/v1/tools/getImageLists'
+    },
+    spider: {
+        syncImageType: '/api/v1/spider/syncImageType',
+        syncImageLists: '/api/v1/spider/syncImageLists'
     },
     /* todo:域名 */
     // baseURL: process.env.NODE_ENV !== 'production' ? 'http://www.laravel.com' : 'https://www.fanglonger.com'

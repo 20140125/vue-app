@@ -8,8 +8,11 @@
                 <el-tab-pane name="getAreaWeather" label="获取天气">
                     <GetWeather></GetWeather>
                 </el-tab-pane>
-                <el-tab-pane name="getImageLists" label="获取表情">
-                    <GetImageLists></GetImageLists>
+                <el-tab-pane name="getImageType" label="图片分类抓取">
+                    <SyncImageType></SyncImageType>
+                </el-tab-pane>
+                <el-tab-pane name="getImageLists" label="图片抓取">
+                    <SyncImageLists></SyncImageLists>
                 </el-tab-pane>
             </el-tabs>
         </template>
@@ -20,11 +23,13 @@
 import BaseLayout from '@/components/BaseLayout'
 import GetAddress from '@/components/system/tools/GetAddress'
 import GetWeather from '@/components/system/tools/GetWeather'
-import GetImageLists from '@/components/system/tools/GetImageLists'
+import SyncImageType from '@/components/system/tools/SyncImageType'
+import SyncImageLists from '@/components/system/tools/SyncImageLists'
+
 
 export default {
     name: 'SystemTools',
-    components: { GetImageLists, GetWeather, GetAddress, BaseLayout },
+    components: { GetWeather, GetAddress, SyncImageType, SyncImageLists, BaseLayout },
     data() {
         return {
             loading: false,
