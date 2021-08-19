@@ -25,13 +25,15 @@ const router = createRouter({
                 { path: 'log/index', name: 'SystemLogManage', component: () => import('@/pages/system/Log'), meta: { title: '日志列表' } },
                 { path: 'area/index', name: 'AreaManage', component: () => import('@/pages/system/Area'), meta: { title: '城市列表' } },
                 { path: 'tools/index', name: 'SystemTools', component: () => import('@/pages/system/Tools'), meta: { title: '系统工具' } },
-
                 /* 用户管理 */
                 { path: 'users/index', name: 'UsersManage', component: () => import('@/pages/users/Users'),  meta: { title: '管理员列表' } },
                 { path: 'userCenter/index', name: 'CenterManage', component: () => import('@/pages/users/Center'),  meta: { title: '个人中心' } },
                 { path: 'oauth/index', name: 'OAuthManage', component: () => import('@/pages/users/OAuth'),  meta: { title: '授权用户' } },
                 /* 接口管理 */
-                { path: 'interfaceCategory/index', name: 'InterfaceManage', component: () => import('@/pages/Interface'),  meta: { title: '接口列表' } }
+                { path: 'interfaceCategory/index', name: 'InterfaceManage', component: () => import('@/pages/Interface'),  meta: { title: '接口列表' } },
+                /* 同步工具 */
+                { path: 'spider/index', name: 'SpiderManage', component: () => import('@/pages/Spider'),  meta: { title: '同步工具' } }
+
             ]
         }
     ]

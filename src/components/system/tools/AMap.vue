@@ -36,7 +36,6 @@ export default {
                 }).then((AMap)=>{
                     new AMap.Map('container', { zoom: 11, viewMode: '3D', center: center })
                 }).catch(e => {
-                    console.log(AMapKey)
                     console.log(e)
                 })
             })

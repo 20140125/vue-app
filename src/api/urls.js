@@ -114,8 +114,8 @@ let urls  = {
         getWeather: '/api/v1/tools/getWeather',
     },
     spider: {
-        syncImageType: '/api/v1/spider/syncImageType',
-        syncImageLists: '/api/v1/spider/syncImageLists'
+        lists: '/api/v1/spider/index',
+        running: '/api/v1/spider/running',
     },
     /* todo:域名 */
     // baseURL: process.env.NODE_ENV !== 'production' ? 'http://www.laravel.com' : 'https://www.fanglonger.com'
