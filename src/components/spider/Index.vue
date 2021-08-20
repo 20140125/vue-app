@@ -16,8 +16,14 @@
             <el-form-item label="输出信息：" v-if="spiderParams.length > 0" class="is-required">
                 <div ref="message" class="messageLists">
                     <div v-for="(item, index) in messageLists" :key="index">
-                        <div class="message-time" v-html="item.time"></div>
-                        <div class="client-content" v-html="item.message"></div>
+                        <div v-if="item.message.indexOf('already') > -1">
+                            <div class="message-time" v-html="item.time" style="color: #E6A23C"></div>
+                            <div class="client-content" v-html="item.message" style="color: #E6A23C"></div>
+                        </div>
+                        <div v-else>
+                            <div class="message-time" v-html="item.time"></div>
+                            <div class="client-content" v-html="item.message"></div>
+                        </div>
                     </div>
                 </div>
             </el-form-item>
@@ -97,11 +103,11 @@ export default {
         padding-left: 10px;
         overflow: auto;
         .message-time {
-            color: #1e7e34;
+            color: #67C23A;
         }
         .client-content {
             margin-left: 10px;
-            color: #1AAD19;
+            color: #67C23A;
             font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
             font-size: 14px;
         }
