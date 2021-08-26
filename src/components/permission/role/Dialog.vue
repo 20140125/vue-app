@@ -22,37 +22,37 @@
 </template>
 
 <script>
-import SubmitButton from '@/components/common/SubmitForm'
-import URLS from '@/api/urls'
-import { toggle } from '@/components/mixins/toggle'
+import SubmitButton from '@/components/common/SubmitForm';
+import URLS from '@/api/urls';
+import {toggle} from '@/components/mixins/toggle';
 
 export default {
     name: 'RoleDialog',
-    components: { SubmitButton },
+    components: {SubmitButton},
     props: ['form', 'reForm', 'authAttr'],
     data() {
         return {
-            localForm: { ...this.form },
+            localForm: {...this.form},
             submitForm: {},
             rules: {
-                role_name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }],
-                auth_ids: [{ required: true, message: '请选择权限', trigger: 'change', type: 'array' }]
+                role_name: [{required: true, message: '请输入角色名称', trigger: 'blur'}],
+                auth_ids: [{required: true, message: '请选择权限', trigger: 'change', type: 'array'}]
             },
-            authMode: { ...this.authAttr }
-        }
+            authMode: {...this.authAttr}
+        };
     },
     mixins: [toggle],
     watch: {
         form() {
-            this.localForm = this.form
+            this.localForm = this.form;
             this.$nextTick(() => {
                 setTimeout(() => {
-                    this.submitForm = { model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.role.save : URLS.role.update }
-                }, 1000)
-            })
+                    this.submitForm = {model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.role.save : URLS.role.update};
+                }, 1000);
+            });
         },
         authAttr() {
-            this.authMode = { ...this.authAttr }
+            this.authMode = {...this.authAttr};
         }
     },
     methods: {
@@ -62,25 +62,25 @@ export default {
          * @param direction  数据移动的方向（'left' / 'right'）
          * @param movedKeys  发生移动的数据 key 数组
          */
-        handleChange (value, direction, movedKeys) {
+        handleChange(value, direction, movedKeys) {
             switch (direction) {
                 /* 删除 */
                 case 'left':
                     movedKeys.forEach((item) => {
-                        this.authMode.defaultChecked.splice(this.authMode.defaultChecked.indexOf(parseInt(item)), 1)
-                    })
-                    break
+                        this.authMode.defaultChecked.splice(this.authMode.defaultChecked.indexOf(parseInt(item)), 1);
+                    });
+                    break;
                 /* 添加 */
                 case 'right':
                     movedKeys.forEach((item) => {
-                        this.authMode.defaultChecked.push(parseInt(item))
-                    })
-                    break
+                        this.authMode.defaultChecked.push(parseInt(item));
+                    });
+                    break;
             }
-            this.localForm.auth_ids = [...new Set(this.authMode.defaultChecked)]
+            this.localForm.auth_ids = [...new Set(this.authMode.defaultChecked)];
         }
     }
-}
+};
 </script>
 
 <style scoped>

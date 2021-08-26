@@ -18,32 +18,33 @@
 </template>
 
 <script>
-import { toggle } from '@/components/mixins/toggle'
-import SubmitButton from '@/components/common/SubmitForm'
-import URLS from '@/api/urls'
+import {toggle} from '@/components/mixins/toggle';
+import SubmitButton from '@/components/common/SubmitForm';
+import URLS from '@/api/urls';
+
 export default {
     name: 'AddCategory',
-    components: { SubmitButton },
+    components: {SubmitButton},
     props: ['categoryLists', 'form', 'reForm'],
-    data () {
+    data() {
         return {
             localForm: this.form,
             submitForm: {},
             rules: {
-                name: [{ required: true, message: '请输入接口分类名称', trigger: 'blur' }],
-                pid: [{ required: true, message: '请选择上级分类名称', trigger: 'change' }]
+                name: [{required: true, message: '请输入接口分类名称', trigger: 'blur'}],
+                pid: [{required: true, message: '请选择上级分类名称', trigger: 'change'}]
             }
-        }
+        };
     },
     mixins: [toggle],
     watch: {
         form() {
-            this.localForm = this.form
+            this.localForm = this.form;
             this.$nextTick(() => {
                 setTimeout(() => {
-                    this.submitForm = { model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.interfaceCategory.save : URLS.interfaceCategory.update }
-                }, 1000)
-            })
+                    this.submitForm = {model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.interfaceCategory.save : URLS.interfaceCategory.update};
+                }, 1000);
+            });
         }
     },
     methods: {
@@ -52,11 +53,11 @@ export default {
          * @param item
          * @return {string}
          */
-        setCategoryName(item){
-            return Array(item.level + 1).join('　　') + item.name
-        },
+        setCategoryName(item) {
+            return Array(item.level + 1).join('　　') + item.name;
+        }
     }
-}
+};
 </script>
 
 <style scoped>

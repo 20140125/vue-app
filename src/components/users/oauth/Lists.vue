@@ -10,7 +10,7 @@
         <el-table-column label="邮箱" prop="email" :show-tooltip-when-overflow="true"></el-table-column>
         <el-table-column label="账号类型">
             <template #default="scope">
-                <el-tag type="success" effect="dark">{{scope.row.oauth_type.toUpperCase()}}</el-tag>
+                <el-tag type="success" effect="dark">{{ scope.row.oauth_type.toUpperCase() }}</el-tag>
             </template>
         </el-table-column>
         <el-table-column label="允许登录" align="center">
@@ -23,7 +23,7 @@
         <el-table-column label="操作" align="right">
             <template #default="scope">
                 <el-tooltip class="item" effect="dark" content="绑定邮箱账号可以使用邮箱登录" placement="top-start">
-                    <el-button v-if="Permission.auth.indexOf(URL) > -1"  plain size="mini" icon="el-icon-edit" type="primary" @click="$emit('bindEmail', scope.row)">邮箱绑定</el-button>
+                    <el-button v-if="Permission.auth.indexOf(URL) > -1" plain size="mini" icon="el-icon-edit" type="primary" @click="$emit('bindEmail', scope.row)">邮箱绑定</el-button>
                 </el-tooltip>
             </template>
         </el-table-column>
@@ -31,23 +31,24 @@
 </template>
 
 <script>
-import URLS from '@/api/urls'
-import StatusRadio from '@/components/common/StatusRadio'
+import URLS from '@/api/urls';
+import StatusRadio from '@/components/common/StatusRadio';
+
 export default {
     name: 'OAuthLists',
-    components: { StatusRadio },
+    components: {StatusRadio},
     props: ['oAuthLists'],
     data() {
         return {
-            URL: URLS.oauth.update,
-        }
+            URL: URLS.oauth.update
+        };
     },
     computed: {
         userInfo() {
-            return this.$store.state.login.userInfo
+            return this.$store.state.login.userInfo;
         }
     }
-}
+};
 </script>
 
 <style scoped>

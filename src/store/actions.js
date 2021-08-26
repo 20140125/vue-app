@@ -1,4 +1,4 @@
-import requestMethod from '@/api/methods'
+import requestMethod from '@/api/methods';
 
 export default {
     /**
@@ -8,14 +8,14 @@ export default {
      * @return {Promise<unknown>}
      * @constructor
      */
-    UPDATE_ACTIONS({ commit }, payload) {
+    UPDATE_ACTIONS({commit}, payload) {
         return new Promise((resolve, reject) => {
             requestMethod.__commonMethods(payload.url, payload.model).then(result => {
-                resolve(result)
+                resolve(result);
             }).catch(error => {
-                commit('UPDATE_MUTATIONS', { error: error })
-                reject(error)
-            })
-        })
+                commit('UPDATE_MUTATIONS', {error: error});
+                reject(error);
+            });
+        });
     }
-}
+};

@@ -3,36 +3,37 @@
 </template>
 
 <script>
-import echarts from 'echarts'
+import echarts from 'echarts';
+
 export default {
-    props:['xAxisData','seriesData','legendData', 'chartsId'],
-    name: "Charts",
+    props: ['xAxisData', 'seriesData', 'legendData', 'chartsId'],
+    name: 'Charts',
     data() {
-        return {}
+        return {};
     },
     mounted() {
         this.$nextTick(function () {
-            this.getCharts(this.chartsId)
+            this.getCharts(this.chartsId);
         });
-        let charts = echarts.init(document.getElementById(this.chartsId))
-        window.addEventListener('resize',() => {
-            charts.resize()
-        })
+        let charts = echarts.init(document.getElementById(this.chartsId));
+        window.addEventListener('resize', () => {
+            charts.resize();
+        });
     },
     watch: {
         seriesData() {
-            this.$nextTick(function() {
-                this.getCharts(this.chartsId)
-            })
-            let charts = echarts.init(document.getElementById(this.chartsId))
-            window.addEventListener('resize',() => {
-                charts.resize()
-            })
+            this.$nextTick(function () {
+                this.getCharts(this.chartsId);
+            });
+            let charts = echarts.init(document.getElementById(this.chartsId));
+            window.addEventListener('resize', () => {
+                charts.resize();
+            });
         }
     },
-    methods:{
-        getCharts:function (chartsId) {
-            let charts = echarts.init(document.getElementById(chartsId))
+    methods: {
+        getCharts: function (chartsId) {
+            let charts = echarts.init(document.getElementById(chartsId));
             charts.setOption({
                 title: {
                     text: ''
@@ -73,28 +74,28 @@ export default {
                         name: this.legendData[0],
                         type: 'line',
                         stack: '总量',
-                        areaStyle: { normal: {} },
+                        areaStyle: {normal: {}},
                         data: (this.seriesData || {}).oauth || []
                     },
                     {
                         name: this.legendData[1],
                         type: 'line',
                         stack: '总量',
-                        areaStyle: { normal: {} },
+                        areaStyle: {normal: {}},
                         data: (this.seriesData || {}).push || []
                     },
                     {
                         name: this.legendData[2],
                         type: 'line',
                         stack: '总量',
-                        areaStyle: { normal: {} },
+                        areaStyle: {normal: {}},
                         data: (this.seriesData || {}).log || []
                     }
                 ]
-            })
+            });
         }
     }
-}
+};
 </script>
 
 <style scoped>

@@ -20,7 +20,7 @@
         <!--todo:卡片形式上传-->
         <i class="el-icon-plus" v-if="uploadControls.button_type === 'card'"></i>
         <!--todo:上传提示文案-->
-        <span v-if="uploadControls.show_tips" class="el-upload__tip" style="margin-left: 20px;">{{ tips ? tips :`请上传${imgWidth}*${imgHeight}的jpg/png 图片`}}</span>
+        <span v-if="uploadControls.show_tips" class="el-upload__tip" style="margin-left: 20px;">{{ tips ? tips : `请上传${imgWidth}*${imgHeight}的jpg/png 图片` }}</span>
     </el-upload>
     <!--todo:点击上传-->
     <el-button v-if="!autoUpload" style="margin-top: 20px" plain type="primary" size="medium" @click="submitUpload">上传到服务器</el-button>
@@ -28,32 +28,32 @@
 
 <script>
 
-import func from '@/utils/func'
-import URLS from '@/api/urls'
-import $http from '@/tools/request'
+import func from '@/utils/func';
+import URLS from '@/api/urls';
+import $http from '@/tools/request';
 
 export default {
     name: 'CommonUpload',
-    props:{
+    props: {
         /* 图片图像 */
-        fileList:{
+        fileList: {
             type: Array,
-            default:()=>[],
+            default: () => []
         },
         /* 图片宽度 */
-        imgWidth:{
-            type:Number,
+        imgWidth: {
+            type: Number,
             default: () => 320
         },
         /* 图片高度 */
         imgHeight: {
             type: Number,
-            default:() => 250,
+            default: () => 250
         },
         /* 图片大小 */
         fileSize: {
             type: Number,
-            default: ()=> 1024
+            default: () => 1024
         },
         /* 图片上传成功 */
         uploadSuccess: {
@@ -81,7 +81,7 @@ export default {
         /* 图片上传地址 */
         action: {
             type: String,
-            default:() => URLS.baseURL + URLS.file.upload
+            default: () => URLS.baseURL + URLS.file.upload
         },
         /* 自动上传 */
         autoUpload: {
@@ -92,30 +92,30 @@ export default {
         avatarImage: {
             type: Object,
             default() {
-                return { avatar_url: '', username: '', size: 100 }
+                return {avatar_url: '', username: '', size: 100};
             }
         },
         /* 图片上传属性 */
         data: {
             type: Object,
             default() {
-                return { name: 'file', round_name: true, file: {} }
+                return {name: 'file', round_name: true, file: {}};
             }
         },
         /* 上传控件 */
         uploadControls: {
             type: Object,
             default() {
-                return { button_type: 'picture', show_tips: true, show_file_list: true }
+                return {button_type: 'picture', show_tips: true, show_file_list: true};
             }
         }
     },
-    methods:{
+    methods: {
         /**
          * todo:点击上传
          */
         submitUpload() {
-            this.$refs.upload.submit()
+            this.$refs.upload.submit();
         },
         /**
          * todo:文件上传
@@ -123,41 +123,41 @@ export default {
          */
         uploadFile(file) {
             /* todo:创建form对象 */
-            let param = new FormData()
-            param.append('file', file.file)
-            param.append('filename', file.file.name)
-            param.append('token', this.$store.getters.token)
-            param.append('round_name', this.data.round_name || false)
+            let param = new FormData();
+            param.append('file', file.file);
+            param.append('filename', file.file.name);
+            param.append('token', this.$store.getters.token);
+            param.append('round_name', this.data.round_name || false);
             /* todo:名字随机时不需要传入路径 */
             if (!this.data.round_name) {
-                param.append('path', this.data.file.path.replace(this.data.file.filename, ''))
+                param.append('path', this.data.file.path.replace(this.data.file.filename, ''));
             }
             /* todo:添加请求头 */
-            let config = { headers: {'Content-Type': 'multipart/form-data', 'Authorization': this.$store.getters.token }}
+            let config = {headers: {'Content-Type': 'multipart/form-data', 'Authorization': this.$store.getters.token}};
             $http.post(file.action, param, config).then(response => {
-                response.data.filename = file.filename
-                file.onSuccess(response.data)
+                response.data.filename = file.filename;
+                file.onSuccess(response.data);
             }).catch(() => {
-                file.onError()
-            })
+                file.onError();
+            });
         },
         /**
          * todo：获取图片背景颜色
          * @param file
          */
         getBackgroundColor(file) {
-            const reader = new FileReader()
-            reader.readAsDataURL(file)
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
             reader.onload = (e) => {
-                const image = new Image()
-                image.src = e.target.result
+                const image = new Image();
+                image.src = e.target.result;
                 image.onload = () => {
-                    const canvas =  document.getElementById('s-award-canvas')
-                    const ctx = canvas.getContext('2d')
-                    ctx.drawImage(image, 0, 0, this.imgWidth, this.imgHeight)
-                    this.$emit('setBackgroundColor', func.rgbToHex(ctx.getImageData(0, 0,image.width, image.height).data))
-                }
-            }
+                    const canvas = document.getElementById('s-award-canvas');
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(image, 0, 0, this.imgWidth, this.imgHeight);
+                    this.$emit('setBackgroundColor', func.rgbToHex(ctx.getImageData(0, 0, image.width, image.height).data));
+                };
+            };
         },
         /**
          * todo:上传图片前处理函数
@@ -165,42 +165,42 @@ export default {
          * @returns {Promise<*>|boolean}
          */
         beforeUpload(file) {
-            const isJPG = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg'
-            const isLt30KB = file.size / 1024 / this.fileSize < 1
+            const isJPG = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg';
+            const isLt30KB = file.size / 1024 / this.fileSize < 1;
             if (!isJPG) {
-                this.$message.error('上传图片只能是 jpg、png 格式!')
-                return false
+                this.$message.error('上传图片只能是 jpg、png 格式!');
+                return false;
             }
             if (!isLt30KB) {
-                this.$message.error(`上传图片大小不能超过${this.fileSize}KB!`)
-                return false
+                this.$message.error(`上传图片大小不能超过${this.fileSize}KB!`);
+                return false;
             }
             if (!this.imgHeight && !this.imgWidth) {
-                return isJPG && isLt30KB
+                return isJPG && isLt30KB;
             }
-            let __this = this
-            const isSize = new Promise(function(resolve, reject) {
-                let width = __this.imgWidth
-                let height = __this.imgHeight
-                let _URL = window.URL || window.webkitURL
-                let image = new Image()
-                image.onload = function() {
-                    let valid =(image.width === width && image.height === height)
-                        || (image.width >= width - 10 && image.height >= height - 10 && image.width <= width + 10 && image.height <= height + 10)
-                    valid ? resolve() : reject()
-                }
-                image.src = _URL.createObjectURL(file)
+            let __this = this;
+            const isSize = new Promise(function (resolve, reject) {
+                let width = __this.imgWidth;
+                let height = __this.imgHeight;
+                let _URL = window.URL || window.webkitURL;
+                let image = new Image();
+                image.onload = function () {
+                    let valid = (image.width === width && image.height === height)
+                        || (image.width >= width - 10 && image.height >= height - 10 && image.width <= width + 10 && image.height <= height + 10);
+                    valid ? resolve() : reject();
+                };
+                image.src = _URL.createObjectURL(file);
             }).then(() => {
-                    return file
+                    return file;
                 }, () => {
-                    __this.$message.error(`上传图片尺寸不符合,只能是${__this.imgWidth}*${__this.imgHeight}!`)
-                    return Promise.reject()
+                    __this.$message.error(`上传图片尺寸不符合,只能是${__this.imgWidth}*${__this.imgHeight}!`);
+                    return Promise.reject();
                 }
-            )
-            return isJPG && isLt30KB && isSize
+            );
+            return isJPG && isLt30KB && isSize;
         }
     }
-}
+};
 </script>
 
 <style>

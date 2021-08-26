@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import URLS from '@/api/urls'
+import URLS from '@/api/urls';
 
 export default {
     name: 'CategoryLists',
@@ -23,9 +23,9 @@ export default {
         return {
             get: URLS.interface.get,
             interfaceCategory: URLS.interfaceCategory
-        }
+        };
     }
-}
+};
 </script>
 
 <style scoped>

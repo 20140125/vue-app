@@ -24,13 +24,13 @@
 </template>
 
 <script>
-import SubmitButton from '@/components/common/SubmitForm'
-import URLS from '@/api/urls'
-import { toggle } from '@/components/mixins/toggle'
+import SubmitButton from '@/components/common/SubmitForm';
+import URLS from '@/api/urls';
+import {toggle} from '@/components/mixins/toggle';
 
 export default {
     name: 'AuthDialog',
-    components: { SubmitButton },
+    components: {SubmitButton},
     props: {
         reForm: {
             type: String,
@@ -38,33 +38,35 @@ export default {
         },
         form: {
             type: Object,
-            default: () => {}
+            default: () => {
+            }
         },
         authLists: {
             type: Object,
-            default: () => {}
+            default: () => {
+            }
         }
     },
     mixins: [toggle],
-    data () {
+    data() {
         return {
             localForm: this.form,
             submitForm: {},
             rules: {
-                name: [{ required: true, message: '请输入权限名称', trigger: 'blur' }],
-                href: [{ required: true, message: '请输入权限链接', trigger: 'blur' }],
-                pid: [{ required: true, message: '请选择上级权限', trigger: 'blur', type: 'number' }],
+                name: [{required: true, message: '请输入权限名称', trigger: 'blur'}],
+                href: [{required: true, message: '请输入权限链接', trigger: 'blur'}],
+                pid: [{required: true, message: '请选择上级权限', trigger: 'blur', type: 'number'}]
             }
-        }
+        };
     },
     watch: {
         form() {
-            this.localForm = this.form
+            this.localForm = this.form;
             this.$nextTick(() => {
                 setTimeout(() => {
-                    this.submitForm = { model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.auth.save : URLS.auth.update }
-                }, 1000)
-            })
+                    this.submitForm = {model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.auth.save : URLS.auth.update};
+                }, 1000);
+            });
         }
     },
     methods: {
@@ -74,10 +76,10 @@ export default {
          * @return {String}
          */
         setAuthName(item) {
-            return Array(item.level + 1).join('　　') + item.name
+            return Array(item.level + 1).join('　　') + item.name;
         }
     }
-}
+};
 </script>
 
 <style scoped>

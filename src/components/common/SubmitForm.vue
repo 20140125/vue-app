@@ -16,18 +16,18 @@ export default {
         async saveForm() {
             await this.form.$refs[this.reForm].validate(valid => {
                 if (!valid) {
-                    return false
+                    return false;
                 }
                 this.$store.dispatch('UPDATE_ACTIONS', this.form).then(() => {
                     /* 更新成功 */
                     setTimeout(() => {
-                        this.$emit('closeDialog')
-                    }, 500)
-                })
-            })
+                        this.$emit('closeDialog');
+                    }, 500);
+                });
+            });
         }
     }
-}
+};
 </script>
 
 <style scoped>

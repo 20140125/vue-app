@@ -38,13 +38,14 @@
 </template>
 
 <script>
-import SubmitButton from '@/components/common/SubmitForm'
-import URLS from '@/api/urls'
-import CommonUpload from '@/components/common/CommonUpload'
-import { toggle } from '@/components/mixins/toggle'
+import SubmitButton from '@/components/common/SubmitForm';
+import URLS from '@/api/urls';
+import CommonUpload from '@/components/common/CommonUpload';
+import {toggle} from '@/components/mixins/toggle';
+
 export default {
     name: 'UsersDialog',
-    components: { CommonUpload, SubmitButton },
+    components: {CommonUpload, SubmitButton},
     mixins: [toggle],
     props: ['form', 'reForm', 'usersAttr'],
     data() {
@@ -52,23 +53,23 @@ export default {
             localForm: this.form,
             submitForm: {},
             rules: {
-                username: [{ required: true, message: '请输入用户昵称', trigger: 'blur' }],
-                avatar_url: [{ required: true, message: '请上传用户头像', trigger: 'change' }],
-                email: [{ required: true, message: '请输入邮箱账号', trigger: 'blur' }],
-                password: [{ required: true, message: '请输入登录密码', trigger: 'blur' }],
-                phone_number: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
-                role_id: [{ required: true, message: '请选择用户角色', trigger: 'change' }]
+                username: [{required: true, message: '请输入用户昵称', trigger: 'blur'}],
+                avatar_url: [{required: true, message: '请上传用户头像', trigger: 'change'}],
+                email: [{required: true, message: '请输入邮箱账号', trigger: 'blur'}],
+                password: [{required: true, message: '请输入登录密码', trigger: 'blur'}],
+                phone_number: [{required: true, message: '请输入手机号', trigger: 'blur'}],
+                role_id: [{required: true, message: '请选择用户角色', trigger: 'change'}]
             }
-        }
+        };
     },
     watch: {
         form() {
-            this.localForm = this.form
+            this.localForm = this.form;
             this.$nextTick(() => {
                 setTimeout(() => {
-                    this.submitForm = { model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.users.save : URLS.users.update }
-                }, 1000)
-            })
+                    this.submitForm = {model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.users.save : URLS.users.update};
+                }, 1000);
+            });
         }
     },
     methods: {
@@ -77,10 +78,10 @@ export default {
          * @param response
          */
         uploadSuccess(response) {
-            this.localForm.avatar_url = (((response || {}).item || {}).lists || {}).src || ''
-        },
+            this.localForm.avatar_url = (((response || {}).item || {}).lists || {}).src || '';
+        }
     }
-}
+};
 </script>
 
 <style lang="less">
@@ -89,6 +90,7 @@ export default {
         display: flex;
         align-items: center;
         position: relative;
+
         .el-form-item__content {
             margin-left: 0 !important;
         }

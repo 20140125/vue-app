@@ -1,5 +1,5 @@
 <template>
-    <el-button icon="el-icon-caret-top" id="toUp" v-if="ToUpBtn" @click="toUp" round size="mini" type="primary">{{buttonValue}}</el-button>
+    <el-button icon="el-icon-caret-top" id="toUp" v-if="ToUpBtn" @click="toUp" round size="mini" type="primary">{{ buttonValue }}</el-button>
 </template>
 
 <script>
@@ -28,18 +28,18 @@ export default {
             default: () => 50
         }
     },
-    data () {
+    data() {
         return {
             ToUpBtn: false
-        }
+        };
     },
     created() {
         this.$nextTick(() => {
             window.addEventListener('scroll', () => {
-                let scrollTop = document.documentElement.scrollTop || document.body.scrollTop
-                this.ToUpBtn = scrollTop >= this.showTimes
-            })
-        })
+                let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                this.ToUpBtn = scrollTop >= this.showTimes;
+            });
+        });
     },
     methods: {
         /**
@@ -47,20 +47,20 @@ export default {
          */
         toUp() {
             /* 每次开启定时器都重新计算速度 */
-            let timer = setInterval( () =>{
+            let timer = setInterval(() => {
                 /* 获取滚动条的滚动高度 */
-                let scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+                let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
                 /* 用于设置速度差，产生缓动的效果 */
-                let speed = Math.floor(-scrollTop / this.speed)
+                let speed = Math.floor(-scrollTop / this.speed);
                 /* 用纯数字赋值 */
-                document.documentElement.scrollTop = document.body.scrollTop = scrollTop + speed
+                document.documentElement.scrollTop = document.body.scrollTop = scrollTop + speed;
                 if (scrollTop === 0) {
-                    clearInterval(timer)
+                    clearInterval(timer);
                 }
-            }, this.interval)
+            }, this.interval);
         }
     }
-}
+};
 </script>
 
 <style lang="less">

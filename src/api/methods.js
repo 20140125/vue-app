@@ -1,4 +1,4 @@
-import request from '../tools/request.js'
+import request from '../tools/request.js';
 
 /**
  * todo:POST方法
@@ -7,9 +7,9 @@ import request from '../tools/request.js'
  * @return {Promise<AxiosResponse<any>>}
  * @private
  */
-const __commonMethods = async function(url, params = {}) {
-    return request.post(url, params)
-}
+const __commonMethods = async function (url, params = {}) {
+    return request.post(url, params);
+};
 /**
  *
  * @type {{
@@ -19,6 +19,6 @@ const __commonMethods = async function(url, params = {}) {
  */
 const __methods = {
     __commonMethods
-}
+};
 
-export default __methods
+export default __methods;

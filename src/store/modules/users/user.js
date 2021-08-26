@@ -1,5 +1,5 @@
-import requestMethods from '@/api/methods'
-import URLS from '@/api/urls'
+import requestMethods from '@/api/methods';
+import URLS from '@/api/urls';
 
 export const mutations = {
     /**
@@ -9,10 +9,10 @@ export const mutations = {
      */
     UPDATE_MUTATIONS: function (state, update) {
         Object.keys(update).forEach(item => {
-            state[item] = update[item]
-        })
-    },
-}
+            state[item] = update[item];
+        });
+    }
+};
 
 export const actions = {
     /**
@@ -22,11 +22,11 @@ export const actions = {
      * @param payload
      * @return {Promise<boolean>}
      */
-    async getUsersLists({ commit, state }, payload) {
+    async getUsersLists({commit, state}, payload) {
         /* 如果页码没有变，直接读取vuex里面的数据 */
         if (state.page === payload.page && !payload.refresh) {
-            commit('UPDATE_MUTATIONS', { usersLists: state.usersLists })
-            return false
+            commit('UPDATE_MUTATIONS', {usersLists: state.usersLists});
+            return false;
         }
         return new Promise((resolve, reject) => {
             requestMethods.__commonMethods(URLS.users.lists, payload).then(result => {
@@ -34,13 +34,13 @@ export const actions = {
                     usersLists: (((result.data || {}).item || {}).lists || {}).data || [],
                     total: (((result.data || {}).item || {}).lists || {}).total || 0,
                     page: payload.page || 1
-                })
-                resolve(result)
+                });
+                resolve(result);
             }).catch(error => {
-                commit('UPDATE_MUTATIONS', { error: error }, { root: true })
-                reject(error)
-            })
-        })
+                commit('UPDATE_MUTATIONS', {error: error}, {root: true});
+                reject(error);
+            });
+        });
     },
     /**
      * todo：获取用户信息
@@ -48,20 +48,20 @@ export const actions = {
      * @param state
      * @return {Promise<boolean>}
      */
-    async getUserCenter({ commit, state }) {
+    async getUserCenter({commit, state}) {
         if (state.userCenter) {
-            commit('UPDATE_MUTATIONS', { userCenter: state.userCenter })
-            return false
+            commit('UPDATE_MUTATIONS', {userCenter: state.userCenter});
+            return false;
         }
         return new Promise((resolve, reject) => {
             requestMethods.__commonMethods(URLS.userCenter.get, {}).then(result => {
-                commit('UPDATE_MUTATIONS', { userCenter: ((result.data || {}).item || {}).lists || {} })
-                resolve(result)
+                commit('UPDATE_MUTATIONS', {userCenter: ((result.data || {}).item || {}).lists || {}});
+                resolve(result);
             }).catch(error => {
-                commit('UPDATE_MUTATIONS', { error: error }, { root: true })
-                reject(error)
-            })
-        })
+                commit('UPDATE_MUTATIONS', {error: error}, {root: true});
+                reject(error);
+            });
+        });
     },
     /**
      * todo:获取缓存用户
@@ -70,25 +70,25 @@ export const actions = {
      * @param payload
      * @return {Promise<boolean>}
      */
-    async getCacheUserLists({ commit, state }, payload) {
+    async getCacheUserLists({commit, state}, payload) {
         /* 如果页码没有变，直接读取vuex里面的数据 */
         if (state.cacheUsers) {
-            commit('UPDATE_MUTATIONS', { cacheUsers: state.cacheUsers })
-            return false
+            commit('UPDATE_MUTATIONS', {cacheUsers: state.cacheUsers});
+            return false;
         }
         return new Promise((resolve, reject) => {
             requestMethods.__commonMethods(URLS.users.cache, payload).then(result => {
-                commit('UPDATE_MUTATIONS', { cacheUsers: ((result.data || {}).item || {}).lists || [] })
-                resolve(result)
+                commit('UPDATE_MUTATIONS', {cacheUsers: ((result.data || {}).item || {}).lists || []});
+                resolve(result);
             }).catch(error => {
-                commit('UPDATE_MUTATIONS', { error: error }, { root: true })
-                reject(error)
-            })
-        })
+                commit('UPDATE_MUTATIONS', {error: error}, {root: true});
+                reject(error);
+            });
+        });
     }
-}
+};
 export default {
     namespaced: true,
     mutations,
     actions
-}
+};

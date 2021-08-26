@@ -22,7 +22,7 @@
                 <el-col :span="18" class="details">
                     <el-form :model="form.model" ref="fileSave">
                         <el-form-item>
-                            <el-tabs type="border-card" lazy closable v-model="tabModel.name"  @tab-click="goto" @tab-remove="removeTab" style="text-align: left!important;">
+                            <el-tabs type="border-card" lazy closable v-model="tabModel.name" @tab-click="goto" @tab-remove="removeTab" style="text-align: left!important;">
                                 <el-tab-pane v-for="item in fileTabs" :label="item.label" :key="item.name" :name="item.name"></el-tab-pane>
                                 <el-card shadow="always">
                                     <codemirror @change="updateContent" ref="edit" :value="tabModel.content" :options="options" style="line-height: 20px"></codemirror>
@@ -42,43 +42,43 @@
 </template>
 
 <script>
-import { codemirror } from 'vue-codemirror-lite'
-import SubmitButton from '@/components/common/SubmitForm'
-import URLS from '@/api/urls'
+import {codemirror} from 'vue-codemirror-lite';
+import SubmitButton from '@/components/common/SubmitForm';
+import URLS from '@/api/urls';
 
 /* 编辑器代码 */
-require('codemirror/mode/php/php.js')
-require('codemirror/mode/sql/sql.js')
-require('codemirror/addon/hint/sql-hint.js')
-require('codemirror/addon/hint/show-hint.js')
-require('codemirror/mode/markdown/markdown.js')
-require('codemirror/mode/xml/xml.js')
-require('codemirror/addon/hint/javascript-hint.js')
-require('codemirror/mode/javascript/javascript.js')
-require('codemirror/addon/selection/active-line')
+require('codemirror/mode/php/php.js');
+require('codemirror/mode/sql/sql.js');
+require('codemirror/addon/hint/sql-hint.js');
+require('codemirror/addon/hint/show-hint.js');
+require('codemirror/mode/markdown/markdown.js');
+require('codemirror/mode/xml/xml.js');
+require('codemirror/addon/hint/javascript-hint.js');
+require('codemirror/mode/javascript/javascript.js');
+require('codemirror/addon/selection/active-line');
 /* 编辑器主题 */
-require('codemirror/theme/monokai.css')
+require('codemirror/theme/monokai.css');
 /* 代码折叠 */
-require('codemirror/addon/fold/foldgutter.css')
-require('codemirror/addon/fold/foldcode.js')
-require('codemirror/addon/fold/foldgutter.js')
-require('codemirror/addon/fold/brace-fold.js')
-require('codemirror/addon/fold/brace-fold.js')
-require('codemirror/addon/fold/comment-fold.js')
+require('codemirror/addon/fold/foldgutter.css');
+require('codemirror/addon/fold/foldcode.js');
+require('codemirror/addon/fold/foldgutter.js');
+require('codemirror/addon/fold/brace-fold.js');
+require('codemirror/addon/fold/brace-fold.js');
+require('codemirror/addon/fold/comment-fold.js');
 /* 括号匹配 */
-require('codemirror/addon/edit/matchbrackets.js')
+require('codemirror/addon/edit/matchbrackets.js');
 
 export default {
     name: 'FileDetails',
     props: ['details', 'detailVisible'],
-    components: { SubmitButton, codemirror },
+    components: {SubmitButton, codemirror},
     data() {
         return {
-            visible: { detail: this.detailVisible },
-            treeProps: { label: 'filename', children: 'children', isLeaf: false },
+            visible: {detail: this.detailVisible},
+            treeProps: {label: 'filename', children: 'children', isLeaf: false},
             fullscreen: false,
-            filterText:'',
-            form: { model: { content: '', path: '' }, url: URLS.file.update, $refs: ''  },
+            filterText: '',
+            form: {model: {content: '', path: ''}, url: URLS.file.update, $refs: ''},
             /* 代码编辑器配置 */
             options: {
                 /* 语言类型 */
@@ -109,31 +109,31 @@ export default {
                 /* 只读 */
                 readOnly: false
             },
-            mode: { markdown: 'text/markdown', php: 'text/x-php', xml: 'text/xml', json: 'application/ld+json', sql: 'text/x-mysql' },
+            mode: {markdown: 'text/markdown', php: 'text/x-php', xml: 'text/xml', json: 'application/ld+json', sql: 'text/x-mysql'},
             savePermission: URLS.file.update
-        }
+        };
     },
     watch: {
         detailVisible() {
-            this.visible.detail = this.detailVisible
+            this.visible.detail = this.detailVisible;
             /* 编辑器只读 */
             if (this.visible.detail) {
-                this.options.readOnly = this.Permission.auth.indexOf(this.savePermission) < 0
+                this.options.readOnly = this.Permission.auth.indexOf(this.savePermission) < 0;
             }
         },
-        filterText (val) {
-            this.$refs.tree.filter(val)
+        filterText(val) {
+            this.$refs.tree.filter(val);
         },
         tabModel() {
-            this.form.model.content = this.tabModel.content
+            this.form.model.content = this.tabModel.content;
         }
     },
     computed: {
         fileTabs() {
-            return this.$store.state.file.tabs
+            return this.$store.state.file.tabs;
         },
         tabModel() {
-            return {...this.$store.state.file.tabModel}
+            return {...this.$store.state.file.tabModel};
         }
     },
     methods: {
@@ -143,20 +143,20 @@ export default {
          */
         async getFileContent(file) {
             if (file.file_type !== 'file') {
-                return false
+                return false;
             }
-            let ext = (file.filename.split('.') || [])[1] || 'php'
+            let ext = (file.filename.split('.') || [])[1] || 'php';
             /* 不支持在线编辑 */
-            let imgExt = ['png', 'jpg', 'jpeg', 'gif', 'mp4', 'flv']
+            let imgExt = ['png', 'jpg', 'jpeg', 'gif', 'mp4', 'flv'];
             if (imgExt.includes(ext.toLowerCase())) {
-                this.$message.error('该文件格式不支持在线编辑!')
-                return false
+                this.$message.error('该文件格式不支持在线编辑!');
+                return false;
             }
-            this.form.$refs = this.$refs
-            this.setOptionsMode(ext)
-            this.form.model.path = file.path
-            let tabs = { name: file.md5, label: file.filename, path: file.path }
-            await this.$store.dispatch('file/getFileContent', tabs)
+            this.form.$refs = this.$refs;
+            this.setOptionsMode(ext);
+            this.form.model.path = file.path;
+            let tabs = {name: file.md5, label: file.filename, path: file.path};
+            await this.$store.dispatch('file/getFileContent', tabs);
         },
         /**
          * TODO:设置编辑器的mode
@@ -165,21 +165,21 @@ export default {
         setOptionsMode: function (ext) {
             switch (ext.toLowerCase()) {
                 case 'xml':
-                    this.options.mode = this.mode.xml
-                    break
+                    this.options.mode = this.mode.xml;
+                    break;
                 case 'md':
-                    this.options.mode = this.mode.markdown
-                    break
+                    this.options.mode = this.mode.markdown;
+                    break;
                 case 'json':
                 case 'lock':
-                    this.options.mode = this.mode.json
-                    break
+                    this.options.mode = this.mode.json;
+                    break;
                 case 'sql':
-                    this.options.mode = this.mode.sql
-                    break
+                    this.options.mode = this.mode.sql;
+                    break;
                 default:
-                    this.options.mode = this.mode.php
-                    break
+                    this.options.mode = this.mode.php;
+                    break;
             }
         },
         /**
@@ -188,7 +188,7 @@ export default {
          * @param data
          */
         filterNode: function (value, data) {
-            return value ? data.filename.toLowerCase().indexOf(value.toLowerCase()) !== -1 : true
+            return value ? data.filename.toLowerCase().indexOf(value.toLowerCase()) !== -1 : true;
         },
         /**
          * todo:获取文件详情
@@ -198,11 +198,11 @@ export default {
         async goto(tab) {
             await this.fileTabs.forEach(item => {
                 if (tab.props.label === item.label) {
-                    this.form.$refs = this.$refs
-                    this.form.model.path = item.path
-                    this.$store.commit('file/UPDATE_MUTATIONS', { tabModel: item })
+                    this.form.$refs = this.$refs;
+                    this.form.model.path = item.path;
+                    this.$store.commit('file/UPDATE_MUTATIONS', {tabModel: item});
                 }
-            })
+            });
         },
         /**
          * todo:删除tab
@@ -212,25 +212,25 @@ export default {
         async removeTab(tabName) {
             await this.fileTabs.forEach((item, index) => {
                 if (tabName === item.name) {
-                    this.form.$refs = this.$refs
-                    this.form.model.path = item.path
-                    let nextTab = this.fileTabs[index + 1] || this.fileTabs[index - 1]
+                    this.form.$refs = this.$refs;
+                    this.form.model.path = item.path;
+                    let nextTab = this.fileTabs[index + 1] || this.fileTabs[index - 1];
                     if (nextTab) {
-                        this.$store.dispatch('file/deleteTabs', { index: index, nextTab: nextTab })
+                        this.$store.dispatch('file/deleteTabs', {index: index, nextTab: nextTab});
                     }
                 }
-            })
+            });
         },
         /**
          * todo:更新文件详情
          * @param content
          */
         updateContent(content) {
-            this.form.$refs = this.$refs
-            this.form.model.content = content
-        },
+            this.form.$refs = this.$refs;
+            this.form.model.content = content;
+        }
     }
-}
+};
 </script>
 
 <style lang="less">
@@ -238,12 +238,14 @@ export default {
     .el-tree {
         min-height: 500px;
     }
+
     .CodeMirror {
         border: 1px solid #eee;
         min-height: 550px;
         height: auto !important;
         z-index: 1;
     }
+
     .CodeMirror-scroll {
         height: auto;
         min-height: 550px;
@@ -251,10 +253,12 @@ export default {
         overflow-y: hidden;
         overflow-x: auto;
     }
-    .CodeMirror-hscrollbar{
+
+    .CodeMirror-hscrollbar {
         left: 30px !important;
         height: 5px !important;
     }
+
     .details {
         .el-form-item__content {
             .el-tabs--border-card {

@@ -6,8 +6,8 @@
 
 export default {
     name: 'JsonView',
-    props: ['items'],
-}
+    props: ['items']
+};
 </script>
 
 <style lang="less">

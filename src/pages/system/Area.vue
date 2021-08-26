@@ -11,24 +11,25 @@
 </template>
 
 <script>
-import BaseLayout from '@/components/BaseLayout'
-import AreaLists from '@/components/system/area/Lists'
-import AreaDialog from "@/components/system/area/Dialog";
+import BaseLayout from '@/components/BaseLayout';
+import AreaLists from '@/components/system/area/Lists';
+import AreaDialog from '@/components/system/area/Dialog';
+
 export default {
     name: 'Area',
-    components: {AreaDialog, AreaLists, BaseLayout },
+    components: {AreaDialog, AreaLists, BaseLayout},
     data() {
         return {
             loading: true,
             syncVisible: false,
             areaLists: [],
             form: {}
-        }
+        };
     },
     mounted() {
-        this.$nextTick(async () =>{
-            await this.getAreaLists()
-        })
+        this.$nextTick(async () => {
+            await this.getAreaLists();
+        });
     },
     methods: {
         /**
@@ -36,12 +37,12 @@ export default {
          * @param parent_id
          */
         async getAreaLists(parent_id = 1) {
-            this.loading = true
-            this.syncVisible = false
-            await this.$store.dispatch('area/getAreaLists', { parent_id: parent_id}).then(() => {
-                this.areaLists = this.$store.state.area.areaLists
-                this.loading = false
-            })
+            this.loading = true;
+            this.syncVisible = false;
+            await this.$store.dispatch('area/getAreaLists', {parent_id: parent_id}).then(() => {
+                this.areaLists = this.$store.state.area.areaLists;
+                this.loading = false;
+            });
         },
         /**
          * todo:加载更多
@@ -51,10 +52,10 @@ export default {
          * @return {Promise<void>}
          */
         async loadMORE(tree, treeNode, resolve) {
-            await this.$store.dispatch('area/getChildrenLists', { parent_id: tree.id }).then(() => {
-                resolve(this.$store.state.area.childrenLists)
-                this.loading = false
-            })
+            await this.$store.dispatch('area/getChildrenLists', {parent_id: tree.id}).then(() => {
+                resolve(this.$store.state.area.childrenLists);
+                this.loading = false;
+            });
         },
 
         /**
@@ -62,23 +63,23 @@ export default {
          * @param search
          */
         searchAreaLists(search) {
-            this.areaLists = []
+            this.areaLists = [];
             this.$store.state.area.areaLists.forEach(item => {
                 if (item.id === parseInt(search, 10) || item.name.indexOf(search) > -1) {
-                    this.areaLists.push(item)
+                    this.areaLists.push(item);
                 }
-            })
+            });
         },
         /**
          * todo:查看天气详情
          * @param form
          */
         getAreaWeather(form) {
-            this.form = { ...form }
-            this.syncVisible = true
+            this.form = {...form};
+            this.syncVisible = true;
         }
     }
-}
+};
 </script>
 
 <style scoped>

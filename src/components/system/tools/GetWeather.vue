@@ -16,16 +16,17 @@
 </template>
 
 <script>
-import JsonView from '@/components/common/JsonView'
-import URLS from  '@/api/urls'
+import JsonView from '@/components/common/JsonView';
+import URLS from '@/api/urls';
+
 export default {
-    name: "GetWeather",
+    name: 'GetWeather',
     components: {JsonView},
     data() {
         return {
             cityName: '',
             items: this.Permission.forecast
-        }
+        };
     },
     methods: {
         /**
@@ -33,14 +34,14 @@ export default {
          * @return {Promise<void>}
          */
         async getWeather() {
-            this.cacheArea = []
-            await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.tools.getWeather, model: { city_name: this.cityName } }).then((response) => {
-                let result = (((response || {}).data || {}).item || {}).lists || {}
-                this.items = JSON.parse(result.forecast)
-            })
+            this.cacheArea = [];
+            await this.$store.dispatch('UPDATE_ACTIONS', {url: URLS.tools.getWeather, model: {city_name: this.cityName}}).then((response) => {
+                let result = (((response || {}).data || {}).item || {}).lists || {};
+                this.items = JSON.parse(result.forecast);
+            });
         }
     }
-}
+};
 </script>
 
 <style lang="less">

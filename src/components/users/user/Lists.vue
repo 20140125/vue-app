@@ -18,25 +18,26 @@
         <el-table-column label="修改时间" prop="updated_at" align="center"></el-table-column>
         <el-table-column label="操作" align="right">
             <template #default="scope">
-               <el-button v-if="Permission.auth.indexOf(URL) > -1" plain size="mini" icon="el-icon-edit" type="primary" @click="$emit('updatedUsers', scope.row)">修改</el-button>
+                <el-button v-if="Permission.auth.indexOf(URL) > -1" plain size="mini" icon="el-icon-edit" type="primary" @click="$emit('updatedUsers', scope.row)">修改</el-button>
             </template>
         </el-table-column>
     </el-table>
 </template>
 
 <script>
-import URLS from '@/api/urls'
-import StatusRadio from '@/components/common/StatusRadio'
+import URLS from '@/api/urls';
+import StatusRadio from '@/components/common/StatusRadio';
+
 export default {
     name: 'UsersLists',
-    components: { StatusRadio },
+    components: {StatusRadio},
     props: ['usersLists'],
     data() {
         return {
-            URL: URLS.users.update,
-        }
+            URL: URLS.users.update
+        };
     }
-}
+};
 </script>
 
 <style scoped>

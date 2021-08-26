@@ -21,18 +21,19 @@
 </template>
 
 <script>
-import StatusRadio from '@/components/common/StatusRadio'
-import URLS from '@/api/urls'
+import StatusRadio from '@/components/common/StatusRadio';
+import URLS from '@/api/urls';
+
 export default {
     name: 'RoleLists',
-    components: { StatusRadio },
+    components: {StatusRadio},
     props: ['roleLists'],
     data() {
         return {
             URL: URLS.role.update
-        }
+        };
     }
-}
+};
 </script>
 
 <style scoped>

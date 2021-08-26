@@ -7,25 +7,26 @@
 </template>
 
 <script>
-import BaseLayout from '@/components/BaseLayout'
-import DatabaseLists from '@/components/system/database/Lists'
+import BaseLayout from '@/components/BaseLayout';
+import DatabaseLists from '@/components/system/database/Lists';
+
 export default {
     name: 'Database',
-    components: { DatabaseLists, BaseLayout },
+    components: {DatabaseLists, BaseLayout},
     data() {
         return {
             loading: true
-        }
+        };
     },
     computed: {
         databaseLists() {
-            return JSON.parse(JSON.stringify(this.$store.state.database.databaseLists || []))
+            return JSON.parse(JSON.stringify(this.$store.state.database.databaseLists || []));
         }
     },
     mounted() {
         this.$nextTick(async () => {
-            await this.getDatabaseLists()
-        } )
+            await this.getDatabaseLists();
+        });
     },
     methods: {
         /**
@@ -33,13 +34,13 @@ export default {
          * @param refresh
          */
         async getDatabaseLists(refresh = true) {
-            this.loading = true
-            await this.$store.dispatch('database/getDatabaseLists', { refresh: refresh }).then(() => {
-                this.loading = false
-            })
+            this.loading = true;
+            await this.$store.dispatch('database/getDatabaseLists', {refresh: refresh}).then(() => {
+                this.loading = false;
+            });
         }
     }
-}
+};
 </script>
 
 <style scoped>

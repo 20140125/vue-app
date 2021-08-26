@@ -33,18 +33,19 @@ export default {
         /* 数据分页 */
         pagination: {
             type: Object,
-            default: () => {}
+            default: () => {
+            }
         }
     },
     watch: {
         pagination: function () {
-            this.T_pagination = this.pagination
+            this.T_pagination = this.pagination;
         }
     },
-    data () {
+    data() {
         return {
-            T_pagination: this.pagination || { limit: 10, page: 1, total: 0, show_page: false }
-        }
+            T_pagination: this.pagination || {limit: 10, page: 1, total: 0, show_page: false}
+        };
     },
     methods: {
         /**
@@ -53,16 +54,17 @@ export default {
          * @private
          */
         __currentChange: function (page) {
-            this.$parent.currentPageChange(page)
+            this.$parent.currentPageChange(page);
         }
     }
-}
+};
 </script>
 
 <style lang="less">
 .form {
     margin: 10px 0 -30px 20px !important;
 }
+
 .pagination {
     margin-top: 20px
 }

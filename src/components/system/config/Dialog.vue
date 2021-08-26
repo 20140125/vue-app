@@ -61,14 +61,14 @@
 </template>
 
 <script>
-import SubmitButton from '@/components/common/SubmitForm'
-import URLS from '@/api/urls'
-import config from './index'
-import { toggle } from '@/components/mixins/toggle'
+import SubmitButton from '@/components/common/SubmitForm';
+import URLS from '@/api/urls';
+import config from './index';
+import {toggle} from '@/components/mixins/toggle';
 
 export default {
     name: 'SystemConfigDialog',
-    components: { SubmitButton },
+    components: {SubmitButton},
     props: ['form', 'reForm'],
     mixins: [toggle],
     data() {
@@ -76,20 +76,20 @@ export default {
             localForm: this.form,
             submitForm: {},
             rules: {
-                name: [{ required: true, message: '请输入配置名称', trigger: 'blur' }],
-                status: [{ required: true, message: '请选择配置状态', trigger: 'change' }],
-                children: [{ required: true, message: '请输入配置属性', trigger: 'blur', type: 'array' }, { validator: config.checkConfigChildren, trigger: 'blur' }]
+                name: [{required: true, message: '请输入配置名称', trigger: 'blur'}],
+                status: [{required: true, message: '请选择配置状态', trigger: 'change'}],
+                children: [{required: true, message: '请输入配置属性', trigger: 'blur', type: 'array'}, {validator: config.checkConfigChildren, trigger: 'blur'}]
             }
-        }
+        };
     },
     watch: {
         form() {
-            this.localForm = this.form
+            this.localForm = this.form;
             this.$nextTick(() => {
                 setTimeout(() => {
-                    this.submitForm = { model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.config.save : URLS.config.update }
-                }, 1000)
-            })
+                    this.submitForm = {model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.config.save : URLS.config.update};
+                }, 1000);
+            });
         }
     },
     methods: {
@@ -98,9 +98,9 @@ export default {
          * @param children
          */
         addChildren(children) {
-            let items = JSON.parse(JSON.stringify(children))
-            items.push({ name: '', value: '', status: 1, pid: this.localForm.children[this.localForm.children.length - 1].pid, id: this.localForm.children[this.localForm.children.length - 1].id + 1 })
-            this.localForm.children = items
+            let items = JSON.parse(JSON.stringify(children));
+            items.push({name: '', value: '', status: 1, pid: this.localForm.children[this.localForm.children.length - 1].pid, id: this.localForm.children[this.localForm.children.length - 1].id + 1});
+            this.localForm.children = items;
         },
         /**
          * todo:移除配置值
@@ -108,10 +108,10 @@ export default {
          * @param index
          */
         deleteChildren(children, index) {
-            children.length > 1 ? children.splice(index, 1) : ''
+            children.length > 1 ? children.splice(index, 1) : '';
         }
     }
-}
+};
 </script>
 
 <style lang="less">
@@ -120,10 +120,12 @@ export default {
         .el-form-item {
             margin-bottom: 15px;
         }
+
         .children {
             margin-left: -100px;
         }
     }
+
     .el-form-item__label {
         width: 100px
     }

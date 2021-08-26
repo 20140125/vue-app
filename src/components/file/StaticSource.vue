@@ -24,14 +24,14 @@ export default {
     data() {
         return {
             visible: this.sourceVisible
-        }
+        };
     },
     watch: {
         sourceVisible() {
-            this.visible = this.sourceVisible
+            this.visible = this.sourceVisible;
         }
     }
-}
+};
 </script>
 
 <style lang="less">

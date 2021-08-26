@@ -20,8 +20,8 @@ export default {
     props: ['areaLists'],
     data() {
         return {
-            search: '',
-        }
+            search: ''
+        };
     },
     methods: {
         /**
@@ -31,10 +31,10 @@ export default {
          * @param resolve
          */
         loadMORE(tree, treeNode, resolve) {
-           this.$emit('loadMORE', tree, treeNode, resolve)
+            this.$emit('loadMORE', tree, treeNode, resolve);
         }
     }
-}
+};
 </script>
 
 <style scoped>

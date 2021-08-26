@@ -1,5 +1,5 @@
-import requestMethods from '@/api/methods'
-import URLS from '@/api/urls'
+import requestMethods from '@/api/methods';
+import URLS from '@/api/urls';
 
 export const mutations = {
     /**
@@ -9,10 +9,10 @@ export const mutations = {
      */
     UPDATE_MUTATIONS: function (state, update) {
         Object.keys(update).forEach(item => {
-            state[item] = update[item]
-        })
-    },
-}
+            state[item] = update[item];
+        });
+    }
+};
 
 export const actions = {
     /**
@@ -22,11 +22,11 @@ export const actions = {
      * @param payload
      * @return {Promise<boolean>}
      */
-    async getPushLists({ commit, state }, payload) {
+    async getPushLists({commit, state}, payload) {
         /* 如果页码没有变，直接读取vuex里面的数据 */
         if (state.page === payload.page && !payload.refresh) {
-            commit('UPDATE_MUTATIONS', { pushLists: state.pushLists })
-            return false
+            commit('UPDATE_MUTATIONS', {pushLists: state.pushLists});
+            return false;
         }
         return new Promise((resolve, reject) => {
             requestMethods.__commonMethods(URLS.push.lists, payload).then(result => {
@@ -34,17 +34,17 @@ export const actions = {
                     pushLists: (((result.data || {}).item || {}).lists || {}).data || [],
                     total: (((result.data || {}).item || {}).lists || {}).total || 0,
                     page: payload.page || 1
-                })
-                resolve(result)
+                });
+                resolve(result);
             }).catch(error => {
-                commit('UPDATE_MUTATIONS', { error: error }, { root: true })
-                reject(error)
-            })
-        })
+                commit('UPDATE_MUTATIONS', {error: error}, {root: true});
+                reject(error);
+            });
+        });
     }
-}
+};
 export default {
     namespaced: true,
     mutations,
     actions
-}
+};

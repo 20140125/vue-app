@@ -1,4 +1,4 @@
-let urls  = {
+let urls = {
     /* todo:登录 */
     login: {
         loginSystem: '/api/v1/account/login',
@@ -81,13 +81,13 @@ let urls  = {
         lists: '/api/v1/interfaceCategory/index',
         save: '/api/v1/interfaceCategory/save',
         update: '/api/v1/interfaceCategory/update',
-        delete: '/api/v1/interfaceCategory/delete',
+        delete: '/api/v1/interfaceCategory/delete'
     },
     /* todo:接口详情 */
     interface: {
         save: '/api/v1/interface/save',
         update: '/api/v1/interface/update',
-        get: '/api/v1/interface/detail',
+        get: '/api/v1/interface/detail'
     },
     /* todo:地区 */
     area: {
@@ -111,15 +111,15 @@ let urls  = {
     },
     tools: {
         getAddress: '/api/v1/tools/getAddress',
-        getWeather: '/api/v1/tools/getWeather',
+        getWeather: '/api/v1/tools/getWeather'
     },
     spider: {
         lists: '/api/v1/spider/index',
-        running: '/api/v1/spider/running',
+        running: '/api/v1/spider/running'
     },
     /* todo:域名 */
     // baseURL: process.env.NODE_ENV !== 'production' ? 'http://www.laravel.com' : 'https://www.fanglonger.com'
     baseURL: 'https://www.fanglonger.com'
 
-}
-export default urls
+};
+export default urls;

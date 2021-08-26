@@ -16,37 +16,37 @@
 </template>
 
 <script>
-import AMap from '@/components/system/tools/AMap'
-import URLS from '@/api/urls'
+import AMap from '@/components/system/tools/AMap';
+import URLS from '@/api/urls';
 
 export default {
     name: 'GetAddress',
-    components: { AMap },
+    components: {AMap},
     data() {
         return {
             ip_address: this.Permission.ip_address,
-            center: [114.058975,22.543754],
-        }
+            center: [114.058975, 22.543754]
+        };
     },
     mounted() {
         this.$nextTick(async () => {
-            await this.getAddress()
-        })
+            await this.getAddress();
+        });
     },
     methods: {
         async getAddress() {
-            await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.tools.getAddress, model: { ip_address: this.ip_address } }).then((response) => {
-                let result = (((response || {}).data || {}).item || {}).lists || []
+            await this.$store.dispatch('UPDATE_ACTIONS', {url: URLS.tools.getAddress, model: {ip_address: this.ip_address}}).then((response) => {
+                let result = (((response || {}).data || {}).item || {}).lists || [];
                 if (result[0]) {
-                    let rectangle = result.rectangle.split(';')
-                    let longitude = (parseFloat(rectangle[0].split(',')[0]) + parseFloat(rectangle[1].split(',')[0])) / 2
-                    let latitude = (parseFloat(rectangle[0].split(',')[1]) + parseFloat(rectangle[1].split(',')[1])) / 2
-                    this.center = [longitude, latitude]
+                    let rectangle = result.rectangle.split(';');
+                    let longitude = (parseFloat(rectangle[0].split(',')[0]) + parseFloat(rectangle[1].split(',')[0])) / 2;
+                    let latitude = (parseFloat(rectangle[0].split(',')[1]) + parseFloat(rectangle[1].split(',')[1])) / 2;
+                    this.center = [longitude, latitude];
                 }
-            })
+            });
         }
     }
-}
+};
 </script>
 
 <style scoped>

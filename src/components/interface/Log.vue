@@ -15,13 +15,14 @@
 </template>
 
 <script>
-import JsonView from "@/components/common/JsonView";
-import MarkDown from "@/components/common/MarkDown";
+import JsonView from '@/components/common/JsonView';
+import MarkDown from '@/components/common/MarkDown';
+
 export default {
     name: 'InterfaceLog',
     components: {MarkDown, JsonView},
     props: ['lists']
-}
+};
 </script>
 
 <style lang="less">

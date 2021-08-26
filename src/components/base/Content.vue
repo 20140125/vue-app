@@ -12,16 +12,16 @@ export default {
     name: 'Content',
     computed: {
         authTabs() {
-            return this.$store.state.home.tabs
+            return this.$store.state.home.tabs;
         },
         tabModel() {
-            return {...this.$store.state.home.tabModel}
+            return {...this.$store.state.home.tabModel};
         }
     },
     mounted() {
         this.$nextTick(async () => {
-            await this.$store.dispatch('home/addTabs', { label: this.$route.meta.title, value: this.$route.path })
-        })
+            await this.$store.dispatch('home/addTabs', {label: this.$route.meta.title, value: this.$route.path});
+        });
     },
     methods: {
         /**
@@ -29,7 +29,7 @@ export default {
          * @return {Promise<void>}
          */
         async goto() {
-            await this.$router.push({ path: this.tabModel.value })
+            await this.$router.push({path: this.tabModel.value});
         },
         /**
          * todo:删除标签
@@ -38,17 +38,17 @@ export default {
         async removeTabs() {
             await this.authTabs.forEach((tab, index) => {
                 if (tab.name === this.tabModel.name) {
-                    let nextTab = this.authTabs[index + 1] || this.authTabs[index - 1]
+                    let nextTab = this.authTabs[index + 1] || this.authTabs[index - 1];
                     if (nextTab) {
-                        this.$store.dispatch('home/deleteTabs', { index: index, nextTab: nextTab }).then(() => {
-                            this.$router.push({ path: nextTab.value })
-                        })
+                        this.$store.dispatch('home/deleteTabs', {index: index, nextTab: nextTab}).then(() => {
+                            this.$router.push({path: nextTab.value});
+                        });
                     }
                 }
-            })
+            });
         }
     }
-}
+};
 </script>
 
 <style scoped>

@@ -12,22 +12,23 @@
 </template>
 
 <script>
-import CommonUpload from '@/components/common/CommonUpload'
+import CommonUpload from '@/components/common/CommonUpload';
+
 export default {
     name: 'FileUpload',
-    components: { CommonUpload },
+    components: {CommonUpload},
     props: ['uploadVisible', 'file'],
-    data () {
+    data() {
         return {
             visible: this.uploadVisible
-        }
+        };
     },
     watch: {
         uploadVisible() {
-            this.visible = this.uploadVisible
-        },
+            this.visible = this.uploadVisible;
+        }
     }
-}
+};
 </script>
 
 <style lang="less">

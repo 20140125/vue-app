@@ -30,14 +30,14 @@
                     </el-select>
                     <el-input v-model.trim="request.desc" auto-complete="true" placeholder="参数描述"></el-input>
                     <el-input v-model.trim="request.val" auto-complete="true" placeholder="参数值"></el-input>
-                    <el-button type="danger" v-if="localForm.request.length > 1"  plain icon="el-icon-delete" @click="requestRemove(localForm.request, index)" size="medium"></el-button>
+                    <el-button type="danger" v-if="localForm.request.length > 1" plain icon="el-icon-delete" @click="requestRemove(localForm.request, index)" size="medium"></el-button>
                 </div>
             </el-form-item>
             <el-form-item label="返回字段：" prop="response" class="response">
                 <el-button type="primary" plain icon="el-icon-circle-plus-outline" @click="responseAdd()" size="medium"></el-button>
                 <div v-for="(response, index) in localForm.response" :key="index">
-                    <el-input v-model.trim="response.name"  placeholder="参数名"></el-input>
-                    <el-select v-model.trim="response.type"  placeholder="字段类型">
+                    <el-input v-model.trim="response.name" placeholder="参数名"></el-input>
+                    <el-select v-model.trim="response.type" placeholder="字段类型">
                         <el-option v-for="(item,index) in attr.type" :key="index" :label="item.label" :value="item.value"></el-option>
                     </el-select>
                     <el-input v-model.trim="response.desc" placeholder="参数描述"></el-input>
@@ -58,28 +58,29 @@
 </template>
 
 <script>
-import JsonView from '@/components/common/JsonView'
+import JsonView from '@/components/common/JsonView';
+
 export default {
     name: 'Json',
-    components: { JsonView },
+    components: {JsonView},
     props: ['form', 'categoryLists', 'reForm'],
     data() {
         return {
             localForm: this.form,
             submitForm: {},
             attr: {
-                methods: [ { label: 'POST', value: 'POST' }, { label: 'GET', value: 'GET' }, { label: 'PUT', value: 'PUT' }, { label: 'DELETE', value: 'DELETE' } ],
+                methods: [{label: 'POST', value: 'POST'}, {label: 'GET', value: 'GET'}, {label: 'PUT', value: 'PUT'}, {label: 'DELETE', value: 'DELETE'}],
                 type: [
-                    { label: '字符串(String)', value: 'String' },
-                    { label: '浮点数(Float)', value: 'Float' },
-                    { label: '整型(Number)', value: 'Number' },
-                    { label: '对象(Object)', value: 'Object' },
-                    { label: '数组(Array)', value: 'Array' },
-                    { label: '时间戳(Timestamp)', value: 'Timestamp' }
+                    {label: '字符串(String)', value: 'String'},
+                    {label: '浮点数(Float)', value: 'Float'},
+                    {label: '整型(Number)', value: 'Number'},
+                    {label: '对象(Object)', value: 'Object'},
+                    {label: '数组(Array)', value: 'Array'},
+                    {label: '时间戳(Timestamp)', value: 'Timestamp'}
                 ]
             },
             rules: {}
-        }
+        };
     },
     methods: {
         /**
@@ -87,51 +88,51 @@ export default {
          * @param item
          * @return {string}
          */
-        setCategoryName(item){
-            return Array(item.level + 1).join('　　') + item.name
+        setCategoryName(item) {
+            return Array(item.level + 1).join('　　') + item.name;
         },
         /**
          * todo:添加请求参数
          */
         requestAdd() {
-            this.localForm.request.push({ name: '', desc: '', required: '', type: '', val: '' })
+            this.localForm.request.push({name: '', desc: '', required: '', type: '', val: ''});
         },
         /**
          * todo:删除请求参数
          * @param item
          * @param index
          */
-        requestRemove(item, index){
-            item.length > 1 ? item.splice(index, 1) : ''
+        requestRemove(item, index) {
+            item.length > 1 ? item.splice(index, 1) : '';
         },
         /**
          * todo:添加返回参数
          */
         responseAdd() {
-            this.localForm.response.push({ name: '', desc: '', type: '' })
+            this.localForm.response.push({name: '', desc: '', type: ''});
         },
         /**
          * todo:删除返回参数
          * @param item
          * @param index
          */
-        responseRemove(item, index){
-            item.length > 1 ? item.splice(index, 1) : ''
+        responseRemove(item, index) {
+            item.length > 1 ? item.splice(index, 1) : '';
         },
         /**
          * todo:获取接口详情
          */
-        getInterfaceDetails(){
-            let params = {}
+        getInterfaceDetails() {
+            let params = {};
             this.localForm.request.map(item => {
-                params[item.name] = item.type === 'Number' ? parseInt(item.val) : item.val
-            })
-            this.$store.dispatch('UPDATE_ACTIONS', { url: this.localForm.href, model: params }).then((response) => {
-                this.localForm.response_string = response.data
-            })
+                params[item.name] = item.type === 'Number' ? parseInt(item.val) : item.val;
+            });
+            this.$store.dispatch('UPDATE_ACTIONS', {url: this.localForm.href, model: params}).then((response) => {
+                this.localForm.response_string = response.data;
+            });
         }
     }
-}
+};
 </script>
 
 <style lang="less">

@@ -18,31 +18,31 @@
 </template>
 
 <script>
-import SubmitButton from '@/components/common/SubmitForm'
-import Json from '@/components/interface/Json'
-import URLS from '@/api/urls'
-import MarkDown from '@/components/common/MarkDown'
-import { toggle } from '@/components/mixins/toggle'
-import InterfaceLog from '@/components/interface/Log'
+import SubmitButton from '@/components/common/SubmitForm';
+import Json from '@/components/interface/Json';
+import URLS from '@/api/urls';
+import MarkDown from '@/components/common/MarkDown';
+import {toggle} from '@/components/mixins/toggle';
+import InterfaceLog from '@/components/interface/Log';
 
 export default {
     name: 'InterfaceDetails',
-    components: {InterfaceLog, MarkDown, Json, SubmitButton },
+    components: {InterfaceLog, MarkDown, Json, SubmitButton},
     props: ['form', 'categoryLists', 'reForm'],
     data() {
         return {
             submitForm: {},
             localForm: this.form
-        }
+        };
     },
     mixins: [toggle],
     watch: {
         form() {
-            this.localForm = this.form
+            this.localForm = this.form;
             if (this.localForm.source === 'json') {
                 setTimeout(() => {
-                    this.submitForm = { model: this.localForm, $refs: this.$refs.json.$refs, url: this.reForm === 'created' ? URLS.interface.save : URLS.interface.update }
-                }, 1000)
+                    this.submitForm = {model: this.localForm, $refs: this.$refs.json.$refs, url: this.reForm === 'created' ? URLS.interface.save : URLS.interface.update};
+                }, 1000);
             }
         }
     },
@@ -52,15 +52,15 @@ export default {
          * @param text
          * @param html
          */
-        saveHandle(text, html){
-            this.localForm.markdown = text
-            this.localForm.html = html
-            this.$store.dispatch('UPDATE_ACTIONS', { url: this.reForm === 'created' ? URLS.interface.save : URLS.interface.update, model: this.localForm }).then(() => {
-                this.$emit('getInterfaceCategory', true)
-            })
+        saveHandle(text, html) {
+            this.localForm.markdown = text;
+            this.localForm.html = html;
+            this.$store.dispatch('UPDATE_ACTIONS', {url: this.reForm === 'created' ? URLS.interface.save : URLS.interface.update, model: this.localForm}).then(() => {
+                this.$emit('getInterfaceCategory', true);
+            });
         }
     }
-}
+};
 </script>
 
 <style lang="less">
@@ -68,6 +68,7 @@ export default {
     .v-md-editor {
         margin-bottom: 20px;
     }
+
     .markdown {
         .el-main {
             text-align: center;

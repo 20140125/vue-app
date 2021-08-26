@@ -8,7 +8,7 @@
                 <el-calendar v-model="value" :first-day-of-week="7">
                     <template #dateCell="{data}">
                         <p :class="data.isSelected ? 'is-selected' : ''">
-                            {{data.day.split('-').slice(2).join('-') }} {{ data.isSelected ? ' ✔️' : ''}}
+                            {{ data.day.split('-').slice(2).join('-') }} {{ data.isSelected ? ' ✔️' : '' }}
                         </p>
                     </template>
                 </el-calendar>
@@ -23,37 +23,40 @@
 </template>
 
 <script>
-import Charts from '@/components/index/Charts'
-import Timeline from '@/components/index/Timeline'
+import Charts from '@/components/index/Charts';
+import Timeline from '@/components/index/Timeline';
+
 export default {
     name: 'Index',
-    components: { Timeline, Charts },
-    data (){
+    components: {Timeline, Charts},
+    data() {
         return {
             value: new Date(),
             chartsNum: 14,
             innerWidth: window.innerWidth,
-            chartsStyle: { display: 'block' }
-        }
+            chartsStyle: {display: 'block'}
+        };
     },
     computed: {
         xAxisData() {
-            return this.$store.state.home.xAxisData
+            return this.$store.state.home.xAxisData;
         },
         seriesData() {
-            return this.$store.state.home.seriesData
+            return this.$store.state.home.seriesData;
         }
     }
-}
+};
 </script>
 
 <style scoped>
 #charts {
     height: 460px;
 }
-.radio{
+
+.radio {
     margin-bottom: 30px;
 }
+
 .is-selected {
     color: red;
 }

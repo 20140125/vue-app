@@ -9,7 +9,7 @@
             <el-form-item prop="verify_code">
                 <el-input v-model.number="form.verify_code" :readonly="!form.email" clearable maxlength="8" placeholder="请输入邮箱验证码" show-icon>
                     <template #append>
-                        <el-button :disabled="!form.email" type="info" @click="getMailCode" plain>{{codeValue}}</el-button>
+                        <el-button :disabled="!form.email" type="info" @click="getMailCode" plain>{{ codeValue }}</el-button>
                     </template>
                 </el-input>
             </el-form-item>
@@ -23,41 +23,41 @@
 <script>
 export default {
     name: 'Mail',
-    data () {
+    data() {
         return {
-            form: { email: '', verify_code: '', loginType: 'mail' },
+            form: {email: '', verify_code: '', loginType: 'mail'},
             codeValue: '获取验证码',
             mailLogin: this.$store.state.login.mailLogin,
             rules: {
-                email: [{ required: true, message: '请输入邮箱', trigger: 'blur', type: 'email' }],
-                verify_code: [{ required: true, message: '请输入邮箱验证码', trigger: 'blur' }]
+                email: [{required: true, message: '请输入邮箱', trigger: 'blur', type: 'email'}],
+                verify_code: [{required: true, message: '请输入邮箱验证码', trigger: 'blur'}]
             }
-        }
+        };
     },
-    created () {
+    created() {
         /**
          * todo:邮箱验证码定时器
          * @return {Promise<void>}
          */
         setInterval(() => {
             if (this.times >= 0 && this.mailLogin) {
-                this.getMailCode()
-                return false
+                this.getMailCode();
+                return false;
             }
-            this.codeValue = '获取验证码'
-            this.times = 60
-        }, 1000)
+            this.codeValue = '获取验证码';
+            this.times = 60;
+        }, 1000);
     },
     methods: {
         /**
          * todo:获取邮箱验证码
          */
-        async getMailCode(){
+        async getMailCode() {
             if (this.mailLogin) {
-                this.codeValue = this.times-- + ' s'
-                return false
+                this.codeValue = this.times-- + ' s';
+                return false;
             }
-            await this.$store.dispatch('login/sendMail', { email: this.form.email })
+            await this.$store.dispatch('login/sendMail', {email: this.form.email});
         },
         /**
          * todo:登录系统
@@ -66,13 +66,13 @@ export default {
         loginSYS(formName) {
             this.$refs[formName].validate((valid) => {
                 if (!valid) {
-                    return false
+                    return false;
                 }
-                this.$emit('loginSYS', this.form)
-            })
+                this.$emit('loginSYS', this.form);
+            });
         }
     }
-}
+};
 </script>
 
 <style scoped>

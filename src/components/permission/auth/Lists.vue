@@ -17,8 +17,9 @@
 </template>
 
 <script>
-import StatusRadio from '@/components/common/StatusRadio'
-import URLS from '@/api/urls'
+import StatusRadio from '@/components/common/StatusRadio';
+import URLS from '@/api/urls';
+
 export default {
     name: 'AuthLists',
     props: {
@@ -27,12 +28,12 @@ export default {
             default: () => []
         }
     },
-    components: { StatusRadio },
+    components: {StatusRadio},
     data() {
         return {
             URL: URLS.auth.update,
             save: URLS.auth.save
-        }
+        };
     }
-}
+};
 </script>

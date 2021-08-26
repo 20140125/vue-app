@@ -1,6 +1,6 @@
-import requestMethods from '@/api/methods'
-import URLS from '@/api/urls'
-import func from '@/utils/func'
+import requestMethods from '@/api/methods';
+import URLS from '@/api/urls';
+import func from '@/utils/func';
 
 export const mutations = {
     /**
@@ -10,10 +10,10 @@ export const mutations = {
      */
     UPDATE_MUTATIONS: function (state, update) {
         Object.keys(update).forEach(item => {
-            state[item] = update[item]
-        })
-    },
-}
+            state[item] = update[item];
+        });
+    }
+};
 
 export const actions = {
     /**
@@ -23,21 +23,21 @@ export const actions = {
      * @param payload
      * @return {Promise<boolean>}
      */
-    async getAreaLists({ commit, state }, payload) {
+    async getAreaLists({commit, state}, payload) {
         /* 如果页码没有变，直接读取vuex里面的数据 */
         if (state.areaLists) {
-            commit('UPDATE_MUTATIONS', { areaLists: state.areaLists })
-            return false
+            commit('UPDATE_MUTATIONS', {areaLists: state.areaLists});
+            return false;
         }
         return new Promise((resolve, reject) => {
             requestMethods.__commonMethods(URLS.area.lists, payload).then(result => {
-                commit('UPDATE_MUTATIONS', { areaLists: ((result.data || {}).item || {}).lists || [] })
-                resolve(result)
+                commit('UPDATE_MUTATIONS', {areaLists: ((result.data || {}).item || {}).lists || []});
+                resolve(result);
             }).catch(error => {
-                commit('UPDATE_MUTATIONS', { error: error }, { root: true })
-                reject(error)
-            })
-        })
+                commit('UPDATE_MUTATIONS', {error: error}, {root: true});
+                reject(error);
+            });
+        });
     },
     /**
      * todo:获取地区列表
@@ -45,17 +45,17 @@ export const actions = {
      * @param payload
      * @return {Promise<boolean>}
      */
-    async getChildrenLists({ commit }, payload) {
+    async getChildrenLists({commit}, payload) {
         /* 如果页码没有变，直接读取vuex里面的数据 */
         return new Promise((resolve, reject) => {
             requestMethods.__commonMethods(URLS.area.lists, payload).then(result => {
-                commit('UPDATE_MUTATIONS', { childrenLists: ((result.data || {}).item || {}).lists || [] })
-                resolve(result)
+                commit('UPDATE_MUTATIONS', {childrenLists: ((result.data || {}).item || {}).lists || []});
+                resolve(result);
             }).catch(error => {
-                commit('UPDATE_MUTATIONS', { error: error }, { root: true })
-                reject(error)
-            })
-        })
+                commit('UPDATE_MUTATIONS', {error: error}, {root: true});
+                reject(error);
+            });
+        });
     },
     /**
      * todo:获取角色列表
@@ -64,25 +64,25 @@ export const actions = {
      * @param payload
      * @return {Promise<boolean>}
      */
-    async getAreaCacheLists({ commit, state }, payload) {
+    async getAreaCacheLists({commit, state}, payload) {
         /* 如果页码没有变，直接读取vuex里面的数据 */
         if (state.cacheArea) {
-            commit('UPDATE_MUTATIONS', { cacheArea: state.cacheArea })
-            return false
+            commit('UPDATE_MUTATIONS', {cacheArea: state.cacheArea});
+            return false;
         }
         return new Promise((resolve, reject) => {
             requestMethods.__commonMethods(URLS.area.cache, payload).then(result => {
-                commit('UPDATE_MUTATIONS', { cacheArea: func.setTree(((result.data || {}).item || {}).lists || [], 0, 'children', 'parent_id' ) || []})
-                resolve(result)
+                commit('UPDATE_MUTATIONS', {cacheArea: func.setTree(((result.data || {}).item || {}).lists || [], 0, 'children', 'parent_id') || []});
+                resolve(result);
             }).catch(error => {
-                commit('UPDATE_MUTATIONS', { error: error }, { root: true })
-                reject(error)
-            })
-        })
+                commit('UPDATE_MUTATIONS', {error: error}, {root: true});
+                reject(error);
+            });
+        });
     }
-}
+};
 export default {
     namespaced: true,
     mutations,
     actions
-}
+};

@@ -23,15 +23,16 @@
 </template>
 
 <script>
-import JsonView from '@/components/common/JsonView'
+import JsonView from '@/components/common/JsonView';
+
 export default {
     name: 'SystemLogLists',
-    components: { JsonView },
+    components: {JsonView},
     props: ['systemLogLists'],
     data() {
-        return {}
+        return {};
     }
-}
+};
 </script>
 
 <style scoped>

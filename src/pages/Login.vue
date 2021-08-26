@@ -20,13 +20,14 @@
 </template>
 
 <script>
-import Account from '@/components/login/Account'
-import Mail from '@/components/login/Mail'
-import OAuth from '@/components/login/OAuth'
+import Account from '@/components/login/Account';
+import Mail from '@/components/login/Mail';
+import OAuth from '@/components/login/OAuth';
+
 export default {
     name: 'Login',
-    components: {OAuth, Mail, Account },
-    data(){
+    components: {OAuth, Mail, Account},
+    data() {
         return {
             bgStyle: {
                 'background': 'url(' + require('../assets/chat/u0.jpg') + ')',
@@ -35,37 +36,37 @@ export default {
             },
             tabPane: 'password',
             header: '账号密码登录',
-            accountAttr: { verifyCode: '', style: { width: '77.6%' }, dialogWidth: '50%' },
+            accountAttr: {verifyCode: '', style: {width: '77.6%'}, dialogWidth: '50%'},
             innerWidth: window.innerWidth,
             oauthLogin: false
-        }
+        };
     },
     created() {
         this.$nextTick(() => {
-            this.__initDialog()
-        })
+            this.__initDialog();
+        });
     },
-    methods:{
+    methods: {
         /**
          * todo:初始化
          */
         __initDialog() {
-            this.refreshCode()
+            this.refreshCode();
             if (this.innerWidth < 768) {
-                this.accountAttr.dialogWidth = '100%'
-                this.accountAttr.style = { width: '55%' }
+                this.accountAttr.dialogWidth = '100%';
+                this.accountAttr.style = {width: '55%'};
             } else if (this.innerWidth >= 768 && this.innerWidth < 992) {
-                this.accountAttr.dialogWidth = '83.3333%'
-                this.accountAttr.style = { width: '79%' }
+                this.accountAttr.dialogWidth = '83.3333%';
+                this.accountAttr.style = {width: '79%'};
             } else if (this.innerWidth >= 992 && this.innerWidth < 1200) {
-                this.accountAttr.dialogWidth = '65.3333%'
-                this.accountAttr.style = { width: '78%' }
+                this.accountAttr.dialogWidth = '65.3333%';
+                this.accountAttr.style = {width: '78%'};
             } else if (this.innerWidth >= 1200 && this.innerWidth < 1920) {
-                this.accountAttr.dialogWidth = '49.3333%'
-                this.accountAttr.style = { width: '79%' }
+                this.accountAttr.dialogWidth = '49.3333%';
+                this.accountAttr.style = {width: '79%'};
             } else if (this.innerWidth >= 1920) {
-                this.accountAttr.dialogWidth = '32.3333%'
-                this.accountAttr.style = { width: '77.6%' }
+                this.accountAttr.dialogWidth = '32.3333%';
+                this.accountAttr.style = {width: '77.6%'};
             }
         },
         /**
@@ -73,16 +74,16 @@ export default {
          * @param tab
          */
         changeTabs(tab) {
-            this.oauthLogin = tab.props.name === 'oauth'
-            this.header = tab.props.label
+            this.oauthLogin = tab.props.name === 'oauth';
+            this.header = tab.props.label;
         },
         /**
          * todo:设置验证码
          * @return {Promise<void>}
          */
         async refreshCode() {
-            this.accountAttr.verifyCode = (Math.random() * 1000000 | 0).toString()
-            await this.$store.dispatch('login/reportCode', { verify_code: this.accountAttr.verifyCode })
+            this.accountAttr.verifyCode = (Math.random() * 1000000 | 0).toString();
+            await this.$store.dispatch('login/reportCode', {verify_code: this.accountAttr.verifyCode});
         },
         /**
          * todo:用戶登錄
@@ -90,10 +91,10 @@ export default {
          * @return {Promise<void>}
          */
         async loginSYS(form) {
-            await this.$store.dispatch('login/loginSYS', form)
+            await this.$store.dispatch('login/loginSYS', form);
         }
     }
-}
+};
 </script>
 
 <style scoped>

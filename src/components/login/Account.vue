@@ -15,7 +15,7 @@
                 <el-input placeholder="请输入验证码" maxlength="6" :style="accountAttr.style" show-icon clearable v-model.trim="form.verify_code">
                     <template #prepend><i class="el-icon-postcard"></i></template>
                 </el-input>
-                <Identify style="float: right"  @click="refreshCode" :identify-code="accountAttr.verifyCode"></Identify>
+                <Identify style="float: right" @click="refreshCode" :identify-code="accountAttr.verifyCode"></Identify>
             </el-form-item>
         </el-form>
         <el-footer style="text-align: center;height: 30px !important">
@@ -25,32 +25,34 @@
 </template>
 
 <script>
-import Identify from '@/components/login/Identify'
+import Identify from '@/components/login/Identify';
+
 export default {
     name: 'Account',
-    components: { Identify },
+    components: {Identify},
     props: {
         accountAttr: {
             type: Object,
-            default: () => {}
+            default: () => {
+            }
         }
     },
-    data () {
+    data() {
         return {
-            form: { password: '', email: '', verify_code: '', loginType: 'password' },
+            form: {password: '', email: '', verify_code: '', loginType: 'password'},
             rules: {
-                email: [{ required: true, message: '请输入邮箱账号', trigger: 'blur', type: 'email' }],
-                password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-                verify_code: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
-            },
-        }
+                email: [{required: true, message: '请输入邮箱账号', trigger: 'blur', type: 'email'}],
+                password: [{required: true, message: '请输入密码', trigger: 'blur'}],
+                verify_code: [{required: true, message: '请输入验证码', trigger: 'blur'}]
+            }
+        };
     },
     methods: {
         /**
          * todo:刷新验证码
          */
-        refreshCode () {
-            this.$emit('refreshCode')
+        refreshCode() {
+            this.$emit('refreshCode');
         },
         /**
          * todo:登录系统
@@ -59,13 +61,13 @@ export default {
         loginSYS(formName) {
             this.$refs[formName].validate((valid) => {
                 if (!valid) {
-                    return false
+                    return false;
                 }
-                this.$emit('loginSYS', this.form)
-            })
+                this.$emit('loginSYS', this.form);
+            });
         }
     }
-}
+};
 </script>
 
 <style scoped>

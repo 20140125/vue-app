@@ -7,22 +7,23 @@
 </template>
 
 <script>
-import BaseLayout from '@/components/BaseLayout'
-import SpiderIndex from '@/components/spider/Index'
+import BaseLayout from '@/components/BaseLayout';
+import SpiderIndex from '@/components/spider/Index';
+
 export default {
     name: 'Spider',
-    components: {SpiderIndex, BaseLayout },
+    components: {SpiderIndex, BaseLayout},
     computed: {
         spiderConfig() {
-            return this.$store.state.spider.spiderConfig
+            return this.$store.state.spider.spiderConfig;
         }
     },
     mounted() {
         this.$nextTick(async () => {
-            await this.$store.dispatch('spider/getSpiderConfiguration',)
-        })
-    },
-}
+            await this.$store.dispatch('spider/getSpiderConfiguration');
+        });
+    }
+};
 </script>
 
 <style scoped>

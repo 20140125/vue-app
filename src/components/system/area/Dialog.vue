@@ -15,18 +15,19 @@
 </template>
 
 <script>
-import JsonView from '@/components/common/JsonView'
-import URLS from '@/api/urls'
-import SubmitButton from '@/components/common/SubmitForm'
-import { toggle } from '@/components/mixins/toggle'
+import JsonView from '@/components/common/JsonView';
+import URLS from '@/api/urls';
+import SubmitButton from '@/components/common/SubmitForm';
+import {toggle} from '@/components/mixins/toggle';
 
 export default {
     name: 'AreaDialog',
-    components: { SubmitButton, JsonView },
+    components: {SubmitButton, JsonView},
     props: {
         form: {
             type: Object,
-            default: () => {}
+            default: () => {
+            }
         },
         showSubmitButton: {
             type: Boolean,
@@ -34,25 +35,25 @@ export default {
         }
     },
     mixins: [toggle],
-    data () {
+    data() {
         return {
             localForm: this.form,
             submitForm: {},
             savePermission: URLS.area.weather
-        }
+        };
     },
     watch: {
         form() {
-            this.localForm = this.form
+            this.localForm = this.form;
             this.$nextTick(() => {
                 setTimeout(() => {
-                    this.submitForm = { model: this.localForm, $refs: this.$refs, url: URLS.area.weather }
-                }, 1000)
-            })
+                    this.submitForm = {model: this.localForm, $refs: this.$refs, url: URLS.area.weather};
+                }, 1000);
+            });
         }
     }
 
-}
+};
 </script>
 
 <style scoped>

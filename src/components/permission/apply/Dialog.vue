@@ -25,12 +25,13 @@
 </template>
 
 <script>
-import SubmitButton from '@/components/common/SubmitForm'
-import URLS from '@/api/urls'
-import { toggle } from '@/components/mixins/toggle'
+import SubmitButton from '@/components/common/SubmitForm';
+import URLS from '@/api/urls';
+import {toggle} from '@/components/mixins/toggle';
+
 export default {
     name: 'PermissionDialog',
-    components: { SubmitButton },
+    components: {SubmitButton},
     props: {
         reForm: {
             type: String,
@@ -38,36 +39,38 @@ export default {
         },
         form: {
             type: Object,
-            default: () => {}
+            default: () => {
+            }
         },
         permissionAttr: {
             type: Object,
-            default: () => {}
+            default: () => {
+            }
         }
     },
     mixins: [toggle],
-    data () {
+    data() {
         return {
             localForm: this.form,
             submitForm: {},
             rules: {
-                user_id: [{ required: true, message: '请选择申请人', trigger: 'blur' }],
-                href: [{ required: true, message: '请选择申请地址', trigger: 'blur' }],
-                expires: [{ required: true, message: '请选择申请时间', trigger: 'change', type: 'date' }],
-                desc: [{ required: true, message: '请输入申请理由', trigger: 'blur' }]
+                user_id: [{required: true, message: '请选择申请人', trigger: 'blur'}],
+                href: [{required: true, message: '请选择申请地址', trigger: 'blur'}],
+                expires: [{required: true, message: '请选择申请时间', trigger: 'change', type: 'date'}],
+                desc: [{required: true, message: '请输入申请理由', trigger: 'blur'}]
             }
-        }
+        };
     },
     watch: {
         form() {
-            this.localForm = this.form
-            this.$nextTick( () => {
+            this.localForm = this.form;
+            this.$nextTick(() => {
                 setTimeout(() => {
-                    this.submitForm = { model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.permission.save : URLS.permission.update }
-                    this.localForm.user_id = this.$store.state.login.userInfo.id
-                    this.$parent.$parent.$parent.getUserAuth(this.localForm.user_id)
-                }, 1000)
-            })
+                    this.submitForm = {model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.permission.save : URLS.permission.update};
+                    this.localForm.user_id = this.$store.state.login.userInfo.id;
+                    this.$parent.$parent.$parent.getUserAuth(this.localForm.user_id);
+                }, 1000);
+            });
         }
     },
     methods: {
@@ -77,10 +80,10 @@ export default {
          * @return {String}
          */
         setAuthName(item) {
-            return Array(item.level + 1).join('　　') + item.name
+            return Array(item.level + 1).join('　　') + item.name;
         }
     }
-}
+};
 </script>
 
 <style scoped>

@@ -22,18 +22,19 @@
 </template>
 
 <script>
-import StatusRadio from '@/components/common/StatusRadio'
-import URLS from '@/api/urls'
+import StatusRadio from '@/components/common/StatusRadio';
+import URLS from '@/api/urls';
+
 export default {
     name: 'SystemConfigLists',
-    components: { StatusRadio },
+    components: {StatusRadio},
     props: ['configLists'],
     data() {
         return {
             URL: URLS.config.update
-        }
+        };
     }
-}
+};
 </script>
 
 <style scoped>

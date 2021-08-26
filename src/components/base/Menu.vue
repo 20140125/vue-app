@@ -10,7 +10,7 @@
                         <i class="el-icon-monitor"></i>
                         <span v-html="menu.name"></span>
                     </template>
-                    <el-menu-item :index="child.id.toString()"  v-for="(child,index) in menu.__children" @click="goto(child)" :key="index">
+                    <el-menu-item :index="child.id.toString()" v-for="(child,index) in menu.__children" @click="goto(child)" :key="index">
                         <template #title>
                             <i class="el-icon-house"></i>
                             <span v-html="child.name"></span>
@@ -28,20 +28,20 @@ export default {
     props: ['isCollapse'],
     computed: {
         menuLists() {
-            return this.$store.state.home.menuLists
+            return this.$store.state.home.menuLists;
         }
     },
-    data () {
+    data() {
         return {
             loading: true
-        }
+        };
     },
     mounted() {
         this.$nextTick(async () => {
             await this.$store.dispatch('home/getMenu').then(() => {
-                this.loading = false
-            })
-        })
+                this.loading = false;
+            });
+        });
     },
     methods: {
         /**
@@ -49,18 +49,21 @@ export default {
          * @param item
          * @return {Promise<void>}
          */
-        async goto (item) {
-            let params = { label: item.name, value: item.href }
+        async goto(item) {
+            let params = {label: item.name, value: item.href};
             await this.$store.dispatch('home/addTabs', params).then(() => {
-                this.$router.push({ path: params.value })
-            })
+                this.$router.push({path: params.value});
+            });
         }
     }
-}
+};
 </script>
 
 <style lang="less">
 .template {
     background: #333333 !important;
+}
+.el-menu--collapse {
+    border-right: none !important;
 }
 </style>

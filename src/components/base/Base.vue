@@ -2,7 +2,7 @@
     <el-container id="base">
         <el-header>
             <!--Header头部-->
-            <Header @setLayout="setLayout" ref="header"></Header>
+            <Header @setLayout="setLayout" ref="header" :layoutNums="layoutNums"></Header>
         </el-header>
         <el-container>
             <el-container direction="vertical">
@@ -26,19 +26,24 @@
 </template>
 
 <script>
-import WebPush from '@/components/base/WebPush'
-import Header from '@/components/base/Header'
-import Menu from '@/components/base/Menu'
-import Content from '@/components/base/Content'
-import ToUp from '@/components/common/ToUp'
+import WebPush from '@/components/base/WebPush';
+import Header from '@/components/base/Header';
+import Menu from '@/components/base/Menu';
+import Content from '@/components/base/Content';
+import ToUp from '@/components/common/ToUp';
+
 export default {
     name: 'BaseLayout',
-    components: {ToUp, Content, Menu, Header, WebPush },
-    data () {
+    components: {ToUp, Content, Menu, Header, WebPush},
+    data() {
         return {
             isCollapse: false,
-            layoutNums: { aside: 3, content: 21, style: { 'min-height': `${window.innerHeight > window.outerHeight ? (window.innerHeight - 130) : (window.outerHeight - 130)}px` } }
-        }
+            layoutNums: {
+                aside: 3,
+                content: 21,
+                style: {'min-height': `${window.innerHeight > window.outerHeight ? (window.innerHeight - 130) : (window.outerHeight - 130)}px`}
+            }
+        };
     },
     methods: {
         /**
@@ -46,11 +51,11 @@ export default {
          * @param isCollapse
          */
         setLayout(isCollapse) {
-            this.layoutNums = isCollapse ? { aside: 1, content: 23 } : { aside: 3, content: 21 }
-            this.isCollapse = isCollapse
+            this.layoutNums = isCollapse ? { aside: 0.1, content: 23 } : { aside: 3, content: 21 };
+            this.isCollapse = isCollapse;
         }
     }
-}
+};
 </script>
 
 <style lang="less">
@@ -66,18 +71,22 @@ export default {
         z-index: 2002;
         box-shadow: 0 2px 10px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
     }
+
     .el-aside {
         margin-top: 60px;
-        overflow:hidden;
+        overflow: hidden;
         background-color: #393d49;
         padding: 0 !important;
+
         i {
             margin-right: 15px !important;
         }
     }
+
     .content {
         margin: 80px 0;
     }
+
     .el-row {
         margin: 0 !important;
         padding: 0 !important

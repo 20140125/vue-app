@@ -28,15 +28,16 @@
 </template>
 
 <script>
-import func from '@/utils/func'
-import Push from 'push.js'
-import LeftBar from '@/components/chat/LeftBar'
-import RightBar from '@/components/chat/RightBar'
-import MessageBox from '@/components/chat/MessageBox'
+import func from '@/utils/func';
+import Push from 'push.js';
+import LeftBar from '@/components/chat/LeftBar';
+import RightBar from '@/components/chat/RightBar';
+import MessageBox from '@/components/chat/MessageBox';
+import router from '@/route/index';
 
 export default {
     name: 'chatMain',
-    components: { MessageBox, RightBar, LeftBar },
+    components: {MessageBox, RightBar, LeftBar},
     props: {
         showLeftBar: {
             type: Boolean,
@@ -45,54 +46,60 @@ export default {
         showRightBar: {
             type: Boolean,
             default: () => true
-        },
+        }
     },
     data() {
         return {
-            imageLists: ['u0.jpg','u1.jpg','u2.jpg','u3.jpeg'],
+            imageLists: ['u0.jpg', 'u1.jpg', 'u2.jpg', 'u3.jpeg'],
             title: '在线客服',
             visible: true,
             bgStyle: {},
             receiver: {}
-        }
+        };
     },
     created() {
         this.bgStyle = {
             'background': 'url(' + require(`../../assets/chat/${this.imageLists[Math.random() * this.imageLists.length | 0]}`) + ')',
             'background-repeat': 'no-repeat',
             'height': (window.innerHeight) + 'px'
+        };
+        if (!this.Permission) {
+            router.push({ path: '/login'});
         }
     },
     computed: {
         /** todo:登录用户信息  **/
         userInfo() {
-            return {...this.$store.state.login.userInfo}
+            return {...this.$store.state.login.userInfo};
         },
         /** todo:webSocketServer  **/
         webSocketServer() {
-            return new WebSocket(this.userInfo.websocket)
+            return new WebSocket(this.userInfo.websocket);
         },
         /** todo:所有用户  **/
         clientUsers() {
-            return this.$store.state.chat.clientUsers
+            return this.$store.state.chat.clientUsers;
         },
         /** todo:通讯用户  **/
         chatUsers() {
-            return this.$store.state.chat.chatUsers
+            return this.$store.state.chat.chatUsers;
         },
         /** todo:客户端公告  **/
         clientLog() {
-            return this.$store.state.chat.clientLog
+            return this.$store.state.chat.clientLog;
         },
         /** todo:消息列表 **/
         messageLists() {
-            return this.$store.state.chat.messageLists
-        },
+            return this.$store.state.chat.messageLists;
+        }
     },
     mounted() {
         this.$nextTick(() => {
-            this.getConnection(this.webSocketServer)
-        })
+            if (!this.Permission) {
+                router.push({ path: '/login'});
+            }
+            this.getConnection(this.webSocketServer);
+        });
     },
     methods: {
         /**
@@ -100,9 +107,9 @@ export default {
          * @param webSocketServer
          */
         async getConnection(webSocketServer) {
-            const __this = this
+            const __this = this;
             /* todo:用户登录 */
-            webSocketServer.onopen = function () {
+            webSocketServer.onopen = async function () {
                 const jsonStr = {
                     type: 'login',
                     from_client_id: __this.userInfo.uuid,
@@ -110,52 +117,52 @@ export default {
                     room_id: __this.userInfo.room_id,
                     client_img: __this.userInfo.avatar_url,
                     uuid: __this.userInfo.uuid
-                }
-                __this.pushClientLog('正在登入系统。。。', jsonStr.client_name)
-                webSocketServer.send(JSON.stringify(jsonStr))
-            }
+                };
+                await __this.pushClientLog('正在登入系统。。。', jsonStr.client_name);
+                webSocketServer.send(JSON.stringify(jsonStr));
+            };
             /* todo:消息往来 */
-            webSocketServer.onmessage = function (response) {
-                const message = JSON.parse(response.data)
+            webSocketServer.onmessage = async function (response) {
+                const message = JSON.parse(response.data);
                 switch (message.type) {
                     case 'ping':
-                        webSocketServer.send('{"type":"pong"}')
-                        break
+                        webSocketServer.send('{"type":"pong"}');
+                        break;
                     case 'login':
-                        __this.$store.dispatch('chat/addClientUsers', { clientUsers: (message || {}).client_lists || [] })
-                        __this.pushClientLog('登入系统成功', message.from_client_name)
-                        break
+                        await __this.$store.dispatch('chat/addClientUsers', {clientUsers: (message || {}).client_lists || []});
+                        await __this.pushClientLog('登入系统成功', message.from_client_name);
+                        break;
                     case 'say':
-                        __this.receiveMessage(message)
-                        __this.$store.dispatch('chat/addClientUsers', { clientUsers: (message || {}).client_lists || [] })
-                        __this.pushClientLog('接收消息成功', message.to_client_name)
-                        break
+                        await __this.receiveMessage(message);
+                        await __this.$store.dispatch('chat/addClientUsers', {clientUsers: (message || {}).client_lists || []});
+                        await __this.pushClientLog('接收消息成功', message.to_client_name);
+                        break;
                     case 'logout':
-                        __this.pushClientLog('登出系统成功', message.from_client_name)
-                        break
+                        await __this.pushClientLog('登出系统成功', message.from_client_name);
+                        break;
 
                 }
-            }
+            };
             /* todo:消息发送失败 */
             webSocketServer.onmessageerror = function () {
-                __this.pushClientLog('消息发送失败')
-            }
+                __this.pushClientLog('消息发送失败');
+            };
             /* todo:链接关闭 */
             webSocketServer.onclose = function () {
-                __this.pushClientLog('链接断开尝试重新连接')
-                __this.connect(webSocketServer)
-            }
+                __this.pushClientLog('链接断开尝试重新连接');
+                __this.connect(webSocketServer);
+            };
             /* todo:链接异常 */
             webSocketServer.onerror = function () {
-                __this.pushClientLog('链接异常')
-            }
+                __this.pushClientLog('链接异常');
+            };
         },
         /**
          * todo:获取接收者信息
          * @param user
          */
         getReceiver(user) {
-            this.receiver = user
+            this.receiver = user;
         },
         /**
          * todo:发送消息
@@ -174,28 +181,28 @@ export default {
                     room_id: this.receiver.to_client_name === 'all' ? this.receiver.room_id : '',
                     uuid: this.receiver.uuid,
                     time: func.setTime(Date.parse(new Date()))
-                }
-                this.webSocketServer.send(JSON.stringify(jsonStr))
-                this.$refs['messageBox'].$refs['message'].innerHTML = ''
-                this.$store.dispatch('chat/addMessageLists', { message: jsonStr, uuid: this.userInfo.uuid })
-                this.pushClientLog('发送消息成功', this.userInfo.username)
-                func.scrollToBottom('.messageLists')
+                };
+                this.webSocketServer.send(JSON.stringify(jsonStr));
+                this.$refs['messageBox'].$refs['message'].innerHTML = '';
+                this.$store.dispatch('chat/addMessageLists', {message: jsonStr, uuid: this.userInfo.uuid});
+                this.pushClientLog('发送消息成功', this.userInfo.username);
+                func.scrollToBottom('.messageLists');
             }
         },
         /**
          * TODO:接收消息
          * @param message
          */
-        async receiveMessage (message) {
+        async receiveMessage(message) {
             for (let index in this.clientUsers) {
                 if (index === message.from_client_id) {
-                    this.$store.dispatch('chat/addChatUsers', this.clientUsers[index])
-                    this.receiver = this.clientUsers[index]
+                    this.$store.dispatch('chat/addChatUsers', this.clientUsers[index]);
+                    this.receiver = this.clientUsers[index];
                 }
             }
-            this.$store.dispatch('chat/addMessageLists', { message: message, uuid: this.userInfo.uuid })
-            func.scrollToBottom('.messageLists')
-            this.pushMessage(message.content)
+            await this.$store.dispatch('chat/addMessageLists', {message: message, uuid: this.userInfo.uuid});
+            func.scrollToBottom('.messageLists');
+            this.pushMessage(message.content);
         },
         /**
          * todo:控制台信息
@@ -203,22 +210,22 @@ export default {
          * @param username
          */
         async pushClientLog(message, username = '通知') {
-            let clientLog = { time: func.setTime(Date.parse(new Date()), 'ch'), message: message, username: username }
-            await this.$store.dispatch('chat/addClientLog', clientLog)
+            let clientLog = {time: func.setTime(Date.parse(new Date()), 'ch'), message: message, username: username};
+            await this.$store.dispatch('chat/addClientLog', clientLog);
         },
         /**
          * todo:推送弹框消息
          * @param message
          */
-        pushMessage (message) {
-            Push.create('你有未读消息', { body: message, requireInteraction: true, icon: 'https://www.fanglonger.com/favicon.ico', timeout: 60000 })
-        },
+        pushMessage(message) {
+            Push.create('你有未读消息', {body: message, requireInteraction: true, icon: 'https://www.fanglonger.com/favicon.ico', timeout: 60000});
+        }
     }
-}
+};
 </script>
 <style lang="less">
 #main {
-    .left-bar, .right-bar{
+    .left-bar, .right-bar {
         .el-card__body {
             padding: 0 !important;
         }

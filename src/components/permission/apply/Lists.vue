@@ -29,16 +29,17 @@
 </template>
 
 <script>
-import StatusRadio from '@/components/common/StatusRadio'
-import URLS from '@/api/urls'
+import StatusRadio from '@/components/common/StatusRadio';
+import URLS from '@/api/urls';
+
 export default {
     name: 'PermissionLists',
     props: ['permissionLists'],
-    components: { StatusRadio },
+    components: {StatusRadio},
     data() {
         return {
             URL: URLS.permission.update
-        }
+        };
     }
-}
+};
 </script>

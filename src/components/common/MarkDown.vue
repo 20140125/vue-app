@@ -36,14 +36,14 @@ export default {
         /* todo：图片上传 */
         uploadFile: {
             type: Function
-        },
+        }
     },
     data() {
         return {
             model: this.markdown
-        }
-    },
-}
+        };
+    }
+};
 </script>
 
 <style scoped>

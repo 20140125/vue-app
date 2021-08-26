@@ -26,7 +26,8 @@
 </template>
 
 <script>
-import URLS from '@/api/urls'
+import URLS from '@/api/urls';
+
 export default {
     name: 'databaseLists',
     props: ['databaseLists'],
@@ -35,43 +36,43 @@ export default {
             edit: false,
             name: '',
             URLS: URLS.database
-        }
+        };
     },
     methods: {
         /**
          * TODO：数据表备份
          * @param table
          */
-        async backupTable (table) {
-            await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.database.backup, model: { name: table.name, form: 'all' } }).then(() => {
-                this.$parent.$parent.$parent.getDatabaseLists(false)
-            })
+        async backupTable(table) {
+            await this.$store.dispatch('UPDATE_ACTIONS', {url: URLS.database.backup, model: {name: table.name, form: 'all'}}).then(() => {
+                this.$parent.$parent.$parent.getDatabaseLists(false);
+            });
         },
         /**
          * TODO：数据表修复
          * @param table
          */
         async repairTable(table) {
-            await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.database.repair, model: { name: table.name, engine: table.engine } }).then(() => {
-                this.$parent.$parent.$parent.getDatabaseLists(false)
-            })
+            await this.$store.dispatch('UPDATE_ACTIONS', {url: URLS.database.repair, model: {name: table.name, engine: table.engine}}).then(() => {
+                this.$parent.$parent.$parent.getDatabaseLists(false);
+            });
         },
         /**
          * TODO：数据表优化
          * @param table
          */
         async optimizeTable(table) {
-            await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.database.optimize, model: { name: table.name, engine: table.engine } }).then(() => {
-                this.$parent.$parent.$parent.getDatabaseLists(false)
-            })
+            await this.$store.dispatch('UPDATE_ACTIONS', {url: URLS.database.optimize, model: {name: table.name, engine: table.engine}}).then(() => {
+                this.$parent.$parent.$parent.getDatabaseLists(false);
+            });
         },
         /**
          * TODO：设置
          * @param table
          */
         setComment(table) {
-            this.name = table.name
-            this.edit = true
+            this.name = table.name;
+            this.edit = true;
         },
         /**
          * TODO：修改注释
@@ -79,17 +80,17 @@ export default {
          */
         async updateComment(table) {
             if (!table.comment) {
-                this.$message.warning('请输入数据表备注')
-                this.$refs[table.name].focus()
-                return false
+                this.$message.warning('请输入数据表备注');
+                this.$refs[table.name].focus();
+                return false;
             }
-            await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.database.alter, model: { name: table.name, comment: table.comment } }).then(() => {
-                this.$parent.$parent.$parent.getDatabaseLists(false)
-                this.edit = false
-            })
+            await this.$store.dispatch('UPDATE_ACTIONS', {url: URLS.database.alter, model: {name: table.name, comment: table.comment}}).then(() => {
+                this.$parent.$parent.$parent.getDatabaseLists(false);
+                this.edit = false;
+            });
         }
     }
-}
+};
 </script>
 
 <style scoped>

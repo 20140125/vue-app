@@ -14,19 +14,19 @@
 </template>
 
 <script>
-import BaseLayout from '@/components/BaseLayout'
-import GetAddress from '@/components/system/tools/GetAddress'
-import GetWeather from '@/components/system/tools/GetWeather'
+import BaseLayout from '@/components/BaseLayout';
+import GetAddress from '@/components/system/tools/GetAddress';
+import GetWeather from '@/components/system/tools/GetWeather';
 
 export default {
     name: 'SystemTools',
-    components: { GetWeather, GetAddress, BaseLayout },
+    components: {GetWeather, GetAddress, BaseLayout},
     data() {
         return {
             activeName: 'getAddress'
-        }
+        };
     }
-}
+};
 </script>
 
 <style scoped>

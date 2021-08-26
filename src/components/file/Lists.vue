@@ -30,7 +30,7 @@
 export default {
     name: 'FileLists',
     props: ['lists', 'fileURL']
-}
+};
 </script>
 
 <style scoped>
