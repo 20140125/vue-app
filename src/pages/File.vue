@@ -4,7 +4,7 @@
             <el-form-item style="width: 900px;">
                 <el-breadcrumb separator-class="el-icon-arrow-right">
                     <el-breadcrumb-item  @click="getFileLists(item, index)" v-for="(item, index) in breadcrumb" :key="index">{{ item.filename }}</el-breadcrumb-item>
-                    <el-breadcrumb-item style="float: right"><i class="el-icon-refresh-right" @click="getFileLists"></i></el-breadcrumb-item>
+                    <el-breadcrumb-item @click="getFileLists({ path: '/', filename: 'longer' })" style="float: right"><i class="el-icon-refresh-right"></i></el-breadcrumb-item>
                 </el-breadcrumb>
             </el-form-item>
         </template>

@@ -265,7 +265,7 @@ export default {
     .details {
         .el-form-item__content {
             .el-tabs--border-card {
-                min-width: 1120px !important;
+                width: 1120px !important;
             }
         }
     }
