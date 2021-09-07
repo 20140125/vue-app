@@ -18,7 +18,7 @@
         <el-table-column label="操作" align="right">
             <template #default="scope">
                 <el-button size="mini" type="text" v-if="scope.row.file_type !== 'file' && Permission.auth.indexOf(fileURL.save) > -1" @click="$emit('addFile',scope.row)">添加</el-button>
-                <el-button size="mini" type="text" v-if="scope.row.filename.split('.')[1] !== 'zip' && Permission.auth.indexOf(fileURL.read) > -1" @click="$emit('getFiles',scope.row)">编辑</el-button>
+                <el-button size="mini" type="text" v-if="scope.row.file_type === 'file' && Permission.auth.indexOf(fileURL.read) > -1" @click="$emit('getFiles',scope.row)">编辑</el-button>
                 <el-button size="mini" type="text" v-if="Permission.auth.indexOf(fileURL.rename) > -1" @click="$emit('renameFile',scope.row)">重命名</el-button>
                 <el-button size="mini" type="text" v-if="Permission.auth.indexOf(fileURL.chmod) > -1" @click="$emit('chmodFile',scope.row)">权限</el-button>
                 <el-button size="mini" type="text" v-if="Permission.auth.indexOf(fileURL.zip) > -1" @click="$emit('composeFile',scope.row)">压缩</el-button>
