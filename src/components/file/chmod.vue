@@ -21,7 +21,7 @@
                     </el-checkbox-group>
                 </el-form-item>
             </el-form>
-            <SubmitButton :form="form" re-form="fileChmod" @closeDialog="$emit('getFileLists')"></SubmitButton>
+            <SubmitButton :form="form" re-form="fileChmod" @closeDialog="$emit('closeDialog')"></SubmitButton>
         </el-dialog>
     </div>
 </template>

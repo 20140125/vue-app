@@ -1,9 +1,11 @@
 <template>
     <BaseLayout :loading="loading">
         <template #header>
-            <el-form-item>
-                <el-button size="mini" type="primary" plain icon="el-icon-s-management" v-if="fileAtt.multipleSelection.length > 0 && Permission.auth.indexOf(fileURL.zip) > -1" @click="composerFile">压缩</el-button>
-                <el-button v-if="Permission.auth.indexOf(fileURL.save) > -1" size="mini" type="primary" plain icon="el-icon-plus" @click="addFile">添加</el-button>
+            <el-form-item style="width: 900px;">
+                <el-breadcrumb separator-class="el-icon-arrow-right">
+                    <el-breadcrumb-item  @click="getFileLists(item, index)" v-for="(item, index) in breadcrumb" :key="index">{{ item.filename }}</el-breadcrumb-item>
+                    <el-breadcrumb-item style="float: right"><i class="el-icon-refresh-right" @click="getFileLists"></i></el-breadcrumb-item>
+                </el-breadcrumb>
             </el-form-item>
         </template>
         <template #body>
@@ -17,16 +19,17 @@
                        @chmodFile="chmodFile"
                        @uploadFile="uploadFile"
                        @unComposeFile="unComposeFile"
+                       @getFileLists="getFileLists"
                        @getMultipleSelection="getMultipleSelection">
             </FileLists>
         </template>
         <template #dialog>
             <!--文本编辑-->
-            <FileDetails :details="fileDetail" ref="fileDetail" :detail-visible="visible.detail" @getFileLists="getFileLists"></FileDetails>
+            <FileDetails :details="fileDetail" ref="fileDetail" :detail-visible="visible.detail" @closeDialog="closeDialog"></FileDetails>
             <!--静态资源预览-->
-            <StaticSource :source-visible="visible.source" :static-source="staticSource" @getFileLists="getFileLists"></StaticSource>
+            <StaticSource :source-visible="visible.source" :static-source="staticSource" @closeDialog="closeDialog"></StaticSource>
             <!--权限-->
-            <FileChmod :chmod-visible="visible.chmod" :file="chmod" @getFileLists="getFileLists"></FileChmod>
+            <FileChmod :chmod-visible="visible.chmod" :file="chmod" @closeDialog="closeDialog"></FileChmod>
             <!-- 文件上传 -->
             <FileUpload :upload-visible="visible.upload" :file="staticSource.file"></FileUpload>
         </template>
@@ -58,7 +61,8 @@ export default {
             chmod: {},
             loading: true,
             fileAtt: {multipleSelection: []},
-            fileURL: URLS.file
+            fileURL: URLS.file,
+            breadcrumb: [{ path: '/', filename: 'longer' }]
         };
     },
     mounted() {
@@ -69,19 +73,27 @@ export default {
     methods: {
         /**
          * todo:获取文件列表
-         * @param refresh
+         * @param basename
+         * @param index
          */
-        async getFileLists(refresh = false) {
-            this.visible = {detail: false, source: false, chmod: false, upload: false};
+        async getFileLists(basename = { path: '/', filename: 'longer' }, index = 0) {
+            if (JSON.stringify(this.breadcrumb).indexOf(JSON.stringify(basename)) === -1) {
+                this.breadcrumb.push(basename)
+            } else {
+                this.breadcrumb.splice(index + 1, this.breadcrumb.length - index - 1)
+            }
+            if (basename.path === '/') {
+                this.breadcrumb = [{ path: '/', filename: 'longer' }];
+            }
+            this.visible = { detail: false, source: false, chmod: false, upload: false };
             this.loading = true;
-            await this.$store.dispatch('file/getFileLists', {path: 'base_path', basename: '/', refresh: refresh}).then(() => {
+            await this.$store.dispatch('file/getFileLists', { path: 'base_path', basename: basename.path }).then(() => {
                 this.loading = false;
             });
         },
         /**
          * todo:获取文件内容
          * @param file
-         * @constructor
          */
         async getFiles(file) {
             const ext = (file.filename.split('.') || [])[1] || 'php';
@@ -126,8 +138,8 @@ export default {
                         title: file.filename
                     });
                 });
-                this.staticSource = form === 'image' ? {image: source, video: [], title: '图片预览'} : {image: [], video: source, title: '视频预览'};
-                this.visible = {detail: false, source: true, chmod: false, upload: false};
+                this.staticSource = form === 'image' ? { image: source, video: [], title: '图片预览' } : { image: [], video: source, title: '视频预览' };
+                this.visible = { detail: false, source: true, chmod: false, upload: false };
             }
         },
         /**
@@ -239,7 +251,26 @@ export default {
                 this.fileAtt.path = item.path.replace(item.filename, '');
                 this.fileAtt.multipleSelection.push(item.path);
             });
+        },
+        /**
+         * todo:关闭弹框
+         */
+        closeDialog() {
+            this.visible = { detail: false, source: false, chmod: false, upload: false };
         }
     }
 };
 </script>
+<style lang="less">
+.el-breadcrumb {
+    border: 1px solid #dddddd;
+    padding: 10px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    background-color: #EEEEEE;
+    .el-icon-refresh-right {
+        cursor: pointer;
+        font-size: 16px;
+    }
+}
+</style>

@@ -22,17 +22,17 @@ export const actions = {
      * @param payload
      * @return {Promise<*|{}>}
      */
-    async getFileLists({commit, state}, payload) {
-        if (state.fileLists && !payload.refresh) {
-            commit('UPDATE_MUTATIONS', {fileLists: state.fileLists});
+    async getFileLists({ commit, state }, payload) {
+        if (payload.basename === state.basename) {
+            commit('UPDATE_MUTATIONS', { fileLists: state.fileLists, basename: payload.basename });
             return false;
         }
         return new Promise((resolve, reject) => {
             requestMethods.__commonMethods(URLS.file.lists, payload).then(result => {
-                commit('UPDATE_MUTATIONS', {fileLists: ((result.data || {}).item || {}).lists || []});
+                commit('UPDATE_MUTATIONS', { fileLists: ((result.data || {}).item || {}).lists || [], basename: payload.basename });
                 resolve(result);
             }).catch(error => {
-                commit('UPDATE_MUTATIONS', {error: (error.data || {}).item || {}}, {root: true});
+                commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
                 reject(error);
             });
         });
@@ -45,7 +45,7 @@ export const actions = {
      * @param payload
      * @return {Promise<void>}
      */
-    async getFileContent({dispatch, commit, state}, payload) {
+    async getFileContent({ dispatch, commit, state }, payload) {
         if (payload.content) {
             state.tabs.forEach(item => {
                 if (item.content === payload.content) {
@@ -60,7 +60,7 @@ export const actions = {
                 dispatch('addTabs', payload);
                 resolve(result);
             }).catch(error => {
-                commit('UPDATE_MUTATIONS', {error: (error.data || {}).item || {}}, {root: true});
+                commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
                 reject(error);
             });
         });
@@ -71,15 +71,15 @@ export const actions = {
      * @param state
      * @param tabs
      */
-    addTabs({commit, state}, tabs) {
+    addTabs({ commit, state }, tabs) {
         try {
             let newTabs = JSON.parse(JSON.stringify(state.tabs || []));
             if (JSON.stringify(newTabs).indexOf(JSON.stringify(tabs)) === -1) {
                 newTabs.push(tabs);
             }
-            commit('UPDATE_MUTATIONS', {tabs: newTabs, tabModel: tabs});
+            commit('UPDATE_MUTATIONS', { tabs: newTabs, tabModel: tabs });
         } catch (error) {
-            commit('UPDATE_MUTATIONS', {error: error}, {root: true});
+            commit('UPDATE_MUTATIONS', { error: error }, { root: true });
         }
     },
     /**
@@ -88,13 +88,13 @@ export const actions = {
      * @param state
      * @param payload
      */
-    deleteTabs({commit, state}, payload) {
+    deleteTabs({ commit, state }, payload) {
         try {
             let newTabs = JSON.parse(JSON.stringify(state.tabs || []));
             newTabs.splice(payload.index, 1);
-            commit('UPDATE_MUTATIONS', {tabs: newTabs, tabModel: payload.nextTab});
+            commit('UPDATE_MUTATIONS', { tabs: newTabs, tabModel: payload.nextTab });
         } catch (error) {
-            commit('UPDATE_MUTATIONS', {error: error}, {root: true});
+            commit('UPDATE_MUTATIONS', { error: error }, { root: true });
         }
     }
 };

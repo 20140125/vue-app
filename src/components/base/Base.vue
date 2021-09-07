@@ -41,7 +41,7 @@ export default {
             layoutNums: {
                 aside: 3,
                 content: 21,
-                style: {'min-height': `${window.innerHeight > window.outerHeight ? (window.innerHeight - 130) : (window.outerHeight - 130)}px`}
+                style: { 'min-height': `${window.innerHeight > window.outerHeight ? (window.innerHeight - 130) : (window.outerHeight - 130)}px` }
             }
         };
     },

@@ -2,6 +2,9 @@
     <div id="dialog">
         <el-dialog v-model="visible.detail" :title="tabModel.label || '在线编辑器'" center width="1550px" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false" :fullscreen="fullscreen">
             <el-row :gutter="24">
+                <el-col :span="24" style="margin-top: -65px;color: white;">
+                    <i class="el-icon-full-screen" style="font-size: 25px" @click="fullscreen = !fullscreen"></i>
+                </el-col>
                 <!--文件列表-->
                 <el-col :span="6" style="margin-bottom: 20px">
                     <el-input placeholder="输入关键字搜索" v-model="filterText" clearable style="margin-bottom: 20px" suffix-icon="el-icon-search"></el-input>
@@ -29,9 +32,9 @@
                                 </el-card>
                             </el-tabs>
                         </el-form-item>
-                        <SubmitButton v-if="Permission.auth.indexOf(savePermission) > -1" :form="form" re-form="fileSave" @closeDialog="$emit('getFileLists')"></SubmitButton>
+                        <SubmitButton v-if="Permission.auth.indexOf(savePermission) > -1" :form="form" re-form="fileSave" @closeDialog="$emit('closeDialog')"></SubmitButton>
                         <el-main style="text-align: center" v-else>
-                            <el-button type="default" size="medium" @click="$emit('getFileLists')" plain>取消</el-button>
+                            <el-button type="default" size="medium" @click="$emit('closeDialog')" plain>取消</el-button>
                         </el-main>
                     </el-form>
                 </el-col>
@@ -74,11 +77,11 @@ export default {
     components: {SubmitButton, codemirror},
     data() {
         return {
-            visible: {detail: this.detailVisible},
-            treeProps: {label: 'filename', children: 'children', isLeaf: false},
+            visible: { detail: this.detailVisible },
+            treeProps: { label: 'filename', children: 'children', isLeaf: false },
             fullscreen: false,
             filterText: '',
-            form: {model: {content: '', path: ''}, url: URLS.file.update, $refs: ''},
+            form: { model: { content: '', path: '' }, url: URLS.file.update, $refs: '' },
             /* 代码编辑器配置 */
             options: {
                 /* 语言类型 */
@@ -262,7 +265,7 @@ export default {
     .details {
         .el-form-item__content {
             .el-tabs--border-card {
-                width: 1120px !important;
+                min-width: 1120px !important;
             }
         }
     }

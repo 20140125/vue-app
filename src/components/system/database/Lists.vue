@@ -45,7 +45,7 @@ export default {
          */
         async backupTable(table) {
             await this.$store.dispatch('UPDATE_ACTIONS', {url: URLS.database.backup, model: {name: table.name, form: 'all'}}).then(() => {
-                this.$parent.$parent.$parent.getDatabaseLists(false);
+                this.$parent.$parent.$parent.$parent.getDatabaseLists(false);
             });
         },
         /**
@@ -54,7 +54,7 @@ export default {
          */
         async repairTable(table) {
             await this.$store.dispatch('UPDATE_ACTIONS', {url: URLS.database.repair, model: {name: table.name, engine: table.engine}}).then(() => {
-                this.$parent.$parent.$parent.getDatabaseLists(false);
+                this.$parent.$parent.$parent.$parent.getDatabaseLists(false);
             });
         },
         /**
@@ -63,7 +63,7 @@ export default {
          */
         async optimizeTable(table) {
             await this.$store.dispatch('UPDATE_ACTIONS', {url: URLS.database.optimize, model: {name: table.name, engine: table.engine}}).then(() => {
-                this.$parent.$parent.$parent.getDatabaseLists(false);
+                this.$parent.$parent.$parent.$parent.getDatabaseLists(false);
             });
         },
         /**
@@ -85,7 +85,7 @@ export default {
                 return false;
             }
             await this.$store.dispatch('UPDATE_ACTIONS', {url: URLS.database.alter, model: {name: table.name, comment: table.comment}}).then(() => {
-                this.$parent.$parent.$parent.getDatabaseLists(false);
+                this.$parent.$parent.$parent.$parent.getDatabaseLists(false);
                 this.edit = false;
             });
         }
