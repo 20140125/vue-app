@@ -7,7 +7,7 @@ export const mutations = {
      * @param state
      * @param update
      */
-    UPDATE_MUTATIONS: function (state, update) {
+    UPDATE_MUTATIONS(state, update) {
         Object.keys(update).forEach(item => {
             state[item] = update[item];
         });
@@ -20,17 +20,17 @@ export const actions = {
      * @param state
      * @return {Promise<boolean>}
      */
-    async getSpiderConfiguration({commit, state}) {
+    async getSpiderConfiguration({ commit, state }) {
         if (state.spiderConfig) {
-            commit('UPDATE_MUTATIONS', {spiderConfig: state.spiderConfig});
+            commit('UPDATE_MUTATIONS', { spiderConfig: state.spiderConfig });
             return false;
         }
         return new Promise((resolve, reject) => {
             requestMethods.__commonMethods(URLS.spider.lists).then(result => {
-                commit('UPDATE_MUTATIONS', {spiderConfig: (((result || {}).data || {}).item || {}).lists || {}});
+                commit('UPDATE_MUTATIONS', { spiderConfig: (((result || {}).data || {}).item || {}).lists || {} });
                 resolve(result);
             }).catch(error => {
-                commit('UPDATE_MUTATIONS', {error: (error.data || {}).item || {}}, {root: true});
+                commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
                 reject(error);
             });
         });
@@ -41,12 +41,12 @@ export const actions = {
      * @param payload
      * @return {Promise<boolean>}
      */
-    async runningSpider({commit}, payload) {
+    async runningSpider({ commit }, payload) {
         return new Promise((resolve, reject) => {
             requestMethods.__commonMethods(URLS.spider.running, payload).then(result => {
                 resolve(result);
             }).catch(error => {
-                commit('UPDATE_MUTATIONS', {error: (error.data || {}).item || {}}, {root: true});
+                commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
                 reject(error);
             });
         });

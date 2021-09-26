@@ -22,10 +22,10 @@ export const actions = {
      * @param payload
      * @return {Promise<boolean>}
      */
-    async getPushLists({commit, state}, payload) {
+    async getPushLists({ commit, state }, payload) {
         /* 如果页码没有变，直接读取vuex里面的数据 */
         if (state.page === payload.page && !payload.refresh) {
-            commit('UPDATE_MUTATIONS', {pushLists: state.pushLists});
+            commit('UPDATE_MUTATIONS', { pushLists: state.pushLists });
             return false;
         }
         return new Promise((resolve, reject) => {
@@ -37,7 +37,7 @@ export const actions = {
                 });
                 resolve(result);
             }).catch(error => {
-                commit('UPDATE_MUTATIONS', {error: error}, {root: true});
+                commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
                 reject(error);
             });
         });

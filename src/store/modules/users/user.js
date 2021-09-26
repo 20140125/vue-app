@@ -7,7 +7,7 @@ export const mutations = {
      * @param state
      * @param update
      */
-    UPDATE_MUTATIONS: function (state, update) {
+    UPDATE_MUTATIONS(state, update) {
         Object.keys(update).forEach(item => {
             state[item] = update[item];
         });
@@ -22,10 +22,10 @@ export const actions = {
      * @param payload
      * @return {Promise<boolean>}
      */
-    async getUsersLists({commit, state}, payload) {
+    async getUsersLists({ commit, state }, payload) {
         /* 如果页码没有变，直接读取vuex里面的数据 */
         if (state.page === payload.page && !payload.refresh) {
-            commit('UPDATE_MUTATIONS', {usersLists: state.usersLists});
+            commit('UPDATE_MUTATIONS', { usersLists: state.usersLists });
             return false;
         }
         return new Promise((resolve, reject) => {
@@ -37,7 +37,7 @@ export const actions = {
                 });
                 resolve(result);
             }).catch(error => {
-                commit('UPDATE_MUTATIONS', {error: error}, {root: true});
+                commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
                 reject(error);
             });
         });
@@ -48,17 +48,17 @@ export const actions = {
      * @param state
      * @return {Promise<boolean>}
      */
-    async getUserCenter({commit, state}) {
+    async getUserCenter({ commit, state }) {
         if (state.userCenter) {
-            commit('UPDATE_MUTATIONS', {userCenter: state.userCenter});
+            commit('UPDATE_MUTATIONS', { userCenter: state.userCenter });
             return false;
         }
         return new Promise((resolve, reject) => {
             requestMethods.__commonMethods(URLS.userCenter.get, {}).then(result => {
-                commit('UPDATE_MUTATIONS', {userCenter: ((result.data || {}).item || {}).lists || {}});
+                commit('UPDATE_MUTATIONS', { userCenter: ((result.data || {}).item || {}).lists || {} });
                 resolve(result);
             }).catch(error => {
-                commit('UPDATE_MUTATIONS', {error: error}, {root: true});
+                commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
                 reject(error);
             });
         });
@@ -73,15 +73,15 @@ export const actions = {
     async getCacheUserLists({commit, state}, payload) {
         /* 如果页码没有变，直接读取vuex里面的数据 */
         if (state.cacheUsers) {
-            commit('UPDATE_MUTATIONS', {cacheUsers: state.cacheUsers});
+            commit('UPDATE_MUTATIONS', { cacheUsers: state.cacheUsers });
             return false;
         }
         return new Promise((resolve, reject) => {
             requestMethods.__commonMethods(URLS.users.cache, payload).then(result => {
-                commit('UPDATE_MUTATIONS', {cacheUsers: ((result.data || {}).item || {}).lists || []});
+                commit('UPDATE_MUTATIONS', { cacheUsers: ((result.data || {}).item || {}).lists || [] });
                 resolve(result);
             }).catch(error => {
-                commit('UPDATE_MUTATIONS', {error: error}, {root: true});
+                commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
                 reject(error);
             });
         });

@@ -7,7 +7,7 @@ export const mutations = {
      * @param state
      * @param update
      */
-    UPDATE_MUTATIONS: function (state, update) {
+    UPDATE_MUTATIONS(state, update) {
         Object.keys(update).forEach(item => {
             state[item] = update[item];
         });
@@ -22,10 +22,10 @@ export const actions = {
      * @param payload
      * @return {Promise<boolean>}
      */
-    async getOAuthLists({commit, state}, payload) {
+    async getOAuthLists({ commit, state }, payload) {
         /* 如果页码没有变，直接读取vuex里面的数据 */
         if (state.page === payload.page && !payload.refresh) {
-            commit('UPDATE_MUTATIONS', {oAuthLists: state.oAuthLists});
+            commit('UPDATE_MUTATIONS', { oAuthLists: state.oAuthLists });
             return false;
         }
         return new Promise((resolve, reject) => {
@@ -37,7 +37,7 @@ export const actions = {
                 });
                 resolve(result);
             }).catch(error => {
-                commit('UPDATE_MUTATIONS', {error: error}, {root: true});
+                commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
                 reject(error);
             });
         });

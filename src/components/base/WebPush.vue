@@ -17,12 +17,12 @@ export default {
     name: 'WebPush',
     data() {
         return {
-            pushMessage: [{message: JSON.stringify(this.$store.state.login.userInfo.weather), timestamp: Date.parse(new Date()) / 1000}]
+            pushMessage: [{ message: JSON.stringify(this.$store.state.login.userInfo.weather), timestamp: Date.parse(new Date()) / 1000 }]
         };
     },
     mounted() {
         this.$nextTick(() => {
-            const SocketService = SocketIO(this.$store.state.login.userInfo.socket, {transports: ['websocket'], autoConnect: true});
+            const SocketService = SocketIO(this.$store.state.login.userInfo.socket, { transports: ['websocket'], autoConnect: true });
             /* todo:链接系统 */
             SocketService.on('connect', () => {
                 console.info(`【登录系统】${func.setTime(Date.parse(new Date()))}`);
@@ -40,12 +40,12 @@ export default {
             });
             /* todo：获取图表信息 */
             SocketService.on('charts', ($response) => {
-                this.$store.dispatch('home/saveSocketMessage', {xAxisData: $response.day, seriesData: $response.total});
+                this.$store.dispatch('home/saveSocketMessage', { xAxisData: $response.day, seriesData: $response.total });
             });
             /* todo:站内消息推送 */
             SocketService.on('new_message', ($message) => {
-                this.pushMessage.push({message: $message, timestamp: Date.parse(new Date()) / 1000});
-                let clientLog = {time: func.setTime(Date.parse(new Date()), 'ch'), message: $message, username: '系统公告'};
+                this.pushMessage.push({ message: $message, timestamp: Date.parse(new Date()) / 1000 });
+                let clientLog = { time: func.setTime(Date.parse(new Date()), 'ch'), message: $message, username: '系统公告' };
                 this.$store.dispatch('chat/addClientLog', clientLog);
             });
             /* todo:链接断开 */

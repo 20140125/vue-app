@@ -8,7 +8,7 @@ export const mutations = {
      * @param state
      * @param update
      */
-    UPDATE_MUTATIONS: function (state, update) {
+    UPDATE_MUTATIONS(state, update) {
         Object.keys(update).forEach(item => {
             state[item] = update[item];
         });
@@ -22,17 +22,17 @@ export const actions = {
      * @param authorized
      * @return {Promise<boolean>}
      */
-    async checkAuthorized({commit, state}, authorized) {
+    async checkAuthorized({ commit, state }, authorized) {
         if (state.userInfo) {
-            commit('UPDATE_MUTATIONS', {userInfo: state.userInfo});
+            commit('UPDATE_MUTATIONS', { userInfo: state.userInfo });
             return false;
         }
         return new Promise((resolve, reject) => {
             requestMethods.__commonMethods(URLS.login.checkAuthorized, authorized).then(result => {
-                commit('UPDATE_MUTATIONS', {userInfo: (((result || {}).data || {}).item || {}).lists || {}, isAuthorized: true});
+                commit('UPDATE_MUTATIONS', { userInfo: (((result || {}).data || {}).item || {}).lists || {}, isAuthorized: true });
                 resolve(result);
             }).catch(error => {
-                commit('UPDATE_MUTATIONS', {error: (error.data || {}).item || {}}, {root: true});
+                commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
                 reject(error);
             });
         });
@@ -43,15 +43,15 @@ export const actions = {
      * @param payload
      * @return {Promise<void>}
      */
-    async loginSYS({commit}, payload) {
+    async loginSYS({ commit }, payload) {
         return new Promise((resolve, reject) => {
             requestMethods.__commonMethods(URLS.login.loginSystem, payload).then(result => {
-                commit('UPDATE_MUTATIONS', {userInfo: ((result.data || {}).item || {}).lists || {}, isAuthorized: true});
+                commit('UPDATE_MUTATIONS', { userInfo: ((result.data || {}).item || {}).lists || {}, isAuthorized: true });
                 window.localStorage.setItem('token', (((result.data || {}).item || {}).lists || {}).remember_token || '');
-                router.push({path: '/admin/home/index'});
+                router.push({ path: '/admin/home/index' });
                 resolve(result);
             }).catch(error => {
-                commit('UPDATE_MUTATIONS', {error: (error.data || {}).item || {}}, {root: true});
+                commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
                 reject(error);
             });
         });
@@ -65,10 +65,10 @@ export const actions = {
     async reportCode({commit}, payload) {
         return new Promise((resolve, reject) => {
             requestMethods.__commonMethods(URLS.login.reportCode, payload).then(result => {
-                commit('UPDATE_MUTATIONS', {verifyCode: (((result.data || {}).item || {}).lists || {}).code || ''});
+                commit('UPDATE_MUTATIONS', { verifyCode: (((result.data || {}).item || {}).lists || {}).code || '' });
                 resolve(result);
             }).catch(error => {
-                commit('UPDATE_MUTATIONS', {error: (error.data || {}).item || {}}, {root: true});
+                commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
                 reject(error);
             });
         });
@@ -82,10 +82,10 @@ export const actions = {
     async sendMail({commit}, payload) {
         return new Promise((resolve, reject) => {
             requestMethods.__commonMethods(URLS.login.sendMail, payload).then(result => {
-                commit('UPDATE_MUTATIONS', {mailLogin: true});
+                commit('UPDATE_MUTATIONS', { mailLogin: true });
                 resolve(result);
             }).catch(error => {
-                commit('UPDATE_MUTATIONS', {error: (error.data || {}).item || {}}, {root: true});
+                commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
                 reject(error);
             });
         });
@@ -97,17 +97,17 @@ export const actions = {
      * @param payload
      * @return {Promise<boolean>}
      */
-    async getOauthConfig({commit, state}, payload) {
+    async getOauthConfig({ commit, state }, payload) {
         if (state.oauthConfig) {
-            commit('UPDATE_MUTATIONS', {oauthConfig: state.oauthConfig});
+            commit('UPDATE_MUTATIONS', { oauthConfig: state.oauthConfig });
             return false;
         }
         return new Promise((resolve, reject) => {
             requestMethods.__commonMethods(URLS.login.oauthConfig, payload).then(result => {
-                commit('UPDATE_MUTATIONS', {oauthConfig: ((result.data || {}).item || {}).lists || {}});
+                commit('UPDATE_MUTATIONS', { oauthConfig: ((result.data || {}).item || {}).lists || {} });
                 resolve(result);
             }).catch(error => {
-                commit('UPDATE_MUTATIONS', {error: (error.data || {}).item || {}}, {root: true});
+                commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
                 reject(error);
             });
         });

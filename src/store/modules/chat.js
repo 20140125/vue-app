@@ -4,7 +4,7 @@ export const mutations = {
      * @param state
      * @param update
      */
-    UPDATE_MUTATIONS: function (state, update) {
+    UPDATE_MUTATIONS(state, update) {
         Object.keys(update).forEach(item => {
             state[item] = update[item];
         });
@@ -16,7 +16,7 @@ export const actions = {
      * @param state
      * @param users
      */
-    addClientUsers({commit}, users) {
+    addClientUsers({ commit }, users) {
         commit('UPDATE_MUTATIONS', users);
     },
     /**
@@ -25,11 +25,15 @@ export const actions = {
      * @param commit
      * @param users
      */
-    addChatUsers({state, commit}, users) {
-        const newChatUsers = JSON.parse(JSON.stringify(state.chatUsers || []));
-        if (JSON.stringify(newChatUsers).indexOf(JSON.stringify(users)) === -1) {
-            newChatUsers.push(users);
-            commit('UPDATE_MUTATIONS', {chatUsers: newChatUsers});
+    addChatUsers({ state, commit }, users) {
+        try {
+            const newChatUsers = JSON.parse(JSON.stringify(state.chatUsers || []));
+            if (JSON.stringify(newChatUsers).indexOf(JSON.stringify(users)) === -1) {
+                newChatUsers.push(users);
+                commit('UPDATE_MUTATIONS', { chatUsers: newChatUsers });
+            }
+        } catch (error) {
+            commit('UPDATE_MUTATIONS', { error: error }, { root: true });
         }
     },
     /**
@@ -38,10 +42,14 @@ export const actions = {
      * @param commit
      * @param log
      */
-    addClientLog({state, commit}, log) {
-        const newClientLog = JSON.parse(JSON.stringify(state.clientLog || []));
-        newClientLog.push(log);
-        commit('UPDATE_MUTATIONS', {clientLog: newClientLog});
+    addClientLog({ state, commit }, log) {
+        try {
+            const newClientLog = JSON.parse(JSON.stringify(state.clientLog || []));
+            newClientLog.push(log);
+            commit('UPDATE_MUTATIONS', { clientLog: newClientLog });
+        } catch (error) {
+            commit('UPDATE_MUTATIONS', { error: error }, { root: true });
+        }
     },
     /**
      * todo：添加聊天记录
@@ -50,10 +58,14 @@ export const actions = {
      * @param payload
      */
     addMessageLists({state, commit}, payload) {
-        const newMessageLists = JSON.parse(JSON.stringify(state.messageLists || []));
-        newMessageLists.push(payload.message);
-        newMessageLists['uuid'] = payload.uuid;
-        commit('UPDATE_MUTATIONS', {messageLists: newMessageLists});
+        try {
+            const newMessageLists = JSON.parse(JSON.stringify(state.messageLists || []));
+            newMessageLists.push(payload.message);
+            newMessageLists['uuid'] = payload.uuid;
+            commit('UPDATE_MUTATIONS', { messageLists: newMessageLists });
+        } catch (error) {
+            commit('UPDATE_MUTATIONS', { error: error }, { root: true });
+        }
     }
 };
 

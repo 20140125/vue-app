@@ -7,7 +7,7 @@ export const mutations = {
      * @param state
      * @param update
      */
-    UPDATE_MUTATIONS: function (state, update) {
+    UPDATE_MUTATIONS(state, update) {
         Object.keys(update).forEach(item => {
             state[item] = update[item];
         });
@@ -22,10 +22,10 @@ export const actions = {
      * @param payload
      * @return {Promise<boolean>}
      */
-    async getPermissionApply({commit, state}, payload) {
+    async getPermissionApply({ commit, state }, payload) {
         /* 如果页码没有变，直接读取vuex里面的数据 */
         if (state.page === payload.page && !payload.refresh) {
-            commit('UPDATE_MUTATIONS', {permissionLists: state.permissionLists});
+            commit('UPDATE_MUTATIONS', { permissionLists: state.permissionLists });
             return false;
         }
         return new Promise((resolve, reject) => {
@@ -37,7 +37,7 @@ export const actions = {
                 });
                 resolve(result);
             }).catch(error => {
-                commit('UPDATE_MUTATIONS', {error: error}, {root: true});
+                commit('UPDATE_MUTATIONS', { error: error }, { root: true });
                 reject(error);
             });
         });
@@ -49,10 +49,10 @@ export const actions = {
      * @param payload
      * @return {Promise<boolean>}
      */
-    async getUserAuth({commit, state}, payload) {
+    async getUserAuth({ commit, state }, payload) {
         /* 如果页码没有变，直接读取vuex里面的数据 */
         if (parseInt(state.user_id, 10) === parseInt(payload.user_id, 10) && !payload.refresh) {
-            commit('UPDATE_MUTATIONS', {authLists: state.authLists, user_id: state.user_id});
+            commit('UPDATE_MUTATIONS', { authLists: state.authLists, user_id: state.user_id });
             return false;
         }
         return new Promise((resolve, reject) => {
@@ -63,7 +63,7 @@ export const actions = {
                 });
                 resolve(result);
             }).catch(error => {
-                commit('UPDATE_MUTATIONS', {error: error}, {root: true});
+                commit('UPDATE_MUTATIONS', { error: error }, { root: true });
                 reject(error);
             });
         });

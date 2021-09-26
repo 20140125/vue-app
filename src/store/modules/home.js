@@ -3,10 +3,10 @@ import URLS from '@/api/urls';
 import func from '@/utils/func';
 
 export const state = {
-    tabs: [{label: '欢迎页', value: '/admin/home/index'}],
-    tabModel: {label: '欢迎页', value: '/admin/home/index'},
+    tabs: [{ label: '欢迎页', value: '/admin/home/index' }],
+    tabModel: { label: '欢迎页', value: '/admin/home/index' },
     notice: [],
-    seriesData: {log: [], oauth: [], notice: []}
+    seriesData: { log: [], oauth: [], notice: [] }
 };
 export const mutations = {
     /**
@@ -14,7 +14,7 @@ export const mutations = {
      * @param state
      * @param update
      */
-    UPDATE_MUTATIONS: function (state, update) {
+    UPDATE_MUTATIONS(state, update) {
         Object.keys(update).forEach(item => {
             state[item] = update[item];
         });
@@ -28,17 +28,17 @@ export const actions = {
      * @param payload
      * @return {Promise<boolean>}
      */
-    async getMenu({commit, state}, payload = {}) {
+    async getMenu({ commit, state }, payload = {}) {
         if (state.menuLists) {
-            commit('UPDATE_MUTATIONS', {menuLists: state.menuLists});
+            commit('UPDATE_MUTATIONS', { menuLists: state.menuLists });
             return false;
         }
         return new Promise((resolve, reject) => {
             requestMethods.__commonMethods(URLS.home.getMenu, payload).then(result => {
-                commit('UPDATE_MUTATIONS', {menuLists: func.setTree(((result.data || {}).item || {}).lists || {})});
+                commit('UPDATE_MUTATIONS', { menuLists: func.setTree(((result.data || {}).item || {}).lists || {}) });
                 resolve(result);
             }).catch(error => {
-                commit('UPDATE_MUTATIONS', {error: (error.data || {}).item || {}}, {root: true});
+                commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
                 reject(error);
             });
         });
@@ -59,17 +59,17 @@ export const actions = {
      * @param payload
      * @return {Promise<boolean>}
      */
-    async getTimeLine({commit, state}, payload = {}) {
+    async getTimeLine({ commit, state }, payload = {}) {
         if (state.timeline) {
             commit('UPDATE_MUTATIONS', {timeline: state.timeline});
             return false;
         }
         return new Promise((resolve, reject) => {
             requestMethods.__commonMethods(URLS.timeline.lists, payload).then(result => {
-                commit('UPDATE_MUTATIONS', {timeline: (((result.data || {}).item || {}).lists || {}).data || []});
+                commit('UPDATE_MUTATIONS', { timeline: (((result.data || {}).item || {}).lists || {}).data || [] });
                 resolve(result);
             }).catch(error => {
-                commit('UPDATE_MUTATIONS', {error: (error.data || {}).item || {}}, {root: true});
+                commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
                 reject(error);
             });
         });
@@ -80,15 +80,15 @@ export const actions = {
      * @param state
      * @param payload
      */
-    addTabs({commit, state}, payload) {
+    addTabs({ commit, state }, payload) {
         try {
             let newTabs = JSON.parse(JSON.stringify(state.tabs));
             if (JSON.stringify(newTabs).indexOf(JSON.stringify(payload)) === -1) {
                 newTabs.push(payload);
             }
-            commit('UPDATE_MUTATIONS', {tabs: newTabs, tabModel: payload});
+            commit('UPDATE_MUTATIONS', { tabs: newTabs, tabModel: payload });
         } catch (error) {
-            commit('UPDATE_MUTATIONS', {error: error}, {root: true});
+            commit('UPDATE_MUTATIONS', { error: error }, { root: true });
         }
     },
     /**
@@ -101,9 +101,9 @@ export const actions = {
         try {
             let newTabs = JSON.parse(JSON.stringify(state.tabs));
             newTabs.splice(payload.index, 1);
-            commit('UPDATE_MUTATIONS', {tabs: newTabs, tabModel: payload.nextTab});
+            commit('UPDATE_MUTATIONS', { tabs: newTabs, tabModel: payload.nextTab });
         } catch (error) {
-            commit('UPDATE_MUTATIONS', {error: error}, {root: true});
+            commit('UPDATE_MUTATIONS', { error: error }, { root: true });
         }
     }
 };

@@ -10,17 +10,18 @@
         </template>
         <template #body>
             <!--文件列表-->
-            <FileLists :lists="fileLists"
-                       :fileURL="fileURL"
-                       @addFile="addFile"
-                       @getFiles="getFiles"
-                       @deleteFile="deleteFile"
-                       @renameFile="renameFile"
-                       @chmodFile="chmodFile"
-                       @uploadFile="uploadFile"
-                       @unComposeFile="unComposeFile"
-                       @getFileLists="getFileLists"
-                       @getMultipleSelection="getMultipleSelection">
+            <FileLists
+                :lists="fileLists"
+                :fileURL="fileURL"
+                @addFile="addFile"
+                @getFiles="getFiles"
+                @deleteFile="deleteFile"
+                @renameFile="renameFile"
+                @chmodFile="chmodFile"
+                @uploadFile="uploadFile"
+                @unComposeFile="unComposeFile"
+                @getFileLists="getFileLists"
+                @getMultipleSelection="getMultipleSelection">
             </FileLists>
         </template>
         <template #dialog>
@@ -78,9 +79,9 @@ export default {
          */
         async getFileLists(basename = { path: '/', filename: 'longer' }, index = 0) {
             if (JSON.stringify(this.breadcrumb).indexOf(JSON.stringify(basename)) === -1) {
-                this.breadcrumb.push(basename)
+                this.breadcrumb.push(basename);
             } else {
-                this.breadcrumb.splice(index + 1, this.breadcrumb.length - index - 1)
+                this.breadcrumb.splice(index + 1, this.breadcrumb.length - index - 1);
             }
             if (basename.path === '/') {
                 this.breadcrumb = [{ path: '/', filename: 'longer' }];
