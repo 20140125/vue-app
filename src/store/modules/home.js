@@ -97,7 +97,7 @@ export const actions = {
      * @param state
      * @param payload
      */
-    deleteTabs({commit, state}, payload) {
+    deleteTabs({ commit, state }, payload) {
         try {
             let newTabs = JSON.parse(JSON.stringify(state.tabs));
             newTabs.splice(payload.index, 1);

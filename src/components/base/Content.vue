@@ -29,20 +29,20 @@ export default {
          * @return {Promise<void>}
          */
         async goto() {
-            await this.$router.push({path: this.tabModel.value});
+            await this.$router.push({ path: this.tabModel.value });
         },
         /**
          * todo:删除标签
+         * @param item
          * @return {Promise<void>}
          */
-        async removeTabs() {
+        async removeTabs(item) {
             await this.authTabs.forEach((tab, index) => {
-                if (tab.name === this.tabModel.name) {
+                if (tab.value === item) {
                     let nextTab = this.authTabs[index + 1] || this.authTabs[index - 1];
                     if (nextTab) {
-                        this.$store.dispatch('home/deleteTabs', {index: index, nextTab: nextTab}).then(() => {
-                            this.$router.push({path: nextTab.value});
-                        });
+                        this.$store.dispatch('home/deleteTabs', { index, nextTab });
+                        this.$router.push({ path: nextTab.value });
                     }
                 }
             });
