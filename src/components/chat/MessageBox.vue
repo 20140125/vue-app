@@ -85,7 +85,7 @@ export default {
          * todo:发送消息
          */
         sendMessage() {
-            this.$refs.message.innerHTML.trim() !== '' ? this.$emit('sendMessa  ge', this.$refs.message.innerHTML.trim()) : this.$refs.message.focus();
+            this.$refs.message.innerHTML.trim() !== '' ? this.$emit('sendMessage', this.$refs.message.innerHTML.trim()) : this.$refs.message.focus();
         },
         /**
          * todo:图片上传成功
