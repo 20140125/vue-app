@@ -20,7 +20,7 @@ export default {
         /* 按钮展示时机 */
         showTimes: {
             type: Number,
-            default: () => 450
+            default: () => 500
         },
         /* 定时器时间 */
         interval: {
@@ -70,8 +70,8 @@ export default {
     line-height: 20px;
     border-radius: 30px;
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: 90px;
+    right: 15px;
     z-index: 2004
 }
 </style>

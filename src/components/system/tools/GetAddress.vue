@@ -35,7 +35,7 @@ export default {
     },
     methods: {
         async getAddress() {
-            await this.$store.dispatch('UPDATE_ACTIONS', {url: URLS.tools.getAddress, model: {ip_address: this.ip_address}}).then((response) => {
+            await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.tools.getAddress, model: { ip_address: this.ip_address } }).then((response) => {
                 let result = (((response || {}).data || {}).item || {}).lists || [];
                 if (result[0]) {
                     let rectangle = result.rectangle.split(';');

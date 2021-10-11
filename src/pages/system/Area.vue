@@ -39,7 +39,7 @@ export default {
         async getAreaLists(parent_id = 1) {
             this.loading = true;
             this.syncVisible = false;
-            await this.$store.dispatch('area/getAreaLists', {parent_id: parent_id}).then(() => {
+            await this.$store.dispatch('area/getAreaLists', { parent_id: parent_id }).then(() => {
                 this.areaLists = this.$store.state.area.areaLists;
                 this.loading = false;
             });
@@ -52,7 +52,7 @@ export default {
          * @return {Promise<void>}
          */
         async loadMORE(tree, treeNode, resolve) {
-            await this.$store.dispatch('area/getChildrenLists', {parent_id: tree.id}).then(() => {
+            await this.$store.dispatch('area/getChildrenLists', { parent_id: tree.id }).then(() => {
                 resolve(this.$store.state.area.childrenLists);
                 this.loading = false;
             });

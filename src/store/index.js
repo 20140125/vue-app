@@ -10,7 +10,7 @@ import apply from '@/store/modules/permission/apply';
 /* 用户管理 */
 import users from '@/store/modules/users/user';
 import oauth from '@/store/modules/users/oauth';
-/*系统管理*/
+/* 系统管理 */
 import push from '@/store/modules/system/push';
 import config from '@/store/modules/system/config';
 import area from '@/store/modules/system/area';

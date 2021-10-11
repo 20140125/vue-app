@@ -13,6 +13,7 @@
             </div>
         </div>
         <div class="sendMessage">
+            <Emotion @clickEmotion="clickEmotion"></Emotion>
             <div>
                 <el-tooltip effect="dark" content="发送表情" placement="top-start">
                     <i @click="showEmotion = !showEmotion" class="el-icon-picture-outline-round icon"></i>
@@ -43,9 +44,11 @@
 
 <script>
 import URLS from '@/api/urls';
+import Emotion from '@/components/chat/Emotion';
 
 export default {
     name: 'MessageBox',
+    components: {Emotion},
     props: ['messageLists', 'userInfo', 'receiveName'],
     computed: {
         uploadFile() {
@@ -72,10 +75,17 @@ export default {
             return content.replace(new RegExp(/&lt;/g), '<').replace(new RegExp(/&gt;/g), '>').replace(new RegExp(/&quot;/g), '"');
         },
         /**
+         * todo:图片选择
+         * @param item
+         */
+        clickEmotion(item) {
+            this.$refs.message.innerHTML += '<img src=\'' + item.icon + '\' width=\'30px\' height=\'30px\' style=\'object-fit: contain;\' alt=\'' + item.title + '\'>';
+        },
+        /**
          * todo:发送消息
          */
         sendMessage() {
-            this.$refs.message.innerHTML.trim() !== '' ? this.$emit('sendMessage', this.$refs.message.innerHTML.trim()) : this.$refs.message.focus();
+            this.$refs.message.innerHTML.trim() !== '' ? this.$emit('sendMessa  ge', this.$refs.message.innerHTML.trim()) : this.$refs.message.focus();
         },
         /**
          * todo:图片上传成功

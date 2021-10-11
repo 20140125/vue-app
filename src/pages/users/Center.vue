@@ -115,7 +115,7 @@ export default {
             await this.$store.dispatch('users/getUserCenter', {}).then(() => {
                 this.userCenter = JSON.parse(JSON.stringify(this.$store.state.users.userCenter));
                 /* 获取城市列表 */
-                this.$store.dispatch('area/getAreaCacheLists', {}).then(() => {
+                this.$store.dispatch('area/getAreaCacheLists', { children: true }).then(() => {
                     this.setOptions(JSON.parse(JSON.stringify(this.$store.state.area.cacheArea)));
                     this.loading = false;
                 });

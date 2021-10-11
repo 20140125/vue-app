@@ -58,7 +58,7 @@ export const actions = {
         });
     },
     /**
-     * todo:获取角色列表
+     * todo:获取缓存城市列表
      * @param commit
      * @param state
      * @param payload
@@ -67,12 +67,16 @@ export const actions = {
     async getAreaCacheLists({ commit, state }, payload) {
         /* 如果页码没有变，直接读取vuex里面的数据 */
         if (state.cacheArea) {
-            commit('UPDATE_MUTATIONS', { cacheArea: state.cacheArea });
+            commit('UPDATE_MUTATIONS', { cacheArea: state.cacheArea || [], cacheArea2: state.cacheArea2 || [] });
             return false;
         }
         return new Promise((resolve, reject) => {
             requestMethods.__commonMethods(URLS.area.cache, payload).then(result => {
-                commit('UPDATE_MUTATIONS', { cacheArea: func.setTree(((result.data || {}).item || {}).lists || [], 0, 'children', 'parent_id') || [] });
+                if (payload.children) {
+                    commit('UPDATE_MUTATIONS', { cacheArea: func.setTree(((result.data || {}).item || {}).lists || [], 0, 'children', 'parent_id') || [] });
+                } else {
+                    commit('UPDATE_MUTATIONS', { cacheArea2: ((result.data || {}).item || {}).lists || [] });
+                }
                 resolve(result);
             }).catch(error => {
                 commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });

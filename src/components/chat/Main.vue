@@ -1,8 +1,8 @@
 <template>
     <div :style="bgStyle" id="main">
-        <el-row :gutter="24" style="padding-top: 10%">
+        <el-row :gutter="24" style="padding-top: 190px;">
             <el-col :span="14" :offset="5">
-                <el-row :gutter="24">
+                <el-row :gutter="24" style="width: 1135px;">
                     <!--聊天用户-->
                     <el-col :span="6" v-if="showLeftBar" class="left-bar">
                         <el-card shadow="hover">
@@ -10,7 +10,7 @@
                         </el-card>
                     </el-col>
                     <!--消息记录-->
-                    <el-col :span="(showLeftBar && showRightBar) ? 12 : ((showLeftBar || showRightBar) ? 18 : 24)">
+                    <el-col :span="(showLeftBar && showRightBar) ? 12 : ((showLeftBar || showRightBar) ? 18 : 24)" class="main-bar">
                         <el-card shadow="hover">
                             <MessageBox @sendMessage="sendMessage" ref="messageBox" :user-info="userInfo" :message-lists="messageLists" :receive-name="receiver.client_name"></MessageBox>
                         </el-card>
@@ -225,10 +225,16 @@ export default {
 </script>
 <style lang="less">
 #main {
+    width: 100%;
+    .main-bar {
+        min-width: 545px !important;
+    }
     .left-bar, .right-bar {
         .el-card__body {
             padding: 0 !important;
         }
+        padding: 0 !important;
+        min-width: 280px !important;
     }
 }
 </style>

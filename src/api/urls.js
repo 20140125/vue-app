@@ -15,6 +15,10 @@ let urls = {
     timeline: {
         lists: '/api/v1/timeline/index'
     },
+    /* todo:表情图 */
+    emotion: {
+        lists: '/api/v1/emotion/index'
+    },
     /* todo:用户管理 */
     users: {
         lists: '/api/v1/users/index',

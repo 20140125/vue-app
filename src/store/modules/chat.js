@@ -1,3 +1,6 @@
+import requestMethods from '@/api/methods';
+import URLS from '@/api/urls';
+
 export const mutations = {
     /**
      * todo: 更新vuex数据
@@ -66,6 +69,33 @@ export const actions = {
         } catch (error) {
             commit('UPDATE_MUTATIONS', { error: error }, { root: true });
         }
+    },
+    /**
+     * todo: 获取表情图
+     * @param state
+     * @param commit
+     * @param payload
+     * @return {Promise<unknown>|boolean}
+     */
+    getEmotionList({ state, commit}, payload) {
+        if (payload.type === state.type && payload.page === state.page) {
+            commit('UPDATE_MUTATIONS', { emotion: state.emotion || [], type: state.type || 1, page: state.page || 1, total: state.state || 0 });
+            return false;
+        }
+        return new Promise((resolve, reject) => {
+            requestMethods.__commonMethods(URLS.emotion.lists, payload).then(result => {
+                commit('UPDATE_MUTATIONS', {
+                    emotion: (((result.data || {}).item || {}).lists || {}).data || [],
+                    total: (((result.data || {}).item || {}).lists || {}).total || 0,
+                    type: payload.type || 1,
+                    page: payload.page || 1
+                });
+                resolve(result);
+            }).catch(error => {
+                commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+                reject(error);
+            });
+        });
     }
 };
 
