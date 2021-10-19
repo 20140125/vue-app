@@ -34,7 +34,7 @@ export default {
             value: new Date(),
             chartsNum: 14,
             innerWidth: window.innerWidth,
-            chartsStyle: {display: 'block'}
+            chartsStyle: { display: 'block' }
         };
     },
     computed: {

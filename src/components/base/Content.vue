@@ -15,12 +15,12 @@ export default {
             return this.$store.state.home.tabs;
         },
         tabModel() {
-            return {...this.$store.state.home.tabModel};
+            return { ...this.$store.state.home.tabModel };
         }
     },
     mounted() {
         this.$nextTick(async () => {
-            await this.$store.dispatch('home/addTabs', {label: this.$route.meta.title, value: this.$route.path});
+            await this.$store.dispatch('home/addTabs', { label: this.$route.meta.title, value: this.$route.path });
         });
     },
     methods: {

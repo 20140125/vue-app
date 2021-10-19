@@ -47,7 +47,7 @@ export default {
             this.localForm = this.form;
             this.$nextTick(() => {
                 setTimeout(() => {
-                    this.submitForm = {model: this.localForm, $refs: this.$refs, url: URLS.area.weather};
+                    this.submitForm = { model: this.localForm, $refs: this.$refs, url: URLS.area.weather };
                 }, 1000);
             });
         }

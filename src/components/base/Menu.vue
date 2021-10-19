@@ -38,9 +38,10 @@ export default {
     },
     mounted() {
         this.$nextTick(async () => {
-            await this.$store.dispatch('home/getMenu').then(() => {
+            await this.$store.dispatch('home/getMenu');
+            setTimeout(() => {
                 this.loading = false;
-            });
+            }, Math.random() * 1000 | 0)
         });
     },
     methods: {
@@ -50,9 +51,9 @@ export default {
          * @return {Promise<void>}
          */
         async goto(item) {
-            let params = {label: item.name, value: item.href};
+            let params = { label: item.name, value: item.href };
             await this.$store.dispatch('home/addTabs', params).then(() => {
-                this.$router.push({path: params.value});
+                this.$router.push({ path: params.value });
             });
         }
     }

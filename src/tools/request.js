@@ -3,6 +3,7 @@ import {ElMessage} from 'element-plus';
 import store from '@/store';
 import router from '@/route/index.js';
 import URLS from '@/api/urls';
+import urls from '@/api/urls';
 
 /**
  * todo:错误跳转
@@ -15,13 +16,13 @@ const ErrorHandler = (status, error) => {
     if (!store.state.token) {
         switch (status) {
             case 401:
-                router.push({path: '/login'}).then(() => {
+                router.push({ path: '/login' }).then(() => {
                     ElMessage.error('Unauthenticated login system');
                 });
                 break;
             case 403:
             case 500:
-                router.push({path: '/login'}).then(() => {
+                router.push({ path: '/login' }).then(() => {
                     console.log(error);
                 });
                 break;
@@ -49,8 +50,11 @@ const instance = axios.create({
 instance.defaults.baseURL = URLS.baseURL;
 // http request 拦截器
 instance.interceptors.request.use(config => {
-    config.headers.Authorization = store.state.token || '';
-    config.data.token = store.state.token || '';
+    //
+    if ([urls.login.loginSystem, urls.login.reportCode].indexOf(config.url) === -1) {
+        config.headers.Authorization = store.state.token || window.localStorage.getItem('token');
+        config.data.token = store.state.token || window.localStorage.getItem('token');
+    }
     return config;
 }, error => {
     return Promise.reject(error);

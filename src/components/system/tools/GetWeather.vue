@@ -57,7 +57,7 @@ export default {
          * @return {Promise<void>}
          */
         async getWeather(item) {
-            this.cityName = item.name
+            this.cityName = item.name;
             await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.tools.getWeather, model: { city_name: this.cityName } }).then((response) => {
                 let result = (((response || {}).data || {}).item || {}).lists || {};
                 this.items = JSON.parse(result.forecast);

@@ -1,10 +1,10 @@
 <template>
     <div id="header">
         <el-menu :default-active="activeIndex" mode="horizontal" background-color="#393d49" text-color="#fff" active-text-color="#ff69b4" @select="handleSelect" :style="headerAttr.headerStyle">
-            <el-menu-item index="1" @click="hideMenu">
+            <el-menu-item index="1">
                 <i :class="headerAttr.menuClass" style="color: #fff;font-size: 25px"></i>
             </el-menu-item>
-            <el-menu-item index="2" @click="visible = !visible">
+            <el-menu-item index="2">
                 <template #title>
                     <i class="el-icon-location"></i>{{ userInfo.city }}
                 </template>
@@ -14,8 +14,8 @@
                     <el-avatar :src="userInfo.avatar_url" :alt="userInfo.username" :size="40"></el-avatar>
                     <span v-html="userInfo.username" style="margin-left: 10px"></span>
                 </template>
-                <el-menu-item index="6-1"><i class="el-icon-user-solid"></i>个人中心</el-menu-item>
-                <el-menu-item index="6-2"><i class="el-icon-upload2"></i>退出系统</el-menu-item>
+                <el-menu-item index="5-1"><i class="el-icon-user-solid"></i>会员中心</el-menu-item>
+                <el-menu-item index="5-2"><i class="el-icon-upload2"></i>退出系统</el-menu-item>
             </el-submenu>
             <el-menu-item index="4" class="el-menu_item_right">
                 <el-dropdown trigger="hover" @command="readNotice" :hide-on-click="false" :show-timeout="100">
@@ -51,7 +51,7 @@ import AreaDialog from '@/components/system/area/Dialog';
 
 export default {
     name: 'Header',
-    components: {AreaDialog},
+    components: { AreaDialog },
     props: ['layoutNums'],
     data() {
         return {
@@ -59,7 +59,7 @@ export default {
             visible: false,
             headerAttr: {
                 menuClass: 'el-icon-s-unfold',
-                headerStyle: {'margin-left': '220px'}
+                headerStyle: { 'margin-left': '220px' }
             }
         };
     },
@@ -72,8 +72,29 @@ export default {
         }
     },
     methods: {
-        handleSelect() {
-
+        /**
+         * todo:导航栏操作
+         * @param index
+         * @return {Promise<void>}
+         */
+        async handleSelect(index) {
+            switch (index) {
+                case '1':
+                   this.hideMenu();
+                   break;
+                case '2':
+                    this.visible = !this.visible;
+                    break;
+                case '3':
+                    await this.routerPush({ label: '欢迎页', value: '/admin/home/index' });
+                    break;
+                case '5-1':
+                    await this.routerPush( { label: '会员中心', value: '/admin/userCenter/index' });
+                    break;
+                case '5-2':
+                    await this.logoutSYS('successfully logout system');
+                    break;
+            }
         },
         /**
          * todo:关闭天气预告弹框
@@ -86,8 +107,24 @@ export default {
          */
         hideMenu() {
             this.isCollapse = !this.isCollapse;
-            this.headerAttr = this.isCollapse ? {menuClass: 'el-icon-s-fold', headerStyle: {'margin-left': '65px'}} : {menuClass: 'el-icon-s-unfold', headerStyle: {'margin-left': '220px'}};
+            this.headerAttr = this.isCollapse ? { menuClass: 'el-icon-s-fold', headerStyle: { 'margin-left': '65px' } } : { menuClass: 'el-icon-s-unfold', headerStyle: { 'margin-left': '220px' } };
             this.$emit('setLayout', this.isCollapse);
+        },
+        /**
+         * todo:路由跳转
+         * @param params
+         * @return {Promise<void>}
+         */
+        async routerPush(params) {
+            await this.$store.dispatch('home/addTabs', params).then(() => this.$router.push({ path: params.value }));
+        },
+        /**
+         * todo：登出系统
+         * @param message
+         * @return {Promise<void>}
+         */
+        async logoutSYS(message) {
+            await this.$store.dispatch('login/logoutSYS', { remember_token: this.$store.state.token }).then(() => this.$message.success(message));
         },
         readNotice() {
         }

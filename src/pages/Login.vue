@@ -83,7 +83,7 @@ export default {
          */
         async refreshCode() {
             this.accountAttr.verifyCode = (Math.random() * 1000000 | 0).toString();
-            await this.$store.dispatch('login/reportCode', {verify_code: this.accountAttr.verifyCode});
+            await this.$store.dispatch('login/reportCode', { verify_code: this.accountAttr.verifyCode });
         },
         /**
          * todo:用戶登錄

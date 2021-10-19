@@ -54,7 +54,7 @@
                     </div>
                 </el-form-item>
                 <el-button type="primary" plain size="mini" icon="el-icon-plus" @click="addChildren(localForm.children)">新增</el-button>
-                <SubmitButton :form="submitForm" :reForm="reForm" @closeDialog="$emit('getConfigLists', { page: 1, limit: 15, refresh: true, total: 0 })"></SubmitButton>
+                <SubmitButton :form="submitForm" :reForm="reForm" @closeDialog="$emit('currentPageChange', 1)"></SubmitButton>
             </el-form>
         </el-dialog>
     </div>
@@ -76,9 +76,9 @@ export default {
             localForm: this.form,
             submitForm: {},
             rules: {
-                name: [{required: true, message: '请输入配置名称', trigger: 'blur'}],
-                status: [{required: true, message: '请选择配置状态', trigger: 'change'}],
-                children: [{required: true, message: '请输入配置属性', trigger: 'blur', type: 'array'}, {validator: config.checkConfigChildren, trigger: 'blur'}]
+                name: [{ required: true, message: '请输入配置名称', trigger: 'blur' }],
+                status: [{ required: true, message: '请选择配置状态', trigger: 'change' }],
+                children: [{ required: true, message: '请输入配置属性', trigger: 'blur', type: 'array' }, { validator: config.checkConfigChildren, trigger: 'blur' }]
             }
         };
     },
@@ -87,7 +87,7 @@ export default {
             this.localForm = this.form;
             this.$nextTick(() => {
                 setTimeout(() => {
-                    this.submitForm = {model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.config.save : URLS.config.update};
+                    this.submitForm = { model: this.localForm, $refs: this.$refs, url: this.reForm === 'created' ? URLS.config.save : URLS.config.update };
                 }, 1000);
             });
         }
@@ -99,7 +99,7 @@ export default {
          */
         addChildren(children) {
             let items = JSON.parse(JSON.stringify(children));
-            items.push({name: '', value: '', status: 1, pid: this.localForm.children[this.localForm.children.length - 1].pid, id: this.localForm.children[this.localForm.children.length - 1].id + 1});
+            items.push({ name: '', value: '', status: 1, pid: this.localForm.children[this.localForm.children.length - 1].pid, id: this.localForm.children[this.localForm.children.length - 1].id + 1 });
             this.localForm.children = items;
         },
         /**

@@ -1,3 +1,3 @@
 export default {
-    token: window.localStorage.getItem('token')
+    token: window.localStorage.getItem('token') || ''
 };

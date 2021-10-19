@@ -49,6 +49,28 @@ export const actions = {
                 commit('UPDATE_MUTATIONS', { userInfo: ((result.data || {}).item || {}).lists || {}, isAuthorized: true });
                 window.localStorage.setItem('token', (((result.data || {}).item || {}).lists || {}).remember_token || '');
                 router.push({ path: '/admin/home/index' });
+                setTimeout(() => {
+                    window.location.reload();
+                }, 100)
+                resolve(result);
+            }).catch(error => {
+                commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+                reject(error);
+            });
+        });
+    },
+    /**
+     * todo:登出系统
+     * @param commit
+     * @param payload
+     * @return {Promise<void>}
+     */
+    async logoutSYS({ commit }, payload) {
+        return new Promise((resolve, reject) => {
+            requestMethods.__commonMethods(URLS.login.logoutSystem, payload).then(result => {
+                commit('UPDATE_MUTATIONS', { userInfo: {}, isAuthorized: false });
+                window.localStorage.removeItem('token');
+                router.push({ path: '/login' });
                 resolve(result);
             }).catch(error => {
                 commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
@@ -65,7 +87,7 @@ export const actions = {
     async reportCode({commit}, payload) {
         return new Promise((resolve, reject) => {
             requestMethods.__commonMethods(URLS.login.reportCode, payload).then(result => {
-                commit('UPDATE_MUTATIONS', { verifyCode: (((result.data || {}).item || {}).lists || {}).code || '' });
+                commit('UPDATE_MUTATIONS', { verifyCode: (((result.data || {}).item || {}).lists || {}).key || '' });
                 resolve(result);
             }).catch(error => {
                 commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });

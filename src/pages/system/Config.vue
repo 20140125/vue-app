@@ -9,7 +9,7 @@
             <SystemConfigLists :config-lists="configLists" @updateConfig="updateConfig"></SystemConfigLists>
         </template>
         <template #dialog>
-            <SystemConfigDialog :sync-visible="syncVisible" :re-form="reForm" :form="form" @getConfigLists="getConfigLists"></SystemConfigDialog>
+            <SystemConfigDialog :sync-visible="syncVisible" :re-form="reForm" :form="form" @currentPageChange="currentPageChange"></SystemConfigDialog>
         </template>
     </BaseLayout>
 </template>
@@ -31,7 +31,7 @@ export default {
     data() {
         return {
             loading: true,
-            pagination: {page: 1, limit: 15, total: 0, show_page: true, refresh: false},
+            pagination: { page: 1, limit: 15, total: 0, show_page: true, refresh: false },
             syncVisible: false,
             reForm: 'created',
             form: {},

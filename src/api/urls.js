@@ -5,7 +5,8 @@ let urls = {
         reportCode: '/api/v1/report/code',
         checkAuthorized: '/api/v1/check/authorized',
         sendMail: '/api/v1/mail/send',
-        oauthConfig: '/api/v1/oauth/config'
+        oauthConfig: '/api/v1/oauth/config',
+        logoutSystem: '/api/v1/account/logout'
     },
     /* todo:导航栏 */
     home: {
