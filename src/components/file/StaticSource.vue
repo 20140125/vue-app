@@ -36,9 +36,14 @@ export default {
 
 <style lang="less">
 #source {
+
     .el-dialog__body {
         padding: 10px 0 0 0 !important;
         line-height: 0 !important;
+
+        .el-carousel__indicator--horizontal {
+            display: none !important;
+        }
     }
 }
 </style>

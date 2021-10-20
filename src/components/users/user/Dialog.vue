@@ -78,6 +78,7 @@ export default {
          * @param response
          */
         uploadSuccess(response) {
+            console.log(response)
             this.localForm.avatar_url = (((response || {}).item || {}).lists || {}).src || '';
         }
     }

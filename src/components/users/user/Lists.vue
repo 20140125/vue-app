@@ -30,7 +30,7 @@ import StatusRadio from '@/components/common/StatusRadio';
 
 export default {
     name: 'UsersLists',
-    components: {StatusRadio},
+    components: { StatusRadio },
     props: ['usersLists'],
     data() {
         return {

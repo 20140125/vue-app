@@ -66,7 +66,7 @@ export default {
         /* 图片个数 */
         uploadLimit: {
             type: Number,
-            default: () => 1
+            default: () => 1000
         },
         /* 上传文案 */
         tips: {
@@ -92,21 +92,21 @@ export default {
         avatarImage: {
             type: Object,
             default() {
-                return {avatar_url: '', username: '', size: 100};
+                return { avatar_url: '', username: '', size: 100 };
             }
         },
         /* 图片上传属性 */
         data: {
             type: Object,
             default() {
-                return {name: 'file', round_name: true, file: {}};
+                return { name: 'file', round_name: true, file: {} };
             }
         },
         /* 上传控件 */
         uploadControls: {
             type: Object,
             default() {
-                return {button_type: 'picture', show_tips: true, show_file_list: true};
+                return { button_type: 'picture', show_tips: true, show_file_list: true };
             }
         }
     },
@@ -126,14 +126,15 @@ export default {
             let param = new FormData();
             param.append('file', file.file);
             param.append('filename', file.file.name);
-            param.append('token', this.$store.getters.token);
+            param.append('token', this.$store.state.token || window.localStorage.getItem('token'));
             param.append('round_name', this.data.round_name || false);
+            param.append('file_type', 'image');
             /* todo:名字随机时不需要传入路径 */
             if (!this.data.round_name) {
                 param.append('path', this.data.file.path.replace(this.data.file.filename, ''));
             }
             /* todo:添加请求头 */
-            let config = {headers: {'Content-Type': 'multipart/form-data', 'Authorization': this.$store.getters.token}};
+            let config = { headers: { 'Content-Type': 'multipart/form-data', 'Authorization': this.$store.state.token } };
             $http.post(file.action, param, config).then(response => {
                 response.data.filename = file.filename;
                 file.onSuccess(response.data);

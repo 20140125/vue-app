@@ -103,7 +103,7 @@ export default {
             let filePath = '';
             if (imgExt.includes(ext.toLowerCase())) {
                 filePath = file.path.replace(file.filename, '');
-                await this.getSource(this.fileLists, filePath, 'image');
+                this.getSource(this.fileLists, filePath, 'image');
                 return false;
             }
             /* 视频浏览 */
@@ -113,7 +113,7 @@ export default {
                 await this.getSource(this.fileLists, filePath, 'video');
                 return false;
             }
-            this.visible = {detail: true, source: false, chmod: false, upload: false};
+            this.visible = { detail: true, source: false, chmod: false, upload: false };
             this.fileDetail = [JSON.parse(JSON.stringify(file))];
             if (file.file_type === 'file' && file.filename.split('.')[1] !== 'zip') {
                 await this.$refs['fileDetail'].getFileContent(file);
@@ -125,23 +125,16 @@ export default {
          * @param filePath
          * @param form
          */
-        async getSource(fileLists, filePath, form = 'image') {
-            let sourceItem;
-            await fileLists.forEach(item => {
-                if (item.path === filePath) sourceItem = item.children;
-                this.getSource(item.children, filePath);
-            });
-            let source = [];
-            if (sourceItem) {
-                await sourceItem.forEach(file => {
-                    source.push({
-                        url: this.$store.state.login.userInfo.local + 'storage' + file.path.substr(file.path.indexOf('public') + 6, file.path.length - file.path.indexOf('public')),
-                        title: file.filename
-                    });
+        getSource(fileLists, filePath, form = 'image') {
+            const source = [];
+            fileLists.forEach(file => {
+                source.push({
+                    url: this.$store.state.login.userInfo.local + 'storage' + file.path.substr(file.path.indexOf('public') + 6, file.path.length - file.path.indexOf('public')),
+                    title: file.filename
                 });
-                this.staticSource = form === 'image' ? { image: source, video: [], title: '图片预览' } : { image: [], video: source, title: '视频预览' };
-                this.visible = { detail: false, source: true, chmod: false, upload: false };
-            }
+            });
+            this.staticSource = form === 'image' ? { image: source, video: [], title: '图片预览' } : { image: [], video: source, title: '视频预览' };
+            this.visible = { detail: false, source: true, chmod: false, upload: false };
         },
         /**
          * todo:添加文件
@@ -153,7 +146,7 @@ export default {
                     this.$message.warning('File name cannot be empty');
                     return false;
                 }
-                this.$store.dispatch('UPDATE_ACTIONS', {url: URLS.file.save, model: {path: file.path + value}}).then(() => {
+                this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.file.save, model: { path: file.path + value } }).then(() => {
                     this.getFileLists(true);
                 });
             }).catch(() => {

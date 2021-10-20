@@ -69,6 +69,7 @@ export const actions = {
         return new Promise((resolve, reject) => {
             requestMethods.__commonMethods(URLS.login.logoutSystem, payload).then(result => {
                 commit('UPDATE_MUTATIONS', { userInfo: {}, isAuthorized: false });
+                commit('UPDATE_MUTATIONS', { token: '' }, { root: true})
                 window.localStorage.removeItem('token');
                 router.push({ path: '/login' });
                 resolve(result);

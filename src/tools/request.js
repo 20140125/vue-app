@@ -51,7 +51,7 @@ instance.defaults.baseURL = URLS.baseURL;
 // http request 拦截器
 instance.interceptors.request.use(config => {
     //
-    if ([urls.login.loginSystem, urls.login.reportCode].indexOf(config.url) === -1) {
+    if ([urls.login.loginSystem, urls.login.reportCode, urls.login.oauthConfig, urls.login.sendMail].indexOf(config.url) === -1) {
         config.headers.Authorization = store.state.token || window.localStorage.getItem('token');
         config.data.token = store.state.token || window.localStorage.getItem('token');
     }

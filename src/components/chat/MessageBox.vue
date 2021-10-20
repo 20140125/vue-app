@@ -58,10 +58,10 @@ export default {
     data() {
         return {
             headers: {
-                Authorization: this.$store.getters.token
+                Authorization: this.$store.state.token || window.localStorage.getItem('token')
             },
             uploadData: {
-                token: this.$store.getters.token,
+                token: this.$store.state.token || window.localStorage.getItem('token'),
                 file_type: 'text',
                 round_name: true
             }

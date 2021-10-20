@@ -11,7 +11,7 @@
             </el-menu-item>
             <el-submenu index="5" class="el-menu_item_right">
                 <template #title>
-                    <el-avatar :src="userInfo.avatar_url" :alt="userInfo.username" :size="40"></el-avatar>
+                    <el-avatar :src="userInfo.avatar_url" :alt="userInfo.username" referrerpolicy="no-referrer" :size="40"></el-avatar>
                     <span v-html="userInfo.username" style="margin-left: 10px"></span>
                 </template>
                 <el-menu-item index="5-1"><i class="el-icon-user-solid"></i>会员中心</el-menu-item>
