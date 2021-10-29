@@ -7,8 +7,8 @@ import request from '@/tools/request.js';
  * @return {Promise<AxiosResponse<any>>}
  * @private
  */
-const __commonMethods = async function (url, params = {}) {
-    return request.post(url, params);
+const __commonMethods = async function(url, params = {}) {
+  return request.post(url, params);
 };
 /**
  *
@@ -18,7 +18,7 @@ const __commonMethods = async function (url, params = {}) {
  * @private
  */
 const __methods = {
-    __commonMethods
+  __commonMethods
 };
 
 export default __methods;

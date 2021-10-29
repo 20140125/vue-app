@@ -1,4 +1,4 @@
-import { createStore, createLogger } from 'vuex';
+import { createLogger, createStore } from 'vuex';
 import login from '@/store/modules/login';
 import home from '@/store/modules/home';
 import chat from '@/store/modules/chat';
@@ -24,6 +24,7 @@ import spider from '@/store/modules/spider';
 import mutations from '@/store/mutaions';
 import state from '@/store/state';
 import actions from '@/store/actions';
+import getters from '@/store/getters';
 
 /**
  * Vuex全局状态管理
@@ -31,10 +32,11 @@ import actions from '@/store/actions';
  */
 const debug = process.env.NODE_ENV !== 'production';
 export default createStore({
-    modules: { login, home, chat, file, auth, role, apply, push, users, oauth, config, area, database, log, category, spider },
-    mutations,
-    state,
-    actions,
-    strict: debug,
-    plugins: debug ? [createLogger()] : []
+  modules: { login, home, chat, file, auth, role, apply, push, users, oauth, config, area, database, log, category, spider },
+  mutations,
+  state,
+  actions,
+  getters,
+  strict: debug,
+  plugins: debug ? [createLogger()] : []
 });
