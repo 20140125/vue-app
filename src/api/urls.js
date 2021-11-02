@@ -123,8 +123,8 @@ let urls = {
     running: '/api/v1/spider/running'
   },
   /* todo:域名 */
-  // baseURL: process.env.NODE_ENV !== 'production' ? 'http://www.laravel.com' : 'https://www.fanglonger.com'
-  baseURL: 'https://www.fanglonger.com'
+  baseURL: process.env.NODE_ENV !== 'production' ? 'http://www.laravel.com' : 'https://www.fanglonger.com'
+  // baseURL: 'https://www.fanglonger.com'
 
 };
 export default urls;

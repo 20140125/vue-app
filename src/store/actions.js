@@ -26,10 +26,10 @@ export default {
    */
   UPDATE_THEME({ commit }, payload) {
     if (payload.theme.theme === 'default') {
-      delete require.cache['./src/theme/element-variables_primary.scss'];
+      delete require.cache['@/theme/element-variables_primary.scss'];
       require('@/theme/element-variables.scss');
     } else {
-      delete require.cache['./src/theme/element-variables.scss'];
+      delete require.cache['@/theme/element-variables.scss'];
       require('@/theme/element-variables_primary.scss');
     }
     window.localStorage.setItem('theme', payload.theme.theme);

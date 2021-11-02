@@ -69,7 +69,7 @@ export default {
         menuClass: 'el-icon-s-unfold',
         headerStyle: { 'margin-left': '220px' }
       },
-      activeColor: this.$store.state.activeColor
+      activeColor: this.$store.getters.activeColor
     };
   },
   computed: {
@@ -138,6 +138,11 @@ export default {
     async logoutSYS(message) {
       await this.$store.dispatch('login/logoutSYS', { remember_token: this.$store.state.token }).then(() => this.$message.success(message));
     },
+    /**
+     * todo:设置主题
+     * @param theme
+     * @return {Promise<void>}
+     */
     async setTheme(theme) {
       await this.$store.dispatch('UPDATE_THEME', { theme }).then(() => this.activeColor = theme.color)
     },

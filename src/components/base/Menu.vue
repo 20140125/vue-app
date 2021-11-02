@@ -34,7 +34,7 @@ export default {
   data() {
     return {
       loading: true,
-      activeColor: this.$store.state.activeColor
+      activeColor: this.$store.getters.activeColor
     };
   },
   mounted() {

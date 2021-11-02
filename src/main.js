@@ -51,12 +51,11 @@ router.beforeEach(async(to, from, next) => {
   if ((to.meta || {}).title || '') {
     document.title = `RBAC权限系统 -- ${to.meta.title}`;
   }
-  console.log(require.cache)
   if (store.getters.theme === 'default') {
-    delete require.cache['./src/theme/element-variables_primary.scss'];
+    delete require.cache['@/theme/element-variables_primary.scss'];
     require('@/theme/element-variables.scss');
   } else {
-    delete require.cache['./src/theme/element-variables.scss'];
+    delete require.cache['@/theme/element-variables.scss'];
     require('@/theme/element-variables_primary.scss');
   }
   /* todo:地址中存在access_token (第三方授权登录) */

@@ -43,7 +43,7 @@ export default {
           axisPointer: {
             type: 'cross',
             label: {
-              backgroundColor: this.$store.state.activeColor
+              backgroundColor: this.$store.getters.activeColor
             }
           }
         },

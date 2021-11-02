@@ -2,7 +2,23 @@
   <BaseLayout :loading="loading" :pagination="pagination">
     <template #header>
       <el-form-item>
-        <el-button v-if="Permission.auth.indexOf(savePermission) > -1" type="primary" plain size="mini" @click='addPush' icon="el-icon-plus">新增</el-button>
+        <el-select v-model="pagination.state" placeholder="请选择推送状态" @change="searchPush" clearable>
+          <el-option v-for="(item, index) in pushState" :key="index" :label="item.label" :value="item.value"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-select v-model.number="pagination.status" placeholder="实时推送" @change="searchPush" clearable>
+          <el-option v-for="(item, index) in pushStatus" :key="index" :label="item.label" :value="item.value"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-input placeholder="请输入接收者的名称" v-model="pagination.username" clearable></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button icon="el-icon-search" @click="searchPush" plain type="primary">检索</el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-button v-if="Permission.auth.indexOf(savePermission) > -1" type="primary" plain @click='addPush' icon="el-icon-plus">新增</el-button>
       </el-form-item>
     </template>
     <template #body>
@@ -27,7 +43,9 @@ export default {
   data() {
     return {
       loading: true,
-      pagination: { page: 1, limit: 15, total: 0, show_page: true, refresh: false },
+      pagination: { page: 1, limit: 15, total: 0, show_page: true, refresh: false, username: '', state: '', status: '' },
+      pushStatus: [{ label: '是', value: 1 }, { label: '否', value: 2 }],
+      pushState: [{ label: 'SUCCESSFULLY', value: 'successfully' }, { label: 'OFFLINE', value: 'offline' }, { label: 'FAILED', value: 'failed' }],
       syncVisible: false,
       reForm: 'created',
       form: {},
@@ -58,6 +76,15 @@ export default {
         this.loading = false;
         this.pagination.total = this.$store.state.push.total;
       });
+    },
+    /**
+     * TODO:检索推送
+     * @return {Promise<boolean>}
+     */
+    async searchPush() {
+      this.pagination.page = 1;
+      this.pagination.refresh = true;
+      await this.getPushLists(this.pagination)
     },
     /**
      * todo:页面转换

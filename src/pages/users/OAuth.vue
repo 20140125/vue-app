@@ -1,6 +1,13 @@
 <template>
   <BaseLayout :loading="loading" :pagination="pagination">
-    <template #header></template>
+    <template #header>
+      <el-form-item>
+        <el-input placeholder="请输入用户名" v-model="pagination.username" clearable></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button icon="el-icon-search" @click="searchOauth" plain type="primary">检索</el-button>
+      </el-form-item>
+    </template>
     <template #body>
       <OAuthLists :oAuthLists="oAuthLists" ref="oAuthLists" @bindEmail="bindEmail"></OAuthLists>
     </template>
@@ -21,7 +28,7 @@ export default {
   data() {
     return {
       loading: true,
-      pagination: { page: 1, limit: 15, total: 0, show_page: true, refresh: false },
+      pagination: { page: 1, limit: 15, total: 0, show_page: true, refresh: false, username: '' },
       syncVisible: false,
       reForm: 'created',
       form: {}
@@ -38,6 +45,15 @@ export default {
     });
   },
   methods: {
+    /**
+     * todo:用户搜索
+     * @return {Promise<boolean>}
+     */
+    async searchOauth() {
+      this.pagination.page = 1;
+      this.pagination.refresh = true;
+      await this.getOAuthLists(this.pagination);
+    },
     /**
      * todo:获取授权用户列表
      * @param pagination

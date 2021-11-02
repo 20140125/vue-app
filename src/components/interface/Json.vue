@@ -95,7 +95,7 @@ export default {
      * todo:添加请求参数
      */
     requestAdd() {
-      this.localForm.request.push({ name: '', desc: '', required: '', type: '', val: '' });
+      this.localForm.request.push({ name: '', desc: '', required: '1', type: '', val: '' });
     },
     /**
      * todo:删除请求参数
