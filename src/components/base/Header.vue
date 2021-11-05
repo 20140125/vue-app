@@ -27,10 +27,7 @@
       </el-submenu>
       <el-menu-item index="4" class="el-menu_item_right">
         <el-dropdown trigger="hover" @command="readNotice" :hide-on-click="false" :show-timeout="100">
-          <el-badge :value="unread" v-if="unread">
-            <i style="color: #fff;font-size: 25px" class="el-icon-message-solid"></i>
-          </el-badge>
-          <el-badge v-else>
+          <el-badge :value="unread || ''">
             <i style="color: #fff;font-size: 25px" class="el-icon-message-solid"></i>
           </el-badge>
           <template #dropdown>
