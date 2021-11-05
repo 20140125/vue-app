@@ -6,7 +6,7 @@
       </el-menu-item>
       <el-menu-item index="2">
         <template #title>
-          <i class="el-icon-location"></i>{{ userInfo.city }}
+          <i style="color: #fff;font-size: 25px" class="el-icon-location"></i>{{ Permission.city }}
         </template>
       </el-menu-item>
       <el-submenu index="6" class="el-menu_item_right">
@@ -19,20 +19,23 @@
       </el-submenu>
       <el-submenu index="5" class="el-menu_item_right">
         <template #title>
-          <el-avatar :src="userInfo.avatar_url" :alt="userInfo.username" referrerpolicy="no-referrer" :size="40"></el-avatar>
-          <span v-html="userInfo.username" style="margin-left: 10px"></span>
+          <el-avatar :src="Permission.avatar_url" :alt="Permission.username" referrerpolicy="no-referrer" :size="40"></el-avatar>
+          <span v-html="Permission.username" style="margin-left: 10px"></span>
         </template>
         <el-menu-item index="5-1"><i class="el-icon-user-solid"></i>会员中心</el-menu-item>
         <el-menu-item index="5-2"><i class="el-icon-upload2"></i>退出系统</el-menu-item>
       </el-submenu>
       <el-menu-item index="4" class="el-menu_item_right">
         <el-dropdown trigger="hover" @command="readNotice" :hide-on-click="false" :show-timeout="100">
-          <el-badge :value="notice.length">
-            <i class="el-icon-message-solid"></i>
+          <el-badge :value="unread" v-if="unread">
+            <i style="color: #fff;font-size: 25px" class="el-icon-message-solid"></i>
+          </el-badge>
+          <el-badge v-else>
+            <i style="color: #fff;font-size: 25px" class="el-icon-message-solid"></i>
           </el-badge>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item class="web-notice" :style="`color: ${activeColor} !important`">站内通知</el-dropdown-item>
+              <el-dropdown-item class="web-notice" :style="`color: ${activeColor} !important`" disabled>系统通知</el-dropdown-item>
               <el-dropdown-item :command="item" divided v-for="(item,index) in notice" :key="index" :disabled="item.disabled">
                 <el-badge is-dot v-if="!item.disabled"></el-badge>
                 【{{ item.title }}】 {{ item.info }}
@@ -44,18 +47,19 @@
       </el-menu-item>
       <el-menu-item index="3" class="el-menu_item_right">
         <template #title>
-          <i class="el-icon-s-home"></i>
+          <i style="color: #fff;font-size: 25px" class="el-icon-s-home"></i>
         </template>
       </el-menu-item>
     </el-menu>
 
     <!--天气预告-->
-    <AreaDialog :form="{ name: userInfo.city, forecast: userInfo.forecast }" :sync-visible="visible" :show-submit-button="false" @closeDialog="closeDialog"></AreaDialog>
+    <AreaDialog :form="{ name: Permission.city, forecast: Permission.forecast }" :sync-visible="visible" :show-submit-button="false" @closeDialog="closeDialog"></AreaDialog>
   </div>
 </template>
 
 <script>
 import AreaDialog from '@/components/system/area/Dialog';
+import URLS from '@/api/urls';
 
 export default {
   name: 'Header',
@@ -73,12 +77,24 @@ export default {
     };
   },
   computed: {
-    userInfo() {
-      return this.$store.state.login.userInfo;
-    },
+    /**
+     * todo:站内通知
+     * @return {any}
+     */
     notice() {
       return JSON.parse(JSON.stringify(this.$store.state.home.notice));
     },
+    /**
+     * todo:未读消息数
+     * @return {any}
+     */
+    unread() {
+      return this.$store.state.home.unread;
+    },
+    /**
+     * todo:主题参数
+     * @return {any}
+     */
     themeAttr() {
       return this.$store.state.themeAttr;
     }
@@ -144,9 +160,25 @@ export default {
      * @return {Promise<void>}
      */
     async setTheme(theme) {
-      await this.$store.dispatch('UPDATE_THEME', { theme }).then(() => this.activeColor = theme.color)
+      await this.$store.dispatch('UPDATE_THEME', { theme }).then(() => this.activeColor = theme.color);
     },
-    readNotice() {
+    /**
+     * todo:系统通知
+     * @param item
+     * @return {Promise<void>}
+     */
+    async readNotice(item) {
+      item === 'more' ? await this.routerPush({ label: '系统通知', value: '/admin/push/index' }) : await this.clearPush(item);
+    },
+    /**
+     * todo:阅读通知
+     * @param item
+     * @return {Promise<void>}
+     */
+    async clearPush(item) {
+      item.disabled = true;
+      item.see = 1;
+      await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.push.update, model: item })
     }
   }
 };

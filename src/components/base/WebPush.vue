@@ -31,11 +31,15 @@ export default {
       });
       /* todo:获取站内推送信息 */
       SocketService.on('notice', ($response) => {
-        if ($response.length > 0 && $response.length !== this.$store.state.home.notice.length) {
+        if ($response.length > 0) {
+          let $unread = 0;
           $response.forEach(item => {
-            item.disabled = (item.state !== 'successfully' && item.see === 0);
+            item.disabled = (item.state === 'successfully' && item.see > 0);
+            if (!item.disabled) {
+              $unread += 1;
+            }
           });
-          this.$store.dispatch('home/saveSocketMessage', { notice: $response });
+          this.$store.dispatch('home/saveSocketMessage', { notice: $response, unread: $unread });
         }
       });
       /* todo：获取图表信息 */
