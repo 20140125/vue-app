@@ -1,6 +1,13 @@
 <template>
   <div id="header">
-    <el-menu :default-active="activeIndex" mode="horizontal" background-color="#393d49" text-color="#fff" :active-text-color="activeColor" @select="handleSelect" :style="headerAttr.headerStyle">
+    <el-menu
+      :default-active="activeIndex"
+      mode="horizontal"
+      background-color="#393d49"
+      text-color="#fff"
+      :active-text-color="activeColor"
+      @select="handleSelect"
+      :style="headerAttr.headerStyle">
       <el-menu-item index="1">
         <i :class="headerAttr.menuClass" style="color: #fff;font-size: 25px"></i>
       </el-menu-item>
@@ -9,21 +16,17 @@
           <i style="color: #fff;font-size: 25px" class="el-icon-location"></i>{{ Permission.city }}
         </template>
       </el-menu-item>
-      <el-submenu index="6" class="el-menu_item_right">
-        <template #title>
-          <span v-html="`主题切换`"></span>
-        </template>
-        <el-menu-item v-for="(item, index) in themeAttr" :key="index" :index="`6-${index + 1}`" :style="`color: ${item.color}`" @click="setTheme(item)">
-          <i :style="`color: ${item.color}`" class="el-icon-s-home"></i>{{ item.text }}
-        </el-menu-item>
-      </el-submenu>
       <el-submenu index="5" class="el-menu_item_right">
         <template #title>
-          <el-avatar :src="Permission.avatar_url" :alt="Permission.username" referrerpolicy="no-referrer" :size="40"></el-avatar>
+          <el-avatar
+            :src="Permission.avatar_url"
+            :alt="Permission.username"
+            referrerpolicy="no-referrer"
+            :size="40"></el-avatar>
           <span v-html="Permission.username" style="margin-left: 10px"></span>
         </template>
-        <el-menu-item index="5-1"><i class="el-icon-user-solid"></i>会员中心</el-menu-item>
-        <el-menu-item index="5-2"><i class="el-icon-upload2"></i>退出系统</el-menu-item>
+        <el-menu-item index="5-1"><i class="el-icon-user-solid" style="color: #fff"></i>会员中心</el-menu-item>
+        <el-menu-item index="5-2"><i class="el-icon-upload2" style="color: #fff"></i>退出系统</el-menu-item>
       </el-submenu>
       <el-menu-item index="4" class="el-menu_item_right">
         <el-dropdown trigger="hover" @command="readNotice" :hide-on-click="false" :show-timeout="100">
@@ -32,12 +35,17 @@
           </el-badge>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item class="web-notice" :style="`color: ${activeColor} !important`" disabled>系统通知</el-dropdown-item>
-              <el-dropdown-item :command="item" divided v-for="(item,index) in notice" :key="index" :disabled="item.disabled">
+              <el-dropdown-item class="web-notice" :style="`color: ${activeColor} !important`" disabled>系统通知
+              </el-dropdown-item>
+              <el-dropdown-item
+                :command="item" divided v-for="(item,index) in notice"
+                :key="index"
+                :disabled="item.disabled">
                 <el-badge is-dot v-if="!item.disabled"></el-badge>
                 【{{ item.title }}】 {{ item.info }}
               </el-dropdown-item>
-              <el-dropdown-item class="web-notice" :style="`color: ${activeColor} !important`" command="more">查看更多</el-dropdown-item>
+              <el-dropdown-item class="web-notice" :style="`color: ${activeColor} !important`" command="more">查看更多
+              </el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -50,7 +58,11 @@
     </el-menu>
 
     <!--天气预告-->
-    <AreaDialog :form="{ name: Permission.city, forecast: Permission.forecast }" :sync-visible="visible" :show-submit-button="false" @closeDialog="closeDialog"></AreaDialog>
+    <AreaDialog
+      :form="{ name: Permission.city, forecast: Permission.forecast }"
+      :sync-visible="visible"
+      :show-submit-button="false" @closeDialog="closeDialog">
+    </AreaDialog>
   </div>
 </template>
 
@@ -132,7 +144,10 @@ export default {
      */
     hideMenu() {
       this.isCollapse = !this.isCollapse;
-      this.headerAttr = this.isCollapse ? { menuClass: 'el-icon-s-fold', headerStyle: { 'margin-left': '65px' } } : { menuClass: 'el-icon-s-unfold', headerStyle: { 'margin-left': '220px' } };
+      this.headerAttr = this.isCollapse ? {
+        menuClass: 'el-icon-s-fold',
+        headerStyle: { 'margin-left': '65px' }
+      } : { menuClass: 'el-icon-s-unfold', headerStyle: { 'margin-left': '220px' } };
       this.$emit('setLayout', this.isCollapse);
     },
     /**
@@ -152,20 +167,15 @@ export default {
       await this.$store.dispatch('login/logoutSYS', { remember_token: this.$store.state.token }).then(() => this.$message.success(message));
     },
     /**
-     * todo:设置主题
-     * @param theme
-     * @return {Promise<void>}
-     */
-    async setTheme(theme) {
-      await this.$store.dispatch('UPDATE_THEME', { theme }).then(() => this.activeColor = theme.color);
-    },
-    /**
      * todo:系统通知
      * @param item
      * @return {Promise<void>}
      */
     async readNotice(item) {
-      item === 'more' ? await this.routerPush({ label: '系统通知', value: '/admin/push/index' }) : await this.clearPush(item);
+      item === 'more' ? await this.routerPush({
+        label: '系统通知',
+        value: '/admin/push/index'
+      }) : await this.clearPush(item);
     },
     /**
      * todo:阅读通知
@@ -175,7 +185,7 @@ export default {
     async clearPush(item) {
       item.disabled = true;
       item.see = 1;
-      await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.push.update, model: item })
+      await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.push.update, model: item });
     }
   }
 };
@@ -187,6 +197,17 @@ export default {
     text-align: center !important;
     font-weight: bold !important;
   }
+}
+
+.el-menu.el-menu--horizontal {
+  border-bottom: solid 1px !important;
+}
+
+.el-menu--horizontal > .el-menu-item.is-active,
+.el-menu--horizontal > .el-submenu.is-active .el-submenu__title,
+.el-menu--horizontal .el-menu .el-menu-item.is-active,
+.el-menu--horizontal .el-menu .el-submenu.is-active > .el-submenu__title {
+  color: white !important;
 }
 
 #header {

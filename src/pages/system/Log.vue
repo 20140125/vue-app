@@ -27,7 +27,7 @@ export default {
     };
   },
   mounted() {
-    this.$nextTick(async() => {
+    this.$nextTick(async () => {
       await this.getSystemLogLists(this.pagination);
     });
   },

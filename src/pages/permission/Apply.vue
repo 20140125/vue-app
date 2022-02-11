@@ -2,20 +2,23 @@
   <BaseLayout :loading="loading" :pagination="pagination">
     <template #header>
       <el-form-item>
-        <el-button v-if="Permission.auth.indexOf(savePermission) > -1" type="primary" plain size="mini" @click='permissionApply' icon="el-icon-plus">权限申请</el-button>
+        <el-button v-if="Permission.auth.indexOf(savePermission) > -1" type="primary" plain size="mini"
+                   @click='permissionApply' icon="el-icon-plus">权限申请
+        </el-button>
       </el-form-item>
     </template>
     <template #body>
-      <PermissionLists :permission-lists="permissionLists" @permissionUpdate="permissionUpdate" @getPermissionApply="getPermissionApply"></PermissionLists>
+      <PermissionLists :permission-lists="permissionLists" @permissionUpdate="permissionUpdate"
+                       @getPermissionApply="getPermissionApply"></PermissionLists>
     </template>
     <template #dialog>
       <PermissionDialog
-          :form="form"
-          :syncVisible="syncVisible"
-          :reForm="reForm"
-          :permissionAttr="permissionAttr"
-          @getPermissionApply="getPermissionApply"
-          @getUserAuth="getUserAuth">
+        :form="form"
+        :syncVisible="syncVisible"
+        :reForm="reForm"
+        :permissionAttr="permissionAttr"
+        @getPermissionApply="getPermissionApply"
+        @getUserAuth="getUserAuth">
       </PermissionDialog>
     </template>
   </BaseLayout>
@@ -47,7 +50,7 @@ export default {
     }
   },
   mounted() {
-    this.$nextTick(async() => {
+    this.$nextTick(async () => {
       await this.getPermissionApply(this.pagination);
     });
   },
@@ -80,7 +83,10 @@ export default {
      */
     async getUserAuth(user_id) {
       await this.$store.dispatch('apply/getUserAuth', { user_id: user_id, refresh: true }).then(() => {
-        this.permissionAttr = { userLists: this.$store.state.users.cacheUsers, authLists: this.$store.state.apply.authLists };
+        this.permissionAttr = {
+          userLists: this.$store.state.users.cacheUsers,
+          authLists: this.$store.state.apply.authLists
+        };
       });
     },
     /**
@@ -102,7 +108,10 @@ export default {
      * @return {Promise<void>}
      */
     async permissionUpdate(form) {
-      this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.permission.update, model: { id: form.id, status: form.status } }).then(() => {
+      this.$store.dispatch('UPDATE_ACTIONS', {
+        url: URLS.permission.update,
+        model: { id: form.id, status: form.status }
+      }).then(() => {
         this.$message.success('权限续期成功');
         this.getPermissionApply({ page: 1, limit: 15, show_page: true, refresh: true });
       });

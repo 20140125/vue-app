@@ -1,6 +1,7 @@
 <template>
   <div id="wenPush">
-    <el-carousel :interval="2000" arrow="never" direction="vertical" indicator-position="none" v-if="pushMessage.length > 0">
+    <el-carousel :interval="2000" arrow="never" direction="vertical" indicator-position="none"
+                 v-if="pushMessage.length > 0">
       <el-carousel-item v-for="(item,index) in pushMessage" :key="index">
         <el-alert type="success" show-icon :title="item.message" effect="light"></el-alert>
       </el-carousel-item>
@@ -17,12 +18,18 @@ export default {
   name: 'WebPush',
   data() {
     return {
-      pushMessage: [{ message: JSON.stringify(this.$store.state.login.userInfo.weather), timestamp: Date.parse(new Date()) / 1000 }]
+      pushMessage: [{
+        message: JSON.stringify(this.$store.state.login.userInfo.weather),
+        timestamp: Date.parse(new Date()) / 1000
+      }]
     };
   },
   mounted() {
     this.$nextTick(() => {
-      const SocketService = SocketIO(this.$store.state.login.userInfo.socket, { transports: ['websocket'], autoConnect: true });
+      const SocketService = SocketIO(this.$store.state.login.userInfo.socket, {
+        transports: ['websocket'],
+        autoConnect: true
+      });
       /* todo:链接系统 */
       SocketService.on('connect', () => {
         console.info(`【登录系统】${func.setTime(Date.parse(new Date()))}`);

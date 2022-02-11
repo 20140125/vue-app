@@ -2,7 +2,8 @@
   <BaseLayout :loading="loading">
     <template #header></template>
     <template #body>
-      <AreaLists :areaLists="areaLists" @loadMORE="loadMORE" @getAreaWeather="getAreaWeather" @searchAreaLists="searchAreaLists"></AreaLists>
+      <AreaLists :areaLists="areaLists" @loadMORE="loadMORE" @getAreaWeather="getAreaWeather"
+                 @searchAreaLists="searchAreaLists"></AreaLists>
     </template>
     <template #dialog>
       <AreaDialog :sync-visible="syncVisible" :form="form" @getAreaLists="getAreaLists"></AreaDialog>
@@ -27,7 +28,7 @@ export default {
     };
   },
   mounted() {
-    this.$nextTick(async() => {
+    this.$nextTick(async () => {
       await this.getAreaLists();
     });
   },

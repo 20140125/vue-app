@@ -10,9 +10,11 @@
             </el-card>
           </el-col>
           <!--消息记录-->
-          <el-col :span="(showLeftBar && showRightBar) ? 12 : ((showLeftBar || showRightBar) ? 18 : 24)" class="main-bar">
+          <el-col :span="(showLeftBar && showRightBar) ? 12 : ((showLeftBar || showRightBar) ? 18 : 24)"
+                  class="main-bar">
             <el-card shadow="hover">
-              <MessageBox @sendMessage="sendMessage" ref="messageBox" :user-info="userInfo" :message-lists="messageLists" :receive-name="receiver.client_name"></MessageBox>
+              <MessageBox @sendMessage="sendMessage" ref="messageBox" :user-info="userInfo"
+                          :message-lists="messageLists" :receive-name="receiver.client_name"></MessageBox>
             </el-card>
           </el-col>
           <!--所有用户-->
@@ -109,7 +111,7 @@ export default {
     async getConnection(webSocketServer) {
       const __this = this;
       /* todo:用户登录 */
-      webSocketServer.onopen = async function() {
+      webSocketServer.onopen = async function () {
         const jsonStr = {
           type: 'login',
           from_client_id: __this.userInfo.uuid,
@@ -122,7 +124,7 @@ export default {
         webSocketServer.send(JSON.stringify(jsonStr));
       };
       /* todo:消息往来 */
-      webSocketServer.onmessage = async function(response) {
+      webSocketServer.onmessage = async function (response) {
         const message = JSON.parse(response.data);
         switch (message.type) {
           case 'ping':
@@ -144,16 +146,16 @@ export default {
         }
       };
       /* todo:消息发送失败 */
-      webSocketServer.onmessageerror = function() {
+      webSocketServer.onmessageerror = function () {
         __this.pushClientLog('消息发送失败');
       };
       /* todo:链接关闭 */
-      webSocketServer.onclose = function() {
+      webSocketServer.onclose = function () {
         __this.pushClientLog('链接断开尝试重新连接');
         __this.connect(webSocketServer);
       };
       /* todo:链接异常 */
-      webSocketServer.onerror = function() {
+      webSocketServer.onerror = function () {
         __this.pushClientLog('链接异常');
       };
     },
@@ -218,7 +220,12 @@ export default {
      * @param message
      */
     pushMessage(message) {
-      Push.create('你有未读消息', { body: message, requireInteraction: true, icon: 'https://www.fanglonger.com/favicon.ico', timeout: 60000 });
+      Push.create('你有未读消息', {
+        body: message,
+        requireInteraction: true,
+        icon: 'https://www.fanglonger.com/favicon.ico',
+        timeout: 60000
+      });
     }
   }
 };

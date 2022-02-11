@@ -1,29 +1,33 @@
 <template>
   <el-upload
-      ref="upload"
-      :name="data.name || 'file'"
-      :data="data"
-      :http-request="uploadFile"
-      :action="action"
-      :auto-upload="autoUpload"
-      :on-success="uploadSuccess"
-      :before-upload="beforeUpload"
-      :on-remove="handleRemove"
-      :limit="uploadLimit"
-      :show-file-list="uploadControls.show_file_list"
-      :file-list="fileList"
-      :list-type="listType">
+    ref="upload"
+    :name="data.name || 'file'"
+    :data="data"
+    :http-request="uploadFile"
+    :action="action"
+    :auto-upload="autoUpload"
+    :on-success="uploadSuccess"
+    :before-upload="beforeUpload"
+    :on-remove="handleRemove"
+    :limit="uploadLimit"
+    :show-file-list="uploadControls.show_file_list"
+    :file-list="fileList"
+    :list-type="listType">
     <!--todo:用户图像上传-->
-    <el-avatar v-if="uploadControls.button_type === 'avatar'" :src="avatarImage.avatar_url" :alt="avatarImage.username" fit="cover" :size="avatarImage.size"></el-avatar>
+    <el-avatar v-if="uploadControls.button_type === 'avatar'" :src="avatarImage.avatar_url" :alt="avatarImage.username"
+               fit="cover" :size="avatarImage.size"></el-avatar>
     <!--todo:按钮形式上传-->
     <el-button size="small" type="primary" v-if="uploadControls.button_type === 'picture'">点击上传</el-button>
     <!--todo:卡片形式上传-->
     <i class="el-icon-plus" v-if="uploadControls.button_type === 'card'"></i>
     <!--todo:上传提示文案-->
-    <span v-if="uploadControls.show_tips" class="el-upload__tip" style="margin-left: 20px;">{{ tips ? tips : `请上传${imgWidth}*${imgHeight}的jpg/png 图片` }}</span>
+    <span v-if="uploadControls.show_tips" class="el-upload__tip"
+          style="margin-left: 20px;">{{ tips ? tips : `请上传${imgWidth}*${imgHeight}的jpg/png 图片` }}</span>
   </el-upload>
   <!--todo:点击上传-->
-  <el-button v-if="!autoUpload" style="margin-top: 20px" plain type="primary" size="medium" @click="submitUpload">上传到服务器</el-button>
+  <el-button v-if="!autoUpload" style="margin-top: 20px" plain type="primary" size="medium" @click="submitUpload">
+    上传到服务器
+  </el-button>
 </template>
 
 <script>
@@ -180,23 +184,23 @@ export default {
         return isJPG && isLt30KB;
       }
       let __this = this;
-      const isSize = new Promise(function(resolve, reject) {
+      const isSize = new Promise(function (resolve, reject) {
         let width = __this.imgWidth;
         let height = __this.imgHeight;
         let _URL = window.URL || window.webkitURL;
         let image = new Image();
-        image.onload = function() {
+        image.onload = function () {
           let valid = (image.width === width && image.height === height)
-              || (image.width >= width - 10 && image.height >= height - 10 && image.width <= width + 10 && image.height <= height + 10);
+            || (image.width >= width - 10 && image.height >= height - 10 && image.width <= width + 10 && image.height <= height + 10);
           valid ? resolve() : reject();
         };
         image.src = _URL.createObjectURL(file);
       }).then(() => {
-            return file;
-          }, () => {
-            __this.$message.error(`上传图片尺寸不符合,只能是${__this.imgWidth}*${__this.imgHeight}!`);
-            return Promise.reject();
-          }
+          return file;
+        }, () => {
+          __this.$message.error(`上传图片尺寸不符合,只能是${__this.imgWidth}*${__this.imgHeight}!`);
+          return Promise.reject();
+        }
       );
       return isJPG && isLt30KB && isSize;
     }

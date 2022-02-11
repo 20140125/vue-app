@@ -2,23 +2,27 @@
   <BaseLayout :loading="loading">
     <template #header>
       <el-form-item>
-        <el-button v-if="Permission.auth.indexOf(savePermission) > -1" size="mini" type="primary" plain icon="el-icon-plus" @click="addCategory">新增</el-button>
+        <el-button v-if="Permission.auth.indexOf(savePermission) > -1" size="mini" type="primary" plain
+                   icon="el-icon-plus" @click="addCategory">新增
+        </el-button>
       </el-form-item>
     </template>
     <template #body>
       <CategoryLists
-          :categoryTree="categoryTree"
-          @addCategory="addCategory"
-          @updateCategory="updateCategory"
-          @removeCategory="removeCategory"
-          @getDetails="getDetails">
+        :categoryTree="categoryTree"
+        @addCategory="addCategory"
+        @updateCategory="updateCategory"
+        @removeCategory="removeCategory"
+        @getDetails="getDetails">
       </CategoryLists>
     </template>
     <template #dialog>
       <!--接口详情-->
-      <InterfaceDetails :reForm="reForm" :syncVisible="syncVisible" :form="form" :categoryLists="categoryLists" @getInterfaceCategory="getInterfaceCategory"></InterfaceDetails>
+      <InterfaceDetails :reForm="reForm" :syncVisible="syncVisible" :form="form" :categoryLists="categoryLists"
+                        @getInterfaceCategory="getInterfaceCategory"></InterfaceDetails>
       <!--接口分类-->
-      <AddCategory :syncVisible="addVisible" :reForm="reForm" :form="form" :categoryLists="categoryLists" @getInterfaceCategory="getInterfaceCategory"></AddCategory>
+      <AddCategory :syncVisible="addVisible" :reForm="reForm" :form="form" :categoryLists="categoryLists"
+                   @getInterfaceCategory="getInterfaceCategory"></AddCategory>
     </template>
   </BaseLayout>
 </template>
@@ -43,7 +47,11 @@ export default {
       defaultJson: {
         source: 'json', desc: '', api_id: '', href: '', method: 'POST',
         request: [{ name: 'token', desc: '用户token', required: 1, type: 'String', val: this.$store.state.token }],
-        response: [{ name: 'code', desc: '200 成功', type: 'Number' }, { name: 'message', desc: 'Success', type: 'String' }],
+        response: [{ name: 'code', desc: '200 成功', type: 'Number' }, {
+          name: 'message',
+          desc: 'Success',
+          type: 'String'
+        }],
         response_string: [], remark: '接口调用必须添加header头Authorization以便验证用户的合法性', apiLog: []
       },
       savePermission: URLS.interface.save
@@ -58,7 +66,7 @@ export default {
     }
   },
   mounted() {
-    this.$nextTick(async() => {
+    this.$nextTick(async () => {
       await this.getInterfaceCategory();
     });
   },
@@ -92,7 +100,13 @@ export default {
      */
     updateCategory(category) {
       this.form = JSON.parse(JSON.stringify(category));
-      this.form = { name: this.form.name, pid: this.form.pid, path: this.form.path, level: this.form.level, id: this.form.id };
+      this.form = {
+        name: this.form.name,
+        pid: this.form.pid,
+        path: this.form.path,
+        level: this.form.level,
+        id: this.form.id
+      };
       this.addVisible = true;
       this.reForm = 'updated';
     },
@@ -111,7 +125,13 @@ export default {
         this.reForm = 'updated';
         if (Object.keys(this.form).length === 0) {
           this.defaultJson.api_id = form.id;
-          this.form = source === 'json' ? this.defaultJson : { api_id: form.id, html: '', markdown: '', source: 'markdown', apiLog: [] };
+          this.form = source === 'json' ? this.defaultJson : {
+            api_id: form.id,
+            html: '',
+            markdown: '',
+            source: 'markdown',
+            apiLog: []
+          };
           this.reForm = 'created';
         }
         this.syncVisible = true;

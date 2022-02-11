@@ -1,5 +1,6 @@
 <template>
-  <el-button :icon="attr['icon'][model.status]" circle :type="attr['type'][model.status]" @click="changeStatus" size="medium"></el-button>
+  <el-button :icon="attr['icon'][model.status]" circle :type="attr['type'][model.status]" @click="changeStatus"
+             size="medium"></el-button>
 </template>
 
 <script>
@@ -37,7 +38,12 @@ export default {
      * todo:状态修改
      */
     async changeStatus() {
-      this.$confirm('确认修改当前状态', { showClose: false, confirmButtonText: '确定', cancelButtonText: '取消', type: 'success' }).then(() => {
+      this.$confirm('确认修改当前状态', {
+        showClose: false,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'success'
+      }).then(() => {
         this.model.status = this.model.status === 1 ? 2 : 1;
         let payload = { url: this.url, model: { id: this.model.id, status: this.model.status, act: 'status' } };
         this.$store.dispatch('UPDATE_ACTIONS', payload).then(() => {

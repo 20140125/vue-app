@@ -12,7 +12,8 @@
       <UsersLists :users-lists="usersLists" @updatedUsers="updatedUsers" ref="usersLists"></UsersLists>
     </template>
     <template #dialog>
-      <UsersDialog :sync-visible="syncVisible" :users-attr="usersAttr" :re-form="reForm" :form="form" @getUsersLists="getUsersLists"></UsersDialog>
+      <UsersDialog :sync-visible="syncVisible" :users-attr="usersAttr" :re-form="reForm" :form="form"
+                   @getUsersLists="getUsersLists"></UsersDialog>
     </template>
   </BaseLayout>
 </template>
@@ -41,7 +42,7 @@ export default {
     }
   },
   mounted() {
-    this.$nextTick(async() => {
+    this.$nextTick(async () => {
       await this.getUsersLists(this.pagination);
     });
   },

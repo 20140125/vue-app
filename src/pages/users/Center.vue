@@ -42,7 +42,8 @@
           <el-tabs type="border-card">
             <el-tab-pane label="信息展示"></el-tab-pane>
             <el-card shadow="hover">
-              <el-form :model="userCenter" label-width="100px" style="margin-left: 20px" label-position="left" ref="center">
+              <el-form :model="userCenter" label-width="100px" style="margin-left: 20px" label-position="left"
+                       ref="center">
                 <el-form-item label="头像：" class="is-required avatar-url">
                   <el-avatar :src="userInfo.avatar_url" fit="fill" :size="100" :alt="userInfo.username"></el-avatar>
                 </el-form-item>
@@ -53,26 +54,34 @@
                   <el-cascader :props="props" :options="options" filterable v-model="userCenter.local"></el-cascader>
                 </el-form-item>
                 <el-form-item label="所在地：" class="is-required">
-                  <el-cascader :props="props" :options="options" filterable v-model="userCenter.ip_address"></el-cascader>
+                  <el-cascader :props="props" :options="options" filterable
+                               v-model="userCenter.ip_address"></el-cascader>
                 </el-form-item>
                 <el-form-item label="座右铭：" class="is-required">
-                  <el-input type="textarea" resize="none" rows="3" show-word-limit maxlength="32" v-model="userCenter.desc" placeholder="这个人很懒，什么也没有留下"></el-input>
+                  <el-input type="textarea" resize="none" rows="3" show-word-limit maxlength="32"
+                            v-model="userCenter.desc" placeholder="这个人很懒，什么也没有留下"></el-input>
                 </el-form-item>
                 <el-form-item label="个人标签：" class="tags is-required">
-                  <el-tag :key="tag" effect="dark" type="success" v-for="tag in userCenter.tags" closable :disable-transitions="false" @close="handleClose(tag)">
+                  <el-tag :key="tag" effect="dark" type="success" v-for="tag in userCenter.tags" closable
+                          :disable-transitions="false" @close="handleClose(tag)">
                     {{ tag }}
                   </el-tag>
-                  <el-input v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter="handleInputConfirm" @blur="handleInputConfirm"></el-input>
+                  <el-input v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small"
+                            @keyup.enter="handleInputConfirm" @blur="handleInputConfirm"></el-input>
                   <el-button type="primary" plain v-else size="small" @click="showInput"> + New Tag</el-button>
                 </el-form-item>
                 <el-form-item label="站内信息：" class="is-required">
-                  <el-tooltip effect="dark" :content="userCenter.notice_status === 1 ? 'YES' : 'NO'" placement="top-start">
-                    <el-switch v-model.number="userCenter.notice_status" active-color="#13ce66" inactive-color="#ff4949" :active-value="1" :inactive-value="2"></el-switch>
+                  <el-tooltip effect="dark" :content="userCenter.notice_status === 1 ? 'YES' : 'NO'"
+                              placement="top-start">
+                    <el-switch v-model.number="userCenter.notice_status" active-color="#13ce66" inactive-color="#ff4949"
+                               :active-value="1" :inactive-value="2"></el-switch>
                   </el-tooltip>
                 </el-form-item>
                 <el-form-item label="账号变更：" class="is-required">
-                  <el-tooltip effect="dark" :content="userCenter.user_status === 1 ? 'YES' : 'NO'" placement="top-start">
-                    <el-switch v-model.number="userCenter.user_status" active-color="#13ce66" inactive-color="#ff4949" :active-value="1" :inactive-value="2"></el-switch>
+                  <el-tooltip effect="dark" :content="userCenter.user_status === 1 ? 'YES' : 'NO'"
+                              placement="top-start">
+                    <el-switch v-model.number="userCenter.user_status" active-color="#13ce66" inactive-color="#ff4949"
+                               :active-value="1" :inactive-value="2"></el-switch>
                   </el-tooltip>
                 </el-form-item>
                 <SubmitButton reForm="center" :form="submitForm"></SubmitButton>
@@ -110,7 +119,7 @@ export default {
     }
   },
   mounted() {
-    this.$nextTick(async() => {
+    this.$nextTick(async () => {
       /* 获取个人信息 */
       await this.$store.dispatch('users/getUserCenter', {}).then(() => {
         this.userCenter = JSON.parse(JSON.stringify(this.$store.state.users.userCenter));

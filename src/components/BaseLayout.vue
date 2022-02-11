@@ -8,11 +8,11 @@
       <slot name="body"></slot>
       <div class="pagination" v-if="T_pagination.show_page">
         <el-pagination
-            @current-change="__currentChange"
-            :page-size="T_pagination.limit"
-            layout="total, prev, pager, next"
-            :total="T_pagination.total"
-            :current-page="T_pagination.page">
+          @current-change="__currentChange"
+          :page-size="T_pagination.limit"
+          layout="total, prev, pager, next"
+          :total="T_pagination.total"
+          :current-page="T_pagination.page">
         </el-pagination>
       </div>
     </el-main>
@@ -38,7 +38,7 @@ export default {
     }
   },
   watch: {
-    pagination: function() {
+    pagination: function () {
       this.T_pagination = this.pagination;
     }
   },
@@ -53,7 +53,7 @@ export default {
      * @param page
      * @private
      */
-    __currentChange: function(page) {
+    __currentChange: function (page) {
       this.$parent.currentPageChange(page);
     }
   }

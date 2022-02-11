@@ -3,13 +3,15 @@
     <el-form label-position="left" label-width="100px">
       <el-form-item label="工具列表：" class="is-required">
         <el-select v-model="keywords" @change="setMethods">
-          <el-option v-for="(item, index) in spiderConfig" :key="index" :value="item.name" :label="item.value.label"></el-option>
+          <el-option v-for="(item, index) in spiderConfig" :key="index" :value="item.name"
+                     :label="item.value.label"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item v-for="(item, index) in spiderParams" :key="index" :label="item.label + '：'" class="is-required">
         <el-input :placeholder="item.placeholder" v-model="item.value">
           <template #append>
-            <el-button icon="el-icon-search" @click="syncSpider({ keywords: item.value, method: item.name })">开始同步</el-button>
+            <el-button icon="el-icon-search" @click="syncSpider({ keywords: item.value, method: item.name })">开始同步
+            </el-button>
           </template>
         </el-input>
       </el-form-item>
@@ -48,7 +50,10 @@ export default {
   props: ['spiderConfig'],
   mounted() {
     this.$nextTick(() => {
-      const SocketService = SocketIO(this.$store.state.login.userInfo.socket, { transports: ['websocket'], autoConnect: true });
+      const SocketService = SocketIO(this.$store.state.login.userInfo.socket, {
+        transports: ['websocket'],
+        autoConnect: true
+      });
       /* todo:链接系统 */
       SocketService.on('connect', () => {
         console.info(`【登录系统】${func.setTime(Date.parse(new Date()))}`);

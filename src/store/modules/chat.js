@@ -79,7 +79,12 @@ export const actions = {
    */
   getEmotionList({ state, commit }, payload) {
     if (payload.type === state.type && payload.page === state.page) {
-      commit('UPDATE_MUTATIONS', { emotion: state.emotion || [], type: state.type || 1, page: state.page || 1, total: state.state || 0 });
+      commit('UPDATE_MUTATIONS', {
+        emotion: state.emotion || [],
+        type: state.type || 1,
+        page: state.page || 1,
+        total: state.state || 0
+      });
       return false;
     }
     return new Promise((resolve, reject) => {

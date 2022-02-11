@@ -3,12 +3,14 @@
     <template #header>
       <el-form-item>
         <el-select v-model="pagination.state" placeholder="请选择推送状态" @change="searchPush" clearable>
-          <el-option v-for="(item, index) in pushState" :key="index" :label="item.label" :value="item.value"></el-option>
+          <el-option v-for="(item, index) in pushState" :key="index" :label="item.label"
+                     :value="item.value"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
         <el-select v-model.number="pagination.status" placeholder="实时推送" @change="searchPush" clearable>
-          <el-option v-for="(item, index) in pushStatus" :key="index" :label="item.label" :value="item.value"></el-option>
+          <el-option v-for="(item, index) in pushStatus" :key="index" :label="item.label"
+                     :value="item.value"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -18,14 +20,17 @@
         <el-button icon="el-icon-search" @click="searchPush" plain type="primary">检索</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button v-if="Permission.auth.indexOf(savePermission) > -1" type="primary" plain @click='addPush' icon="el-icon-plus">新增</el-button>
+        <el-button v-if="Permission.auth.indexOf(savePermission) > -1" type="primary" plain @click='addPush'
+                   icon="el-icon-plus">新增
+        </el-button>
       </el-form-item>
     </template>
     <template #body>
       <PushLists :push-lists="pushLists" @runPusher="runPusher" ref="pushLists"></PushLists>
     </template>
     <template #dialog>
-      <PushDialog :sync-visible="syncVisible" :re-form="reForm" :form="form" :user-lists="userLists" @getPushLists="getPushLists"></PushDialog>
+      <PushDialog :sync-visible="syncVisible" :re-form="reForm" :form="form" :user-lists="userLists"
+                  @getPushLists="getPushLists"></PushDialog>
     </template>
   </BaseLayout>
 </template>
@@ -43,9 +48,21 @@ export default {
   data() {
     return {
       loading: true,
-      pagination: { page: 1, limit: 15, total: 0, show_page: true, refresh: false, username: '', state: '', status: '' },
+      pagination: {
+        page: 1,
+        limit: 15,
+        total: 0,
+        show_page: true,
+        refresh: false,
+        username: '',
+        state: '',
+        status: ''
+      },
       pushStatus: [{ label: '是', value: 1 }, { label: '否', value: 2 }],
-      pushState: [{ label: 'SUCCESSFULLY', value: 'successfully' }, { label: 'OFFLINE', value: 'offline' }, { label: 'FAILED', value: 'failed' }],
+      pushState: [{ label: 'SUCCESSFULLY', value: 'successfully' }, {
+        label: 'OFFLINE',
+        value: 'offline'
+      }, { label: 'FAILED', value: 'failed' }],
       syncVisible: false,
       reForm: 'created',
       form: {},
@@ -59,7 +76,7 @@ export default {
     }
   },
   mounted() {
-    this.$nextTick(async() => {
+    this.$nextTick(async () => {
       await this.getPushLists(this.pagination);
     });
   },
@@ -99,7 +116,15 @@ export default {
      * @return {Promise<void>}
      */
     async addPush() {
-      this.form = { username: '', uuid: '', title: '', info: '', status: 1, state: 'failed', created_at: func.setTime(Date.parse(new Date()), 'en') };
+      this.form = {
+        username: '',
+        uuid: '',
+        title: '',
+        info: '',
+        status: 1,
+        state: 'failed',
+        created_at: func.setTime(Date.parse(new Date()), 'en')
+      };
       this.reForm = 'created';
       this.syncVisible = true;
       await this.$store.dispatch('users/getCacheUserLists', {}).then(() => {

@@ -29,7 +29,10 @@ export const actions = {
     }
     return new Promise((resolve, reject) => {
       requestMethods.__commonMethods(URLS.login.checkAuthorized, authorized).then(result => {
-        commit('UPDATE_MUTATIONS', { userInfo: (((result || {}).data || {}).item || {}).lists || {}, isAuthorized: true });
+        commit('UPDATE_MUTATIONS', {
+          userInfo: (((result || {}).data || {}).item || {}).lists || {},
+          isAuthorized: true
+        });
         resolve(result);
       }).catch(error => {
         commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });

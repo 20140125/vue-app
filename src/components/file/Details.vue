@@ -1,13 +1,15 @@
 <template>
   <div id="dialog">
-    <el-dialog v-model="visible.detail" :title="tabModel.label || '在线编辑器'" center width="1550px" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false" :fullscreen="fullscreen">
+    <el-dialog v-model="visible.detail" :title="tabModel.label || '在线编辑器'" center width="1550px" :show-close="false"
+               :close-on-click-modal="false" :close-on-press-escape="false" :fullscreen="fullscreen">
       <el-row :gutter="24">
         <el-col :span="24" style="margin-top: -65px;color: white;">
           <i class="el-icon-full-screen" style="font-size: 25px" @click="fullscreen = !fullscreen"></i>
         </el-col>
         <!--文件列表-->
         <el-col :span="6" style="margin-bottom: 20px">
-          <el-input placeholder="输入关键字搜索" v-model="filterText" clearable style="margin-bottom: 20px" suffix-icon="el-icon-search"></el-input>
+          <el-input placeholder="输入关键字搜索" v-model="filterText" clearable style="margin-bottom: 20px"
+                    suffix-icon="el-icon-search"></el-input>
           <el-tree :data="details"
                    :highlight-current="true"
                    :props="treeProps"
@@ -25,14 +27,18 @@
         <el-col :span="18" class="details">
           <el-form :model="form.model" ref="fileSave">
             <el-form-item>
-              <el-tabs type="border-card" lazy closable v-model="tabModel.name" @tab-click="goto" @tab-remove="removeTab" style="text-align: left!important;">
-                <el-tab-pane v-for="item in fileTabs" :label="item.label" :key="item.name" :name="item.name"></el-tab-pane>
+              <el-tabs type="border-card" lazy closable v-model="tabModel.name" @tab-click="goto"
+                       @tab-remove="removeTab" style="text-align: left!important;">
+                <el-tab-pane v-for="item in fileTabs" :label="item.label" :key="item.name"
+                             :name="item.name"></el-tab-pane>
                 <el-card shadow="always">
-                  <codemirror @change="updateContent" ref="edit" :value="tabModel.content" :options="options" style="line-height: 20px"></codemirror>
+                  <codemirror @change="updateContent" ref="edit" :value="tabModel.content" :options="options"
+                              style="line-height: 20px"></codemirror>
                 </el-card>
               </el-tabs>
             </el-form-item>
-            <SubmitButton v-if="Permission.auth.indexOf(savePermission) > -1" :form="form" re-form="fileSave" @closeDialog="$emit('closeDialog')"></SubmitButton>
+            <SubmitButton v-if="Permission.auth.indexOf(savePermission) > -1" :form="form" re-form="fileSave"
+                          @closeDialog="$emit('closeDialog')"></SubmitButton>
             <el-main style="text-align: center" v-else>
               <el-button type="default" size="medium" @click="$emit('closeDialog')" plain>取消</el-button>
             </el-main>
@@ -112,7 +118,13 @@ export default {
         /* 只读 */
         readOnly: false
       },
-      mode: { markdown: 'text/markdown', php: 'text/x-php', xml: 'text/xml', json: 'application/ld+json', sql: 'text/x-mysql' },
+      mode: {
+        markdown: 'text/markdown',
+        php: 'text/x-php',
+        xml: 'text/xml',
+        json: 'application/ld+json',
+        sql: 'text/x-mysql'
+      },
       savePermission: URLS.file.update
     };
   },
@@ -165,7 +177,7 @@ export default {
      * TODO:设置编辑器的mode
      * @param ext
      */
-    setOptionsMode: function(ext) {
+    setOptionsMode: function (ext) {
       switch (ext.toLowerCase()) {
         case 'xml':
           this.options.mode = this.mode.xml;
@@ -190,7 +202,7 @@ export default {
      * @param value
      * @param data
      */
-    filterNode: function(value, data) {
+    filterNode: function (value, data) {
       return value ? data.filename.toLowerCase().indexOf(value.toLowerCase()) !== -1 : true;
     },
     /**

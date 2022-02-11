@@ -2,7 +2,9 @@
   <BaseLayout :loading="loading">
     <template #header>
       <el-form-item>
-        <el-button v-if="Permission.auth.indexOf(savePermission) > -1" plain type="primary" size="mini" icon="el-icon-plus" @click="addAuth">添加</el-button>
+        <el-button v-if="Permission.auth.indexOf(savePermission) > -1" plain type="primary" size="mini"
+                   icon="el-icon-plus" @click="addAuth">添加
+        </el-button>
       </el-form-item>
     </template>
     <!--权限列表-->
@@ -11,7 +13,8 @@
     </template>
     <!--权限修改-->
     <template #dialog>
-      <AuthDialog :form="form" :auth-lists="authLists" :reForm="reForm" :sync-visible="syncVisible" @getAuthLists="getAuthLists"></AuthDialog>
+      <AuthDialog :form="form" :auth-lists="authLists" :reForm="reForm" :sync-visible="syncVisible"
+                  @getAuthLists="getAuthLists"></AuthDialog>
     </template>
   </BaseLayout>
 </template>
@@ -45,7 +48,7 @@ export default {
     }
   },
   mounted() {
-    this.$nextTick(async() => {
+    this.$nextTick(async () => {
       await this.getAuthLists();
     });
   },

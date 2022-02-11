@@ -51,7 +51,17 @@ export default {
      * @param isCollapse
      */
     setLayout(isCollapse) {
-      this.layoutNums = isCollapse ? { aside: 0.1, content: 23 } : { aside: 3, content: 21 };
+      this.layoutNums = isCollapse ?
+        {
+          aside: 1,
+          content: 23,
+          style: { 'min-height': `${window.innerHeight > window.outerHeight ? (window.innerHeight - 130) : (window.outerHeight - 130)}px` }
+        }
+        : {
+          aside: 3,
+          content: 21,
+          style: { 'min-height': `${window.innerHeight > window.outerHeight ? (window.innerHeight - 130) : (window.outerHeight - 130)}px` }
+        };
       this.isCollapse = isCollapse;
     }
   }

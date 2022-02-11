@@ -1,7 +1,8 @@
 <template>
   <el-skeleton :rows="5" animated :loading="loading">
     <el-timeline>
-      <el-timeline-item v-for="(item, index) in timeLine" :key="index" :type="item.type" placement="top" :timestamp="item.timestamp">
+      <el-timeline-item v-for="(item, index) in timeLine" :key="index" :type="item.type" placement="top"
+                        :timestamp="item.timestamp">
         <el-card shadow="always">{{ item.content }}</el-card>
       </el-timeline-item>
     </el-timeline>
@@ -22,7 +23,7 @@ export default {
     }
   },
   mounted() {
-    this.$nextTick(async() => {
+    this.$nextTick(async () => {
       await this.$store.dispatch('home/getTimeLine', { page: 1, limit: 11 }).then(() => {
         this.loading = false;
       });

@@ -1,13 +1,13 @@
 <template>
   <v-md-editor
-      v-model="model"
-      height="600px"
-      ref="markdown"
-      :mode="mode"
-      :disabled-menus="[]"
-      @upload-image="uploadFile"
-      @save="saveHandle"
-      @change="changeHandle">
+    v-model="model"
+    height="600px"
+    ref="markdown"
+    :mode="mode"
+    :disabled-menus="[]"
+    @upload-image="uploadFile"
+    @save="saveHandle"
+    @change="changeHandle">
   </v-md-editor>
 </template>
 

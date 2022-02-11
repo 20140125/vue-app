@@ -1,10 +1,12 @@
 <template>
   <div id="interface">
-    <el-dialog v-model="visible" title="编辑接口" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false" center :width="localForm.source === 'json' ? '1200px' : '1500px'">
+    <el-dialog v-model="visible" title="编辑接口" :show-close="false" :close-on-click-modal="false"
+               :close-on-press-escape="false" center :width="localForm.source === 'json' ? '1200px' : '1500px'">
       <div v-if="localForm.source === 'json'">
         <Json ref="json" :reForm="reForm" :form="localForm" :categoryLists="categoryLists"></Json>
         <InterfaceLog :lists="localForm.apiLog"></InterfaceLog>
-        <SubmitButton :form="submitForm" :reForm="reForm" @closeDialog="$emit('getInterfaceCategory', true)"></SubmitButton>
+        <SubmitButton :form="submitForm" :reForm="reForm"
+                      @closeDialog="$emit('getInterfaceCategory', true)"></SubmitButton>
       </div>
       <div v-if="localForm.source === 'markdown'" class="markdown">
         <MarkDown :markdown="localForm.markdown" :saveHandle="saveHandle"></MarkDown>
@@ -41,7 +43,11 @@ export default {
       this.localForm = this.form;
       if (this.localForm.source === 'json') {
         setTimeout(() => {
-          this.submitForm = { model: this.localForm, $refs: this.$refs.json.$refs, url: this.reForm === 'created' ? URLS.interface.save : URLS.interface.update };
+          this.submitForm = {
+            model: this.localForm,
+            $refs: this.$refs.json.$refs,
+            url: this.reForm === 'created' ? URLS.interface.save : URLS.interface.update
+          };
         }, 1000);
       }
     }
@@ -55,7 +61,10 @@ export default {
     saveHandle(text, html) {
       this.localForm.markdown = text;
       this.localForm.html = html;
-      this.$store.dispatch('UPDATE_ACTIONS', { url: this.reForm === 'created' ? URLS.interface.save : URLS.interface.update, model: this.localForm }).then(() => {
+      this.$store.dispatch('UPDATE_ACTIONS', {
+        url: this.reForm === 'created' ? URLS.interface.save : URLS.interface.update,
+        model: this.localForm
+      }).then(() => {
         this.$emit('getInterfaceCategory', true);
       });
     }

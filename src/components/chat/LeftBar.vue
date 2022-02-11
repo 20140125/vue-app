@@ -2,10 +2,12 @@
   <div id="left-bar">
     <div class="chat-user">
       <el-menu background-color="#393d49" text-color="#fff" active-text-color="#ff69b4" style="height: 575px">
-        <el-menu-item :users="user" v-for="(user,index) in chatUsers" @click="getUser(user)" :key="index" :index="index.toString()">
+        <el-menu-item :users="user" v-for="(user,index) in chatUsers" @click="getUser(user)" :key="index"
+                      :index="index.toString()">
           <el-avatar :size="35" :src="user.client_img" class="img"></el-avatar>
           <template #title>
-            <span class="username" v-html="user.client_name.replace(userInfo.username,'<b style=color:#67C23A;font-weight:300>'+userInfo.username+'</b>')"></span>
+            <span class="username"
+                  v-html="user.client_name.replace(userInfo.username,'<b style=color:#67C23A;font-weight:300>'+userInfo.username+'</b>')"></span>
           </template>
           <!--未读消息数-->
           <el-badge v-if="user.total" type="danger" :value="user.total"></el-badge>

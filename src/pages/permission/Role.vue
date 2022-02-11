@@ -2,14 +2,17 @@
   <BaseLayout :loading="loading" :pagination="pagination">
     <template #header>
       <el-form-item>
-        <el-button type="primary" v-if="Permission.auth.indexOf(savePermission) > -1" plain size="mini" @click='addRoles' icon="el-icon-plus">新增</el-button>
+        <el-button type="primary" v-if="Permission.auth.indexOf(savePermission) > -1" plain size="mini"
+                   @click='addRoles' icon="el-icon-plus">新增
+        </el-button>
       </el-form-item>
     </template>
     <template #body>
       <RoleLists :role-lists="roleLists" @updateRole="updateRoles"></RoleLists>
     </template>
     <template #dialog>
-      <RoleDialog :sync-visible="syncVisible" :form="form" :reForm="reForm" :authAttr="authAttr" @getRoleLists="getRoleLists"></RoleDialog>
+      <RoleDialog :sync-visible="syncVisible" :form="form" :reForm="reForm" :authAttr="authAttr"
+                  @getRoleLists="getRoleLists"></RoleDialog>
     </template>
   </BaseLayout>
 </template>
@@ -40,7 +43,7 @@ export default {
     }
   },
   mounted() {
-    this.$nextTick(async() => {
+    this.$nextTick(async () => {
       await this.getRoleLists(this.pagination);
     });
   },
@@ -95,7 +98,10 @@ export default {
       this.reForm = 'updated';
       this.syncVisible = true;
       await this.getRoleAuth().then(() => {
-        this.authAttr = { authLists: this.$store.state.role.authLists, defaultChecked: form.auth_ids ? JSON.parse(form.auth_ids) : [] };
+        this.authAttr = {
+          authLists: this.$store.state.role.authLists,
+          defaultChecked: form.auth_ids ? JSON.parse(form.auth_ids) : []
+        };
         this.form.auth_ids = this.authAttr.defaultChecked;
       });
     }

@@ -3,32 +3,38 @@
     <template #header>
       <el-form-item style="width: 900px;">
         <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item @click="getFileLists(item, index)" v-for="(item, index) in breadcrumb" :key="index">{{ item.filename }}</el-breadcrumb-item>
-          <el-breadcrumb-item @click="getFileLists({ path: '/', filename: 'longer' })" style="float: right"><i class="el-icon-refresh-right"></i></el-breadcrumb-item>
+          <el-breadcrumb-item @click="getFileLists(item, index)" v-for="(item, index) in breadcrumb" :key="index">{{
+              item.filename
+            }}
+          </el-breadcrumb-item>
+          <el-breadcrumb-item @click="getFileLists({ path: '/', filename: 'longer' })" style="float: right"><i
+            class="el-icon-refresh-right"></i></el-breadcrumb-item>
         </el-breadcrumb>
       </el-form-item>
     </template>
     <template #body>
       <!--文件列表-->
       <FileLists
-          :lists="fileLists"
-          :fileURL="fileURL"
-          @addFile="addFile"
-          @getFiles="getFiles"
-          @deleteFile="deleteFile"
-          @renameFile="renameFile"
-          @chmodFile="chmodFile"
-          @uploadFile="uploadFile"
-          @unComposeFile="unComposeFile"
-          @getFileLists="getFileLists"
-          @getMultipleSelection="getMultipleSelection">
+        :lists="fileLists"
+        :fileURL="fileURL"
+        @addFile="addFile"
+        @getFiles="getFiles"
+        @deleteFile="deleteFile"
+        @renameFile="renameFile"
+        @chmodFile="chmodFile"
+        @uploadFile="uploadFile"
+        @unComposeFile="unComposeFile"
+        @getFileLists="getFileLists"
+        @getMultipleSelection="getMultipleSelection">
       </FileLists>
     </template>
     <template #dialog>
       <!--文本编辑-->
-      <FileDetails :details="fileDetail" ref="fileDetail" :detail-visible="visible.detail" @closeDialog="closeDialog"></FileDetails>
+      <FileDetails :details="fileDetail" ref="fileDetail" :detail-visible="visible.detail"
+                   @closeDialog="closeDialog"></FileDetails>
       <!--静态资源预览-->
-      <StaticSource :source-visible="visible.source" :static-source="staticSource" @closeDialog="closeDialog"></StaticSource>
+      <StaticSource :source-visible="visible.source" :static-source="staticSource"
+                    @closeDialog="closeDialog"></StaticSource>
       <!--权限-->
       <FileChmod :chmod-visible="visible.chmod" :file="chmod" @closeDialog="closeDialog"></FileChmod>
       <!-- 文件上传 -->
@@ -67,7 +73,7 @@ export default {
     };
   },
   mounted() {
-    this.$nextTick(async() => {
+    this.$nextTick(async () => {
       await this.getFileLists();
     });
   },
@@ -133,7 +139,11 @@ export default {
           title: file.filename
         });
       });
-      this.staticSource = form === 'image' ? { image: source, video: [], title: '图片预览' } : { image: [], video: source, title: '视频预览' };
+      this.staticSource = form === 'image' ? { image: source, video: [], title: '图片预览' } : {
+        image: [],
+        video: source,
+        title: '视频预览'
+      };
       this.visible = { detail: false, source: true, chmod: false, upload: false };
     },
     /**
@@ -197,7 +207,10 @@ export default {
      * @param file
      */
     async unComposeFile(file) {
-      await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.file.unzip, model: { resource: file.filename.split('.')[0], path: file.path } }).then(() => {
+      await this.$store.dispatch('UPDATE_ACTIONS', {
+        url: URLS.file.unzip,
+        model: { resource: file.filename.split('.')[0], path: file.path }
+      }).then(() => {
         this.getFileLists(true);
       });
     },
@@ -206,7 +219,11 @@ export default {
      * @param file
      */
     async deleteFile(file) {
-      await this.$confirm('此操作将永远删除该文件，是否继续？', `删除文件${file.filename}`, { confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning' }).then(() => {
+      await this.$confirm('此操作将永远删除该文件，是否继续？', `删除文件${file.filename}`, {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
         this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.file.delete, model: { path: file.path } }).then(() => {
           this.getFileLists(true);
         });
@@ -219,13 +236,23 @@ export default {
      * @param file
      */
     async renameFile(file) {
-      await this.$prompt('请输入新文件名', `${file.filename}重命名`, { confirmButtonText: '确定', cancelButtonText: '取消' }).then(({ value }) => {
+      await this.$prompt('请输入新文件名', `${file.filename}重命名`, {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }).then(({ value }) => {
         if (['', 'null', null, undefined, 'undefined'].includes(value)) {
           this.$message.warning('File name cannot be empty');
           return false;
         }
-        this.$confirm('此操作可能会影响项目运行，是否继续？', '重命名', { confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning' }).then(() => {
-          this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.file.rename, model: { path: file.path + value } }).then(() => {
+        this.$confirm('此操作可能会影响项目运行，是否继续？', '重命名', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$store.dispatch('UPDATE_ACTIONS', {
+            url: URLS.file.rename,
+            model: { path: file.path + value }
+          }).then(() => {
             this.getFileLists(true);
           });
         }).catch(() => {

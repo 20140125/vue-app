@@ -46,23 +46,19 @@ VMdEditor.use(createTipPlugin());
 app.use(VMdEditor);
 
 // 权限拦截
-router.beforeEach(async(to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   /* todo:设置标题 */
   if ((to.meta || {}).title || '') {
     document.title = `RBAC权限系统 -- ${to.meta.title}`;
-  }
-  if (store.getters.theme === 'default') {
-    delete require.cache['@/theme/element-variables_primary.scss'];
-    require('@/theme/element-variables.scss');
-  } else {
-    delete require.cache['@/theme/element-variables.scss'];
-    require('@/theme/element-variables_primary.scss');
   }
   /* todo:地址中存在access_token (第三方授权登录) */
   if (to.params.access_token) {
     window.localStorage.setItem('token', to.params.access_token || '');
     await store.commit('UPDATE_MUTATIONS', { token: to.params.access_token }, { root: true });
-    await store.commit('home/UPDATE_MUTATIONS', { tabs: [{ label: '欢迎页', value: '/admin/home/index' }], tabModel: { label: '欢迎页', value: '/admin/home/index' } });
+    await store.commit('home/UPDATE_MUTATIONS', {
+      tabs: [{ label: '欢迎页', value: '/admin/home/index' }],
+      tabModel: { label: '欢迎页', value: '/admin/home/index' }
+    });
     next({ path: '/admin/home/index', redirect: to.path });
   }
   if (to.name === 'IndexManage' && !to.params.access_token) {

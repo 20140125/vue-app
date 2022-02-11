@@ -57,7 +57,11 @@ export const actions = {
     }
     return new Promise((resolve, reject) => {
       requestMethods.__commonMethods(URLS.interface.get, payload).then(result => {
-        commit('UPDATE_MUTATIONS', { details: ((result.data || {}).item || {}).lists || {}, id: payload.id || 0, source: payload.source || '' });
+        commit('UPDATE_MUTATIONS', {
+          details: ((result.data || {}).item || {}).lists || {},
+          id: payload.id || 0,
+          source: payload.source || ''
+        });
         resolve(result);
       }).catch(error => {
         commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });

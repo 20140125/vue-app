@@ -12,7 +12,7 @@ export default {
     return {};
   },
   mounted() {
-    this.$nextTick(function() {
+    this.$nextTick(function () {
       this.getCharts(this.chartsId);
     });
     let charts = echarts.init(document.getElementById(this.chartsId));
@@ -22,7 +22,7 @@ export default {
   },
   watch: {
     seriesData() {
-      this.$nextTick(function() {
+      this.$nextTick(function () {
         this.getCharts(this.chartsId);
       });
       let charts = echarts.init(document.getElementById(this.chartsId));
@@ -32,7 +32,7 @@ export default {
     }
   },
   methods: {
-    getCharts: function(chartsId) {
+    getCharts: function (chartsId) {
       let charts = echarts.init(document.getElementById(chartsId));
       charts.setOption({
         title: {

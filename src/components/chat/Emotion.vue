@@ -5,7 +5,8 @@
         <el-tab-pane v-for="(item,index) in emotionType" :name="item.type.toString()" :key="index" :label="item.title">
           <div class="emotion-box-line" v-for="(emotion, index) in emotionList" :key="index">
             <div class="emotion-item">
-              <el-image :src="emotion.icon" :alt="emotion.title" style="width: 30px;height: 30px;" lazy @click="$emit('clickEmotion', emotion)"></el-image>
+              <el-image :src="emotion.icon" :alt="emotion.title" style="width: 30px;height: 30px;" lazy
+                        @click="$emit('clickEmotion', emotion)"></el-image>
             </div>
           </div>
         </el-tab-pane>

@@ -7,7 +7,7 @@ export const mutations = {
    * @param state
    * @param update
    */
-  UPDATE_MUTATIONS: function(state, update) {
+  UPDATE_MUTATIONS: function (state, update) {
     Object.keys(update).forEach(item => {
       state[item] = update[item];
     });

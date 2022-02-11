@@ -32,7 +32,24 @@ import getters from '@/store/getters';
  */
 const debug = process.env.NODE_ENV !== 'production';
 export default createStore({
-  modules: { login, home, chat, file, auth, role, apply, push, users, oauth, config, area, database, log, category, spider },
+  modules: {
+    login,
+    home,
+    chat,
+    file,
+    auth,
+    role,
+    apply,
+    push,
+    users,
+    oauth,
+    config,
+    area,
+    database,
+    log,
+    category,
+    spider
+  },
   mutations,
   state,
   actions,

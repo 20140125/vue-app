@@ -2,7 +2,8 @@
   <div id="weather">
     <el-form label-position="left" label-width="100px">
       <el-form-item label="城市名称：">
-        <el-autocomplete v-model="cityName" style="width: 300px" :fetch-suggestions="querySearch" @select="getWeather" prefix-icon="el-icon-search" :placeholder="`请输入城市名称(${Permission.city})`">
+        <el-autocomplete v-model="cityName" style="width: 300px" :fetch-suggestions="querySearch" @select="getWeather"
+                         prefix-icon="el-icon-search" :placeholder="`请输入城市名称(${Permission.city})`">
           <template #default="scope">
             <span v-html="scope.item.name"></span>
           </template>
@@ -58,7 +59,10 @@ export default {
      */
     async getWeather(item) {
       this.cityName = item.name;
-      await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.tools.getWeather, model: { city_name: this.cityName } }).then((response) => {
+      await this.$store.dispatch('UPDATE_ACTIONS', {
+        url: URLS.tools.getWeather,
+        model: { city_name: this.cityName }
+      }).then((response) => {
         let result = (((response || {}).data || {}).item || {}).lists || {};
         this.items = JSON.parse(result.forecast);
       });

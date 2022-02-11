@@ -1,6 +1,7 @@
 <template>
   <el-tabs type="border-card" closable lazy v-model="tabModel.value" @tab-click="goto" @tab-remove="removeTabs">
-    <el-tab-pane v-for="item in authTabs" :tab="item" :label="item.label" :key="item.value" :name="item.value"></el-tab-pane>
+    <el-tab-pane v-for="item in authTabs" :tab="item" :label="item.label" :key="item.value"
+                 :name="item.value"></el-tab-pane>
     <el-card shadow="always">
       <router-view></router-view>
     </el-card>
@@ -19,7 +20,7 @@ export default {
     }
   },
   mounted() {
-    this.$nextTick(async() => {
+    this.$nextTick(async () => {
       await this.$store.dispatch('home/addTabs', { label: this.$route.meta.title, value: this.$route.path });
     });
   },

@@ -29,7 +29,10 @@ export const actions = {
     }
     return new Promise((resolve, reject) => {
       requestMethods.__commonMethods(URLS.file.lists, payload).then(result => {
-        commit('UPDATE_MUTATIONS', { fileLists: ((result.data || {}).item || {}).lists || [], basename: payload.basename });
+        commit('UPDATE_MUTATIONS', {
+          fileLists: ((result.data || {}).item || {}).lists || [],
+          basename: payload.basename
+        });
         resolve(result);
       }).catch(error => {
         commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });

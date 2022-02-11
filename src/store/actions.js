@@ -17,22 +17,5 @@ export default {
         reject(error);
       });
     });
-  },
-  /**
-   * todo:更新主题
-   * @param commit
-   * @param payload
-   * @constructor
-   */
-  UPDATE_THEME({ commit }, payload) {
-    if (payload.theme.theme === 'default') {
-      delete require.cache['@/theme/element-variables_primary.scss'];
-      require('@/theme/element-variables.scss');
-    } else {
-      delete require.cache['@/theme/element-variables.scss'];
-      require('@/theme/element-variables_primary.scss');
-    }
-    window.localStorage.setItem('theme', payload.theme.theme);
-    commit('UPDATE_MUTATIONS', { theme: payload.theme.theme }, { root: true });
   }
 };

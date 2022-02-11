@@ -1,6 +1,7 @@
 <template>
   <div id="upload">
-    <el-dialog v-model="visible" :title="`文件上传`" center :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false" @close="$emit('closeDialog')">
+    <el-dialog v-model="visible" :title="`文件上传`" center :show-close="false" :close-on-click-modal="false"
+               :close-on-press-escape="false" @close="$emit('closeDialog')">
       <CommonUpload
         list-type='picture-card'
         :img-height="0"

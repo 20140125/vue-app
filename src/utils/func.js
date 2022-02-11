@@ -58,7 +58,7 @@ export default {
    */
   scrollToUp() {
     /* 每次开启定时器都重新计算速度 */
-    let timer = setInterval(function() {
+    let timer = setInterval(function () {
       /* 获取滚动条的滚动高度 */
       let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
       /* 用于设置速度差，产生缓动的效果 */

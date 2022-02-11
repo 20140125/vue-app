@@ -7,7 +7,7 @@ import request from '@/tools/request.js';
  * @return {Promise<AxiosResponse<any>>}
  * @private
  */
-const __commonMethods = async function(url, params = {}) {
+const __commonMethods = async function (url, params = {}) {
   return request.post(url, params);
 };
 /**

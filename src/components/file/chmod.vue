@@ -1,9 +1,11 @@
 <template>
   <div id="chmod">
-    <el-dialog width="500px" v-model="visible" :title="`设置权限[${file.filename}]`" :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false" @close="$emit('getFileLists')">
+    <el-dialog width="500px" v-model="visible" :title="`设置权限[${file.filename}]`" :show-close="false"
+               :close-on-click-modal="false" :close-on-press-escape="false" @close="$emit('getFileLists')">
       <el-form label-width="80px" :model="form" ref="fileChmod" :rules="rules" label-position="left">
         <el-form-item label="权限值：" prop="model.auth">
-          <el-input placeholder="请输入内容" maxlength="3" @change="setChmod(form.model.auth)" v-model.number="form.model.auth"></el-input>
+          <el-input placeholder="请输入内容" maxlength="3" @change="setChmod(form.model.auth)"
+                    v-model.number="form.model.auth"></el-input>
         </el-form-item>
         <el-form-item label="所有者：" class="is-required">
           <el-checkbox-group v-model="form.model.all" @change="chmodChange('all')">
@@ -59,7 +61,15 @@ export default {
       visible: this.chmodVisible,
       form: { model: { auth: '', all: [], user: [], common: [] }, url: URLS.file.chmod, $refs: this.$refs },
       chmodAttr: [{ 'id': 4, 'value': '读取' }, { 'id': 2, 'value': '写入' }, { 'id': 1, 'value': '执行' }],
-      chmodAuth: { 1: ['执行'], 2: ['写入'], 3: ['写入', '执行'], 4: ['读取'], 5: ['读取', '执行'], 6: ['读取', '写入'], 7: ['读取', '写入', '执行'] },
+      chmodAuth: {
+        1: ['执行'],
+        2: ['写入'],
+        3: ['写入', '执行'],
+        4: ['读取'],
+        5: ['读取', '执行'],
+        6: ['读取', '写入'],
+        7: ['读取', '写入', '执行']
+      },
       chmodId: { all: 0, user: 0, common: 0 },
       rules: {
         model: {
@@ -82,8 +92,17 @@ export default {
      * @param auth
      */
     setChmod(auth) {
-      this.chmodId = { all: parseInt(auth.toString().substr(0, 1), 10), user: parseInt(auth.toString().substr(1, 1), 10), common: parseInt(auth.toString().substr(2, 1), 10) };
-      this.form.model = { auth: auth, all: this.chmodAuth[this.chmodId.all], user: this.chmodAuth[this.chmodId.user], common: this.chmodAuth[this.chmodId.common] };
+      this.chmodId = {
+        all: parseInt(auth.toString().substr(0, 1), 10),
+        user: parseInt(auth.toString().substr(1, 1), 10),
+        common: parseInt(auth.toString().substr(2, 1), 10)
+      };
+      this.form.model = {
+        auth: auth,
+        all: this.chmodAuth[this.chmodId.all],
+        user: this.chmodAuth[this.chmodId.user],
+        common: this.chmodAuth[this.chmodId.common]
+      };
     },
     /**
      * todo:权限值改变

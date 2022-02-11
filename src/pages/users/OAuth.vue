@@ -12,7 +12,8 @@
       <OAuthLists :oAuthLists="oAuthLists" ref="oAuthLists" @bindEmail="bindEmail"></OAuthLists>
     </template>
     <template #dialog>
-      <OAuthDialog :sync-visible="syncVisible" :re-form="reForm" :form="form" @getOAuthLists="getOAuthLists"></OAuthDialog>
+      <OAuthDialog :sync-visible="syncVisible" :re-form="reForm" :form="form"
+                   @getOAuthLists="getOAuthLists"></OAuthDialog>
     </template>
   </BaseLayout>
 </template>
@@ -40,7 +41,7 @@ export default {
     }
   },
   mounted() {
-    this.$nextTick(async() => {
+    this.$nextTick(async () => {
       await this.getOAuthLists(this.pagination);
     });
   },
