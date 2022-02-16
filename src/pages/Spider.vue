@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import BaseLayout from '@/components/BaseLayout';
-import SpiderIndex from '@/components/spider/Index';
+import BaseLayout from '../components/BaseLayout';
+import SpiderIndex from '../components/spider/Index';
 
 export default {
   name: 'Spider',

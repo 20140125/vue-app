@@ -1,11 +1,21 @@
 <template>
   <div id="chmod">
-    <el-dialog width="500px" v-model="visible" :title="`设置权限[${file.filename}]`" :show-close="false"
-               :close-on-click-modal="false" :close-on-press-escape="false" @close="$emit('getFileLists')">
+    <el-dialog
+      width="500px"
+      v-model="visible"
+      :title="`设置权限[${file.filename}]`"
+      :show-close="false"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      @close="$emit('getFileLists')">
       <el-form label-width="80px" :model="form" ref="fileChmod" :rules="rules" label-position="left">
         <el-form-item label="权限值：" prop="model.auth">
-          <el-input placeholder="请输入内容" maxlength="3" @change="setChmod(form.model.auth)"
-                    v-model.number="form.model.auth"></el-input>
+          <el-input
+            placeholder="请输入内容"
+            maxlength="3"
+            @change="setChmod(form.model.auth)"
+            v-model.number="form.model.auth">
+          </el-input>
         </el-form-item>
         <el-form-item label="所有者：" class="is-required">
           <el-checkbox-group v-model="form.model.all" @change="chmodChange('all')">
@@ -29,8 +39,8 @@
 </template>
 
 <script>
-import SubmitButton from '@/components/common/SubmitForm';
-import URLS from '@/api/urls';
+import SubmitButton from '../common/SubmitForm';
+import URLS from '../../api/urls';
 
 export default {
   name: 'FileChmod',

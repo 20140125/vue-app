@@ -54,34 +54,71 @@
                   <el-cascader :props="props" :options="options" filterable v-model="userCenter.local"></el-cascader>
                 </el-form-item>
                 <el-form-item label="所在地：" class="is-required">
-                  <el-cascader :props="props" :options="options" filterable
-                               v-model="userCenter.ip_address"></el-cascader>
+                  <el-cascader
+                    :props="props"
+                    :options="options"
+                    filterable
+                    v-model="userCenter.ip_address">
+                  </el-cascader>
                 </el-form-item>
                 <el-form-item label="座右铭：" class="is-required">
-                  <el-input type="textarea" resize="none" rows="3" show-word-limit maxlength="32"
-                            v-model="userCenter.desc" placeholder="这个人很懒，什么也没有留下"></el-input>
+                  <el-input
+                    type="textarea"
+                    resize="none"
+                    rows="3"
+                    show-word-limit
+                    maxlength="32"
+                    v-model="userCenter.desc"
+                    placeholder="这个人很懒，什么也没有留下">
+                  </el-input>
                 </el-form-item>
                 <el-form-item label="个人标签：" class="tags is-required">
-                  <el-tag :key="tag" effect="dark" type="success" v-for="tag in userCenter.tags" closable
-                          :disable-transitions="false" @close="handleClose(tag)">
+                  <el-tag
+                    :key="tag"
+                    effect="dark"
+                    type="success"
+                    v-for="tag in userCenter.tags"
+                    closable
+                    :disable-transitions="false"
+                    @close="handleClose(tag)">
                     {{ tag }}
                   </el-tag>
-                  <el-input v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small"
-                            @keyup.enter="handleInputConfirm" @blur="handleInputConfirm"></el-input>
+                  <el-input
+                    v-if="inputVisible"
+                    v-model="inputValue"
+                    ref="saveTagInput"
+                    size="small"
+                    @keyup.enter="handleInputConfirm"
+                    @blur="handleInputConfirm">
+                  </el-input>
                   <el-button type="primary" plain v-else size="small" @click="showInput"> + New Tag</el-button>
                 </el-form-item>
                 <el-form-item label="站内信息：" class="is-required">
-                  <el-tooltip effect="dark" :content="userCenter.notice_status === 1 ? 'YES' : 'NO'"
-                              placement="top-start">
-                    <el-switch v-model.number="userCenter.notice_status" active-color="#13ce66" inactive-color="#ff4949"
-                               :active-value="1" :inactive-value="2"></el-switch>
+                  <el-tooltip
+                    effect="dark"
+                    :content="userCenter.notice_status === 1 ? 'YES' : 'NO'"
+                    placement="top-start">
+                    <el-switch
+                      v-model.number="userCenter.notice_status"
+                      active-color="#13ce66"
+                      inactive-color="#ff4949"
+                      :active-value="1"
+                      :inactive-value="2">
+                    </el-switch>
                   </el-tooltip>
                 </el-form-item>
                 <el-form-item label="账号变更：" class="is-required">
-                  <el-tooltip effect="dark" :content="userCenter.user_status === 1 ? 'YES' : 'NO'"
-                              placement="top-start">
-                    <el-switch v-model.number="userCenter.user_status" active-color="#13ce66" inactive-color="#ff4949"
-                               :active-value="1" :inactive-value="2"></el-switch>
+                  <el-tooltip
+                    effect="dark"
+                    :content="userCenter.user_status === 1 ? 'YES' : 'NO'"
+                    placement="top-start">
+                    <el-switch
+                      v-model.number="userCenter.user_status"
+                      active-color="#13ce66"
+                      inactive-color="#ff4949"
+                      :active-value="1"
+                      :inactive-value="2">
+                    </el-switch>
                   </el-tooltip>
                 </el-form-item>
                 <SubmitButton reForm="center" :form="submitForm"></SubmitButton>
@@ -95,9 +132,9 @@
 </template>
 
 <script>
-import BaseLayout from '@/components/BaseLayout';
-import SubmitButton from '@/components/common/SubmitForm';
-import URLS from '@/api/urls';
+import BaseLayout from '../../components/BaseLayout';
+import SubmitButton from '../../components/common/SubmitForm';
+import URLS from '../../api/urls';
 
 export default {
   name: 'Center',

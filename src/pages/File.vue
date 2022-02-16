@@ -3,12 +3,14 @@
     <template #header>
       <el-form-item style="width: 900px;">
         <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item @click="getFileLists(item, index)" v-for="(item, index) in breadcrumb" :key="index">{{
-              item.filename
-            }}
+          <el-breadcrumb-item @click="getFileLists(item, index)" v-for="(item, index) in breadcrumb" :key="index">
+            {{ item.filename }}
           </el-breadcrumb-item>
-          <el-breadcrumb-item @click="getFileLists({ path: '/', filename: 'longer' })" style="float: right"><i
-            class="el-icon-refresh-right"></i></el-breadcrumb-item>
+          <el-breadcrumb-item
+            @click="getFileLists({ path: '/', filename: 'longer' })"
+            style="float: right">
+            <i class="el-icon-refresh-right"></i>
+          </el-breadcrumb-item>
         </el-breadcrumb>
       </el-form-item>
     </template>
@@ -30,11 +32,18 @@
     </template>
     <template #dialog>
       <!--文本编辑-->
-      <FileDetails :details="fileDetail" ref="fileDetail" :detail-visible="visible.detail"
-                   @closeDialog="closeDialog"></FileDetails>
+      <FileDetails
+        :details="fileDetail"
+        ref="fileDetail"
+        :detail-visible="visible.detail"
+        @closeDialog="closeDialog">
+      </FileDetails>
       <!--静态资源预览-->
-      <StaticSource :source-visible="visible.source" :static-source="staticSource"
-                    @closeDialog="closeDialog"></StaticSource>
+      <StaticSource
+        :source-visible="visible.source"
+        :static-source="staticSource"
+        @closeDialog="closeDialog">
+      </StaticSource>
       <!--权限-->
       <FileChmod :chmod-visible="visible.chmod" :file="chmod" @closeDialog="closeDialog"></FileChmod>
       <!-- 文件上传 -->
@@ -44,13 +53,13 @@
 </template>
 
 <script>
-import FileLists from '@/components/file/Lists';
-import FileDetails from '@/components/file/Details';
-import BaseLayout from '@/components/BaseLayout';
-import URLS from '@/api/urls';
-import StaticSource from '@/components/file/StaticSource';
-import FileChmod from '@/components/file/chmod';
-import FileUpload from '@/components/file/Upload';
+import FileLists from '../components/file/Lists';
+import FileDetails from '../components/file/Details';
+import BaseLayout from '../components/BaseLayout';
+import URLS from '../api/urls';
+import StaticSource from '../components/file/StaticSource';
+import FileChmod from '../components/file/chmod';
+import FileUpload from '../components/file/Upload';
 
 export default {
   name: 'File',

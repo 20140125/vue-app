@@ -1,14 +1,23 @@
 <template>
   <div>
-    <el-dialog v-model="visible" :title="localForm.name" :show-close="false" :close-on-click-modal="false"
-               :close-on-press-escape="false" center>
+    <el-dialog
+      v-model="visible"
+      :title="localForm.name"
+      :show-close="false"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      center>
       <el-form ref="area" :model="localForm">
         <el-form-item>
           <JsonView :items="localForm.forecast"></JsonView>
         </el-form-item>
       </el-form>
-      <SubmitButton v-if="showSubmitButton && Permission.auth.indexOf(savePermission) > -1" :form="submitForm"
-                    reForm="area" @closeDialog="$emit('getAreaLists', { parent_id: 1 })"></SubmitButton>
+      <SubmitButton
+        v-if="showSubmitButton && Permission.auth.indexOf(savePermission) > -1"
+        :form="submitForm"
+        reForm="area"
+        @closeDialog="$emit('getAreaLists', { parent_id: 1 })">
+      </SubmitButton>
       <el-main style="text-align: center" v-else>
         <el-button type="primary" plain size="medium" @click="$emit('closeDialog')">取消</el-button>
       </el-main>
@@ -17,10 +26,10 @@
 </template>
 
 <script>
-import JsonView from '@/components/common/JsonView';
-import URLS from '@/api/urls';
-import SubmitButton from '@/components/common/SubmitForm';
-import { toggle } from '@/components/mixins/toggle';
+import JsonView from '../../common/JsonView';
+import URLS from '../../../api/urls';
+import SubmitButton from '../../common/SubmitForm';
+import { toggle } from '../../mixins/toggle';
 
 export default {
   name: 'AreaDialog',

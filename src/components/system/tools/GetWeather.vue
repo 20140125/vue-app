@@ -2,8 +2,13 @@
   <div id="weather">
     <el-form label-position="left" label-width="100px">
       <el-form-item label="城市名称：">
-        <el-autocomplete v-model="cityName" style="width: 300px" :fetch-suggestions="querySearch" @select="getWeather"
-                         prefix-icon="el-icon-search" :placeholder="`请输入城市名称(${Permission.city})`">
+        <el-autocomplete
+          v-model="cityName"
+          style="width: 300px"
+          :fetch-suggestions="querySearch"
+          @select="getWeather"
+          prefix-icon="el-icon-search"
+          :placeholder="`请输入城市名称(${Permission.city})`">
           <template #default="scope">
             <span v-html="scope.item.name"></span>
           </template>
@@ -17,8 +22,8 @@
 </template>
 
 <script>
-import JsonView from '@/components/common/JsonView';
-import URLS from '@/api/urls';
+import JsonView from '../../common/JsonView';
+import URLS from '../../../api/urls';
 
 export default {
   name: 'GetWeather',

@@ -12,9 +12,16 @@
         </el-input>
       </el-form-item>
       <el-form-item prop="verify_code">
-        <el-input placeholder="请输入验证码" maxlength="6" :style="accountAttr.style" show-icon clearable
-                  v-model.trim="form.verify_code">
-          <template #prepend><i class="el-icon-postcard"></i></template>
+        <el-input
+          placeholder="请输入验证码"
+          maxlength="6"
+          :style="accountAttr.style"
+          show-icon
+          clearable
+          v-model.trim="form.verify_code">
+          <template #prepend>
+            <i class="el-icon-postcard"></i>
+          </template>
         </el-input>
         <Identify style="float: right" @click="refreshCode" :identify-code="accountAttr.verifyCode"></Identify>
       </el-form-item>
@@ -26,7 +33,7 @@
 </template>
 
 <script>
-import Identify from '@/components/login/Identify';
+import Identify from '../login/Identify';
 
 export default {
   name: 'Account',

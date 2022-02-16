@@ -18,13 +18,15 @@
         <el-tooltip effect="dark" content="发送表情" placement="top-start">
           <i @click="showEmotion = !showEmotion" class="el-icon-picture-outline-round icon"></i>
         </el-tooltip>
-        <el-upload :action="uploadFile"
-                   :data="uploadData"
-                   accept="image/jpeg, image/jpg, image/png, image/gif, audio/mp4, video/mp4"
-                   :headers="headers"
-                   :show-file-list="false"
-                   :on-success="uploadSuccess"
-                   :before-upload="beforeUpload" style="float: left">
+        <el-upload
+          :action="uploadFile"
+          :data="uploadData"
+          accept="image/jpeg, image/jpg, image/png, image/gif, audio/mp4, video/mp4"
+          :headers="headers"
+          :show-file-list="false"
+          :on-success="uploadSuccess"
+          :before-upload="beforeUpload"
+          style="float: left">
           <el-tooltip effect="dark" content="发送文件和图片" placement="top-start">
             <i @click="showEmotion = false" class="el-icon-picture-outline icon"></i>
           </el-tooltip>
@@ -64,7 +66,8 @@ export default {
         token: this.$store.state.token || window.localStorage.getItem('token'),
         file_type: 'text',
         round_name: true
-      }
+      },
+      showEmotion: false
     };
   },
   methods: {

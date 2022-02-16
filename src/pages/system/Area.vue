@@ -2,8 +2,12 @@
   <BaseLayout :loading="loading">
     <template #header></template>
     <template #body>
-      <AreaLists :areaLists="areaLists" @loadMORE="loadMORE" @getAreaWeather="getAreaWeather"
-                 @searchAreaLists="searchAreaLists"></AreaLists>
+      <AreaLists
+        :areaLists="areaLists"
+        @loadMORE="loadMORE"
+        @getAreaWeather="getAreaWeather"
+        @searchAreaLists="searchAreaLists">
+      </AreaLists>
     </template>
     <template #dialog>
       <AreaDialog :sync-visible="syncVisible" :form="form" @getAreaLists="getAreaLists"></AreaDialog>
@@ -12,9 +16,9 @@
 </template>
 
 <script>
-import BaseLayout from '@/components/BaseLayout';
-import AreaLists from '@/components/system/area/Lists';
-import AreaDialog from '@/components/system/area/Dialog';
+import BaseLayout from '../../components/BaseLayout';
+import AreaLists from '../../components/system/area/Lists';
+import AreaDialog from '../../components/system/area/Dialog';
 
 export default {
   name: 'Area',

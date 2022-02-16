@@ -4,7 +4,7 @@
   </el-row>
 </template>
 <script>
-import BaseLayout from '@/components/base/Base';
+import BaseLayout from '../components/base/Base';
 
 export default {
   name: 'Home',

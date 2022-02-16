@@ -9,17 +9,23 @@
     </el-table-column>
     <el-table-column label="邮箱" prop="email" :show-tooltip-when-overflow="true"></el-table-column>
     <el-table-column label="手机号" prop="phone_number" :show-tooltip-when-overflow="true"></el-table-column>
-    <el-table-column label="允许登录" align="center">
+    <el-table-column label="允许登录" align="center" width="100px">
       <template #default="scope">
         <StatusRadio :url="URL" :status-model="scope.row"></StatusRadio>
       </template>
     </el-table-column>
     <el-table-column label="添加时间" prop="created_at" align="center"></el-table-column>
     <el-table-column label="修改时间" prop="updated_at" align="center"></el-table-column>
-    <el-table-column label="操作" align="right">
+    <el-table-column label="操作" align="center" width="100px">
       <template #default="scope">
-        <el-button v-if="Permission.auth.indexOf(URL) > -1" plain size="mini" icon="el-icon-edit" type="primary"
-                   @click="$emit('updatedUsers', scope.row)">修改
+        <el-button
+          v-if="Permission.auth.indexOf(URL) > -1"
+          plain
+          size="mini"
+          icon="el-icon-edit"
+          type="primary"
+          @click="$emit('updatedUsers', scope.row)">
+          修改
         </el-button>
       </template>
     </el-table-column>
@@ -27,8 +33,8 @@
 </template>
 
 <script>
-import URLS from '@/api/urls';
-import StatusRadio from '@/components/common/StatusRadio';
+import StatusRadio from '../../common/StatusRadio';
+import Urls from '../../../api/urls';
 
 export default {
   name: 'UsersLists',
@@ -36,7 +42,7 @@ export default {
   props: ['usersLists'],
   data() {
     return {
-      URL: URLS.users.update
+      URL: Urls.users.update
     };
   }
 };

@@ -1,6 +1,6 @@
-import requestMethods from '@/api/methods';
-import URLS from '@/api/urls';
-import func from '@/utils/func';
+import requestMethods from '../../../api/methods';
+import URLS from '../../../api/urls';
+import func from '../../../utils/func';
 
 export const mutations = {
   /**
@@ -30,7 +30,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      requestMethods.__commonMethods(URLS.area.lists, payload).then(result => {
+      requestMethods.commonMethods(URLS.area.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', { areaLists: ((result.data || {}).item || {}).lists || [] });
         resolve(result);
       }).catch(error => {
@@ -48,7 +48,7 @@ export const actions = {
   async getChildrenLists({ commit }, payload) {
     /* 如果页码没有变，直接读取vuex里面的数据 */
     return new Promise((resolve, reject) => {
-      requestMethods.__commonMethods(URLS.area.lists, payload).then(result => {
+      requestMethods.commonMethods(URLS.area.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', { childrenLists: ((result.data || {}).item || {}).lists || [] });
         resolve(result);
       }).catch(error => {
@@ -71,7 +71,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      requestMethods.__commonMethods(URLS.area.cache, payload).then(result => {
+      requestMethods.commonMethods(URLS.area.cache, payload).then(result => {
         if (payload.children) {
           commit('UPDATE_MUTATIONS', { cacheArea: func.setTree(((result.data || {}).item || {}).lists || [], 0, 'children', 'parent_id') || [] });
         } else {

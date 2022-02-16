@@ -12,16 +12,21 @@
       <UsersLists :users-lists="usersLists" @updatedUsers="updatedUsers" ref="usersLists"></UsersLists>
     </template>
     <template #dialog>
-      <UsersDialog :sync-visible="syncVisible" :users-attr="usersAttr" :re-form="reForm" :form="form"
-                   @getUsersLists="getUsersLists"></UsersDialog>
+      <UsersDialog
+        :sync-visible="syncVisible"
+        :users-attr="usersAttr"
+        :re-form="reForm"
+        :form="form"
+        @getUsersLists="getUsersLists">
+      </UsersDialog>
     </template>
   </BaseLayout>
 </template>
 
 <script>
-import BaseLayout from '@/components/BaseLayout';
-import UsersLists from '@/components/users/user/Lists';
-import UsersDialog from '@/components/users/user/Dialog';
+import BaseLayout from '../../components/BaseLayout';
+import UsersLists from '../../components/users/user/Lists';
+import UsersDialog from '../../components/users/user/Dialog';
 
 export default {
   name: 'Users',

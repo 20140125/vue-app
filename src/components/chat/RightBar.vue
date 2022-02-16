@@ -12,13 +12,19 @@
       </el-carousel>
     </div>
     <div class="client-user">
-      <el-menu background-color="#393d49" text-color="#fff" active-text-color="#ff69b4">
-        <el-menu-item :users="user" v-for="(user,index) in clientUsers" @click="getUser(user)" :key="index"
-                      :index="user.id">
+      <el-menu background-color="#545c64" text-color="#fff" active-text-color="#ff69b4">
+        <el-menu-item
+          :users="user"
+          v-for="(user,index) in clientUsers"
+          @click="getUser(user)"
+          :key="index"
+          :index="user.id">
           <el-avatar :size="35" :src="user.client_img" class="img"></el-avatar>
           <template #title>
-            <span class="username"
-                  v-html="user.client_name.replace(userInfo.username,'<b style=color:#0e82fc;font-weight:300>'+userInfo.username+'</b>')"></span>
+            <span
+              class="username"
+              v-html="user.client_name.replace(userInfo.username,'<b style=color:#0e82fc;font-weight:300>'+userInfo.username+'</b>')">
+            </span>
           </template>
           <!--未读消息数-->
           <el-badge v-if="user.total" type="danger" :value="user.total"></el-badge>

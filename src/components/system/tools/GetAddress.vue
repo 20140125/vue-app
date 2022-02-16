@@ -39,13 +39,11 @@ export default {
         url: URLS.tools.getAddress,
         model: { ip_address: this.ip_address }
       }).then((response) => {
-        let result = (((response || {}).data || {}).item || {}).lists || [];
-        if (result[0]) {
-          let rectangle = result.rectangle.split(';');
-          let longitude = (parseFloat(rectangle[0].split(',')[0]) + parseFloat(rectangle[1].split(',')[0])) / 2;
-          let latitude = (parseFloat(rectangle[0].split(',')[1]) + parseFloat(rectangle[1].split(',')[1])) / 2;
-          this.center = [longitude, latitude];
-        }
+        let result = (((response || {}).data || {}).item || {}).lists || {};
+        let rectangle = (result || {}).rectangle.split(';');
+        let longitude = (parseFloat(rectangle[0].split(',')[0]) + parseFloat(rectangle[1].split(',')[0])) / 2;
+        let latitude = (parseFloat(rectangle[0].split(',')[1]) + parseFloat(rectangle[1].split(',')[1])) / 2;
+        this.center = [longitude, latitude];
       });
     }
   }

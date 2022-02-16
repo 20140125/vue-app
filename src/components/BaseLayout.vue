@@ -8,7 +8,7 @@
       <slot name="body"></slot>
       <div class="pagination" v-if="T_pagination.show_page">
         <el-pagination
-          @current-change="__currentChange"
+          @current-change="currentChange"
           :page-size="T_pagination.limit"
           layout="total, prev, pager, next"
           :total="T_pagination.total"
@@ -53,7 +53,7 @@ export default {
      * @param page
      * @private
      */
-    __currentChange: function (page) {
+    currentChange: function (page) {
       this.$parent.currentPageChange(page);
     }
   }

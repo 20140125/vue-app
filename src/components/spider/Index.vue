@@ -3,14 +3,19 @@
     <el-form label-position="left" label-width="100px">
       <el-form-item label="工具列表：" class="is-required">
         <el-select v-model="keywords" @change="setMethods">
-          <el-option v-for="(item, index) in spiderConfig" :key="index" :value="item.name"
-                     :label="item.value.label"></el-option>
+          <el-option
+            v-for="(item, index) in spiderConfig"
+            :key="index"
+            :value="item.name"
+            :label="item.value.label">
+          </el-option>
         </el-select>
       </el-form-item>
       <el-form-item v-for="(item, index) in spiderParams" :key="index" :label="item.label + '：'" class="is-required">
         <el-input :placeholder="item.placeholder" v-model="item.value">
           <template #append>
-            <el-button icon="el-icon-search" @click="syncSpider({ keywords: item.value, method: item.name })">开始同步
+            <el-button icon="el-icon-search" @click="syncSpider({ keywords: item.value, method: item.name })">
+              开始同步
             </el-button>
           </template>
         </el-input>
@@ -35,7 +40,7 @@
 
 <script>
 import SocketIO from 'socket.io-client';
-import func from '@/utils/func';
+import func from '../../utils/func';
 
 export default {
   name: 'SpiderIndex',

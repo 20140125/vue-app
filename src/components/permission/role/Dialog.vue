@@ -1,7 +1,12 @@
 <template>
   <div>
-    <el-dialog v-model="visible" :title="reForm === 'created' ? '添加角色' : '修改角色'" :show-close="false"
-               :close-on-click-modal="false" :close-on-press-escape="false" center>
+    <el-dialog
+      v-model="visible"
+      :title="reForm === 'created' ? '添加角色' : '修改角色'"
+      :show-close="false"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      center>
       <el-form :model="localForm" :ref="reForm" label-position="left" label-width="100px" :rules="rules">
         <el-form-item label="角色名称：" prop="role_name">
           <el-input placeholder="请输入角色名称" v-model.trim="localForm.role_name"></el-input>
@@ -16,17 +21,20 @@
             filterable>
           </el-transfer>
         </el-form-item>
-        <SubmitButton :form="submitForm" :reForm="reForm"
-                      @closeDialog="$emit('getRoleLists', { page: 1, limit: 15, refresh: true, total: 0 })"></SubmitButton>
+        <SubmitButton
+          :form="submitForm"
+          :reForm="reForm"
+          @closeDialog="$emit('getRoleLists', { page: 1, limit: 15, refresh: true, total: 0 })">
+        </SubmitButton>
       </el-form>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import SubmitButton from '@/components/common/SubmitForm';
-import URLS from '@/api/urls';
-import { toggle } from '@/components/mixins/toggle';
+import SubmitButton from '../../common/SubmitForm';
+import URLS from '../../../api/urls';
+import { toggle } from '../../mixins/toggle';
 
 export default {
   name: 'RoleDialog',

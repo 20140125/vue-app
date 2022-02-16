@@ -2,8 +2,14 @@
   <BaseLayout :loading="loading">
     <template #header>
       <el-form-item>
-        <el-button v-if="Permission.auth.indexOf(savePermission) > -1" size="mini" type="primary" plain
-                   icon="el-icon-plus" @click="addCategory">新增
+        <el-button
+          v-if="Permission.auth.indexOf(savePermission) > -1"
+          size="mini"
+          type="primary"
+          plain
+          icon="el-icon-plus"
+          @click="addCategory">
+          新增
         </el-button>
       </el-form-item>
     </template>
@@ -18,21 +24,31 @@
     </template>
     <template #dialog>
       <!--接口详情-->
-      <InterfaceDetails :reForm="reForm" :syncVisible="syncVisible" :form="form" :categoryLists="categoryLists"
-                        @getInterfaceCategory="getInterfaceCategory"></InterfaceDetails>
+      <InterfaceDetails
+        :reForm="reForm"
+        :syncVisible="syncVisible"
+        :form="form"
+        :categoryLists="categoryLists"
+        @getInterfaceCategory="getInterfaceCategory">
+      </InterfaceDetails>
       <!--接口分类-->
-      <AddCategory :syncVisible="addVisible" :reForm="reForm" :form="form" :categoryLists="categoryLists"
-                   @getInterfaceCategory="getInterfaceCategory"></AddCategory>
+      <AddCategory
+        :syncVisible="addVisible"
+        :reForm="reForm"
+        :form="form"
+        :categoryLists="categoryLists"
+        @getInterfaceCategory="getInterfaceCategory">
+      </AddCategory>
     </template>
   </BaseLayout>
 </template>
 
 <script>
-import BaseLayout from '@/components/BaseLayout';
-import CategoryLists from '@/components/interface/Category';
-import InterfaceDetails from '@/components/interface/Details';
-import AddCategory from '@/components/interface/Add';
-import URLS from '@/api/urls';
+import BaseLayout from '../components/BaseLayout';
+import CategoryLists from '../components/interface/Category';
+import InterfaceDetails from '../components/interface/Details';
+import AddCategory from '../components/interface/Add';
+import URLS from '../api/urls';
 
 export default {
   name: 'Interface',
@@ -47,11 +63,10 @@ export default {
       defaultJson: {
         source: 'json', desc: '', api_id: '', href: '', method: 'POST',
         request: [{ name: 'token', desc: '用户token', required: 1, type: 'String', val: this.$store.state.token }],
-        response: [{ name: 'code', desc: '200 成功', type: 'Number' }, {
-          name: 'message',
-          desc: 'Success',
-          type: 'String'
-        }],
+        response: [
+          { name: 'code', desc: '200 成功', type: 'Number' },
+          { name: 'message', desc: 'Success', type: 'String' }
+        ],
         response_string: [], remark: '接口调用必须添加header头Authorization以便验证用户的合法性', apiLog: []
       },
       savePermission: URLS.interface.save
@@ -111,7 +126,7 @@ export default {
       this.reForm = 'updated';
     },
     removeCategory() {
-      this.$alert('暂不支持删除功能');
+      this.$alert('开发中...');
     },
     /**
      * todo:获取接口详情

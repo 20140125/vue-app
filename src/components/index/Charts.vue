@@ -22,7 +22,7 @@ export default {
   },
   watch: {
     seriesData() {
-      this.$nextTick(function () {
+      this.$nextTick( () => {
         this.getCharts(this.chartsId);
       });
       let charts = echarts.init(document.getElementById(this.chartsId));
@@ -32,7 +32,7 @@ export default {
     }
   },
   methods: {
-    getCharts: function (chartsId) {
+    getCharts(chartsId) {
       let charts = echarts.init(document.getElementById(chartsId));
       charts.setOption({
         title: {

@@ -7,8 +7,13 @@
         </el-input>
       </el-form-item>
       <el-form-item prop="verify_code">
-        <el-input v-model.number="form.verify_code" :readonly="!form.email" clearable maxlength="8"
-                  placeholder="请输入邮箱验证码" show-icon>
+        <el-input
+          v-model.number="form.verify_code"
+          :readonly="!form.email"
+          clearable
+          maxlength="8"
+          placeholder="请输入邮箱验证码"
+          show-icon>
           <template #append>
             <el-button :disabled="!form.email" type="info" @click="getMailCode" plain>{{ codeValue }}</el-button>
           </template>

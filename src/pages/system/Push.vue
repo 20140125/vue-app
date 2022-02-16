@@ -3,14 +3,22 @@
     <template #header>
       <el-form-item>
         <el-select v-model="pagination.state" placeholder="请选择推送状态" @change="searchPush" clearable>
-          <el-option v-for="(item, index) in pushState" :key="index" :label="item.label"
-                     :value="item.value"></el-option>
+          <el-option
+            v-for="(item, index) in pushState"
+            :key="index"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
         <el-select v-model.number="pagination.status" placeholder="实时推送" @change="searchPush" clearable>
-          <el-option v-for="(item, index) in pushStatus" :key="index" :label="item.label"
-                     :value="item.value"></el-option>
+          <el-option
+            v-for="(item, index) in pushStatus"
+            :key="index"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -20,8 +28,13 @@
         <el-button icon="el-icon-search" @click="searchPush" plain type="primary">检索</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button v-if="Permission.auth.indexOf(savePermission) > -1" type="primary" plain @click='addPush'
-                   icon="el-icon-plus">新增
+        <el-button
+          v-if="Permission.auth.indexOf(savePermission) > -1"
+          type="primary"
+          plain
+          @click='addPush'
+          icon="el-icon-plus">
+          新增
         </el-button>
       </el-form-item>
     </template>
@@ -29,18 +42,23 @@
       <PushLists :push-lists="pushLists" @runPusher="runPusher" ref="pushLists"></PushLists>
     </template>
     <template #dialog>
-      <PushDialog :sync-visible="syncVisible" :re-form="reForm" :form="form" :user-lists="userLists"
-                  @getPushLists="getPushLists"></PushDialog>
+      <PushDialog
+        :sync-visible="syncVisible"
+        :re-form="reForm"
+        :form="form"
+        :user-lists="userLists"
+        @getPushLists="getPushLists">
+      </PushDialog>
     </template>
   </BaseLayout>
 </template>
 
 <script>
-import BaseLayout from '@/components/BaseLayout';
-import PushLists from '@/components/system/push/Lists';
-import PushDialog from '@/components/system/push/Dialog';
-import func from '@/utils/func';
-import URLS from '@/api/urls';
+import BaseLayout from '../../components/BaseLayout';
+import PushLists from '../../components/system/push/Lists';
+import PushDialog from '../../components/system/push/Dialog';
+import func from '../../utils/func';
+import URLS from '../../api/urls';
 
 export default {
   name: 'Push',

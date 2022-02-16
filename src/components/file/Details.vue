@@ -1,25 +1,37 @@
 <template>
   <div id="dialog">
-    <el-dialog v-model="visible.detail" :title="tabModel.label || '在线编辑器'" center width="1550px" :show-close="false"
-               :close-on-click-modal="false" :close-on-press-escape="false" :fullscreen="fullscreen">
+    <el-dialog
+      v-model="visible.detail"
+      :title="tabModel.label || '在线编辑器'"
+      center
+      width="1550px"
+      :show-close="false"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      :fullscreen="fullscreen">
       <el-row :gutter="24">
         <el-col :span="24" style="margin-top: -65px;color: white;">
           <i class="el-icon-full-screen" style="font-size: 25px" @click="fullscreen = !fullscreen"></i>
         </el-col>
         <!--文件列表-->
         <el-col :span="6" style="margin-bottom: 20px">
-          <el-input placeholder="输入关键字搜索" v-model="filterText" clearable style="margin-bottom: 20px"
-                    suffix-icon="el-icon-search"></el-input>
-          <el-tree :data="details"
-                   :highlight-current="true"
-                   :props="treeProps"
-                   accordion
-                   node-key="md5"
-                   :filter-node-method="filterNode"
-                   @node-click="getFileContent"
-                   ref="tree"
-                   :default-expand-all="false"
-                   style="background-color: #272822;line-height: 20px">
+          <el-input
+            placeholder="输入关键字搜索"
+            v-model="filterText"
+            clearable
+            style="margin-bottom: 20px"
+            suffix-icon="el-icon-search"></el-input>
+          <el-tree
+            :data="details"
+            :highlight-current="true"
+            :props="treeProps"
+            accordion
+            node-key="md5"
+            :filter-node-method="filterNode"
+            @node-click="getFileContent"
+            ref="tree"
+            :default-expand-all="false"
+            style="background-color: #272822;line-height: 20px">
           </el-tree>
         </el-col>
         <!--文件列表-->
@@ -27,18 +39,37 @@
         <el-col :span="18" class="details">
           <el-form :model="form.model" ref="fileSave">
             <el-form-item>
-              <el-tabs type="border-card" lazy closable v-model="tabModel.name" @tab-click="goto"
-                       @tab-remove="removeTab" style="text-align: left!important;">
-                <el-tab-pane v-for="item in fileTabs" :label="item.label" :key="item.name"
-                             :name="item.name"></el-tab-pane>
+              <el-tabs
+                type="border-card"
+                lazy
+                closable
+                v-model="tabModel.name"
+                @tab-click="goto"
+                @tab-remove="removeTab"
+                style="text-align: left!important;">
+                <el-tab-pane
+                  v-for="item in fileTabs"
+                  :label="item.label"
+                  :key="item.name"
+                  :name="item.name">
+                </el-tab-pane>
                 <el-card shadow="always">
-                  <codemirror @change="updateContent" ref="edit" :value="tabModel.content" :options="options"
-                              style="line-height: 20px"></codemirror>
+                  <codemirror
+                    @change="updateContent"
+                    ref="edit"
+                    :value="tabModel.content"
+                    :options="options"
+                    style="line-height: 20px">
+                  </codemirror>
                 </el-card>
               </el-tabs>
             </el-form-item>
-            <SubmitButton v-if="Permission.auth.indexOf(savePermission) > -1" :form="form" re-form="fileSave"
-                          @closeDialog="$emit('closeDialog')"></SubmitButton>
+            <SubmitButton
+              v-if="Permission.auth.indexOf(savePermission) > -1"
+              :form="form"
+              re-form="fileSave"
+              @closeDialog="$emit('closeDialog')">
+            </SubmitButton>
             <el-main style="text-align: center" v-else>
               <el-button type="default" size="medium" @click="$emit('closeDialog')" plain>取消</el-button>
             </el-main>
@@ -52,8 +83,8 @@
 
 <script>
 import { codemirror } from 'vue-codemirror-lite';
-import SubmitButton from '@/components/common/SubmitForm';
-import URLS from '@/api/urls';
+import SubmitButton from '../common/SubmitForm';
+import URLS from '../../api/urls';
 
 /* 编辑器代码 */
 require('codemirror/mode/php/php.js');

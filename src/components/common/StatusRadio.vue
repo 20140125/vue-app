@@ -1,6 +1,12 @@
 <template>
-  <el-button :icon="attr['icon'][model.status]" circle :type="attr['type'][model.status]" @click="changeStatus"
-             size="medium"></el-button>
+  <el-button
+    :icon="attr['icon'][model.status]"
+    circle
+    plain
+    :type="attr['type'][model.status]"
+    @click="changeStatus"
+    size="medium">
+  </el-button>
 </template>
 
 <script>

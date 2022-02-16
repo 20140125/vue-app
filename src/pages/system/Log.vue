@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import BaseLayout from '@/components/BaseLayout';
-import SystemLogLists from '@/components/system/log/Lists';
+import BaseLayout from '../../components/BaseLayout';
+import SystemLogLists from '../../components/system/log/Lists';
 
 export default {
   name: 'SystemLog',

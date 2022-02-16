@@ -2,14 +2,23 @@
   <BaseLayout :loading="loading" :pagination="pagination">
     <template #header>
       <el-form-item>
-        <el-button v-if="Permission.auth.indexOf(savePermission) > -1" type="primary" plain size="mini"
-                   @click='permissionApply' icon="el-icon-plus">权限申请
+        <el-button
+          v-if="Permission.auth.indexOf(savePermission) > -1"
+          type="primary"
+          plain
+          size="mini"
+          @click='permissionApply'
+          icon="el-icon-plus">
+          权限申请
         </el-button>
       </el-form-item>
     </template>
     <template #body>
-      <PermissionLists :permission-lists="permissionLists" @permissionUpdate="permissionUpdate"
-                       @getPermissionApply="getPermissionApply"></PermissionLists>
+      <PermissionLists
+        :permission-lists="permissionLists"
+        @permissionUpdate="permissionUpdate"
+        @getPermissionApply="getPermissionApply">
+      </PermissionLists>
     </template>
     <template #dialog>
       <PermissionDialog
@@ -25,10 +34,10 @@
 </template>
 
 <script>
-import BaseLayout from '@/components/BaseLayout';
-import PermissionLists from '@/components/permission/apply/Lists';
-import PermissionDialog from '@/components/permission/apply/Dialog';
-import URLS from '@/api/urls';
+import BaseLayout from '../../components/BaseLayout';
+import PermissionLists from '../../components/permission/apply/Lists';
+import PermissionDialog from '../../components/permission/apply/Dialog';
+import URLS from '../../api/urls';
 
 export default {
   name: 'Apply',

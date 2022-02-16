@@ -2,8 +2,13 @@
   <BaseLayout :loading="loading" :pagination="pagination">
     <template #header>
       <el-form-item>
-        <el-button type="primary" v-if="Permission.auth.indexOf(savePermission) > -1" plain size="mini"
-                   @click='addRoles' icon="el-icon-plus">新增
+        <el-button
+          type="primary"
+          v-if="Permission.auth.indexOf(savePermission) > -1"
+          plain
+          size="mini"
+          @click='addRoles' icon="el-icon-plus">
+          新增
         </el-button>
       </el-form-item>
     </template>
@@ -11,17 +16,22 @@
       <RoleLists :role-lists="roleLists" @updateRole="updateRoles"></RoleLists>
     </template>
     <template #dialog>
-      <RoleDialog :sync-visible="syncVisible" :form="form" :reForm="reForm" :authAttr="authAttr"
-                  @getRoleLists="getRoleLists"></RoleDialog>
+      <RoleDialog
+        :sync-visible="syncVisible"
+        :form="form"
+        :reForm="reForm"
+        :authAttr="authAttr"
+        @getRoleLists="getRoleLists">
+      </RoleDialog>
     </template>
   </BaseLayout>
 </template>
 
 <script>
-import BaseLayout from '@/components/BaseLayout';
-import RoleLists from '@/components/permission/role/Lists';
-import RoleDialog from '@/components/permission/role/Dialog';
-import URLS from '@/api/urls';
+import BaseLayout from '../../components/BaseLayout';
+import RoleLists from '../../components/permission/role/Lists';
+import RoleDialog from '../../components/permission/role/Dialog';
+import URLS from '../../api/urls';
 
 export default {
   name: 'Role',

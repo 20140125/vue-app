@@ -12,16 +12,20 @@
       <OAuthLists :oAuthLists="oAuthLists" ref="oAuthLists" @bindEmail="bindEmail"></OAuthLists>
     </template>
     <template #dialog>
-      <OAuthDialog :sync-visible="syncVisible" :re-form="reForm" :form="form"
-                   @getOAuthLists="getOAuthLists"></OAuthDialog>
+      <OAuthDialog
+        :sync-visible="syncVisible"
+        :re-form="reForm"
+        :form="form"
+        @getOAuthLists="getOAuthLists">
+      </OAuthDialog>
     </template>
   </BaseLayout>
 </template>
 
 <script>
-import BaseLayout from '@/components/BaseLayout';
-import OAuthLists from '@/components/users/oauth/Lists';
-import OAuthDialog from '@/components/users/oauth/Dialog';
+import BaseLayout from '../../components/BaseLayout';
+import OAuthLists from '../../components/users/oauth/Lists';
+import OAuthDialog from '../../components/users/oauth/Dialog';
 
 export default {
   name: 'OAuth',

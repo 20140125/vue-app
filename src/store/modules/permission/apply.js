@@ -1,5 +1,5 @@
-import requestMethods from '@/api/methods';
-import URLS from '@/api/urls';
+import requestMethods from '../../../api/methods';
+import URLS from '../../../api/urls';
 
 export const mutations = {
   /**
@@ -29,7 +29,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      requestMethods.__commonMethods(URLS.permission.lists, payload).then(result => {
+      requestMethods.commonMethods(URLS.permission.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
           permissionLists: (((result.data || {}).item || {}).lists || {}).data || [],
           total: (((result.data || {}).item || {}).lists || {}).total || 0,
@@ -56,7 +56,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      requestMethods.__commonMethods(URLS.permission.get, payload).then(result => {
+      requestMethods.commonMethods(URLS.permission.get, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
           authLists: (((result.data || {}).item || {}).lists || {}).authLists || [],
           user_id: (((result.data || {}).item || {}).lists || {}).user_id || 0

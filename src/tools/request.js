@@ -1,9 +1,8 @@
 import axios from 'axios/index';
 import { ElMessage } from 'element-plus';
-import store from '@/store';
-import router from '@/route/index.js';
-import URLS from '@/api/urls';
-import urls from '@/api/urls';
+import store from '../store';
+import router from '../route';
+import urls from '../api/urls';
 
 /**
  * todo:错误跳转
@@ -47,11 +46,11 @@ const instance = axios.create({
     }
   }
 });
-instance.defaults.baseURL = URLS.baseURL;
+instance.defaults.baseURL = urls.baseURL;
 // http request 拦截器
 instance.interceptors.request.use(config => {
-  //
-  if ([urls.login.loginSystem, urls.login.reportCode, urls.login.oauthConfig, urls.login.sendMail].indexOf(config.url) === -1) {
+  const commonURL = store.state.token ? [urls.login.loginSystem, urls.login.reportCode, urls.login.sendMail] : [urls.login.loginSystem, urls.login.reportCode, urls.login.oauthConfig, urls.login.sendMail]
+  if (commonURL.indexOf(config.url) === -1) {
     config.headers.Authorization = store.state.token || window.localStorage.getItem('token');
     config.data.token = store.state.token || window.localStorage.getItem('token');
   }

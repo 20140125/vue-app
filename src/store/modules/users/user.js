@@ -1,5 +1,5 @@
-import requestMethods from '@/api/methods';
-import URLS from '@/api/urls';
+import requestMethods from '../../../api/methods';
+import URLS from '../../../api/urls';
 
 export const mutations = {
   /**
@@ -29,7 +29,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      requestMethods.__commonMethods(URLS.users.lists, payload).then(result => {
+      requestMethods.commonMethods(URLS.users.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
           usersLists: (((result.data || {}).item || {}).lists || {}).data || [],
           total: (((result.data || {}).item || {}).lists || {}).total || 0,
@@ -54,7 +54,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      requestMethods.__commonMethods(URLS.userCenter.get, {}).then(result => {
+      requestMethods.commonMethods(URLS.userCenter.get, {}).then(result => {
         commit('UPDATE_MUTATIONS', { userCenter: ((result.data || {}).item || {}).lists || {} });
         resolve(result);
       }).catch(error => {
@@ -77,7 +77,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      requestMethods.__commonMethods(URLS.users.cache, payload).then(result => {
+      requestMethods.commonMethods(URLS.users.cache, payload).then(result => {
         commit('UPDATE_MUTATIONS', { cacheUsers: ((result.data || {}).item || {}).lists || [] });
         resolve(result);
       }).catch(error => {

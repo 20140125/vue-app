@@ -3,8 +3,12 @@
     <el-table-column type="selection" width="60"></el-table-column>
     <el-table-column label="文件名" width="600">
       <template #default="scope">
-        <span v-if="scope.row.file_type !== 'file'" style="cursor: pointer;" v-html="scope.row.filename"
-              @click="$emit('getFileLists', scope.row)"></span>
+        <span
+          v-if="scope.row.file_type !== 'file'"
+          style="cursor: pointer;"
+          v-html="scope.row.filename"
+          @click="$emit('getFileLists', scope.row)">
+        </span>
         <span @click="$emit('getFiles',scope.row)" style="cursor: pointer;" v-else v-html="scope.row.filename"></span>
       </template>
     </el-table-column>
@@ -18,35 +22,68 @@
     <el-table-column label="修改时间" prop="time" width="150"></el-table-column>
     <el-table-column label="操作" align="right">
       <template #default="scope">
-        <el-button size="mini" type="text"
-                   v-if="scope.row.file_type !== 'file' && Permission.auth.indexOf(fileURL.save) > -1"
-                   @click="$emit('addFile',scope.row)">添加
+        <el-button
+          size="mini"
+          type="text"
+          v-if="scope.row.file_type !== 'file' && Permission.auth.indexOf(fileURL.save) > -1"
+          @click="$emit('addFile', scope.row)">
+          添加
         </el-button>
-        <el-button size="mini" type="text"
-                   v-if="scope.row.file_type === 'file' && Permission.auth.indexOf(fileURL.read) > -1"
-                   @click="$emit('getFiles',scope.row)">编辑
+        <el-button
+          size="mini"
+          type="text"
+          v-if="scope.row.file_type === 'file' && Permission.auth.indexOf(fileURL.read) > -1"
+          @click="$emit('getFiles', scope.row)">
+          编辑
         </el-button>
-        <el-button size="mini" type="text" v-if="Permission.auth.indexOf(fileURL.rename) > -1"
-                   @click="$emit('renameFile',scope.row)">重命名
+        <el-button
+          size="mini"
+          type="text"
+          v-if="Permission.auth.indexOf(fileURL.rename) > -1"
+          @click="$emit('renameFile', scope.row)">
+          重命名
         </el-button>
-        <el-button size="mini" type="text" v-if="Permission.auth.indexOf(fileURL.chmod) > -1"
-                   @click="$emit('chmodFile',scope.row)">权限
+        <el-button
+          size="mini"
+          type="text"
+          v-if="Permission.auth.indexOf(fileURL.chmod) > -1"
+          @click="$emit('chmodFile',scope.row)">
+          权限
         </el-button>
-        <el-button size="mini" type="text" v-if="Permission.auth.indexOf(fileURL.zip) > -1"
-                   @click="$emit('composeFile',scope.row)">压缩
+        <el-button
+          size="mini"
+          type="text"
+          v-if="Permission.auth.indexOf(fileURL.zip) > -1"
+          @click="$emit('composeFile',scope.row)">
+          压缩
         </el-button>
-        <el-button size="mini" type="text"
-                   v-if="scope.row.file_type === 'file' && scope.row.filename.split('.')[1] === 'zip' && Permission.auth.indexOf(fileURL.unzip) > -1"
-                   @click="$emit('unComposeFile',scope.row)">解压
+        <el-button
+          size="mini"
+          type="text"
+          v-if="scope.row.file_type === 'file' && scope.row.filename.split('.')[1] === 'zip' && Permission.auth.indexOf(fileURL.unzip) > -1"
+          @click="$emit('unComposeFile',scope.row)">
+          解压
         </el-button>
-        <el-button size="mini" type="text" v-if="Permission.auth.indexOf(fileURL.download) > -1"
-                   @click="$emit('downloadFile',scope.row)">下载
+        <el-button
+          size="mini"
+          type="text"
+          v-if="Permission.auth.indexOf(fileURL.download) > -1"
+          @click="$emit('downloadFile',scope.row)">
+          下载
         </el-button>
-        <el-button size="mini" type="text" v-if="Permission.auth.indexOf(fileURL.upload) > -1"
-                   @click="$emit('uploadFile',scope.row)">上传
+        <el-button
+          size="mini"
+          type="text"
+          v-if="Permission.auth.indexOf(fileURL.upload) > -1"
+          @click="$emit('uploadFile',scope.row)">
+          上传
         </el-button>
-        <el-button size="mini" type="text" v-if="Permission.auth.indexOf(fileURL.delete) > -1"
-                   @click="$emit('deleteFile',scope.row)">删除
+        <el-button
+          size="mini"
+          type="text"
+          v-if="Permission.auth.indexOf(fileURL.delete) > -1"
+          @click="$emit('deleteFile',scope.row)">
+          删除
         </el-button>
       </template>
     </el-table-column>

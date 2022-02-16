@@ -2,28 +2,43 @@
   <BaseLayout :loading="loading">
     <template #header>
       <el-form-item>
-        <el-button v-if="Permission.auth.indexOf(savePermission) > -1" plain type="primary" size="mini"
-                   icon="el-icon-plus" @click="addAuth">添加
+        <el-button
+          v-if="Permission.auth.indexOf(savePermission) > -1"
+          plain
+          type="primary"
+          size="mini"
+          icon="el-icon-plus"
+          @click="addAuth">
+          添加
         </el-button>
       </el-form-item>
     </template>
     <!--权限列表-->
     <template #body>
-      <AuthLists :auth-tree="authTree" @addAuth="addAuth" @updateAuth="updateAuth"></AuthLists>
+      <AuthLists
+        :auth-tree="authTree"
+        @addAuth="addAuth"
+        @updateAuth="updateAuth">
+      </AuthLists>
     </template>
     <!--权限修改-->
     <template #dialog>
-      <AuthDialog :form="form" :auth-lists="authLists" :reForm="reForm" :sync-visible="syncVisible"
-                  @getAuthLists="getAuthLists"></AuthDialog>
+      <AuthDialog
+        :form="form"
+        :auth-lists="authLists"
+        :reForm="reForm"
+        :sync-visible="syncVisible"
+        @getAuthLists="getAuthLists">
+      </AuthDialog>
     </template>
   </BaseLayout>
 </template>
 
 <script>
-import BaseLayout from '@/components/BaseLayout';
-import AuthLists from '@/components/permission/auth/Lists';
-import AuthDialog from '@/components/permission/auth/Dialog';
-import URLS from '@/api/urls';
+import BaseLayout from '../../components/BaseLayout';
+import AuthLists from '../../components/permission/auth/Lists';
+import AuthDialog from '../../components/permission/auth/Dialog';
+import URLS from '../../api/urls';
 
 export default {
   name: 'Auth',
@@ -40,11 +55,11 @@ export default {
   computed: {
     /* todo：权限列表 */
     authLists() {
-      return this.$store.state.auth.authLists;
+      return this.$store.state.auth.authLists || [];
     },
     /* todo：权限树列表 */
     authTree() {
-      return this.$store.state.auth.authTree;
+      return this.$store.state.auth.authTree || [];
     }
   },
   mounted() {

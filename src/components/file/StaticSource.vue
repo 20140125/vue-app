@@ -1,7 +1,13 @@
 <template>
   <div id="source">
-    <el-dialog v-model="visible" width="30%" :title="staticSource.title" center :close-on-click-modal="false"
-               :close-on-press-escape="false" @close="$emit('closeDialog')">
+    <el-dialog
+      v-model="visible"
+      width="30%"
+      :title="staticSource.title"
+      center
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      @close="$emit('closeDialog')">
       <!--图片滚动-->
       <el-carousel v-if="staticSource.image.length > 0">
         <el-carousel-item v-for="(item, index) in staticSource.image" :key="index">

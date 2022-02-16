@@ -1,8 +1,12 @@
 <template>
   <div :style="bgStyle">
     <el-row :gutter="24" style="padding-top: 10%">
-      <el-col :xl="{'span':8,'offset':8}" :lg="{'span':12,'offset':6}" :md="{'span':16,'offset':4}"
-              :sm="{'span':20,'offset':'2'}" :xs="{'span':24}">
+      <el-col
+        :xl="{'span':8,'offset':8}"
+        :lg="{'span':12,'offset':6}"
+        :md="{'span':16,'offset':4}"
+        :sm="{'span':20,'offset':'2'}"
+        :xs="{'span':24}">
         <el-header style="text-align: center;font-size: 20px;font-weight: 800" v-html="header"></el-header>
         <el-tabs type="border-card" @tab-click="changeTabs" v-model="tabPane" style="margin: 0 5px">
           <el-tab-pane label="账号密码登录" name="password">
@@ -21,9 +25,9 @@
 </template>
 
 <script>
-import Account from '@/components/login/Account';
-import Mail from '@/components/login/Mail';
-import OAuth from '@/components/login/Oauth';
+import Account from '../components/login/Account';
+import Mail from '../components/login/Mail';
+import OAuth from '../components/login/Oauth';
 
 export default {
   name: 'Login',
@@ -44,14 +48,14 @@ export default {
   },
   created() {
     this.$nextTick(() => {
-      this.__initDialog();
+      this.initDialog();
     });
   },
   methods: {
     /**
      * todo:初始化
      */
-    __initDialog() {
+    initDialog() {
       this.refreshCode();
       if (this.innerWidth < 768) {
         this.accountAttr.dialogWidth = '100%';

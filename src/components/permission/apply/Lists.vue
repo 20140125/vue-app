@@ -14,8 +14,11 @@
     <el-table-column label="申请地址" prop="href"></el-table-column>
     <el-table-column label="授权通过" align="center" width="150px">
       <template #default="scope">
-        <StatusRadio :url="URL" :status-model="scope.row"
-                     @closeDialog="$emit('getPermissionApply', { page: 1, limit: 15, show_page: true, refresh: true })"></StatusRadio>
+        <StatusRadio
+          :url="URL"
+          :status-model="scope.row"
+          @closeDialog="$emit('getPermissionApply', { page: 1, limit: 15, show_page: true, refresh: true })">
+        </StatusRadio>
       </template>
     </el-table-column>
     <el-table-column label="申请时间" prop="created_at" align="center"></el-table-column>
@@ -23,8 +26,14 @@
     <el-table-column label="权限期限" prop="expires" align="center"></el-table-column>
     <el-table-column label="操作" width="200px" align="right">
       <template #default="scope">
-        <el-button type="primary" v-if="scope.row.refresh" plain icon="el-icon-refresh-right" size="mini"
-                   @click="$emit('permissionUpdate', scope.row)">续期
+        <el-button
+          type="primary"
+          v-if="scope.row.refresh"
+          plain
+          icon="el-icon-refresh-right"
+          size="mini"
+          @click="$emit('permissionUpdate', scope.row)">
+          续期
         </el-button>
       </template>
     </el-table-column>
@@ -32,8 +41,8 @@
 </template>
 
 <script>
-import StatusRadio from '@/components/common/StatusRadio';
-import URLS from '@/api/urls';
+import StatusRadio from '../../common/StatusRadio';
+import URLS from '../../../api/urls';
 
 export default {
   name: 'PermissionLists',

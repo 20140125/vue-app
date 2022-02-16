@@ -1,12 +1,21 @@
 <template>
   <div id="interface">
-    <el-dialog v-model="visible" title="编辑接口" :show-close="false" :close-on-click-modal="false"
-               :close-on-press-escape="false" center :width="localForm.source === 'json' ? '1200px' : '1500px'">
+    <el-dialog
+      v-model="visible"
+      title="编辑接口"
+      :show-close="false"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      center
+      :width="localForm.source === 'json' ? '1200px' : '1500px'">
       <div v-if="localForm.source === 'json'">
         <Json ref="json" :reForm="reForm" :form="localForm" :categoryLists="categoryLists"></Json>
         <InterfaceLog :lists="localForm.apiLog"></InterfaceLog>
-        <SubmitButton :form="submitForm" :reForm="reForm"
-                      @closeDialog="$emit('getInterfaceCategory', true)"></SubmitButton>
+        <SubmitButton
+          :form="submitForm"
+          :reForm="reForm"
+          @closeDialog="$emit('getInterfaceCategory', true)">
+        </SubmitButton>
       </div>
       <div v-if="localForm.source === 'markdown'" class="markdown">
         <MarkDown :markdown="localForm.markdown" :saveHandle="saveHandle"></MarkDown>
@@ -20,12 +29,12 @@
 </template>
 
 <script>
-import SubmitButton from '@/components/common/SubmitForm';
-import Json from '@/components/interface/Json';
-import URLS from '@/api/urls';
-import MarkDown from '@/components/common/MarkDown';
-import { toggle } from '@/components/mixins/toggle';
-import InterfaceLog from '@/components/interface/Log';
+import SubmitButton from '../common/SubmitForm';
+import Json from '../interface/Json';
+import URLS from '../../api/urls';
+import MarkDown from '../common/MarkDown';
+import { toggle } from '../mixins/toggle';
+import InterfaceLog from '../interface/Log';
 
 export default {
   name: 'InterfaceDetails',

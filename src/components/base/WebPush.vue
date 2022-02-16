@@ -12,7 +12,7 @@
 <script>
 
 import SocketIO from 'socket.io-client';
-import func from '@/utils/func';
+import func from '../../utils/func';
 
 export default {
   name: 'WebPush',

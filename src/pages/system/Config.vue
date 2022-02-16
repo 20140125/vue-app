@@ -2,8 +2,14 @@
   <BaseLayout :loading="loading" :pagination="pagination">
     <template #header>
       <el-form-item>
-        <el-button v-if="Permission.auth.indexOf(savePermission) > -1" type="primary" plain size="mini"
-                   @click='addConfig' icon="el-icon-plus">新增
+        <el-button
+          v-if="Permission.auth.indexOf(savePermission) > -1"
+          type="primary"
+          plain
+          size="mini"
+          @click='addConfig'
+          icon="el-icon-plus">
+          新增
         </el-button>
       </el-form-item>
     </template>
@@ -11,8 +17,12 @@
       <SystemConfigLists :config-lists="configLists" @updateConfig="updateConfig"></SystemConfigLists>
     </template>
     <template #dialog>
-      <SystemConfigDialog :sync-visible="syncVisible" :re-form="reForm" :form="form"
-                          @currentPageChange="currentPageChange"></SystemConfigDialog>
+      <SystemConfigDialog
+        :sync-visible="syncVisible"
+        :re-form="reForm"
+        :form="form"
+        @currentPageChange="currentPageChange">
+      </SystemConfigDialog>
     </template>
   </BaseLayout>
 </template>

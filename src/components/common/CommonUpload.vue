@@ -14,15 +14,24 @@
     :file-list="fileList"
     :list-type="listType">
     <!--todo:用户图像上传-->
-    <el-avatar v-if="uploadControls.button_type === 'avatar'" :src="avatarImage.avatar_url" :alt="avatarImage.username"
-               fit="cover" :size="avatarImage.size"></el-avatar>
+    <el-avatar
+      v-if="uploadControls.button_type === 'avatar'"
+      :src="avatarImage.avatar_url"
+      :alt="avatarImage.username"
+      fit="cover"
+      :size="avatarImage.size">
+    </el-avatar>
     <!--todo:按钮形式上传-->
     <el-button size="small" type="primary" v-if="uploadControls.button_type === 'picture'">点击上传</el-button>
     <!--todo:卡片形式上传-->
     <i class="el-icon-plus" v-if="uploadControls.button_type === 'card'"></i>
     <!--todo:上传提示文案-->
-    <span v-if="uploadControls.show_tips" class="el-upload__tip"
-          style="margin-left: 20px;">{{ tips ? tips : `请上传${imgWidth}*${imgHeight}的jpg/png 图片` }}</span>
+    <span
+      v-if="uploadControls.show_tips"
+      class="el-upload__tip"
+      style="margin-left: 20px;">
+      {{ tips ? tips : `请上传${imgWidth}*${imgHeight}的jpg/png 图片` }}
+    </span>
   </el-upload>
   <!--todo:点击上传-->
   <el-button v-if="!autoUpload" style="margin-top: 20px" plain type="primary" size="medium" @click="submitUpload">
@@ -32,9 +41,9 @@
 
 <script>
 
-import func from '@/utils/func';
-import URLS from '@/api/urls';
-import $http from '@/tools/request';
+import func from '../../utils/func';
+import URLS from '../../api/urls';
+import $http from '../../tools/request';
 
 export default {
   name: 'CommonUpload',
@@ -183,10 +192,9 @@ export default {
       if (!this.imgHeight && !this.imgWidth) {
         return isJPG && isLt30KB;
       }
-      let __this = this;
-      const isSize = new Promise(function (resolve, reject) {
-        let width = __this.imgWidth;
-        let height = __this.imgHeight;
+      const isSize = new Promise( (resolve, reject) => {
+        let width = this.imgWidth;
+        let height = this.imgHeight;
         let _URL = window.URL || window.webkitURL;
         let image = new Image();
         image.onload = function () {
@@ -198,7 +206,7 @@ export default {
       }).then(() => {
           return file;
         }, () => {
-          __this.$message.error(`上传图片尺寸不符合,只能是${__this.imgWidth}*${__this.imgHeight}!`);
+          this.$message.error(`上传图片尺寸不符合,只能是${this.imgWidth}*${this.imgHeight}!`);
           return Promise.reject();
         }
       );

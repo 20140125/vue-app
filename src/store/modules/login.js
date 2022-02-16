@@ -1,6 +1,6 @@
-import requestMethods from '@/api/methods';
-import URLS from '@/api/urls';
-import router from '@/route/index';
+import requestMethods from '../../api/methods';
+import URLS from '../../api/urls';
+import router from '../../route/index';
 
 export const mutations = {
   /**
@@ -28,7 +28,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      requestMethods.__commonMethods(URLS.login.checkAuthorized, authorized).then(result => {
+      requestMethods.commonMethods(URLS.login.checkAuthorized, authorized).then(result => {
         commit('UPDATE_MUTATIONS', {
           userInfo: (((result || {}).data || {}).item || {}).lists || {},
           isAuthorized: true
@@ -48,7 +48,7 @@ export const actions = {
    */
   async loginSYS({ commit }, payload) {
     return new Promise((resolve, reject) => {
-      requestMethods.__commonMethods(URLS.login.loginSystem, payload).then(result => {
+      requestMethods.commonMethods(URLS.login.loginSystem, payload).then(result => {
         commit('UPDATE_MUTATIONS', { userInfo: ((result.data || {}).item || {}).lists || {}, isAuthorized: true });
         window.localStorage.setItem('token', (((result.data || {}).item || {}).lists || {}).remember_token || '');
         router.push({ path: '/admin/home/index' });
@@ -70,7 +70,7 @@ export const actions = {
    */
   async logoutSYS({ commit }, payload) {
     return new Promise((resolve, reject) => {
-      requestMethods.__commonMethods(URLS.login.logoutSystem, payload).then(result => {
+      requestMethods.commonMethods(URLS.login.logoutSystem, payload).then(result => {
         commit('UPDATE_MUTATIONS', { userInfo: {}, isAuthorized: false });
         commit('UPDATE_MUTATIONS', { token: '' }, { root: true });
         window.localStorage.removeItem('token');
@@ -90,7 +90,7 @@ export const actions = {
    */
   async reportCode({ commit }, payload) {
     return new Promise((resolve, reject) => {
-      requestMethods.__commonMethods(URLS.login.reportCode, payload).then(result => {
+      requestMethods.commonMethods(URLS.login.reportCode, payload).then(result => {
         commit('UPDATE_MUTATIONS', { verifyCode: (((result.data || {}).item || {}).lists || {}).key || '' });
         resolve(result);
       }).catch(error => {
@@ -107,7 +107,7 @@ export const actions = {
    */
   async sendMail({ commit }, payload) {
     return new Promise((resolve, reject) => {
-      requestMethods.__commonMethods(URLS.login.sendMail, payload).then(result => {
+      requestMethods.commonMethods(URLS.login.sendMail, payload).then(result => {
         commit('UPDATE_MUTATIONS', { mailLogin: true });
         resolve(result);
       }).catch(error => {
@@ -129,7 +129,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      requestMethods.__commonMethods(URLS.login.oauthConfig, payload).then(result => {
+      requestMethods.commonMethods(URLS.login.oauthConfig, payload).then(result => {
         commit('UPDATE_MUTATIONS', { oauthConfig: ((result.data || {}).item || {}).lists || {} });
         resolve(result);
       }).catch(error => {

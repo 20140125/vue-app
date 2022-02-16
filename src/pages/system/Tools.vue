@@ -14,9 +14,9 @@
 </template>
 
 <script>
-import BaseLayout from '@/components/BaseLayout';
-import GetAddress from '@/components/system/tools/GetAddress';
-import GetWeather from '@/components/system/tools/GetWeather';
+import BaseLayout from '../../components/BaseLayout';
+import GetAddress from '../../components/system/tools/GetAddress';
+import GetWeather from '../../components/system/tools/GetWeather';
 
 export default {
   name: 'SystemTools',

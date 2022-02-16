@@ -2,8 +2,12 @@
   <el-row :gutter="24">
     <el-col :span="chartsNum">
       <el-card shadow="hover" :style="chartsStyle">
-        <Charts chartsId="charts" :legend-data="['授权用户', '站内通知', '系统日志']" :x-axis-data="xAxisData"
-                :series-data="seriesData"></Charts>
+        <Charts
+          chartsId="charts"
+          :legend-data="['授权用户', '站内通知', '系统日志']"
+          :x-axis-data="xAxisData"
+          :series-data="seriesData">
+        </Charts>
       </el-card>
       <el-card shadow="hover" style="margin-top:35px">
         <el-calendar v-model="value" :first-day-of-week="7">
@@ -24,8 +28,8 @@
 </template>
 
 <script>
-import Charts from '@/components/index/Charts';
-import Timeline from '@/components/index/Timeline';
+import Charts from '../components/index/Charts';
+import Timeline from '../components/index/Timeline';
 
 export default {
   name: 'Index',

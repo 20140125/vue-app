@@ -30,12 +30,12 @@
 </template>
 
 <script>
-import func from '@/utils/func';
+import func from '../../utils/func';
 import Push from 'push.js';
-import LeftBar from '@/components/chat/LeftBar';
-import RightBar from '@/components/chat/RightBar';
-import MessageBox from '@/components/chat/MessageBox';
-import router from '@/route/index';
+import LeftBar from '../chat/LeftBar';
+import RightBar from '../chat/RightBar';
+import MessageBox from '../chat/MessageBox';
+import router from '../../route/index';
 
 export default {
   name: 'chatMain',
@@ -109,55 +109,54 @@ export default {
      * @param webSocketServer
      */
     async getConnection(webSocketServer) {
-      const __this = this;
       /* todo:用户登录 */
-      webSocketServer.onopen = async function () {
+      webSocketServer.addEventListener('open', async () => {
         const jsonStr = {
           type: 'login',
-          from_client_id: __this.userInfo.uuid,
-          client_name: __this.userInfo.username,
-          room_id: __this.userInfo.room_id,
-          client_img: __this.userInfo.avatar_url,
-          uuid: __this.userInfo.uuid
+          from_client_id: this.userInfo.uuid,
+          client_name: this.userInfo.username,
+          room_id: this.userInfo.room_id,
+          client_img: this.userInfo.avatar_url,
+          uuid: this.userInfo.uuid
         };
-        await __this.pushClientLog('正在登入系统。。。', jsonStr.client_name);
+        await this.pushClientLog('正在登入系统。。。', jsonStr.client_name);
         webSocketServer.send(JSON.stringify(jsonStr));
-      };
+      });
       /* todo:消息往来 */
-      webSocketServer.onmessage = async function (response) {
+      webSocketServer.addEventListener('message', async (response) => {
         const message = JSON.parse(response.data);
         switch (message.type) {
           case 'ping':
             webSocketServer.send('{"type":"pong"}');
             break;
           case 'login':
-            await __this.$store.dispatch('chat/addClientUsers', { clientUsers: (message || {}).client_lists || [] });
-            await __this.pushClientLog('登入系统成功', message.from_client_name);
+            await this.$store.dispatch('chat/addClientUsers', { clientUsers: (message || {}).client_lists || [] });
+            await this.pushClientLog('登入系统成功', message.from_client_name);
             break;
           case 'say':
-            await __this.receiveMessage(message);
-            await __this.$store.dispatch('chat/addClientUsers', { clientUsers: (message || {}).client_lists || [] });
-            await __this.pushClientLog('接收消息成功', message.to_client_name);
+            await this.receiveMessage(message);
+            await this.$store.dispatch('chat/addClientUsers', { clientUsers: (message || {}).client_lists || [] });
+            await this.pushClientLog('接收消息成功', message.to_client_name);
             break;
           case 'logout':
-            await __this.pushClientLog('登出系统成功', message.from_client_name);
+            await this.pushClientLog('登出系统成功', message.from_client_name);
             break;
 
         }
-      };
+      });
       /* todo:消息发送失败 */
-      webSocketServer.onmessageerror = function () {
-        __this.pushClientLog('消息发送失败');
-      };
+      webSocketServer.addEventListener('messageerror', () => {
+        this.pushClientLog('消息发送失败');
+      });
       /* todo:链接关闭 */
-      webSocketServer.onclose = function () {
-        __this.pushClientLog('链接断开尝试重新连接');
-        __this.connect(webSocketServer);
-      };
+      webSocketServer.addEventListener('close', () => {
+        this.pushClientLog('链接断开尝试重新连接');
+        this.connect(webSocketServer);
+      });
       /* todo:链接异常 */
-      webSocketServer.onerror = function () {
-        __this.pushClientLog('链接异常');
-      };
+      webSocketServer.addEventListener('error', () => {
+        this.pushClientLog('链接异常');
+      });
     },
     /**
      * todo:获取接收者信息

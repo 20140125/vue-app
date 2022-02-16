@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import BaseLayout from '@/components/BaseLayout';
-import DatabaseLists from '@/components/system/database/Lists';
+import BaseLayout from '../../components/BaseLayout';
+import DatabaseLists from '../../components/system/database/Lists';
 
 export default {
   name: 'Database',
