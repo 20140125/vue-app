@@ -200,7 +200,7 @@ export default {
 }
 
 .el-menu.el-menu--horizontal {
-  border-bottom: solid 1px !important;
+  border-bottom: none !important;
 }
 
 .el-menu--horizontal > .el-menu-item.is-active,

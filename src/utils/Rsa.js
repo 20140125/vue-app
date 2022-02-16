@@ -1,4 +1,4 @@
-import { JSEncrypt } from 'jsencrypt'
+import { JSEncrypt } from 'jsencrypt';
 
 export default {
   /**
@@ -51,19 +51,19 @@ export default {
    */
   str_split(string, splitLength) {
     if (splitLength === null) {
-      splitLength = 1
+      splitLength = 1;
     }
     if (string === null || splitLength < 1) {
-      return false
+      return false;
     }
-    string += ''
-    const chunks = []
-    let pos = 0
-    const len = string.length
+    string += '';
+    const chunks = [];
+    let pos = 0;
+    const len = string.length;
     while (pos < len) {
-      chunks.push(string.slice(pos, pos += splitLength))
+      chunks.push(string.slice(pos, pos += splitLength));
     }
-    return chunks
+    return chunks;
   },
   /**
    * todo:16进制转buffer
@@ -73,10 +73,10 @@ export default {
   hexToBuffer(data) {
     const hexArray = data.map(el => parseInt(el, 16));
     if (!Array.isArray(data)) {
-      return hexArray([data])
+      return hexArray([data]);
     }
     const uarr = new Uint8Array(hexArray);
-    return Buffer.from(uarr)
+    return Buffer.from(uarr);
   },
   /**
    * todo:buffer转16进制
@@ -85,6 +85,6 @@ export default {
    */
   bufferToHex(data) {
     const uarr = Array.prototype.slice.call(data);
-    return uarr.map(el => Number(el).toString(16))
+    return uarr.map(el => Number(el).toString(16));
   }
-}
+};

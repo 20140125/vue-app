@@ -79,7 +79,7 @@ export default {
     position: fixed;
     width: 100%;
     z-index: 2002;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
+    box-shadow: 0 10px 10px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
   }
 
   .el-aside {
@@ -94,7 +94,7 @@ export default {
   }
 
   .content {
-    margin: 80px 0;
+    margin-top: 80px;
   }
 
   .el-row {

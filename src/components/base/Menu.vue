@@ -1,19 +1,29 @@
 <template>
   <el-skeleton animated :loading="loading">
     <template #template>
-      <el-skeleton-item v-for="item in 5" :key="item" :style="`width: ${(item + 1) * Math.random() * 100 | 0}%`"
-                        variant="text" class="template"></el-skeleton-item>
+      <el-skeleton-item
+        v-for="item in 5"
+        :key="item"
+        :style="`width: ${(item + 1) * Math.random() * 100 | 0}%`"
+        variant="text" class="template">
+      </el-skeleton-item>
     </template>
     <template #default>
-      <el-menu unique-opened background-color="#393d49" text-color="#fff" :active-text-color="activeColor"
-               :collapse="isCollapse">
+      <el-menu
+        unique-opened background-color="#393d49"
+        text-color="#fff"
+        :active-text-color="activeColor"
+        :collapse="isCollapse">
         <el-submenu v-for="(menu,index) in menuLists" :key="index" :index="menu.id.toString()">
           <template #title>
             <i class="el-icon-monitor"></i>
             <span v-html="menu.name"></span>
           </template>
-          <el-menu-item :index="child.id.toString()" v-for="(child,index) in menu.__children" @click="goto(child)"
-                        :key="index">
+          <el-menu-item
+            :index="child.id.toString()"
+            v-for="(child,index) in menu.__children"
+            @click="goto(child)"
+            :key="index">
             <template #title>
               <i class="el-icon-house"></i>
               <span v-html="child.name"></span>
@@ -45,7 +55,7 @@ export default {
       await this.$store.dispatch('home/getMenu');
       setTimeout(() => {
         this.loading = false;
-      }, Math.random() * 1000 | 0)
+      }, Math.random() * 1000 | 0);
     });
   },
   methods: {
@@ -55,7 +65,6 @@ export default {
      * @return {Promise<void>}
      */
     async goto(item) {
-      this.activeColor = this.$store.getters.activeColor;
       let params = { label: item.name, value: item.href };
       await this.$store.dispatch('home/addTabs', params).then(() => {
         this.$router.push({ path: params.value });

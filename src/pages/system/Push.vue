@@ -101,7 +101,7 @@ export default {
     async searchPush() {
       this.pagination.page = 1;
       this.pagination.refresh = true;
-      await this.getPushLists(this.pagination)
+      await this.getPushLists(this.pagination);
     },
     /**
      * todo:页面转换

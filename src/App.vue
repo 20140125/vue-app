@@ -1,5 +1,5 @@
 <template>
-  <router-view></router-view>
+  <router-view style="margin:0 !important"></router-view>
 </template>
 
 <script>

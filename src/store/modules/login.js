@@ -54,7 +54,7 @@ export const actions = {
         router.push({ path: '/admin/home/index' });
         setTimeout(() => {
           window.location.reload();
-        }, 100)
+        }, 100);
         resolve(result);
       }).catch(error => {
         commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
@@ -72,7 +72,7 @@ export const actions = {
     return new Promise((resolve, reject) => {
       requestMethods.__commonMethods(URLS.login.logoutSystem, payload).then(result => {
         commit('UPDATE_MUTATIONS', { userInfo: {}, isAuthorized: false });
-        commit('UPDATE_MUTATIONS', { token: '' }, { root: true })
+        commit('UPDATE_MUTATIONS', { token: '' }, { root: true });
         window.localStorage.removeItem('token');
         router.push({ path: '/login' });
         resolve(result);

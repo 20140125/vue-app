@@ -1,1 +1,5 @@
-export default {}
+export default {
+  activeColor() {
+    return '#409EFF';
+  }
+};
