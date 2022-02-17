@@ -33,21 +33,21 @@
     <template #dialog>
       <!--文本编辑-->
       <FileDetails
-        :details="fileDetail"
+        :details="fileLists"
         ref="fileDetail"
         :detail-visible="visible.detail"
         @closeDialog="closeDialog">
       </FileDetails>
       <!--静态资源预览-->
       <StaticSource
-        :source-visible="visible.source"
+        :syncVisible="visible.source"
         :static-source="staticSource"
         @closeDialog="closeDialog">
       </StaticSource>
       <!--权限-->
       <FileChmod :chmod-visible="visible.chmod" :file="chmod" @closeDialog="closeDialog"></FileChmod>
       <!-- 文件上传 -->
-      <FileUpload :upload-visible="visible.upload" :file="staticSource.file"></FileUpload>
+      <FileUpload :syncVisible="visible.upload" :file="staticSource.file" @closeDialog="closeDialog"></FileUpload>
     </template>
   </BaseLayout>
 </template>
@@ -91,8 +91,9 @@ export default {
      * todo:获取文件列表
      * @param basename
      * @param index
+     * @param detail
      */
-    async getFileLists(basename = { path: '/', filename: 'longer' }, index = 0) {
+    async getFileLists(basename = { path: '/', filename: 'longer' }, index = 0, detail = false) {
       if (JSON.stringify(this.breadcrumb).indexOf(JSON.stringify(basename)) === -1) {
         this.breadcrumb.push(basename);
       } else {
@@ -101,7 +102,7 @@ export default {
       if (basename.path === '/') {
         this.breadcrumb = [{ path: '/', filename: 'longer' }];
       }
-      this.visible = { detail: false, source: false, chmod: false, upload: false };
+      this.visible = { detail: detail, source: false, chmod: false, upload: false };
       this.loading = true;
       await this.$store.dispatch('file/getFileLists', { path: 'base_path', basename: basename.path }).then(() => {
         this.loading = false;
@@ -129,7 +130,6 @@ export default {
         return false;
       }
       this.visible = { detail: true, source: false, chmod: false, upload: false };
-      this.fileDetail = [JSON.parse(JSON.stringify(file))];
       if (file.file_type === 'file' && file.filename.split('.')[1] !== 'zip') {
         await this.$refs['fileDetail'].getFileContent(file);
       }

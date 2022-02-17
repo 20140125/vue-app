@@ -23,10 +23,12 @@
             suffix-icon="el-icon-search"></el-input>
           <el-tree
             :data="details"
+            icon="el-icon-edit"
             :highlight-current="true"
             :props="treeProps"
             accordion
-            node-key="md5"
+            :indent="20"
+            node-key="name"
             :filter-node-method="filterNode"
             @node-click="getFileContent"
             ref="tree"
@@ -65,7 +67,7 @@
               </el-tabs>
             </el-form-item>
             <SubmitButton
-              v-if="Permission.auth.indexOf(savePermission) > -1"
+              v-if="Permission.auth.indexOf(savePermission) > -1 && fileAuth === 777"
               :form="form"
               re-form="fileSave"
               @closeDialog="$emit('closeDialog')">
@@ -156,7 +158,8 @@ export default {
         json: 'application/ld+json',
         sql: 'text/x-mysql'
       },
-      savePermission: URLS.file.update
+      savePermission: URLS.file.update,
+      fileAuth: 644
     };
   },
   watch: {
@@ -172,6 +175,7 @@ export default {
     },
     tabModel() {
       this.form.model.content = this.tabModel.content;
+      this.form.$refs = this.$refs;
     }
   },
   computed: {
@@ -189,8 +193,11 @@ export default {
      */
     async getFileContent(file) {
       if (file.file_type !== 'file') {
+        this.visible.detail = true
+        this.$parent.$parent.$parent.getFileLists(file, 0, true)
         return false;
       }
+      this.fileAuth = parseInt(file.auth, 10);
       let ext = (file.filename.split('.') || [])[1] || 'php';
       /* 不支持在线编辑 */
       let imgExt = ['png', 'jpg', 'jpeg', 'gif', 'mp4', 'flv'];
@@ -201,14 +208,14 @@ export default {
       this.form.$refs = this.$refs;
       this.setOptionsMode(ext);
       this.form.model.path = file.path;
-      let tabs = { name: file.md5, label: file.filename, path: file.path };
+      let tabs = { name: file.name, label: file.filename, path: file.path, auth: this.fileAuth };
       await this.$store.dispatch('file/getFileContent', tabs);
     },
     /**
      * TODO:设置编辑器的mode
      * @param ext
      */
-    setOptionsMode: function (ext) {
+    setOptionsMode (ext) {
       switch (ext.toLowerCase()) {
         case 'xml':
           this.options.mode = this.mode.xml;
@@ -246,6 +253,7 @@ export default {
         if (tab.props.label === item.label) {
           this.form.$refs = this.$refs;
           this.form.model.path = item.path;
+          this.fileAuth = item.auth;
           this.$store.commit('file/UPDATE_MUTATIONS', { tabModel: item });
         }
       });

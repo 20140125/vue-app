@@ -21,21 +21,13 @@
 
 <script>
 import CommonUpload from '../common/CommonUpload';
+import { toggle } from '../mixins/toggle';
 
 export default {
   name: 'FileUpload',
   components: { CommonUpload },
-  props: ['uploadVisible', 'file'],
-  data() {
-    return {
-      visible: this.uploadVisible
-    };
-  },
-  watch: {
-    uploadVisible() {
-      this.visible = this.uploadVisible;
-    }
-  }
+  props: ['file'],
+  mixins: [toggle]
 };
 </script>
 

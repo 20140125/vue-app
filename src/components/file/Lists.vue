@@ -9,7 +9,7 @@
           v-html="scope.row.filename"
           @click="$emit('getFileLists', scope.row)">
         </span>
-        <span @click="$emit('getFiles',scope.row)" style="cursor: pointer;" v-else v-html="scope.row.filename"></span>
+        <span v-else @click="$emit('getFiles',scope.row)" style="cursor: pointer;" v-html="scope.row.filename"></span>
       </template>
     </el-table-column>
     <el-table-column label="类型" width="100">

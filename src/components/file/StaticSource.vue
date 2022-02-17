@@ -25,19 +25,12 @@
 </template>
 
 <script>
+import { toggle } from '../mixins/toggle';
+
 export default {
   name: 'StaticSource',
-  props: ['sourceVisible', 'staticSource'],
-  data() {
-    return {
-      visible: this.sourceVisible
-    };
-  },
-  watch: {
-    sourceVisible() {
-      this.visible = this.sourceVisible;
-    }
-  }
+  props: ['staticSource'],
+  mixins: [toggle]
 };
 </script>
 
