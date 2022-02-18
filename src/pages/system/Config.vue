@@ -21,7 +21,7 @@
         :sync-visible="syncVisible"
         :re-form="reForm"
         :form="form"
-        @currentPageChange="currentPageChange">
+        @getConfigLists="getConfigLists">
       </SystemConfigDialog>
     </template>
   </BaseLayout>
@@ -62,6 +62,7 @@ export default {
      * @param pagination
      */
     async getConfigLists(pagination) {
+      this.pagination.page = pagination.page;
       this.syncVisible = false;
       this.loading = true;
       await this.$store.dispatch('config/getConfigLists', pagination).then(() => {

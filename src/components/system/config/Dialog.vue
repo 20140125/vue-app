@@ -87,7 +87,11 @@
         <el-button type="primary" plain size="mini" icon="el-icon-plus" @click="addChildren(localForm.children)">
           新增
         </el-button>
-        <SubmitButton :form="submitForm" :reForm="reForm" @closeDialog="$emit('currentPageChange', 1)"></SubmitButton>
+        <SubmitButton
+          :form="submitForm"
+          :reForm="reForm"
+          @closeDialog="$emit('getConfigLists', { page: 1, limit: 15, total: 0, show_page: true, refresh: true })">
+        </SubmitButton>
       </el-form>
     </el-dialog>
   </div>

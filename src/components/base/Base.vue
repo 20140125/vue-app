@@ -95,6 +95,7 @@ export default {
 
   .content {
     margin-top: 80px;
+    margin-bottom: 40px !important;
   }
 
   .el-row {

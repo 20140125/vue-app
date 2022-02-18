@@ -67,13 +67,13 @@ export default {
 
 <style lang="less">
 #toUp {
-  box-shadow: 0 2px 5px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+  box-shadow: 0 5px 5px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
   text-align: center;
   line-height: 20px;
   border-radius: 30px;
   position: fixed;
-  bottom: 90px;
-  right: 15px;
+  bottom: 80px;
+  right: 20px;
   z-index: 2004
 }
 </style>

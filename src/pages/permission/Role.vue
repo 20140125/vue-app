@@ -7,7 +7,8 @@
           v-if="Permission.auth.indexOf(savePermission) > -1"
           plain
           size="mini"
-          @click='addRoles' icon="el-icon-plus">
+          @click='addRoles'
+          icon="el-icon-plus">
           新增
         </el-button>
       </el-form-item>

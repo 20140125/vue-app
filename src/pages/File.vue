@@ -116,17 +116,14 @@ export default {
       const ext = (file.filename.split('.') || [])[1] || 'php';
       /* 图片浏览 */
       const imgExt = ['png', 'jpg', 'jpeg', 'gif'];
-      let filePath = '';
       if (imgExt.includes(ext.toLowerCase())) {
-        filePath = file.path.replace(file.filename, '');
-        this.getSource(this.fileLists, filePath, 'image');
+        this.getSource(this.fileLists, file.path.replace(file.filename, ''), 'image');
         return false;
       }
       /* 视频浏览 */
       const videoExt = ['mp4', 'flv'];
       if (videoExt.includes(ext.toLowerCase())) {
-        filePath = file.path.replace(file.filename, '');
-        await this.getSource(this.fileLists, filePath, 'video');
+        await this.getSource(this.fileLists, file.path.replace(file.filename, ''), 'video');
         return false;
       }
       this.visible = { detail: true, source: false, chmod: false, upload: false };
@@ -166,7 +163,7 @@ export default {
           return false;
         }
         this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.file.save, model: { path: file.path + value } }).then(() => {
-          this.getFileLists(true);
+          this.getFileLists();
         });
       }).catch(() => {
         this.$message.info('cancel entry');
@@ -205,7 +202,7 @@ export default {
             path: file ? file.path.replace(file.filename, '') : this.fileAtt.path
           }
         }).then(() => {
-          this.getFileLists(true);
+          this.getFileLists();
         });
       }).catch(() => {
         this.$message.info('cancel entry');
@@ -220,7 +217,7 @@ export default {
         url: URLS.file.unzip,
         model: { resource: file.filename.split('.')[0], path: file.path }
       }).then(() => {
-        this.getFileLists(true);
+        this.getFileLists();
       });
     },
     /**
@@ -234,7 +231,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.file.delete, model: { path: file.path } }).then(() => {
-          this.getFileLists(true);
+          this.getFileLists();
         });
       }).catch(() => {
         this.$message({ type: 'info', message: 'cancel remove！' });
@@ -262,7 +259,7 @@ export default {
             url: URLS.file.rename,
             model: { path: file.path + value }
           }).then(() => {
-            this.getFileLists(true);
+            this.getFileLists();
           });
         }).catch(() => {
           this.$message.info('cancel rename file');

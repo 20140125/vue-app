@@ -1,3 +1,9 @@
+/**
+ * todo:配置信息检查
+ * @param rule
+ * @param value
+ * @param callback
+ */
 const checkConfigChildren = (rule, value, callback) => {
   try {
     let err = 0;
