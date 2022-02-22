@@ -33,6 +33,8 @@ export const actions = {
           userInfo: (((result || {}).data || {}).item || {}).lists || {},
           isAuthorized: true
         });
+        window.localStorage.setItem('token', (((result.data || {}).item || {}).lists || {}).remember_token || '');
+        window.localStorage.setItem('RTX', (((result.data || {}).item || {}).lists || {}).username || 'tourist');
         resolve(result);
       }).catch(error => {
         commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
@@ -51,6 +53,7 @@ export const actions = {
       requestMethods.commonMethods(URLS.login.loginSystem, payload).then(result => {
         commit('UPDATE_MUTATIONS', { userInfo: ((result.data || {}).item || {}).lists || {}, isAuthorized: true });
         window.localStorage.setItem('token', (((result.data || {}).item || {}).lists || {}).remember_token || '');
+        window.localStorage.setItem('RTX', (((result.data || {}).item || {}).lists || {}).username || 'tourist');
         router.push({ path: '/admin/home/index' });
         setTimeout(() => {
           window.location.reload();
@@ -74,6 +77,7 @@ export const actions = {
         commit('UPDATE_MUTATIONS', { userInfo: {}, isAuthorized: false });
         commit('UPDATE_MUTATIONS', { token: '' }, { root: true });
         window.localStorage.removeItem('token');
+        window.localStorage.removeItem('RTX');
         router.push({ path: '/login' });
         resolve(result);
       }).catch(error => {

@@ -1,13 +1,13 @@
 <template>
   <el-table :data="configLists" row-key="id" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
     <el-table-column label="#ID" prop="id"></el-table-column>
-    <el-table-column label="配置名称" prop="name"></el-table-column>
+    <el-table-column label="配置名称" prop="name" :show-tooltip-when-overflow="true"></el-table-column>
     <el-table-column label="配置状态">
       <template #default="scope">
         <StatusRadio
           :url="URL"
           :status-model="scope.row"
-          v-if="scope.row.id < 1000 && Permission.auth.indexOf(URL) > -1">
+          v-if="scope.row.id < 100 && Permission.auth.indexOf(URL) > -1">
         </StatusRadio>
         <el-button
           v-else

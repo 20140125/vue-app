@@ -1,15 +1,22 @@
 <template>
-  <router-view style="margin:0 !important"></router-view>
+  <router-view
+    style="margin:0 !important"
+    v-water-mark="{ text: username, textColor: 'rgba(0, 0, 0, .2)', font: '25px PingFang SC', row: 180, col: 700 }">
+  </router-view>
 </template>
 
 <script>
+
+import urls from './api/urls';
+import func from './utils/func';
 
 export default {
   name: 'App',
   data() {
     return {
       loading: true,
-      throttle: 1500
+      throttle: 1500,
+      username: `${this.$store.state.username}【${urls.baseURL}】${func.setTime(Date.parse(new Date()))}`
     };
   },
   mounted() {

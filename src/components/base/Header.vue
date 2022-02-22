@@ -22,7 +22,8 @@
             :src="Permission.avatar_url"
             :alt="Permission.username"
             referrerpolicy="no-referrer"
-            :size="40"></el-avatar>
+            :size="40">
+          </el-avatar>
           <span v-html="Permission.username" style="margin-left: 10px"></span>
         </template>
         <el-menu-item index="5-1"><i class="el-icon-user-solid" style="color: #fff"></i>会员中心</el-menu-item>

@@ -128,8 +128,14 @@ const router = createRouter({
           name: 'SpiderManage',
           component: () => import('../pages/Spider'),
           meta: { title: '同步工具' }
+        },
+        /* 错误页面 */
+        {
+          path: 'error/page',
+          name: 'ErrorPage',
+          component: () => import('../pages/ErrorPage'),
+          meta: { title: '错误页面' }
         }
-
       ]
     }
   ]

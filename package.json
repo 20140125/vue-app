@@ -25,6 +25,7 @@
     "qs": "^6.5.2",
     "vue": "^3.0.0",
     "vue3-json-viewer": "^1.0.4",
+    "vue3-watermark": "^1.0.2",
     "vuex": "^4.0.2"
   },
   "devDependencies": {

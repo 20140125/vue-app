@@ -6,33 +6,47 @@ import urls from '../api/urls';
 
 /**
  * todo:错误跳转
- * @param status
  * @param error
- * @return {Promise<never>}
+ * @return {boolean}
  * @constructor
  */
-const ErrorHandler = (status, error) => {
-  if (!store.state.token) {
-    switch (status) {
-      case 401:
-        router.push({ path: '/login' }).then(() => {
-          ElMessage.error('Unauthenticated login system');
-        });
-        break;
-      case 403:
-      case 500:
-        router.push({ path: '/login' }).then(() => {
-          console.log(error);
-        });
-        break;
-    }
-  } else {
-    ElMessage.error(status === 403 ? 'Permission denied login system' : 'Network error, please try again later');
-    return Promise.reject({
-      code: status,
-      message: status === 403 ? 'Permission denied login system' : 'Network error, Please try again later',
-      item: error
+const ErrorHandler = (error) => {
+  if (store.state.token) {
+    router.push({ path: '/admin/error/page' }).then(() => {
+      store.commit('UPDATE_MUTATIONS', {
+        error: {
+          code: error.response.status,
+          message: error.response.status === 403 ? 'Permission denied login system' : 'Network error, Please try again later'
+        }
+      }, { root: true });
+      return Promise.reject({
+        error: {
+          code: error.response.status,
+          message: error.response.status === 403 ? 'Permission denied login system' : 'Network error, Please try again later'
+        }
+      });
     });
+    return false;
+  }
+  switch (error.response.status) {
+    case 401:
+      router.push({ path: '/login' }).then(() => {
+        ElMessage.error('Unauthenticated login system');
+      });
+      break;
+    case 403:
+      router.push({ path: '/login' }).then(() => {
+        ElMessage.error('Permission denied login system');
+      });
+      break;
+    case 500:
+      router.push({ path: '/login' }).then(() => {
+        ElMessage.error('Network error, Please try again later');
+      });
+      break;
+    default:
+      router.push({ path: '/login' }).then(r => console.info(r));
+      break;
   }
 };
 
@@ -49,7 +63,7 @@ const instance = axios.create({
 instance.defaults.baseURL = urls.baseURL;
 // http request 拦截器
 instance.interceptors.request.use(config => {
-  const commonURL = store.state.token ? [urls.login.loginSystem, urls.login.reportCode, urls.login.sendMail] : [urls.login.loginSystem, urls.login.reportCode, urls.login.oauthConfig, urls.login.sendMail]
+  const commonURL = store.state.token ? [urls.login.loginSystem, urls.login.reportCode, urls.login.sendMail] : [urls.login.loginSystem, urls.login.reportCode, urls.login.oauthConfig, urls.login.sendMail];
   if (commonURL.indexOf(config.url) === -1) {
     config.headers.Authorization = store.state.token || window.localStorage.getItem('token');
     config.data.token = store.state.token || window.localStorage.getItem('token');
@@ -71,6 +85,6 @@ instance.interceptors.response.use(response => {
     return Promise.reject(error);
   }
 }, error => {
-  ErrorHandler(error.response.status, error).then(() => console.log(error));
+  ErrorHandler(error);
 });
 export default instance;

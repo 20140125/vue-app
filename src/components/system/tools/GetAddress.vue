@@ -2,7 +2,7 @@
   <div id="address">
     <el-form label-position="left" label-width="100px">
       <el-form-item label="IP地址：">
-        <el-input v-model="ip_address" :placeholder="`请输入IP（仅支持国内）地址(${Permission.ip_address})`">
+        <el-input v-model="ip_address" :placeholder="`请输入IP（仅支持国内）地址(${ip_address})`">
           <template #append>
             <el-button icon="el-icon-search" @click="getAddress">搜索</el-button>
           </template>
@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import AMap from '@/components/system/tools/AMap';
-import URLS from '@/api/urls';
+import AMap from '../../system/tools/AMap';
+import URLS from '../../../api/urls';
 
 export default {
   name: 'GetAddress',
@@ -39,8 +39,14 @@ export default {
         url: URLS.tools.getAddress,
         model: { ip_address: this.ip_address }
       }).then((response) => {
-        let result = (((response || {}).data || {}).item || {}).lists || {};
-        let rectangle = (result || {}).rectangle.split(';');
+        let result = (((response || {}).data || {}).item || {}).lists || {
+          rectangle: []
+        };
+        if (result.rectangle.length === 0) {
+          this.$message.error('请输入国内正确的IP地址');
+          return false;
+        }
+        let rectangle = ((result || {}).rectangle || []).split(';');
         let longitude = (parseFloat(rectangle[0].split(',')[0]) + parseFloat(rectangle[1].split(',')[0])) / 2;
         let latitude = (parseFloat(rectangle[0].split(',')[1]) + parseFloat(rectangle[1].split(',')[1])) / 2;
         this.center = [longitude, latitude];

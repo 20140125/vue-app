@@ -4,7 +4,7 @@
       <el-form-item label="城市名称：">
         <el-autocomplete
           v-model="cityName"
-          style="width: 300px"
+          style="width: 400px"
           :fetch-suggestions="querySearch"
           @select="getWeather"
           prefix-icon="el-icon-search"

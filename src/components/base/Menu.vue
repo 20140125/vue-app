@@ -25,7 +25,7 @@
             @click="goto(child)"
             :key="index">
             <template #title>
-              <i class="el-icon-house"></i>
+              <i class="el-icon-s-home"></i>
               <span v-html="child.name"></span>
             </template>
           </el-menu-item>

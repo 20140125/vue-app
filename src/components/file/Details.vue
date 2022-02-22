@@ -193,12 +193,12 @@ export default {
      */
     async getFileContent(file) {
       if (file.file_type !== 'file') {
-        this.visible.detail = true
-        this.$parent.$parent.$parent.getFileLists(file, 0, true)
+        this.visible.detail = true;
+        this.$parent.$parent.$parent.getFileLists(file, 0, true);
         return false;
       }
       this.fileAuth = parseInt(file.auth, 10);
-      this.options.readOnly = this.fileAuth !== 777
+      this.options.readOnly = this.fileAuth !== 777;
       let ext = (file.filename.split('.') || [])[1] || 'php';
       /* 不支持在线编辑 */
       let imgExt = ['png', 'jpg', 'jpeg', 'gif', 'mp4', 'flv'];
@@ -255,7 +255,7 @@ export default {
           this.form.$refs = this.$refs;
           this.form.model.path = item.path;
           this.fileAuth = item.auth;
-          this.options.readOnly = this.fileAuth !== 777
+          this.options.readOnly = this.fileAuth !== 777;
           this.$store.commit('file/UPDATE_MUTATIONS', { tabModel: item });
         }
       });

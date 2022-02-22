@@ -17,17 +17,21 @@ import createLineNumberPlugin from '@kangc/v-md-editor/lib/plugins/line-number/i
 /* todo: Tip 提示插件*/
 import createTipPlugin from '@kangc/v-md-editor/lib/plugins/tip/index';
 import '@kangc/v-md-editor/lib/plugins/tip/tip.css';
+/* 水印 */
+import waterMark from 'vue3-watermark';
 
 // highlightjs
 import hljs from 'highlight.js';
 
-import store from '@/store/index';
+import store from './store/index';
 /* 引入组件 */
 import App from './App';
 /* 引入资源 */
 import router from './route';
 /* 创建app */
 const app = createApp(App);
+/* 全局水印 */
+waterMark(app);
 /* 注入路由 */
 app.use(router);
 /* 引入vuex */

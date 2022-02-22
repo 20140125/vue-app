@@ -10,6 +10,7 @@
     <el-card shadow="always">
       <router-view></router-view>
     </el-card>
+
   </el-tabs>
 </template>
 
