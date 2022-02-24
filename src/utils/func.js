@@ -1,3 +1,6 @@
+import store from '../store';
+import router from '../route';
+
 export default {
   /**
    * todo:设置时间
@@ -97,5 +100,21 @@ export default {
       digits.includes(base16) ? color.push('0' + base16) : color.push(base16);
     });
     return '#' + color.join('');
+  },
+
+  /**
+   * todo:删除tab标签
+   * @param item
+   */
+  async removeTabs(item) {
+    await store.state.home.tabs.forEach((tab, index) => {
+      if (tab.value === item) {
+        let nextTab = store.state.home.tabs[index + 1] || store.state.home.tabs[index - 1];
+        if (nextTab) {
+          console.log(nextTab);
+          store.dispatch('home/deleteTabs', { index, nextTab }).then(() => router.push({ path: nextTab.value }));
+        }
+      }
+    });
   }
 };

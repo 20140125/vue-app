@@ -1,7 +1,11 @@
 <template>
   <div id="wenPush">
-    <el-carousel :interval="2000" arrow="never" direction="vertical" indicator-position="none"
-                 v-if="pushMessage.length > 0">
+    <el-carousel
+      v-if="pushMessage.length > 0"
+      :interval="2000"
+      arrow="never"
+      direction="vertical"
+      indicator-position="none">
       <el-carousel-item v-for="(item,index) in pushMessage" :key="index">
         <el-alert type="success" show-icon :title="item.message" effect="light"></el-alert>
       </el-carousel-item>

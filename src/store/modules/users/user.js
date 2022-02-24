@@ -24,15 +24,15 @@ export const actions = {
    */
   async getUsersLists({ commit, state }, payload) {
     /* 如果页码没有变，直接读取vuex里面的数据 */
-    if (state.page === payload.page && !payload.refresh) {
+    if (state.page === payload.page && !payload.refresh && state.usersLists.length > 0) {
       commit('UPDATE_MUTATIONS', { usersLists: state.usersLists });
       return false;
     }
     return new Promise((resolve, reject) => {
       requestMethods.commonMethods(URLS.users.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
-          usersLists: (((result.data || {}).item || {}).lists || {}).data || [],
-          total: (((result.data || {}).item || {}).lists || {}).total || 0,
+          usersLists: ((((result || {}).data || {}).item || {}).lists || {}).data || [],
+          total: ((((result || {}).data || {}).item || {}).lists || {}).total || 0,
           page: payload.page || 1
         });
         resolve(result);
@@ -55,7 +55,7 @@ export const actions = {
     }
     return new Promise((resolve, reject) => {
       requestMethods.commonMethods(URLS.userCenter.get, {}).then(result => {
-        commit('UPDATE_MUTATIONS', { userCenter: ((result.data || {}).item || {}).lists || {} });
+        commit('UPDATE_MUTATIONS', { userCenter: (((result || {}).data || {}).item || {}).lists || {} });
         resolve(result);
       }).catch(error => {
         commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
@@ -78,7 +78,7 @@ export const actions = {
     }
     return new Promise((resolve, reject) => {
       requestMethods.commonMethods(URLS.users.cache, payload).then(result => {
-        commit('UPDATE_MUTATIONS', { cacheUsers: ((result.data || {}).item || {}).lists || [] });
+        commit('UPDATE_MUTATIONS', { cacheUsers: (((result || {}).data || {}).item || {}).lists || [] });
         resolve(result);
       }).catch(error => {
         commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });

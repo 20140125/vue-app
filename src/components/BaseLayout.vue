@@ -1,27 +1,32 @@
 <template>
-  <el-skeleton :rows="5" animated :loading="loading">
-    <el-form :inline="true" class="form">
-      <slot name="header"></slot>
-    </el-form>
-    <!--主题信息-->
-    <el-main>
-      <slot name="body"></slot>
-      <div class="pagination" v-if="T_pagination.show_page">
-        <el-pagination
-          @current-change="currentChange"
-          :page-size="T_pagination.limit"
-          layout="total, prev, pager, next"
-          :total="T_pagination.total"
-          :current-page="T_pagination.page">
-        </el-pagination>
-      </div>
-    </el-main>
-    <!--弹框信息-->
-    <slot name="dialog"></slot>
-  </el-skeleton>
+  <div v-water-mark="{ text: username, textColor: 'rgba(0, 0, 0, .2)', font: '25px consolas, sans-serif', row: 130, col: 850 }">
+    <el-skeleton :rows="5" animated :loading="loading">
+      <el-form :inline="true" class="form">
+        <slot name="header"></slot>
+      </el-form>
+      <!--主题信息-->
+      <el-main>
+        <slot name="body"></slot>
+        <div class="pagination" v-if="T_pagination.show_page">
+          <el-pagination
+            @current-change="currentChange"
+            :page-size="T_pagination.limit"
+            layout="total, prev, pager, next"
+            :total="T_pagination.total"
+            :current-page="T_pagination.page">
+          </el-pagination>
+        </div>
+      </el-main>
+      <!--弹框信息-->
+      <slot name="dialog"></slot>
+    </el-skeleton>
+  </div>
 </template>
 
 <script>
+import urls from '../api/urls';
+import func from '../utils/func';
+
 export default {
   name: 'BaseLayout',
   props: {
@@ -44,7 +49,8 @@ export default {
   },
   data() {
     return {
-      T_pagination: this.pagination || { limit: 10, page: 1, total: 0, show_page: false }
+      T_pagination: this.pagination || { limit: 10, page: 1, total: 0, show_page: false },
+      username: `${this.$store.state.username}【${urls.baseURL}】${func.setTime(Date.parse(new Date()))}`
     };
   },
   methods: {

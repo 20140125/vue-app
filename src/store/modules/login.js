@@ -33,8 +33,8 @@ export const actions = {
           userInfo: (((result || {}).data || {}).item || {}).lists || {},
           isAuthorized: true
         });
-        window.localStorage.setItem('token', (((result.data || {}).item || {}).lists || {}).remember_token || '');
-        window.localStorage.setItem('RTX', (((result.data || {}).item || {}).lists || {}).username || 'tourist');
+        window.localStorage.setItem('token', ((((result || {}).data || {}).item || {}).lists || {}).remember_token || '');
+        window.localStorage.setItem('RTX', ((((result || {}).data || {}).item || {}).lists || {}).username || 'tourist');
         resolve(result);
       }).catch(error => {
         commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
@@ -51,9 +51,9 @@ export const actions = {
   async loginSYS({ commit }, payload) {
     return new Promise((resolve, reject) => {
       requestMethods.commonMethods(URLS.login.loginSystem, payload).then(result => {
-        commit('UPDATE_MUTATIONS', { userInfo: ((result.data || {}).item || {}).lists || {}, isAuthorized: true });
-        window.localStorage.setItem('token', (((result.data || {}).item || {}).lists || {}).remember_token || '');
-        window.localStorage.setItem('RTX', (((result.data || {}).item || {}).lists || {}).username || 'tourist');
+        commit('UPDATE_MUTATIONS', { userInfo: (((result || {}).data || {}).item || {}).lists || {}, isAuthorized: true });
+        window.localStorage.setItem('token', ((((result || {}).data || {}).item || {}).lists || {}).remember_token || '');
+        window.localStorage.setItem('RTX', ((((result || {}).data || {}).item || {}).lists || {}).username || 'tourist');
         router.push({ path: '/admin/home/index' });
         setTimeout(() => {
           window.location.reload();
@@ -95,7 +95,7 @@ export const actions = {
   async reportCode({ commit }, payload) {
     return new Promise((resolve, reject) => {
       requestMethods.commonMethods(URLS.login.reportCode, payload).then(result => {
-        commit('UPDATE_MUTATIONS', { verifyCode: (((result.data || {}).item || {}).lists || {}).key || '' });
+        commit('UPDATE_MUTATIONS', { verifyCode: ((((result || {}).data || {}).item || {}).lists || {}).key || '' });
         resolve(result);
       }).catch(error => {
         commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
@@ -134,7 +134,7 @@ export const actions = {
     }
     return new Promise((resolve, reject) => {
       requestMethods.commonMethods(URLS.login.oauthConfig, payload).then(result => {
-        commit('UPDATE_MUTATIONS', { oauthConfig: ((result.data || {}).item || {}).lists || {} });
+        commit('UPDATE_MUTATIONS', { oauthConfig: (((result || {}).data || {}).item || {}).lists || {} });
         resolve(result);
       }).catch(error => {
         commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });

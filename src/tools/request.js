@@ -1,4 +1,4 @@
-import axios from 'axios/index';
+import axios from 'axios';
 import { ElMessage } from 'element-plus';
 import store from '../store';
 import router from '../route';
@@ -6,48 +6,16 @@ import urls from '../api/urls';
 
 /**
  * todo:错误跳转
- * @param error
- * @return {boolean}
- * @constructor
+ * @param response
  */
-const ErrorHandler = (error) => {
-  if (store.state.token) {
-    router.push({ path: '/admin/error/page' }).then(() => {
-      store.commit('UPDATE_MUTATIONS', {
-        error: {
-          code: error.response.status,
-          message: error.response.status === 403 ? 'Permission denied login system' : 'Network error, Please try again later'
-        }
-      }, { root: true });
-      return Promise.reject({
-        error: {
-          code: error.response.status,
-          message: error.response.status === 403 ? 'Permission denied login system' : 'Network error, Please try again later'
-        }
-      });
-    });
-    return false;
+const ErrorHandler = (response) => {
+  if (!store.state.token) {
+    return router.push({ path: '/login' }).then(() => ElMessage.error(response.data.item.message));
   }
-  switch (error.response.status) {
-    case 401:
-      router.push({ path: '/login' }).then(() => {
-        ElMessage.error('Unauthenticated login system');
-      });
-      break;
-    case 403:
-      router.push({ path: '/login' }).then(() => {
-        ElMessage.error('Permission denied login system');
-      });
-      break;
-    case 500:
-      router.push({ path: '/login' }).then(() => {
-        ElMessage.error('Network error, Please try again later');
-      });
-      break;
-    default:
-      router.push({ path: '/login' }).then(r => console.info(r));
-      break;
-  }
+  router.push({ path: '/admin/result/index' }).then(() => {
+    store.commit('UPDATE_MUTATIONS', { error: response.data.item }, { root: true });
+    return Promise.resolve({ error: response.data.item });
+  });
 };
 
 const TIMEOUT = 0;
@@ -74,17 +42,12 @@ instance.interceptors.request.use(config => {
 });
 // http response 拦截器
 instance.interceptors.response.use(response => {
-  if (response.data.item.code !== 20000) {
-    ElMessage.warning(response.data.item.message);
-    return Promise.reject(response);
-  }
   try {
-    response.data.item.message !== 'successfully' ? ElMessage.success(response.data.item.message) : '';
-    return Promise.resolve(response);
+    return parseInt(response.data.item.code, 10) !== 20000 ? ErrorHandler(response) : Promise.resolve(response);
   } catch (error) {
     return Promise.reject(error);
   }
 }, error => {
-  ErrorHandler(error);
+  return Promise.reject(error);
 });
 export default instance;

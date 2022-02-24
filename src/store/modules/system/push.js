@@ -24,15 +24,15 @@ export const actions = {
    */
   async getPushLists({ commit, state }, payload) {
     /* 如果页码没有变，直接读取vuex里面的数据 */
-    if (state.page === payload.page && !payload.refresh) {
+    if (state.page === payload.page && !payload.refresh && state.pushLists.length > 0) {
       commit('UPDATE_MUTATIONS', { pushLists: state.pushLists });
       return false;
     }
     return new Promise((resolve, reject) => {
       requestMethods.commonMethods(URLS.push.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
-          pushLists: (((result.data || {}).item || {}).lists || {}).data || [],
-          total: (((result.data || {}).item || {}).lists || {}).total || 0,
+          pushLists: ((((result || {}).data || {}).item || {}).lists || {}).data || [],
+          total: ((((result || {}).data || {}).item || {}).lists || {}).total || 0,
           page: payload.page || 1
         });
         resolve(result);

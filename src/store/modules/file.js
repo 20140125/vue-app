@@ -30,7 +30,7 @@ export const actions = {
     return new Promise((resolve, reject) => {
       requestMethods.commonMethods(URLS.file.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
-          fileLists: ((result.data || {}).item || {}).lists || [],
+          fileLists: (((result || {}).data || {}).item || {}).lists || [],
           basename: payload.basename
         });
         resolve(result);
@@ -59,7 +59,7 @@ export const actions = {
     }
     return new Promise((resolve, reject) => {
       requestMethods.commonMethods(URLS.file.read, payload).then(result => {
-        payload.content = ((result.data || {}).item || {}).lists || {};
+        payload.content = (((result || {}).data || {}).item || {}).lists || {};
         dispatch('addTabs', payload);
         resolve(result);
       }).catch(error => {

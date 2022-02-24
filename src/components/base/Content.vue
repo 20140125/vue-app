@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import func from "../../utils/func";
+
 export default {
   name: 'Content',
   computed: {
@@ -44,15 +46,7 @@ export default {
      * @return {Promise<void>}
      */
     async removeTabs(item) {
-      await this.authTabs.forEach((tab, index) => {
-        if (tab.value === item) {
-          let nextTab = this.authTabs[index + 1] || this.authTabs[index - 1];
-          if (nextTab) {
-            this.$store.dispatch('home/deleteTabs', { index, nextTab });
-            this.$router.push({ path: nextTab.value });
-          }
-        }
-      });
+      await func.removeTabs(item)
     }
   }
 };

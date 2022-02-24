@@ -34,7 +34,7 @@ export const actions = {
       requestMethods.commonMethods(URLS.interfaceCategory.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
           categoryLists: ((result.data || {}).item || {}).lists || {},
-          categoryTree: func.setTree(((result.data || {}).item || {}).lists || {}, 0, 'children')
+          categoryTree: func.setTree((((result || {}).data || {}).item || {}).lists || {}, 0, 'children')
         });
         resolve(result);
       }).catch(error => {
@@ -58,7 +58,7 @@ export const actions = {
     return new Promise((resolve, reject) => {
       requestMethods.commonMethods(URLS.interface.get, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
-          details: ((result.data || {}).item || {}).lists || {},
+          details: (((result || {}).data || {}).item || {}).lists || {},
           id: payload.id || 0,
           source: payload.source || ''
         });

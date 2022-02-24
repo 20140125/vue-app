@@ -35,7 +35,7 @@ export const actions = {
     }
     return new Promise((resolve, reject) => {
       requestMethods.commonMethods(URLS.home.getMenu, payload).then(result => {
-        commit('UPDATE_MUTATIONS', { menuLists: func.setTree(((result.data || {}).item || {}).lists || {}) });
+        commit('UPDATE_MUTATIONS', { menuLists: func.setTree((((result || {}).data || {}).item || {}).lists || {}) });
         resolve(result);
       }).catch(error => {
         commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
@@ -66,7 +66,7 @@ export const actions = {
     }
     return new Promise((resolve, reject) => {
       requestMethods.commonMethods(URLS.timeline.lists, payload).then(result => {
-        commit('UPDATE_MUTATIONS', { timeline: (((result.data || {}).item || {}).lists || {}).data || [] });
+        commit('UPDATE_MUTATIONS', { timeline: ((((result || {}).data || {}).item || {}).lists || {}).data || [] });
         resolve(result);
       }).catch(error => {
         commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });

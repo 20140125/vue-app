@@ -131,9 +131,9 @@ const router = createRouter({
         },
         /* 错误页面 */
         {
-          path: 'error/page',
-          name: 'ErrorPage',
-          component: () => import('../pages/ErrorPage'),
+          path: 'result/index',
+          name: 'ResultManage',
+          component: () => import('../pages/Result'),
           meta: { title: '错误页面' }
         }
       ]

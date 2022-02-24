@@ -34,8 +34,8 @@ export const actions = {
     return new Promise((resolve, reject) => {
       requestMethods.commonMethods(URLS.auth.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
-          authTree: func.setTree(((result.data || {}).item || {}).lists || [], 0, 'children'),
-          authLists: ((result.data || {}).item || {}).lists || []
+          authTree: func.setTree((((result || {}).data || {}).item || {}).lists || [], 0, 'children'),
+          authLists: (((result || {}).data || {}).item || {}).lists || []
         });
         resolve(result);
       }).catch(error => {

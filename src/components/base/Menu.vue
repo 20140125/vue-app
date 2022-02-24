@@ -52,10 +52,12 @@ export default {
   },
   mounted() {
     this.$nextTick(async () => {
-      await this.$store.dispatch('home/getMenu');
-      setTimeout(() => {
-        this.loading = false;
-      }, Math.random() * 1000 | 0);
+      if (this.$store.state.token) {
+        await this.$store.dispatch('home/getMenu');
+        setTimeout(() => {
+          this.loading = false;
+        }, Math.random() * 1000 | 0);
+      }
     });
   },
   methods: {

@@ -24,15 +24,15 @@ export const actions = {
    */
   async getSystemLogLists({ commit, state }, payload) {
     /* 如果页码没有变，直接读取vuex里面的数据 */
-    if (state.page === payload.page && !payload.refresh) {
+    if (state.page === payload.page && !payload.refresh && state.systemLogLists.length > 0) {
       commit('UPDATE_MUTATIONS', { systemLogLists: state.systemLogLists });
       return false;
     }
     return new Promise((resolve, reject) => {
       requestMethods.commonMethods(URLS.log.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
-          systemLogLists: (((result.data || {}).item || {}).lists || {}).data || [],
-          total: (((result.data || {}).item || {}).lists || {}).total || 0,
+          systemLogLists: ((((result || {}).data || {}).item || {}).lists || {}).data || [],
+          total: ((((result || {}).data || {}).item || {}).lists || {}).total || 0,
           page: payload.page || 1
         });
         resolve(result);

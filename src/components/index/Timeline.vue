@@ -28,9 +28,11 @@ export default {
   },
   mounted() {
     this.$nextTick(async () => {
-      await this.$store.dispatch('home/getTimeLine', { page: 1, limit: 11 }).then(() => {
-        this.loading = false;
-      });
+      if (this.$store.state.token) {
+        await this.$store.dispatch('home/getTimeLine', { page: 1, limit: 11 }).then(() => {
+          this.loading = false;
+        });
+      }
     });
   }
 };

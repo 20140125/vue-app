@@ -24,15 +24,15 @@ export const actions = {
    */
   async getRoleLists({ commit, state }, payload) {
     /* 如果页码没有变，直接读取vuex里面的数据 */
-    if (state.page === payload.page && !payload.refresh) {
+    if (state.page === payload.page && !payload.refresh && state.roleLists.length > 0) {
       commit('UPDATE_MUTATIONS', { roleLists: state.roleLists });
       return false;
     }
     return new Promise((resolve, reject) => {
       requestMethods.commonMethods(URLS.role.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
-          roleLists: (((result.data || {}).item || {}).lists || {}).data || [],
-          total: (((result.data || {}).item || {}).lists || {}).total || 0,
+          roleLists: ((((result || {}).data || {}).item || {}).lists || {}).data || [],
+          total: ((((result || {}).data || {}).item || {}).lists || {}).total || 0,
           page: payload.page || 1
         });
         resolve(result);
@@ -57,10 +57,10 @@ export const actions = {
     }
     return new Promise((resolve, reject) => {
       requestMethods.commonMethods(URLS.role.auth, payload).then(result => {
-        commit('UPDATE_MUTATIONS', { authLists: ((result.data || {}).item || {}).lists || [] });
+        commit('UPDATE_MUTATIONS', { authLists: (((result || {}).data || {}).item || {}).lists || [] });
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: error }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
         reject(error);
       });
     });

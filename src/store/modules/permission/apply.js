@@ -24,15 +24,15 @@ export const actions = {
    */
   async getPermissionApply({ commit, state }, payload) {
     /* 如果页码没有变，直接读取vuex里面的数据 */
-    if (state.page === payload.page && !payload.refresh) {
+    if (state.page === payload.page && !payload.refresh && state.permissionLists.length > 0) {
       commit('UPDATE_MUTATIONS', { permissionLists: state.permissionLists });
       return false;
     }
     return new Promise((resolve, reject) => {
       requestMethods.commonMethods(URLS.permission.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
-          permissionLists: (((result.data || {}).item || {}).lists || {}).data || [],
-          total: (((result.data || {}).item || {}).lists || {}).total || 0,
+          permissionLists: ((((result || {}).data || {}).item || {}).lists || {}).data || [],
+          total: ((((result || {}).data || {}).item || {}).lists || {}).total || 0,
           page: payload.page || 1
         });
         resolve(result);
@@ -58,8 +58,8 @@ export const actions = {
     return new Promise((resolve, reject) => {
       requestMethods.commonMethods(URLS.permission.get, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
-          authLists: (((result.data || {}).item || {}).lists || {}).authLists || [],
-          user_id: (((result.data || {}).item || {}).lists || {}).user_id || 0
+          authLists: ((((result || {}).data || {}).item || {}).lists || {}).authLists || [],
+          user_id: ((((result || {}).data || {}).item || {}).lists || {}).user_id || 0
         });
         resolve(result);
       }).catch(error => {

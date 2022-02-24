@@ -13,8 +13,13 @@
           <el-col :span="(showLeftBar && showRightBar) ? 12 : ((showLeftBar || showRightBar) ? 18 : 24)"
                   class="main-bar">
             <el-card shadow="hover">
-              <MessageBox @sendMessage="sendMessage" ref="messageBox" :user-info="userInfo"
-                          :message-lists="messageLists" :receive-name="receiver.client_name"></MessageBox>
+              <MessageBox
+                @sendMessage="sendMessage"
+                ref="messageBox"
+                :user-info="userInfo"
+                :message-lists="messageLists"
+                :receive-name="receiver.client_name">
+              </MessageBox>
             </el-card>
           </el-col>
           <!--所有用户-->
