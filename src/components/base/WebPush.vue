@@ -1,5 +1,5 @@
 <template>
-  <div id="wenPush">
+  <div id="webPush">
     <el-carousel
       v-if="pushMessage.length > 0"
       :interval="2000"
@@ -77,7 +77,7 @@ export default {
 </script>
 
 <style lang="less">
-#wenPush {
+#webPush {
   .el-carousel__container {
     height: 80px !important;
     line-height: 25px;
