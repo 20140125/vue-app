@@ -17,7 +17,7 @@ import area from '../store/modules/system/area';
 import database from '../store/modules/system/database';
 import log from '../store/modules/system/log';
 /* 接口管理 */
-import category from '../store/modules/interface/category';
+import category from '../store/modules/category/category';
 /* 爬虫管理 */
 import spider from '../store/modules/spider';
 
