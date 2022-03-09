@@ -2,10 +2,10 @@
   <div>
     <el-dialog
       v-model="visible"
-      :title="localForm.name"
-      :show-close="false"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
+      :show-close="false"
+      :title="localForm.name"
       center>
       <el-form ref="area" :model="localForm">
         <el-form-item>
@@ -18,8 +18,8 @@
         reForm="area"
         @closeDialog="$emit('getAreaLists', { parent_id: 1 })">
       </SubmitButton>
-      <el-main style="text-align: center" v-else>
-        <el-button type="primary" plain size="medium" @click="$emit('closeDialog')">取消</el-button>
+      <el-main v-else style="text-align: center">
+        <el-button plain size="medium" type="primary" @click="$emit('closeDialog')">取消</el-button>
       </el-main>
     </el-dialog>
   </div>

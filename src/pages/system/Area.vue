@@ -4,13 +4,13 @@
     <template #body>
       <AreaLists
         :areaLists="areaLists"
-        @loadMORE="loadMORE"
         @getAreaWeather="getAreaWeather"
+        @loadMORE="loadMORE"
         @searchAreaLists="searchAreaLists">
       </AreaLists>
     </template>
     <template #dialog>
-      <AreaDialog :sync-visible="syncVisible" :form="form" @getAreaLists="getAreaLists"></AreaDialog>
+      <AreaDialog :form="form" :sync-visible="syncVisible" @getAreaLists="getAreaLists"></AreaDialog>
     </template>
   </BaseLayout>
 </template>

@@ -1,30 +1,30 @@
 <template>
   <el-upload
     ref="upload"
-    :name="data.name || 'file'"
-    :data="data"
-    :http-request="uploadFile"
     :action="action"
     :auto-upload="autoUpload"
-    :on-success="uploadSuccess"
     :before-upload="beforeUpload"
-    :on-remove="handleRemove"
-    :limit="uploadLimit"
-    :show-file-list="uploadControls.show_file_list"
+    :data="data"
     :file-list="fileList"
-    :list-type="listType">
+    :http-request="uploadFile"
+    :limit="uploadLimit"
+    :list-type="listType"
+    :name="data.name || 'file'"
+    :on-remove="handleRemove"
+    :on-success="uploadSuccess"
+    :show-file-list="uploadControls.show_file_list">
     <!--todo:用户图像上传-->
     <el-avatar
       v-if="uploadControls.button_type === 'avatar'"
-      :src="avatarImage.avatar_url"
       :alt="avatarImage.username"
-      fit="cover"
-      :size="avatarImage.size">
+      :size="avatarImage.size"
+      :src="avatarImage.avatar_url"
+      fit="cover">
     </el-avatar>
     <!--todo:按钮形式上传-->
-    <el-button size="small" type="primary" v-if="uploadControls.button_type === 'picture'">点击上传</el-button>
+    <el-button v-if="uploadControls.button_type === 'picture'" size="small" type="primary">点击上传</el-button>
     <!--todo:卡片形式上传-->
-    <i class="el-icon-plus" v-if="uploadControls.button_type === 'card'"></i>
+    <i v-if="uploadControls.button_type === 'card'" class="el-icon-plus"></i>
     <!--todo:上传提示文案-->
     <span
       v-if="uploadControls.show_tips"
@@ -34,7 +34,7 @@
     </span>
   </el-upload>
   <!--todo:点击上传-->
-  <el-button v-if="!autoUpload" style="margin-top: 20px" plain type="primary" size="medium" @click="submitUpload">
+  <el-button v-if="!autoUpload" plain size="medium" style="margin-top: 20px" type="primary" @click="submitUpload">
     上传到服务器
   </el-button>
 </template>
@@ -139,7 +139,7 @@ export default {
       let param = new FormData();
       param.append('file', file.file);
       param.append('filename', file.file.name);
-      param.append('token', this.$store.state.token || window.localStorage.getItem('token'));
+      param.append('token', this.$store.state.baseLayout.token);
       param.append('round_name', this.data.round_name || false);
       param.append('file_type', 'image');
       /* todo:名字随机时不需要传入路径 */
@@ -147,7 +147,7 @@ export default {
         param.append('path', this.data.file.path.replace(this.data.file.filename, ''));
       }
       /* todo:添加请求头 */
-      let config = { headers: { 'Content-Type': 'multipart/form-data', 'Authorization': this.$store.state.token } };
+      let config = { headers: { 'Content-Type': 'multipart/form-data', 'Authorization': this.$store.state.baseLayout.token } };
       $http.post(file.action, param, config).then(response => {
         response.data.filename = file.filename;
         file.onSuccess(response.data);
@@ -192,7 +192,7 @@ export default {
       if (!this.imgHeight && !this.imgWidth) {
         return isJPG && isLt30KB;
       }
-      const isSize = new Promise( (resolve, reject) => {
+      const isSize = new Promise((resolve, reject) => {
         let width = this.imgWidth;
         let height = this.imgHeight;
         let _URL = window.URL || window.webkitURL;

@@ -1,5 +1,5 @@
 <template>
-  <json-viewer :value="items" :expand-depth='5' copyable boxed sort class="json-view"></json-viewer>
+  <json-viewer :expand-depth='5' :value="items" boxed class="json-view" copyable sort></json-viewer>
 </template>
 
 <script>

@@ -9,8 +9,12 @@ import urls from '../api/urls';
  * @param response
  */
 const ErrorHandler = (response) => {
-  if (!store.state.token) {
-    return router.push({ path: '/login' }).then(() => ElMessage.error(response.data.item.message));
+  if (!store.state.baseLayout.token) {
+    return router.push({ path: '/login' }).then(() => {
+      ElMessage.error(response.data.item.message);
+      store.commit('UPDATE_MUTATIONS', { error: response.data.item }, { root: true });
+      return Promise.resolve({ error: response.data.item });
+    });
   }
   router.push({ path: '/admin/result/index' }).then(() => {
     store.commit('UPDATE_MUTATIONS', { error: response.data.item }, { root: true });
@@ -31,10 +35,10 @@ const instance = axios.create({
 instance.defaults.baseURL = urls.baseURL;
 // http request 拦截器
 instance.interceptors.request.use(config => {
-  const commonURL = store.state.token ? [urls.login.loginSystem, urls.login.reportCode, urls.login.sendMail] : [urls.login.loginSystem, urls.login.reportCode, urls.login.oauthConfig, urls.login.sendMail];
+  const commonURL = store.state.baseLayout.token ? [urls.login.loginSystem, urls.login.reportCode, urls.login.sendMail] : [urls.login.loginSystem, urls.login.reportCode, urls.login.oauthConfig, urls.login.sendMail];
   if (commonURL.indexOf(config.url) === -1) {
-    config.headers.Authorization = store.state.token || window.localStorage.getItem('token');
-    config.data.token = store.state.token || window.localStorage.getItem('token');
+    config.headers.Authorization = store.state.baseLayout.token;
+    config.data.token = store.state.baseLayout.token;
   }
   return config;
 }, error => {

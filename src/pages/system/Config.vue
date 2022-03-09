@@ -4,11 +4,11 @@
       <el-form-item>
         <el-button
           v-if="Permission.auth.indexOf(savePermission) > -1"
-          type="primary"
+          icon="el-icon-plus"
           plain
           size="mini"
-          @click='addConfig'
-          icon="el-icon-plus">
+          type="primary"
+          @click='addConfig'>
           新增
         </el-button>
       </el-form-item>
@@ -18,9 +18,9 @@
     </template>
     <template #dialog>
       <SystemConfigDialog
-        :sync-visible="syncVisible"
-        :re-form="reForm"
         :form="form"
+        :re-form="reForm"
+        :sync-visible="syncVisible"
         @getConfigLists="getConfigLists">
       </SystemConfigDialog>
     </template>

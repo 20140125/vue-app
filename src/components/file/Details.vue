@@ -2,13 +2,13 @@
   <div id="dialog">
     <el-dialog
       v-model="visible.detail"
-      :title="tabModel.label || '在线编辑器'"
-      center
-      width="1550px"
-      :show-close="false"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
-      :fullscreen="fullscreen">
+      :fullscreen="fullscreen"
+      :show-close="false"
+      :title="tabModel.label || '在线编辑器'"
+      center
+      width="1550px">
       <el-row :gutter="24">
         <el-col :span="24" style="margin-top: -65px;color: white;">
           <i class="el-icon-full-screen" style="font-size: 25px" @click="fullscreen = !fullscreen"></i>
@@ -16,52 +16,52 @@
         <!--文件列表-->
         <el-col :span="6" style="margin-bottom: 20px">
           <el-input
-            placeholder="输入关键字搜索"
             v-model="filterText"
             clearable
+            placeholder="输入关键字搜索"
             style="margin-bottom: 20px"
             suffix-icon="el-icon-search"></el-input>
           <el-tree
+            ref="tree"
             :data="details"
-            icon="el-icon-edit"
+            :default-expand-all="false"
+            :filter-node-method="filterNode"
             :highlight-current="true"
+            :indent="20"
             :props="treeProps"
             accordion
-            :indent="20"
+            icon="el-icon-edit"
             node-key="name"
-            :filter-node-method="filterNode"
-            @node-click="getFileContent"
-            ref="tree"
-            :default-expand-all="false"
-            style="background-color: #272822;line-height: 20px">
+            style="background-color: #272822;line-height: 20px"
+            @node-click="getFileContent">
           </el-tree>
         </el-col>
         <!--文件列表-->
         <!--文件内容-->
         <el-col :span="18" class="details">
-          <el-form :model="form.model" ref="fileSave">
+          <el-form ref="fileSave" :model="form.model">
             <el-form-item>
               <el-tabs
-                type="border-card"
-                lazy
-                closable
                 v-model="tabModel.name"
+                closable
+                lazy
+                style="text-align: left!important;"
+                type="border-card"
                 @tab-click="goto"
-                @tab-remove="removeTab"
-                style="text-align: left!important;">
+                @tab-remove="removeTab">
                 <el-tab-pane
                   v-for="item in fileTabs"
-                  :label="item.label"
                   :key="item.name"
+                  :label="item.label"
                   :name="item.name">
                 </el-tab-pane>
                 <el-card shadow="always">
                   <codemirror
-                    @change="updateContent"
                     ref="edit"
-                    :value="tabModel.content"
                     :options="options"
-                    style="line-height: 20px">
+                    :value="tabModel.content"
+                    style="line-height: 20px"
+                    @change="updateContent">
                   </codemirror>
                 </el-card>
               </el-tabs>
@@ -72,8 +72,8 @@
               re-form="fileSave"
               @closeDialog="$emit('closeDialog')">
             </SubmitButton>
-            <el-main style="text-align: center" v-else>
-              <el-button type="default" size="medium" @click="$emit('closeDialog')" plain>取消</el-button>
+            <el-main v-else style="text-align: center">
+              <el-button plain size="medium" type="default" @click="$emit('closeDialog')">取消</el-button>
             </el-main>
           </el-form>
         </el-col>
@@ -216,7 +216,7 @@ export default {
      * TODO:设置编辑器的mode
      * @param ext
      */
-    setOptionsMode (ext) {
+    setOptionsMode(ext) {
       switch (ext.toLowerCase()) {
         case 'xml':
           this.options.mode = this.mode.xml;

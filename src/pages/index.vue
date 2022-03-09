@@ -1,12 +1,12 @@
 <template>
   <el-row :gutter="24">
     <el-col :span="chartsNum">
-      <el-card shadow="hover" :style="chartsStyle">
+      <el-card :style="chartsStyle" shadow="hover">
         <Charts
-          chartsId="charts"
           :legend-data="['授权用户', '站内通知', '系统日志']"
+          :series-data="seriesData"
           :x-axis-data="xAxisData"
-          :series-data="seriesData">
+          chartsId="charts">
         </Charts>
       </el-card>
       <el-card shadow="hover" style="margin-top:35px">

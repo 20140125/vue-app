@@ -1,29 +1,29 @@
 <template>
-  <el-skeleton animated :loading="loading">
+  <el-skeleton :loading="loading" animated>
     <template #template>
       <el-skeleton-item
         v-for="item in 5"
         :key="item"
         :style="`width: ${(item + 1) * Math.random() * 100 | 0}%`"
-        variant="text" class="template">
+        class="template" variant="text">
       </el-skeleton-item>
     </template>
     <template #default>
       <el-menu
-        unique-opened background-color="#393d49"
+        :active-text-color="activeColor" :collapse="isCollapse"
+        background-color="#393d49"
         text-color="#fff"
-        :active-text-color="activeColor"
-        :collapse="isCollapse">
+        unique-opened>
         <el-submenu v-for="(menu,index) in menuLists" :key="index" :index="menu.id.toString()">
           <template #title>
             <i class="el-icon-monitor"></i>
             <span v-html="menu.name"></span>
           </template>
           <el-menu-item
-            :index="child.id.toString()"
             v-for="(child,index) in menu.__children"
-            @click="goto(child)"
-            :key="index">
+            :key="index"
+            :index="child.id.toString()"
+            @click="goto(child)">
             <template #title>
               <i class="el-icon-s-home"></i>
               <span v-html="child.name"></span>
@@ -52,7 +52,7 @@ export default {
   },
   mounted() {
     this.$nextTick(async () => {
-      if (this.$store.state.token) {
+      if (this.$store.state.baseLayout.token) {
         await this.$store.dispatch('home/getMenu');
         setTimeout(() => {
           this.loading = false;

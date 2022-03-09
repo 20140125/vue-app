@@ -1,11 +1,11 @@
 <template>
-  <el-tabs type="border-card" closable lazy v-model="tabModel.value" @tab-click="goto" @tab-remove="removeTabs">
+  <el-tabs v-model="tabModel.value" closable lazy type="border-card" @tab-click="goto" @tab-remove="removeTabs">
     <el-tab-pane
       v-for="item in authTabs"
-      :tab="item"
-      :label="item.label"
       :key="item.value"
-      :name="item.value">
+      :label="item.label"
+      :name="item.value"
+      :tab="item">
     </el-tab-pane>
     <el-card shadow="always">
       <router-view></router-view>
@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import func from "../../utils/func";
+import func from '../../utils/func';
 
 export default {
   name: 'Content',
@@ -46,7 +46,7 @@ export default {
      * @return {Promise<void>}
      */
     async removeTabs(item) {
-      await func.removeTabs(item)
+      await func.removeTabs(item);
     }
   }
 };

@@ -7,7 +7,7 @@
       direction="vertical"
       indicator-position="none">
       <el-carousel-item v-for="(item,index) in pushMessage" :key="index">
-        <el-alert type="success" show-icon :title="item.message" effect="light"></el-alert>
+        <el-alert :title="item.message" effect="light" show-icon type="success"></el-alert>
       </el-carousel-item>
     </el-carousel>
   </div>

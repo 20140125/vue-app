@@ -1,35 +1,35 @@
 <template>
   <div id="chmod">
     <el-dialog
-      width="500px"
       v-model="visible"
-      :title="`设置权限[${file.filename}]`"
-      :show-close="false"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
+      :show-close="false"
+      :title="`设置权限[${file.filename}]`"
+      width="500px"
       @close="$emit('getFileLists')">
-      <el-form label-width="80px" :model="form" ref="fileChmod" :rules="rules" label-position="left">
+      <el-form ref="fileChmod" :model="form" :rules="rules" label-position="left" label-width="80px">
         <el-form-item label="权限值：" prop="model.auth">
           <el-input
-            placeholder="请输入内容"
+            v-model.number="form.model.auth"
             maxlength="3"
-            @change="setChmod(form.model.auth)"
-            v-model.number="form.model.auth">
+            placeholder="请输入内容"
+            @change="setChmod(form.model.auth)">
           </el-input>
         </el-form-item>
-        <el-form-item label="所有者：" class="is-required">
+        <el-form-item class="is-required" label="所有者：">
           <el-checkbox-group v-model="form.model.all" @change="chmodChange('all')">
-            <el-checkbox border size="small" v-for="item in chmodAttr" :label="item.value" :key="item.id"></el-checkbox>
+            <el-checkbox v-for="item in chmodAttr" :key="item.id" :label="item.value" border size="small"></el-checkbox>
           </el-checkbox-group>
         </el-form-item>
-        <el-form-item label="用户组：" class="is-required">
+        <el-form-item class="is-required" label="用户组：">
           <el-checkbox-group v-model="form.model.user" @change="chmodChange('user')">
-            <el-checkbox border size="small" v-for="item in chmodAttr" :label="item.value" :key="item.id"></el-checkbox>
+            <el-checkbox v-for="item in chmodAttr" :key="item.id" :label="item.value" border size="small"></el-checkbox>
           </el-checkbox-group>
         </el-form-item>
-        <el-form-item label="公共：" class="is-required">
+        <el-form-item class="is-required" label="公共：">
           <el-checkbox-group v-model="form.model.common" @change="chmodChange('common')">
-            <el-checkbox border size="small" v-for="item in chmodAttr" :label="item.value" :key="item.id"></el-checkbox>
+            <el-checkbox v-for="item in chmodAttr" :key="item.id" :label="item.value" border size="small"></el-checkbox>
           </el-checkbox-group>
         </el-form-item>
       </el-form>

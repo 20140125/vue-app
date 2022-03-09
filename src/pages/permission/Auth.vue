@@ -4,10 +4,10 @@
       <el-form-item>
         <el-button
           v-if="Permission.auth.indexOf(savePermission) > -1"
-          plain
-          type="primary"
-          size="mini"
           icon="el-icon-plus"
+          plain
+          size="mini"
+          type="primary"
           @click="addAuth">
           添加
         </el-button>
@@ -24,8 +24,8 @@
     <!--权限修改-->
     <template #dialog>
       <AuthDialog
-        :form="form"
         :auth-lists="authLists"
+        :form="form"
         :reForm="reForm"
         :sync-visible="syncVisible"
         @getAuthLists="getAuthLists">

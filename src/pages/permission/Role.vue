@@ -3,12 +3,12 @@
     <template #header>
       <el-form-item>
         <el-button
-          type="primary"
           v-if="Permission.auth.indexOf(savePermission) > -1"
+          icon="el-icon-plus"
           plain
           size="mini"
-          @click='addRoles'
-          icon="el-icon-plus">
+          type="primary"
+          @click='addRoles'>
           新增
         </el-button>
       </el-form-item>
@@ -18,10 +18,10 @@
     </template>
     <template #dialog>
       <RoleDialog
-        :sync-visible="syncVisible"
+        :authAttr="authAttr"
         :form="form"
         :reForm="reForm"
-        :authAttr="authAttr"
+        :sync-visible="syncVisible"
         @getRoleLists="getRoleLists">
       </RoleDialog>
     </template>

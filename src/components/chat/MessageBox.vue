@@ -4,7 +4,7 @@
       <div ref="message" class="messageLists">
         <div v-for="(item, index) in messageLists" :key="index">
           <div class="userinfo">
-            <el-avatar class="client-img" :src="item.client_img" :size="30"></el-avatar>
+            <el-avatar :size="30" :src="item.client_img" class="client-img"></el-avatar>
             <span class="from-client-name" v-html="item.from_client_name"></span>
             <span class="message-time" v-html="item.time"></span>
           </div>
@@ -15,29 +15,29 @@
     <div class="sendMessage">
       <Emotion @clickEmotion="clickEmotion"></Emotion>
       <div>
-        <el-tooltip effect="dark" content="发送表情" placement="top-start">
-          <i @click="showEmotion = !showEmotion" class="el-icon-picture-outline-round icon"></i>
+        <el-tooltip content="发送表情" effect="dark" placement="top-start">
+          <i class="el-icon-picture-outline-round icon" @click="showEmotion = !showEmotion"></i>
         </el-tooltip>
         <el-upload
           :action="uploadFile"
-          :data="uploadData"
-          accept="image/jpeg, image/jpg, image/png, image/gif, audio/mp4, video/mp4"
-          :headers="headers"
-          :show-file-list="false"
-          :on-success="uploadSuccess"
           :before-upload="beforeUpload"
+          :data="uploadData"
+          :headers="headers"
+          :on-success="uploadSuccess"
+          :show-file-list="false"
+          accept="image/jpeg, image/jpg, image/png, image/gif, audio/mp4, video/mp4"
           style="float: left">
-          <el-tooltip effect="dark" content="发送文件和图片" placement="top-start">
-            <i @click="showEmotion = false" class="el-icon-picture-outline icon"></i>
+          <el-tooltip content="发送文件和图片" effect="dark" placement="top-start">
+            <i class="el-icon-picture-outline icon" @click="showEmotion = false"></i>
           </el-tooltip>
         </el-upload>
       </div>
       <!--文本输入框-->
-      <div contentEditable="true" ref="message" class="input-content"></div>
+      <div ref="message" class="input-content" contentEditable="true"></div>
       <!--文本输入框-->
       <div class="input-button">
-        <el-tooltip effect="dark" content="Shift + Enter 快捷发送" placement="top-start">
-          <el-button type="primary" :disabled="!receiveName" plain size="mini" @click="sendMessage">发送(S)</el-button>
+        <el-tooltip content="Shift + Enter 快捷发送" effect="dark" placement="top-start">
+          <el-button :disabled="!receiveName" plain size="mini" type="primary" @click="sendMessage">发送(S)</el-button>
         </el-tooltip>
       </div>
     </div>

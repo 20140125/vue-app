@@ -2,7 +2,7 @@
   <BaseLayout :loading="loading" :pagination="pagination">
     <template #header>
       <el-form-item>
-        <el-select v-model="pagination.state" placeholder="请选择推送状态" @change="searchPush" clearable>
+        <el-select v-model="pagination.state" clearable placeholder="请选择推送状态" @change="searchPush">
           <el-option
             v-for="(item, index) in pushState"
             :key="index"
@@ -12,7 +12,7 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-select v-model.number="pagination.status" placeholder="实时推送" @change="searchPush" clearable>
+        <el-select v-model.number="pagination.status" clearable placeholder="实时推送" @change="searchPush">
           <el-option
             v-for="(item, index) in pushStatus"
             :key="index"
@@ -22,30 +22,30 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-input placeholder="请输入接收者的名称" v-model="pagination.username" clearable></el-input>
+        <el-input v-model="pagination.username" clearable placeholder="请输入接收者的名称"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button icon="el-icon-search" @click="searchPush" plain type="primary">检索</el-button>
+        <el-button icon="el-icon-search" plain type="primary" @click="searchPush">检索</el-button>
       </el-form-item>
       <el-form-item>
         <el-button
           v-if="Permission.auth.indexOf(savePermission) > -1"
-          type="primary"
+          icon="el-icon-plus"
           plain
-          @click='addPush'
-          icon="el-icon-plus">
+          type="primary"
+          @click='addPush'>
           新增
         </el-button>
       </el-form-item>
     </template>
     <template #body>
-      <PushLists :push-lists="pushLists" @runPusher="runPusher" ref="pushLists"></PushLists>
+      <PushLists ref="pushLists" :push-lists="pushLists" @runPusher="runPusher"></PushLists>
     </template>
     <template #dialog>
       <PushDialog
-        :sync-visible="syncVisible"
-        :re-form="reForm"
         :form="form"
+        :re-form="reForm"
+        :sync-visible="syncVisible"
         :user-lists="userLists"
         @getPushLists="getPushLists">
       </PushDialog>

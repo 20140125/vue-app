@@ -1,11 +1,11 @@
 <template>
   <BaseLayout>
     <template #body>
-      <el-tabs type="card" v-model="activeName">
-        <el-tab-pane name="getAddress" label="获取地址">
+      <el-tabs v-model="activeName" type="card">
+        <el-tab-pane label="获取地址" name="getAddress">
           <GetAddress></GetAddress>
         </el-tab-pane>
-        <el-tab-pane name="getAreaWeather" label="获取天气">
+        <el-tab-pane label="获取天气" name="getAreaWeather">
           <GetWeather></GetWeather>
         </el-tab-pane>
       </el-tabs>

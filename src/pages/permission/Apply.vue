@@ -4,11 +4,11 @@
       <el-form-item>
         <el-button
           v-if="Permission.auth.indexOf(savePermission) > -1"
-          type="primary"
+          icon="el-icon-plus"
           plain
           size="mini"
-          @click='permissionApply'
-          icon="el-icon-plus">
+          type="primary"
+          @click='permissionApply'>
           权限申请
         </el-button>
       </el-form-item>
@@ -16,16 +16,16 @@
     <template #body>
       <PermissionLists
         :permission-lists="permissionLists"
-        @permissionUpdate="permissionUpdate"
-        @getPermissionApply="getPermissionApply">
+        @getPermissionApply="getPermissionApply"
+        @permissionUpdate="permissionUpdate">
       </PermissionLists>
     </template>
     <template #dialog>
       <PermissionDialog
         :form="form"
-        :syncVisible="syncVisible"
-        :reForm="reForm"
         :permissionAttr="permissionAttr"
+        :reForm="reForm"
+        :syncVisible="syncVisible"
         @getPermissionApply="getPermissionApply"
         @getUserAuth="getUserAuth">
       </PermissionDialog>

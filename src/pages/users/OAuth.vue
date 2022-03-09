@@ -2,20 +2,20 @@
   <BaseLayout :loading="loading" :pagination="pagination">
     <template #header>
       <el-form-item>
-        <el-input placeholder="请输入用户名" v-model="pagination.username" clearable></el-input>
+        <el-input v-model="pagination.username" clearable placeholder="请输入用户名"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button icon="el-icon-search" @click="searchOauth" plain type="primary">检索</el-button>
+        <el-button icon="el-icon-search" plain type="primary" @click="searchOauth">检索</el-button>
       </el-form-item>
     </template>
     <template #body>
-      <OAuthLists :oAuthLists="oAuthLists" ref="oAuthLists" @bindEmail="bindEmail"></OAuthLists>
+      <OAuthLists ref="oAuthLists" :oAuthLists="oAuthLists" @bindEmail="bindEmail"></OAuthLists>
     </template>
     <template #dialog>
       <OAuthDialog
-        :sync-visible="syncVisible"
-        :re-form="reForm"
         :form="form"
+        :re-form="reForm"
+        :sync-visible="syncVisible"
         @getOAuthLists="getOAuthLists">
       </OAuthDialog>
     </template>

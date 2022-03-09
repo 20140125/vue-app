@@ -33,8 +33,6 @@ export const actions = {
           userInfo: (((result || {}).data || {}).item || {}).lists || {},
           isAuthorized: true
         });
-        window.localStorage.setItem('token', ((((result || {}).data || {}).item || {}).lists || {}).remember_token || '');
-        window.localStorage.setItem('RTX', ((((result || {}).data || {}).item || {}).lists || {}).username || 'tourist');
         resolve(result);
       }).catch(error => {
         commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
@@ -45,19 +43,25 @@ export const actions = {
   /**
    * todo:登录系统
    * @param commit
+   * @param state
    * @param payload
    * @return {Promise<void>}
    */
-  async loginSYS({ commit }, payload) {
+  async loginSYS({ commit, state }, payload) {
     return new Promise((resolve, reject) => {
       requestMethods.commonMethods(URLS.login.loginSystem, payload).then(result => {
-        commit('UPDATE_MUTATIONS', { userInfo: (((result || {}).data || {}).item || {}).lists || {}, isAuthorized: true });
-        window.localStorage.setItem('token', ((((result || {}).data || {}).item || {}).lists || {}).remember_token || '');
-        window.localStorage.setItem('RTX', ((((result || {}).data || {}).item || {}).lists || {}).username || 'tourist');
-        router.push({ path: '/admin/home/index' });
-        setTimeout(() => {
-          window.location.reload();
-        }, 100);
+        commit('UPDATE_MUTATIONS', {
+          userInfo: (((result || {}).data || {}).item || {}).lists || {},
+          isAuthorized: true
+        });
+        if (Object.keys(state.userInfo).length > 0) {
+          window.localStorage.setItem('token', state.userInfo.remember_token || '');
+          window.localStorage.setItem('RTX', state.userInfo.username || 'tourist');
+          router.push({ path: '/admin/home/index' });
+          setTimeout(() => {
+            window.location.reload();
+          }, 100);
+        }
         resolve(result);
       }).catch(error => {
         commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
@@ -75,7 +79,7 @@ export const actions = {
     return new Promise((resolve, reject) => {
       requestMethods.commonMethods(URLS.login.logoutSystem, payload).then(result => {
         commit('UPDATE_MUTATIONS', { userInfo: {}, isAuthorized: false });
-        commit('UPDATE_MUTATIONS', { token: '' }, { root: true });
+        commit('UPDATE_MUTATIONS', { baseLayout: { token: '', username: 'tourist' } }, { root: true });
         window.localStorage.removeItem('token');
         window.localStorage.removeItem('RTX');
         router.push({ path: '/login' });

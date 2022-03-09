@@ -1,9 +1,11 @@
 <template>
   <el-main>
-    <el-form :model="form" ref="mail" :rules="rules">
+    <el-form ref="mail" :model="form" :rules="rules">
       <el-form-item prop="email">
         <el-input v-model.trim="form.email" clearable placeholder="请输入邮箱账号" show-icon>
-          <template #prepend><i class="el-icon-s-custom"/></template>
+          <template #prepend>
+            <i class="el-icon-s-custom"></i>
+          </template>
         </el-input>
       </el-form-item>
       <el-form-item prop="verify_code">
@@ -15,13 +17,13 @@
           placeholder="请输入邮箱验证码"
           show-icon>
           <template #append>
-            <el-button :disabled="!form.email" type="info" @click="getMailCode" plain>{{ codeValue }}</el-button>
+            <el-button :disabled="!form.email" plain type="info" @click="getMailCode">{{ codeValue }}</el-button>
           </template>
         </el-input>
       </el-form-item>
     </el-form>
     <el-footer style="text-align: center;height: 30px !important">
-      <el-button type="primary" @click="loginSYS('mail')" plain>登录系统</el-button>
+      <el-button plain type="primary" @click="loginSYS('mail')">登录系统</el-button>
     </el-footer>
   </el-main>
 </template>

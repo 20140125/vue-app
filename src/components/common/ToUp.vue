@@ -1,5 +1,5 @@
 <template>
-  <el-button icon="el-icon-caret-top" id="toUp" v-if="ToUpBtn" @click="toUp" round size="mini" type="primary">
+  <el-button v-if="ToUpBtn" id="toUp" icon="el-icon-caret-top" round size="mini" type="primary" @click="toUp">
     {{ buttonValue }}
   </el-button>
 </template>

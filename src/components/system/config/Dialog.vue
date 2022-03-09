@@ -2,22 +2,22 @@
   <div id="system">
     <el-dialog
       v-model="visible"
-      :title="reForm === 'created' ? '添加系统配置' : '修改系统'"
-      :show-close="false"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
+      :show-close="false"
+      :title="reForm === 'created' ? '添加系统配置' : '修改系统'"
       center>
-      <el-form :model="localForm" :ref="reForm" label-position="left" label-width="100px" :rules="rules">
+      <el-form :ref="reForm" :model="localForm" :rules="rules" label-position="left" label-width="100px">
         <el-form-item label="配置名称：" prop="name">
-          <el-input placeholder="请输入" v-model.trim="localForm.name"></el-input>
+          <el-input v-model.trim="localForm.name" placeholder="请输入"></el-input>
         </el-form-item>
         <el-form-item label="配置状态：" prop="status">
           <el-switch
             v-model.number="localForm.status"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
             :active-value="1"
-            :inactive-value="2"></el-switch>
+            :inactive-value="2"
+            active-color="#13ce66"
+            inactive-color="#ff4949"></el-switch>
         </el-form-item>
         <el-form-item prop="children">
           <div v-for="(item, index) in localForm.children" :key="index" class="config">
@@ -33,25 +33,25 @@
                 <div class="el-form-item">
                   <label class="el-form-item__label">KEY：</label>
                   <div class="el-form-item__content">
-                    <el-input placeholder="请输入" v-model.trim="item.name"></el-input>
+                    <el-input v-model.trim="item.name" placeholder="请输入"></el-input>
                   </div>
                 </div>
                 <div class="el-form-item">
                   <label class="el-form-item__label">VALUE：</label>
                   <div class="el-form-item__content">
                     <el-input
-                      placeholder="请输入对应的VALUE，用逗号间隔"
-                      type="textarea"
-                      resize="none"
+                      v-model.trim="item.value"
                       :autosize="{ minRows: 4}"
-                      v-model.trim="item.value">
+                      placeholder="请输入对应的VALUE，用逗号间隔"
+                      resize="none"
+                      type="textarea">
                     </el-input>
                   </div>
                 </div>
                 <div class="el-form-item">
                   <label class="el-form-item__label">ID：</label>
                   <div class="el-form-item__content">
-                    <el-input placeholder="请输入" v-model.number="item.id"></el-input>
+                    <el-input v-model.number="item.id" placeholder="请输入"></el-input>
                   </div>
                 </div>
                 <div class="el-form-item">
@@ -59,10 +59,10 @@
                   <div class="el-form-item__content">
                     <el-switch
                       v-model.number="item.status"
-                      active-color="#13ce66"
-                      inactive-color="#ff4949"
                       :active-value="1"
-                      :inactive-value="2">
+                      :inactive-value="2"
+                      active-color="#13ce66"
+                      inactive-color="#ff4949">
                     </el-switch>
                   </div>
                 </div>
@@ -71,10 +71,10 @@
                   <div class="el-form-item__content">
                     <el-button
                       v-if="localForm.children.length > 1"
-                      type="danger"
-                      size="mini"
-                      plain
                       icon="el-icon-delete"
+                      plain
+                      size="mini"
+                      type="danger"
                       @click="deleteChildren(localForm.children, index)">
                       移除
                     </el-button>
@@ -84,7 +84,7 @@
             </div>
           </div>
         </el-form-item>
-        <el-button type="primary" plain size="mini" icon="el-icon-plus" @click="addChildren(localForm.children)">
+        <el-button icon="el-icon-plus" plain size="mini" type="primary" @click="addChildren(localForm.children)">
           新增
         </el-button>
         <SubmitButton

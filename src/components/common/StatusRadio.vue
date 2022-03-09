@@ -1,11 +1,11 @@
 <template>
   <el-button
     :icon="attr['icon'][model.status]"
+    :type="attr['type'][model.status]"
     circle
     plain
-    :type="attr['type'][model.status]"
-    @click="changeStatus"
-    size="medium">
+    size="medium"
+    @click="changeStatus">
   </el-button>
 </template>
 

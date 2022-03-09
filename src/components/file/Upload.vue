@@ -2,18 +2,18 @@
   <div id="upload">
     <el-dialog
       v-model="visible"
-      :title="`文件上传`"
-      center
       :close-on-click-modal="false"
       :close-on-press-escape="false"
+      :title="`文件上传`"
+      center
       @close="$emit('closeDialog')">
       <CommonUpload
-        list-type='picture-card'
+        :auto-upload="false"
+        :data="{ name: 'file', file: file, round_name: false }"
         :img-height="0"
         :img-width="0"
-        :auto-upload="false"
         :upload-controls="{ button_type: 'picture', show_tips: false, show_file_list: true }"
-        :data="{ name: 'file', file: file, round_name: false }">
+        list-type='picture-card'>
       </CommonUpload>
     </el-dialog>
   </div>

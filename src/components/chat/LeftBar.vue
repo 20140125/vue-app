@@ -1,13 +1,13 @@
 <template>
   <div id="left-bar">
     <div class="chat-user">
-      <el-menu background-color="#545c64" text-color="#fff" active-text-color="#ff69b4" style="height: 575px">
+      <el-menu active-text-color="#ff69b4" background-color="#545c64" style="height: 575px" text-color="#fff">
         <el-menu-item
-          :users="user"
           v-for="(user,index) in chatUsers"
-          @click="getUser(user)"
           :key="index"
-          :index="index.toString()">
+          :index="index.toString()"
+          :users="user"
+          @click="getUser(user)">
           <el-avatar :size="35" :src="user.client_img" class="img"></el-avatar>
           <template #title>
             <span
@@ -16,11 +16,11 @@
             </span>
           </template>
           <!--未读消息数-->
-          <el-badge v-if="user.total" type="danger" :value="user.total"></el-badge>
+          <el-badge v-if="user.total" :value="user.total" type="danger"></el-badge>
           <!--在线-->
-          <el-badge v-else-if="user.online" type="success" is-dot></el-badge>
+          <el-badge v-else-if="user.online" is-dot type="success"></el-badge>
           <!--离线-->
-          <el-badge v-else-if="!user.online" type="info" is-dot></el-badge>
+          <el-badge v-else-if="!user.online" is-dot type="info"></el-badge>
         </el-menu-item>
       </el-menu>
     </div>

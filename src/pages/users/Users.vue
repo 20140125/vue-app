@@ -2,21 +2,21 @@
   <BaseLayout :loading="loading" :pagination="pagination">
     <template #header>
       <el-form-item>
-        <el-input placeholder="请输入用户名" v-model="pagination.username" clearable></el-input>
+        <el-input v-model="pagination.username" clearable placeholder="请输入用户名"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button icon="el-icon-search" @click="searchUsers" plain type="primary">检索</el-button>
+        <el-button icon="el-icon-search" plain type="primary" @click="searchUsers">检索</el-button>
       </el-form-item>
     </template>
     <template #body>
-      <UsersLists :users-lists="usersLists" @updatedUsers="updatedUsers" ref="usersLists"></UsersLists>
+      <UsersLists ref="usersLists" :users-lists="usersLists" @updatedUsers="updatedUsers"></UsersLists>
     </template>
     <template #dialog>
       <UsersDialog
+        :form="form"
+        :re-form="reForm"
         :sync-visible="syncVisible"
         :users-attr="usersAttr"
-        :re-form="reForm"
-        :form="form"
         @getUsersLists="getUsersLists">
       </UsersDialog>
     </template>

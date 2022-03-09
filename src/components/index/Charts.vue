@@ -22,7 +22,7 @@ export default {
   },
   watch: {
     seriesData() {
-      this.$nextTick( () => {
+      this.$nextTick(() => {
         this.getCharts(this.chartsId);
       });
       let charts = echarts.init(document.getElementById(this.chartsId));

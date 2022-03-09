@@ -1,8 +1,8 @@
 <template>
   <div id="json">
-    <el-form :model="localForm" :ref="reForm" label-position="left" label-width="100px" :rules="rules">
+    <el-form :ref="reForm" :model="localForm" :rules="rules" label-position="left" label-width="100px">
       <el-form-item label="接口名称：" prop="api_id">
-        <el-select v-model.number="localForm.api_id" placeholder="接口名称" disabled>
+        <el-select v-model.number="localForm.api_id" disabled placeholder="接口名称">
           <el-option
             v-for="(item,index) in categoryLists"
             :key="index"
@@ -27,13 +27,13 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="请求字段：" prop="request" class="response">
+      <el-form-item class="response" label="请求字段：" prop="request">
         <el-button
-          type="primary"
-          plain
           icon="el-icon-circle-plus-outline"
-          @click="requestAdd()"
-          size="medium">
+          plain
+          size="medium"
+          type="primary"
+          @click="requestAdd()">
         </el-button>
         <div v-for="(request, index) in localForm.request" :key="index">
           <el-input v-model.trim="request.name" placeholder="参数名"></el-input>
@@ -46,28 +46,28 @@
             </el-option>
           </el-select>
           <el-select v-model.trim="request.required" placeholder="是否必须">
-            <el-option label="是" :value="1"></el-option>
-            <el-option label="否" :value="0"></el-option>
+            <el-option :value="1" label="是"></el-option>
+            <el-option :value="0" label="否"></el-option>
           </el-select>
           <el-input v-model.trim="request.desc" auto-complete="true" placeholder="参数描述"></el-input>
           <el-input v-model.trim="request.val" auto-complete="true" placeholder="参数值"></el-input>
           <el-button
-            type="danger"
             v-if="localForm.request.length > 1"
-            plain
             icon="el-icon-delete"
-            @click="requestRemove(localForm.request, index)"
-            size="medium">
+            plain
+            size="medium"
+            type="danger"
+            @click="requestRemove(localForm.request, index)">
           </el-button>
         </div>
       </el-form-item>
-      <el-form-item label="返回字段：" prop="response" class="response">
+      <el-form-item class="response" label="返回字段：" prop="response">
         <el-button
-          type="primary"
-          plain
           icon="el-icon-circle-plus-outline"
-          @click="responseAdd()"
-          size="medium">
+          plain
+          size="medium"
+          type="primary"
+          @click="responseAdd()">
         </el-button>
         <div v-for="(response, index) in localForm.response" :key="index">
           <el-input v-model.trim="response.name" placeholder="参数名"></el-input>
@@ -81,23 +81,23 @@
           </el-select>
           <el-input v-model.trim="response.desc" placeholder="参数描述"></el-input>
           <el-button
-            type="danger"
             v-if="localForm.response.length > 1"
             icon="el-icon-delete"
             plain
-            @click="responseRemove(localForm.response, index)"
-            size="medium">
+            size="medium"
+            type="danger"
+            @click="responseRemove(localForm.response, index)">
           </el-button>
         </div>
       </el-form-item>
       <el-form-item label="备注：" prop="remark">
         <el-input
           v-model.trim="localForm.remark"
-          maxlength="500"
-          show-word-limit
-          resize="none"
           :autosize="{ minRows: 4}"
-          placeholder="备注" type="textarea">
+          maxlength="500"
+          placeholder="备注"
+          resize="none"
+          show-word-limit type="textarea">
         </el-input>
       </el-form-item>
       <el-form-item label="接口请求：">

@@ -1,14 +1,14 @@
 <template>
   <BaseLayout :loading="loading">
     <template #body>
-      <el-row :gutter="24" id="information">
-        <el-col :xl="8" :lg="8">
+      <el-row id="information" :gutter="24">
+        <el-col :lg="8" :xl="8">
           <el-tabs type="border-card">
             <el-tab-pane label="个人简介"></el-tab-pane>
             <el-card shadow="hover">
               <el-form>
                 <el-form-item style="text-align: center">
-                  <el-avatar :src="userInfo.avatar_url" fit="fill" :size="100" :alt="userInfo.username"></el-avatar>
+                  <el-avatar :alt="userInfo.username" :size="100" :src="userInfo.avatar_url" fit="fill"></el-avatar>
                 </el-form-item>
                 <el-form-item>
                   <i class="el-icon-user-solid"></i>
@@ -32,96 +32,96 @@
                 </el-form-item>
                 <el-form-item class="tags">
                   <i class="el-icon-s-claim"></i>
-                  <el-tag :key="tag" v-for="tag in userCenter.tags" effect="dark" type="success">{{ tag }}</el-tag>
+                  <el-tag v-for="tag in userCenter.tags" :key="tag" effect="dark" type="success">{{ tag }}</el-tag>
                 </el-form-item>
               </el-form>
             </el-card>
           </el-tabs>
         </el-col>
-        <el-col :xl="16" :lg="16">
+        <el-col :lg="16" :xl="16">
           <el-tabs type="border-card">
             <el-tab-pane label="信息展示"></el-tab-pane>
             <el-card shadow="hover">
-              <el-form :model="userCenter" label-width="100px" style="margin-left: 20px" label-position="left"
-                       ref="center">
-                <el-form-item label="头像：" class="is-required avatar-url">
-                  <el-avatar :src="userInfo.avatar_url" fit="fill" :size="100" :alt="userInfo.username"></el-avatar>
+              <el-form ref="center" :model="userCenter" label-position="left" label-width="100px"
+                       style="margin-left: 20px">
+                <el-form-item class="is-required avatar-url" label="头像：">
+                  <el-avatar :alt="userInfo.username" :size="100" :src="userInfo.avatar_url" fit="fill"></el-avatar>
                 </el-form-item>
-                <el-form-item label="用户名：" class="is-required">
+                <el-form-item class="is-required" label="用户名：">
                   <span v-html="userInfo.username"></span>
                 </el-form-item>
-                <el-form-item label="居住地址：" class="is-required">
-                  <el-cascader :props="props" :options="options" filterable v-model="userCenter.local"></el-cascader>
+                <el-form-item class="is-required" label="居住地址：">
+                  <el-cascader v-model="userCenter.local" :options="options" :props="props" filterable></el-cascader>
                 </el-form-item>
-                <el-form-item label="所在地：" class="is-required">
+                <el-form-item class="is-required" label="所在地：">
                   <el-cascader
-                    :props="props"
+                    v-model="userCenter.ip_address"
                     :options="options"
-                    filterable
-                    v-model="userCenter.ip_address">
+                    :props="props"
+                    filterable>
                   </el-cascader>
                 </el-form-item>
-                <el-form-item label="座右铭：" class="is-required">
+                <el-form-item class="is-required" label="座右铭：">
                   <el-input
-                    type="textarea"
+                    v-model="userCenter.desc"
+                    maxlength="32"
+                    placeholder="这个人很懒，什么也没有留下"
                     resize="none"
                     rows="3"
                     show-word-limit
-                    maxlength="32"
-                    v-model="userCenter.desc"
-                    placeholder="这个人很懒，什么也没有留下">
+                    type="textarea">
                   </el-input>
                 </el-form-item>
-                <el-form-item label="个人标签：" class="tags is-required">
+                <el-form-item class="tags is-required" label="个人标签：">
                   <el-tag
+                    v-for="tag in userCenter.tags"
                     :key="tag"
+                    :disable-transitions="false"
+                    closable
                     effect="dark"
                     type="success"
-                    v-for="tag in userCenter.tags"
-                    closable
-                    :disable-transitions="false"
                     @close="handleClose(tag)">
                     {{ tag }}
                   </el-tag>
                   <el-input
                     v-if="inputVisible"
-                    v-model="inputValue"
                     ref="saveTagInput"
+                    v-model="inputValue"
                     size="small"
-                    @keyup.enter="handleInputConfirm"
-                    @blur="handleInputConfirm">
+                    @blur="handleInputConfirm"
+                    @keyup.enter="handleInputConfirm">
                   </el-input>
-                  <el-button type="primary" plain v-else size="small" @click="showInput"> + New Tag</el-button>
+                  <el-button v-else plain size="small" type="primary" @click="showInput"> + New Tag</el-button>
                 </el-form-item>
-                <el-form-item label="站内信息：" class="is-required">
+                <el-form-item class="is-required" label="站内信息：">
                   <el-tooltip
-                    effect="dark"
                     :content="userCenter.notice_status === 1 ? 'YES' : 'NO'"
+                    effect="dark"
                     placement="top-start">
                     <el-switch
                       v-model.number="userCenter.notice_status"
-                      active-color="#13ce66"
-                      inactive-color="#ff4949"
                       :active-value="1"
-                      :inactive-value="2">
+                      :inactive-value="2"
+                      active-color="#13ce66"
+                      inactive-color="#ff4949">
                     </el-switch>
                   </el-tooltip>
                 </el-form-item>
-                <el-form-item label="账号变更：" class="is-required">
+                <el-form-item class="is-required" label="账号变更：">
                   <el-tooltip
-                    effect="dark"
                     :content="userCenter.user_status === 1 ? 'YES' : 'NO'"
+                    effect="dark"
                     placement="top-start">
                     <el-switch
                       v-model.number="userCenter.user_status"
-                      active-color="#13ce66"
-                      inactive-color="#ff4949"
                       :active-value="1"
-                      :inactive-value="2">
+                      :inactive-value="2"
+                      active-color="#13ce66"
+                      inactive-color="#ff4949">
                     </el-switch>
                   </el-tooltip>
                 </el-form-item>
-                <SubmitButton reForm="center" :form="submitForm"></SubmitButton>
+                <SubmitButton :form="submitForm" reForm="center"></SubmitButton>
               </el-form>
             </el-card>
           </el-tabs>

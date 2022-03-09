@@ -4,10 +4,10 @@
       <el-form-item>
         <el-button
           v-if="Permission.auth.indexOf(savePermission) > -1"
+          icon="el-icon-plus"
+          plain
           size="mini"
           type="primary"
-          plain
-          icon="el-icon-plus"
           @click="addCategory">
           新增
         </el-button>
@@ -17,26 +17,26 @@
       <CategoryLists
         :categoryTree="categoryTree"
         @addCategory="addCategory"
-        @updateCategory="updateCategory"
+        @getDetails="getDetails"
         @removeCategory="removeCategory"
-        @getDetails="getDetails">
+        @updateCategory="updateCategory">
       </CategoryLists>
     </template>
     <template #dialog>
       <!--接口详情-->
       <InterfaceDetails
+        :categoryLists="categoryLists"
+        :form="form"
         :reForm="reForm"
         :syncVisible="syncVisible"
-        :form="form"
-        :categoryLists="categoryLists"
         @getInterfaceCategory="getInterfaceCategory">
       </InterfaceDetails>
       <!--接口分类-->
       <AddCategory
-        :syncVisible="addVisible"
-        :reForm="reForm"
-        :form="form"
         :categoryLists="categoryLists"
+        :form="form"
+        :reForm="reForm"
+        :syncVisible="addVisible"
         @getInterfaceCategory="getInterfaceCategory">
       </AddCategory>
     </template>

@@ -2,23 +2,23 @@
   <div>
     <el-dialog
       v-model="visible"
-      :title="reForm === 'created' ? '添加角色' : '修改角色'"
-      :show-close="false"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
+      :show-close="false"
+      :title="reForm === 'created' ? '添加角色' : '修改角色'"
       center>
-      <el-form :model="localForm" :ref="reForm" label-position="left" label-width="100px" :rules="rules">
+      <el-form :ref="reForm" :model="localForm" :rules="rules" label-position="left" label-width="100px">
         <el-form-item label="角色名称：" prop="role_name">
-          <el-input placeholder="请输入角色名称" v-model.trim="localForm.role_name"></el-input>
+          <el-input v-model.trim="localForm.role_name" placeholder="请输入角色名称"></el-input>
         </el-form-item>
         <el-form-item label="权限列表：" prop="auth_ids">
           <el-transfer
-            :titles="['所有', '拥有']"
-            :data="authMode.authLists"
-            style="text-align: left; display: inline-block"
             v-model="authMode.defaultChecked"
-            @change="handleChange"
-            filterable>
+            :data="authMode.authLists"
+            :titles="['所有', '拥有']"
+            filterable
+            style="text-align: left; display: inline-block"
+            @change="handleChange">
           </el-transfer>
         </el-form-item>
         <SubmitButton

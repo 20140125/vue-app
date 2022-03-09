@@ -2,18 +2,18 @@
   <div>
     <el-dialog
       v-model="visible"
-      title="编辑接口"
-      :show-close="false"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
-      center>
-      <el-form :model="localForm" :ref="reForm" label-position="left" label-width="100px" :rules="rules">
+      :show-close="false"
+      center
+      title="编辑接口">
+      <el-form :ref="reForm" :model="localForm" :rules="rules" label-position="left" label-width="100px">
         <el-form-item label="分类名称：" prop="name">
-          <el-input placeholder="请输入接口分类名称" v-model.trim="localForm.name"></el-input>
+          <el-input v-model.trim="localForm.name" placeholder="请输入接口分类名称"></el-input>
         </el-form-item>
         <el-form-item label="上级分类：" prop="pid">
           <el-select v-model.number="localForm.pid" placeholder="上级分类">
-            <el-option label="分类名称" :value="0" v-if="localForm.pid === 0" selected></el-option>
+            <el-option v-if="localForm.pid === 0" :value="0" label="分类名称" selected></el-option>
             <el-option
               v-for="(item,index) in categoryLists"
               :key="index"

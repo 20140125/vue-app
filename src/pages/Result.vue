@@ -6,10 +6,10 @@
           <i :class="error.code !== '200' ? 'el-icon-lock' : 'el-icon-unlock'" style="font-size: 100px"></i>
         </template>
         <template #title>
-          <i v-html="error.code" style="font-size: 30px; font-family: consolas, sans-serif"></i>
+          <i style="font-size: 30px; font-family: consolas, sans-serif" v-html="error.code"></i>
         </template>
         <template #subTitle>
-          <i v-html="error.message" style="font-size: 40px; font-family: consolas, sans-serif"></i>
+          <i style="font-size: 40px; font-family: consolas, sans-serif" v-html="error.message"></i>
         </template>
         <template #extra>
           <span style="color: #409EFF">{{ timeout }}秒后自动跳转</span>
@@ -21,7 +21,7 @@
 
 <script>
 import BaseLayout from '../components/BaseLayout';
-import func from "../utils/func";
+import func from '../utils/func';
 
 export default {
   name: 'Result',
@@ -44,7 +44,7 @@ export default {
         if (!this.timeout) {
           func.removeTabs(this.$store.state.home.tabModel.value).then(() => {
             clearInterval(timer);
-          })
+          });
         }
       }, 1000);
     });

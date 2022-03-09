@@ -2,55 +2,55 @@
   <div>
     <el-dialog
       v-model="visible"
-      title="权限申请"
-      :show-close="false"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
-      center>
-      <el-form :model="localForm" :ref="reForm" label-position="left" label-width="100px" :rules="rules">
+      :show-close="false"
+      center
+      title="权限申请">
+      <el-form :ref="reForm" :model="localForm" :rules="rules" label-position="left" label-width="100px">
         <el-form-item label="申请人：" prop="user_id">
           <el-select
-            filterable
-            v-model.number="localForm.user_id" clearable
+            v-model.number="localForm.user_id"
+            clearable filterable
             @change="$emit('getUserAuth', localForm.user_id)">
             <el-option
               v-for="(item,index) in permissionAttr.userLists"
-              :label="item.username"
               :key="index"
+              :label="item.username"
               :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="申请地址：" prop="href">
-          <el-select filterable v-model="localForm.href" :disabled="reForm === 'update'">
+          <el-select v-model="localForm.href" :disabled="reForm === 'update'" filterable>
             <el-option
               v-for="(item,index) in permissionAttr.authLists"
-              :label="setAuthName(item)"
-              clearable
               :key="index"
+              :disabled="item.disable"
+              :label="setAuthName(item)"
               :value="item.api"
-              :disabled="item.disable">
+              clearable>
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="申请时间：" prop="expires">
           <el-date-picker
             v-model="localForm.expires"
-            clearable
             :editable="false"
+            clearable
+            placeholder="选择申请时间"
             type="datetime"
-            value-format="YYYY-MM-DD HH:mm:ss"
-            placeholder="选择申请时间">
+            value-format="YYYY-MM-DD HH:mm:ss">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="申请理由：" prop="desc">
           <el-input
             v-model.trim="localForm.desc"
+            :autosize="{ minRows: 4}"
             maxlength="200"
             placeholder="请输入申请理由"
-            show-word-limit
             resize="none"
-            :autosize="{ minRows: 4}"
+            show-word-limit
             type="textarea">
           </el-input>
         </el-form-item>

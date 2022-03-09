@@ -4,11 +4,11 @@
       <el-form-item label="城市名称：">
         <el-autocomplete
           v-model="cityName"
-          style="width: 400px"
           :fetch-suggestions="querySearch"
-          @select="getWeather"
+          :placeholder="`请输入城市名称(${Permission.city})`"
           prefix-icon="el-icon-search"
-          :placeholder="`请输入城市名称(${Permission.city})`">
+          style="width: 400px"
+          @select="getWeather">
           <template #default="scope">
             <span v-html="scope.item.name"></span>
           </template>

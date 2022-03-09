@@ -1,59 +1,59 @@
 <template>
   <div id="header">
     <el-menu
-      :default-active="activeIndex"
-      mode="horizontal"
-      background-color="#393d49"
-      text-color="#fff"
       :active-text-color="activeColor"
-      @select="handleSelect"
-      :style="headerAttr.headerStyle">
+      :default-active="activeIndex"
+      :style="headerAttr.headerStyle"
+      background-color="#393d49"
+      mode="horizontal"
+      text-color="#fff"
+      @select="handleSelect">
       <el-menu-item index="1">
         <i :class="headerAttr.menuClass" style="color: #fff;font-size: 25px"></i>
       </el-menu-item>
       <el-menu-item index="2">
         <template #title>
-          <i style="color: #fff;font-size: 25px" class="el-icon-location"></i>{{ Permission.city }}
+          <i class="el-icon-location" style="color: #fff;font-size: 25px"></i>{{ Permission.city }}
         </template>
       </el-menu-item>
-      <el-submenu index="5" class="el-menu_item_right">
+      <el-submenu class="el-menu_item_right" index="5">
         <template #title>
           <el-avatar
-            :src="Permission.avatar_url"
             :alt="Permission.username"
-            referrerpolicy="no-referrer"
-            :size="40">
+            :size="40"
+            :src="Permission.avatar_url"
+            referrerpolicy="no-referrer">
           </el-avatar>
-          <span v-html="Permission.username" style="margin-left: 10px"></span>
+          <span style="margin-left: 10px" v-html="Permission.username"></span>
         </template>
         <el-menu-item index="5-1"><i class="el-icon-user-solid" style="color: #fff"></i>会员中心</el-menu-item>
         <el-menu-item index="5-2"><i class="el-icon-upload2" style="color: #fff"></i>退出系统</el-menu-item>
       </el-submenu>
-      <el-menu-item index="4" class="el-menu_item_right">
-        <el-dropdown trigger="hover" @command="readNotice" :hide-on-click="false" :show-timeout="100">
+      <el-menu-item class="el-menu_item_right" index="4">
+        <el-dropdown :hide-on-click="false" :show-timeout="100" trigger="hover" @command="readNotice">
           <el-badge :value="unread || ''">
-            <i style="color: #fff;font-size: 25px" class="el-icon-message-solid"></i>
+            <i class="el-icon-message-solid" style="color: #fff;font-size: 25px"></i>
           </el-badge>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item class="web-notice" :style="`color: ${activeColor} !important`" disabled>系统通知
+              <el-dropdown-item :style="`color: ${activeColor} !important`" class="web-notice" disabled>系统通知
               </el-dropdown-item>
               <el-dropdown-item
-                :command="item" divided v-for="(item,index) in notice"
-                :key="index"
-                :disabled="item.disabled">
-                <el-badge is-dot v-if="!item.disabled"></el-badge>
+                v-for="(item,index) in notice" :key="index" :command="item"
+                :disabled="item.disabled"
+                divided>
+                <el-badge v-if="!item.disabled" is-dot></el-badge>
                 【{{ item.title }}】 {{ item.info }}
               </el-dropdown-item>
-              <el-dropdown-item class="web-notice" :style="`color: ${activeColor} !important`" command="more">查看更多
+              <el-dropdown-item :style="`color: ${activeColor} !important`" class="web-notice" command="more">查看更多
               </el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
       </el-menu-item>
-      <el-menu-item index="3" class="el-menu_item_right">
+      <el-menu-item class="el-menu_item_right" index="3">
         <template #title>
-          <i style="color: #fff;font-size: 25px" class="el-icon-s-home"></i>
+          <i class="el-icon-s-home" style="color: #fff;font-size: 25px"></i>
         </template>
       </el-menu-item>
     </el-menu>
@@ -61,8 +61,8 @@
     <!--天气预告-->
     <AreaDialog
       :form="{ name: Permission.city, forecast: Permission.forecast }"
-      :sync-visible="visible"
-      :show-submit-button="false" @closeDialog="closeDialog">
+      :show-submit-button="false"
+      :sync-visible="visible" @closeDialog="closeDialog">
     </AreaDialog>
   </div>
 </template>

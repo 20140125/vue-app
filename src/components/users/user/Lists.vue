@@ -1,28 +1,28 @@
 <template>
   <el-table :data="usersLists">
     <el-table-column label="#ID" prop="id" width="100px"></el-table-column>
-    <el-table-column label="用户名" prop="username" width="150px" :show-tooltip-when-overflow="true"></el-table-column>
-    <el-table-column label="头像" align="center">
+    <el-table-column :show-tooltip-when-overflow="true" label="用户名" prop="username" width="150px"></el-table-column>
+    <el-table-column align="center" label="头像">
       <template #default="scope">
-        <el-avatar :src="scope.row.avatar_url" :alt="scope.row.username"></el-avatar>
+        <el-avatar :alt="scope.row.username" :src="scope.row.avatar_url"></el-avatar>
       </template>
     </el-table-column>
-    <el-table-column label="邮箱" prop="email" :show-tooltip-when-overflow="true"></el-table-column>
-    <el-table-column label="手机号" prop="phone_number" :show-tooltip-when-overflow="true"></el-table-column>
-    <el-table-column label="允许登录" align="center" width="100px">
+    <el-table-column :show-tooltip-when-overflow="true" label="邮箱" prop="email"></el-table-column>
+    <el-table-column :show-tooltip-when-overflow="true" label="手机号" prop="phone_number"></el-table-column>
+    <el-table-column align="center" label="允许登录" width="100px">
       <template #default="scope">
-        <StatusRadio :url="URL" :status-model="scope.row"></StatusRadio>
+        <StatusRadio :status-model="scope.row" :url="URL"></StatusRadio>
       </template>
     </el-table-column>
-    <el-table-column label="添加时间" prop="created_at" align="center"></el-table-column>
-    <el-table-column label="修改时间" prop="updated_at" align="center"></el-table-column>
-    <el-table-column label="操作" align="center" width="100px">
+    <el-table-column align="center" label="添加时间" prop="created_at"></el-table-column>
+    <el-table-column align="center" label="修改时间" prop="updated_at"></el-table-column>
+    <el-table-column align="center" label="操作" width="100px">
       <template #default="scope">
         <el-button
           v-if="Permission.auth.indexOf(URL) > -1"
+          icon="el-icon-edit"
           plain
           size="mini"
-          icon="el-icon-edit"
           type="primary"
           @click="$emit('updatedUsers', scope.row)">
           修改

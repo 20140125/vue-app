@@ -2,41 +2,41 @@
   <div>
     <el-dialog
       v-model="visible"
-      :title="reForm === 'created' ? '添加权限' : '修改权限'"
-      :show-close="false"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
+      :show-close="false"
+      :title="reForm === 'created' ? '添加权限' : '修改权限'"
       center>
-      <el-form :model="localForm" :ref="reForm" label-position="left" label-width="100px" :rules="rules">
+      <el-form :ref="reForm" :model="localForm" :rules="rules" label-position="left" label-width="100px">
         <el-form-item label="权限名称：" prop="name">
-          <el-input placeholder="请输入权限名称" v-model.trim="localForm.name"></el-input>
+          <el-input v-model.trim="localForm.name" placeholder="请输入权限名称"></el-input>
         </el-form-item>
         <el-form-item label="权限地址：" prop="href">
           <el-input
-            placeholder="请输入权限名称(/admin/auth/index)"
             v-model.trim="localForm.href"
-            :readonly="reForm === 'updated'">
+            :readonly="reForm === 'updated'"
+            placeholder="请输入权限名称(/admin/auth/index)">
           </el-input>
         </el-form-item>
         <el-form-item label="权限上级：" prop="pid">
-          <el-select placeholder="请选择权限上级" filterable v-model.number="localForm.pid">
-            <el-option label="默认权限" :value="0" v-if="localForm.pid === 0" selected></el-option>
+          <el-select v-model.number="localForm.pid" filterable placeholder="请选择权限上级">
+            <el-option v-if="localForm.pid === 0" :value="0" label="默认权限" selected></el-option>
             <el-option
               v-for="(item, index) in authLists"
-              :disabled="item.id === localForm.id"
               :key="index"
+              :disabled="item.id === localForm.id"
               :label="setAuthName(item)"
               :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="权限状态：" class="is-required">
+        <el-form-item class="is-required" label="权限状态：">
           <el-switch
             v-model.number="localForm.status"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
             :active-value="1"
-            :inactive-value="2">
+            :inactive-value="2"
+            active-color="#13ce66"
+            inactive-color="#ff4949">
           </el-switch>
         </el-form-item>
         <SubmitButton :form="submitForm" :reForm="reForm" @closeDialog="$emit('getAuthLists', true)"></SubmitButton>

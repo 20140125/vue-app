@@ -3,12 +3,12 @@
     <template #header>
       <el-form-item style="width: 900px;">
         <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item @click="getFileLists(item, index)" v-for="(item, index) in breadcrumb" :key="index">
+          <el-breadcrumb-item v-for="(item, index) in breadcrumb" :key="index" @click="getFileLists(item, index)">
             {{ item.filename }}
           </el-breadcrumb-item>
           <el-breadcrumb-item
-            @click="getFileLists({ path: '/', filename: 'longer' })"
-            style="float: right">
+            style="float: right"
+            @click="getFileLists({ path: '/', filename: 'longer' })">
             <i class="el-icon-refresh-right"></i>
           </el-breadcrumb-item>
         </el-breadcrumb>
@@ -17,37 +17,37 @@
     <template #body>
       <!--文件列表-->
       <FileLists
-        :lists="fileLists"
         :fileURL="fileURL"
+        :lists="fileLists"
         @addFile="addFile"
-        @getFiles="getFiles"
-        @deleteFile="deleteFile"
-        @renameFile="renameFile"
         @chmodFile="chmodFile"
-        @uploadFile="uploadFile"
-        @unComposeFile="unComposeFile"
+        @deleteFile="deleteFile"
         @getFileLists="getFileLists"
-        @getMultipleSelection="getMultipleSelection">
+        @getFiles="getFiles"
+        @getMultipleSelection="getMultipleSelection"
+        @renameFile="renameFile"
+        @unComposeFile="unComposeFile"
+        @uploadFile="uploadFile">
       </FileLists>
     </template>
     <template #dialog>
       <!--文本编辑-->
       <FileDetails
-        :details="fileLists"
         ref="fileDetail"
         :detail-visible="visible.detail"
+        :details="fileLists"
         @closeDialog="closeDialog">
       </FileDetails>
       <!--静态资源预览-->
       <StaticSource
-        :syncVisible="visible.source"
         :static-source="staticSource"
+        :syncVisible="visible.source"
         @closeDialog="closeDialog">
       </StaticSource>
       <!--权限-->
       <FileChmod :chmod-visible="visible.chmod" :file="chmod" @closeDialog="closeDialog"></FileChmod>
       <!-- 文件上传 -->
-      <FileUpload :syncVisible="visible.upload" :file="staticSource.file" @closeDialog="closeDialog"></FileUpload>
+      <FileUpload :file="staticSource.file" :syncVisible="visible.upload" @closeDialog="closeDialog"></FileUpload>
     </template>
   </BaseLayout>
 </template>

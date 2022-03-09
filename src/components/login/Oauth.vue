@@ -1,11 +1,11 @@
 <template>
   <div style="margin: 20px 0">
     <el-button
-      @click="toLogin(item)"
-      type="primary"
-      plain
       v-for="(item, index) in (oAuthConfig || {}).children"
-      :key="index">
+      :key="index"
+      plain
+      type="primary"
+      @click="toLogin(item)">
       {{ item.name.toUpperCase() }}
     </el-button>
   </div>

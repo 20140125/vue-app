@@ -1,11 +1,11 @@
 <template>
   <div class="emotion">
-    <div class="emotion-box" :style="{ height: height + 'px' }">
-      <el-tabs type="border-card" tab-position="top" @tab-click="changeEmotionLists" v-model="type">
-        <el-tab-pane v-for="(item,index) in emotionType" :name="item.type.toString()" :key="index" :label="item.title">
-          <div class="emotion-box-line" v-for="(emotion, index) in emotionList" :key="index">
+    <div :style="{ height: height + 'px' }" class="emotion-box">
+      <el-tabs v-model="type" tab-position="top" type="border-card" @tab-click="changeEmotionLists">
+        <el-tab-pane v-for="(item,index) in emotionType" :key="index" :label="item.title" :name="item.type.toString()">
+          <div v-for="(emotion, index) in emotionList" :key="index" class="emotion-box-line">
             <div class="emotion-item">
-              <el-image :src="emotion.icon" :alt="emotion.title" style="width: 30px;height: 30px;" lazy
+              <el-image :alt="emotion.title" :src="emotion.icon" lazy style="width: 30px;height: 30px;"
                         @click="$emit('clickEmotion', emotion)"></el-image>
             </div>
           </div>

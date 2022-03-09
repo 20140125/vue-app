@@ -1,20 +1,20 @@
 <template>
-  <el-table :data="configLists" row-key="id" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
+  <el-table :data="configLists" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" row-key="id">
     <el-table-column label="#ID" prop="id"></el-table-column>
-    <el-table-column label="配置名称" prop="name" :show-tooltip-when-overflow="true"></el-table-column>
+    <el-table-column :show-tooltip-when-overflow="true" label="配置名称" prop="name"></el-table-column>
     <el-table-column label="配置状态">
       <template #default="scope">
         <StatusRadio
-          :url="URL"
+          v-if="scope.row.id < 100 && Permission.auth.indexOf(URL) > -1"
           :status-model="scope.row"
-          v-if="scope.row.id < 100 && Permission.auth.indexOf(URL) > -1">
+          :url="URL">
         </StatusRadio>
         <el-button
           v-else
           :icon="['el-icon-check', 'el-icon-close'][scope.row.status - 1]"
+          :type="['primary', 'danger'][scope.row.status - 1]"
           circle
           plain
-          :type="['primary', 'danger'][scope.row.status - 1]"
           size="medium">
         </el-button>
       </template>
@@ -28,10 +28,10 @@
       <template #default="scope">
         <el-button
           v-if="scope.row.id < 100 && Permission.auth.indexOf(URL) > -1"
-          type="primary"
           icon="el-icon-edit"
           plain
           size="mini"
+          type="primary"
           @click="$emit('updateConfig', scope.row)">
           编辑
         </el-button>

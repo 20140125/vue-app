@@ -1,10 +1,10 @@
 <template>
-  <div :style="bgStyle" id="main">
+  <div id="main" :style="bgStyle">
     <el-row :gutter="24" style="padding-top: 190px;">
-      <el-col :span="14" :offset="5">
+      <el-col :offset="5" :span="14">
         <el-row :gutter="24" style="width: 1135px;">
           <!--聊天用户-->
-          <el-col :span="6" v-if="showLeftBar" class="left-bar">
+          <el-col v-if="showLeftBar" :span="6" class="left-bar">
             <el-card shadow="hover">
               <LeftBar :chat-users="chatUsers" :user-info="userInfo" @getReceiver="getReceiver"></LeftBar>
             </el-card>
@@ -14,16 +14,16 @@
                   class="main-bar">
             <el-card shadow="hover">
               <MessageBox
-                @sendMessage="sendMessage"
                 ref="messageBox"
-                :user-info="userInfo"
                 :message-lists="messageLists"
-                :receive-name="receiver.client_name">
+                :receive-name="receiver.client_name"
+                :user-info="userInfo"
+                @sendMessage="sendMessage">
               </MessageBox>
             </el-card>
           </el-col>
           <!--所有用户-->
-          <el-col :span="6" v-if="showRightBar" class="right-bar">
+          <el-col v-if="showRightBar" :span="6" class="right-bar">
             <el-card shadow="hover">
               <RightBar :client-users="clientUsers" :user-info="userInfo" @getReceiver="getReceiver"></RightBar>
             </el-card>

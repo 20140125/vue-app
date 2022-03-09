@@ -1,19 +1,20 @@
 <template>
-  <div v-water-mark="{ text: username, textColor: 'rgba(0, 0, 0, .2)', font: '25px consolas, sans-serif', row: 130, col: 850 }">
-    <el-skeleton :rows="5" animated :loading="loading">
+  <div
+    v-water-mark="{ text: username, textColor: 'rgba(0, 0, 0, .2)', font: '25px consolas, sans-serif', row: 130, col: 850 }">
+    <el-skeleton :loading="loading" :rows="5" animated>
       <el-form :inline="true" class="form">
         <slot name="header"></slot>
       </el-form>
       <!--主题信息-->
       <el-main>
         <slot name="body"></slot>
-        <div class="pagination" v-if="T_pagination.show_page">
+        <div v-if="T_pagination.show_page" class="pagination">
           <el-pagination
-            @current-change="currentChange"
+            :current-page="T_pagination.page"
             :page-size="T_pagination.limit"
-            layout="total, prev, pager, next"
             :total="T_pagination.total"
-            :current-page="T_pagination.page">
+            layout="total, prev, pager, next"
+            @current-change="currentChange">
           </el-pagination>
         </div>
       </el-main>

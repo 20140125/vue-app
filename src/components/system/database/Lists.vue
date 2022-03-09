@@ -1,63 +1,63 @@
 <template>
   <el-table :data="databaseLists">
-    <el-table-column label="表名" prop="name" :show-tooltip-when-overflow="true" min-width="120"></el-table-column>
-    <el-table-column label="版本号" prop="version" min-width="100" align="center"></el-table-column>
-    <el-table-column label="引擎" prop="engine" min-width="100" align="center"></el-table-column>
-    <el-table-column label="数据表大小" prop="data_length" align="center" sortable min-width="120"></el-table-column>
-    <el-table-column label="自增量" prop="auto_increment" align="center" sortable min-width="100"></el-table-column>
+    <el-table-column :show-tooltip-when-overflow="true" label="表名" min-width="120" prop="name"></el-table-column>
+    <el-table-column align="center" label="版本号" min-width="100" prop="version"></el-table-column>
+    <el-table-column align="center" label="引擎" min-width="100" prop="engine"></el-table-column>
+    <el-table-column align="center" label="数据表大小" min-width="120" prop="data_length" sortable></el-table-column>
+    <el-table-column align="center" label="自增量" min-width="100" prop="auto_increment" sortable></el-table-column>
     <el-table-column
-      label="字符集编码"
-      prop="collation"
       :show-tooltip-when-overflow="true"
+      align="center"
+      label="字符集编码"
       min-width="120"
-      align="center">
+      prop="collation">
     </el-table-column>
-    <el-table-column label="备注" align="center" min-width="150" :show-tooltip-when-overflow="true">
+    <el-table-column :show-tooltip-when-overflow="true" align="center" label="备注" min-width="150">
       <template #default="scope">
         <el-input
-          v-model="scope.row.comment"
-          :ref="scope.row.name"
           v-if="scope.row.name === name"
+          :ref="scope.row.name"
+          v-model="scope.row.comment"
           placeholder="请输入数据表备注">
         </el-input>
-        <div v-html="scope.row.comment" v-else></div>
+        <div v-else v-html="scope.row.comment"></div>
       </template>
     </el-table-column>
-    <el-table-column label="创建时间" sortable prop="create_time" align="center" min-width="160"></el-table-column>
-    <el-table-column width="300" align="right" label="操作">
+    <el-table-column align="center" label="创建时间" min-width="160" prop="create_time" sortable></el-table-column>
+    <el-table-column align="right" label="操作" width="300">
       <template #default="scope">
         <el-button
-          type="primary"
+          v-if="scope.row.name === name"
+          icon="el-icon-edit-outline"
           plain
           size="mini"
-          @click="updateComment(scope.row)"
-          icon="el-icon-edit-outline"
-          v-if="scope.row.name === name">
+          type="primary"
+          @click="updateComment(scope.row)">
           更新
         </el-button>
-        <el-button type="primary" plain size="mini" @click="setComment(scope.row)" v-else icon="el-icon-edit">修改
+        <el-button v-else icon="el-icon-edit" plain size="mini" type="primary" @click="setComment(scope.row)">修改
         </el-button>
         <el-button
           v-if="Permission.auth.indexOf(URLS.backup) > -1"
-          type="primary"
           plain
           size="mini"
+          type="primary"
           @click="backupTable(scope.row)">
           备份
         </el-button>
         <el-button
           v-if="Permission.auth.indexOf(URLS.repair) > -1"
-          type="primary"
           plain
           size="mini"
+          type="primary"
           @click="repairTable(scope.row)">
           修复
         </el-button>
         <el-button
           v-if="Permission.auth.indexOf(URLS.optimize) > -1"
-          type="primary"
           plain
           size="mini"
+          type="primary"
           @click="optimizeTable(scope.row)">
           优化
         </el-button>

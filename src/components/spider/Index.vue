@@ -1,18 +1,18 @@
 <template>
   <div id="spider" v-loading="loading">
     <el-form label-position="left" label-width="100px">
-      <el-form-item label="工具列表：" class="is-required">
+      <el-form-item class="is-required" label="工具列表：">
         <el-select v-model="keywords" @change="setMethods">
           <el-option
             v-for="(item, index) in spiderConfig"
             :key="index"
-            :value="item.name"
-            :label="item.value.label">
+            :label="item.value.label"
+            :value="item.name">
           </el-option>
         </el-select>
       </el-form-item>
       <el-form-item v-for="(item, index) in spiderParams" :key="index" :label="item.label + '：'" class="is-required">
-        <el-input :placeholder="item.placeholder" v-model="item.value">
+        <el-input v-model="item.value" :placeholder="item.placeholder">
           <template #append>
             <el-button icon="el-icon-search" @click="syncSpider({ keywords: item.value, method: item.name })">
               开始同步
@@ -20,12 +20,12 @@
           </template>
         </el-input>
       </el-form-item>
-      <el-form-item label="输出信息：" v-if="spiderParams.length > 0" class="is-required">
+      <el-form-item v-if="spiderParams.length > 0" class="is-required" label="输出信息：">
         <div ref="message" class="messageLists">
           <div v-for="(item, index) in messageLists" :key="index">
             <div v-if="item.message.indexOf('already') > -1">
-              <div class="message-time" v-html="item.time" style="color: #E6A23C"></div>
-              <div class="client-content" v-html="item.message" style="color: #E6A23C"></div>
+              <div class="message-time" style="color: #E6A23C" v-html="item.time"></div>
+              <div class="client-content" style="color: #E6A23C" v-html="item.message"></div>
             </div>
             <div v-else>
               <div class="message-time" v-html="item.time"></div>

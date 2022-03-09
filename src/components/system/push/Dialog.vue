@@ -2,15 +2,15 @@
   <div>
     <el-dialog
       v-model="visible"
-      :title="reForm === 'created' ? '添加站内通知' : '修改站内通知'"
-      :show-close="false"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
+      :show-close="false"
+      :title="reForm === 'created' ? '添加站内通知' : '修改站内通知'"
       center>
-      <el-form :model="localForm" :ref="reForm" label-position="left" label-width="100px" :rules="rules">
+      <el-form :ref="reForm" :model="localForm" :rules="rules" label-position="left" label-width="100px">
         <el-form-item label="目标用户：" prop="username">
-          <el-select v-model="localForm.username" @change="handleChange" filterable placeholder="请选择目标用户">
-            <el-option label="站内所有用户" :value="Permission.default_client_id"></el-option>
+          <el-select v-model="localForm.username" filterable placeholder="请选择目标用户" @change="handleChange">
+            <el-option :value="Permission.default_client_id" label="站内所有用户"></el-option>
             <el-option
               v-for="(item,index) in userLists"
               :key="index"
@@ -20,7 +20,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="站内标识：" prop="uuid">
-          <el-input readonly v-model="localForm.uuid" placeholder="请输入站内标识"></el-input>
+          <el-input v-model="localForm.uuid" placeholder="请输入站内标识" readonly></el-input>
         </el-form-item>
         <el-form-item label="推送标题：" prop="title">
           <el-input v-model.trim="localForm.title" placeholder="请输入推送标题"></el-input>
@@ -29,27 +29,27 @@
           <el-input
             v-model.trim="localForm.info"
             placeholder="请输入推送消息"
-            type="textarea"
             resize="none"
-            rows="4">
+            rows="4"
+            type="textarea">
           </el-input>
         </el-form-item>
         <el-form-item label="推送时间：" prop="created_at">
           <el-date-picker
-            type="datetime"
-            value-format="YYYY-MM-DD HH:mm:ss"
-            format="YYYY-MM-DD HH:mm:ss"
             v-model="localForm.created_at"
-            :editable="false">
+            :editable="false"
+            format="YYYY-MM-DD HH:mm:ss"
+            type="datetime"
+            value-format="YYYY-MM-DD HH:mm:ss">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="实时推送：" class="is-required">
+        <el-form-item class="is-required" label="实时推送：">
           <el-switch
             v-model.number="localForm.status"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
             :active-value="1"
-            :inactive-value="2">
+            :inactive-value="2"
+            active-color="#13ce66"
+            inactive-color="#ff4949">
           </el-switch>
         </el-form-item>
         <SubmitButton

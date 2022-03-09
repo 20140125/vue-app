@@ -1,13 +1,14 @@
 <template>
-  <el-container id="base" v-water-mark="{ text: username, textColor: 'rgba(0, 0, 0, .2)', font: '25px consolas, sans-serif', row: 130, col: 850 }">
+  <el-container id="base"
+                v-water-mark="{ text: username, textColor: 'rgba(0, 0, 0, .2)', font: '25px consolas, sans-serif', row: 130, col: 850 }">
     <el-header>
       <!--Header头部-->
-      <Header @setLayout="setLayout" ref="header" :layoutNums="layoutNums"></Header>
+      <Header ref="header" :layoutNums="layoutNums" @setLayout="setLayout"></Header>
     </el-header>
     <el-container>
       <el-container direction="vertical">
         <el-row :gutter="24">
-          <el-col :span="layoutNums.aside" class="el-aside" :style="layoutNums.style">
+          <el-col :span="layoutNums.aside" :style="layoutNums.style" class="el-aside">
             <!-- 导航栏 -->
             <Menu :is-collapse="isCollapse"></Menu>
           </el-col>

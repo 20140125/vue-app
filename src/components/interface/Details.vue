@@ -2,14 +2,14 @@
   <div id="interface">
     <el-dialog
       v-model="visible"
-      title="编辑接口"
-      :show-close="false"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
+      :show-close="false"
+      :width="localForm.source === 'json' ? '1200px' : '1500px'"
       center
-      :width="localForm.source === 'json' ? '1200px' : '1500px'">
+      title="编辑接口">
       <div v-if="localForm.source === 'json'">
-        <Json ref="json" :reForm="reForm" :form="localForm" :categoryLists="categoryLists"></Json>
+        <Json ref="json" :categoryLists="categoryLists" :form="localForm" :reForm="reForm"></Json>
         <InterfaceLog :lists="localForm.apiLog"></InterfaceLog>
         <SubmitButton
           :form="submitForm"

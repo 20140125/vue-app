@@ -2,15 +2,15 @@
   <div :style="bgStyle">
     <el-row :gutter="24" style="padding-top: 10%">
       <el-col
-        :xl="{'span':8,'offset':8}"
         :lg="{'span':12,'offset':6}"
         :md="{'span':16,'offset':4}"
         :sm="{'span':20,'offset':'2'}"
+        :xl="{'span':8,'offset':8}"
         :xs="{'span':24}">
         <el-header style="text-align: center;font-size: 20px;font-weight: 800" v-html="header"></el-header>
-        <el-tabs type="border-card" @tab-click="changeTabs" v-model="tabPane" style="margin: 0 5px">
+        <el-tabs v-model="tabPane" style="margin: 0 5px" type="border-card" @tab-click="changeTabs">
           <el-tab-pane label="账号密码登录" name="password">
-            <Account :account-attr="accountAttr" @refreshCode="refreshCode" @loginSYS="loginSYS"></Account>
+            <Account :account-attr="accountAttr" @loginSYS="loginSYS" @refreshCode="refreshCode"></Account>
           </el-tab-pane>
           <el-tab-pane label="邮箱验证码登录/注册" name="email">
             <Mail :account-attr="accountAttr" @loginSYS="loginSYS"></Mail>

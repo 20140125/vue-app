@@ -2,13 +2,13 @@
   <div id="users">
     <el-dialog
       v-model="visible"
-      title="邮箱绑定"
-      :show-close="false"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
-      center>
-      <el-form :model="localForm" :ref="reForm" label-position="left" label-width="100px" :rules="rules">
-        <el-form-item label="账户昵称：" class="is-required">
+      :show-close="false"
+      center
+      title="邮箱绑定">
+      <el-form :ref="reForm" :model="localForm" :rules="rules" label-position="left" label-width="100px">
+        <el-form-item class="is-required" label="账户昵称：">
           <el-input v-model.trim="localForm.username" readonly></el-input>
         </el-form-item>
         <el-form-item label="邮箱账号：" prop="email">
@@ -17,7 +17,7 @@
         <el-form-item label="验证码：" prop="code">
           <el-input v-model.number="localForm.code" :readonly="!localForm.email" maxlength="8" placeholder="请输入邮箱验证码">
             <template #append>
-              <el-tooltip class="item" effect="dark" content="请确定已经输入正确的邮箱账号" placement="top-start">
+              <el-tooltip class="item" content="请确定已经输入正确的邮箱账号" effect="dark" placement="top-start">
                 <el-button @click="getMailCode">{{ codeValue }}</el-button>
               </el-tooltip>
             </template>
