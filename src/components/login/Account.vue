@@ -1,29 +1,29 @@
 <template>
-  <el-main>
+  <el-main id="account">
     <el-form ref="password" :model="form" :rules="rules" label-position="left">
       <el-form-item prop="email">
-        <el-input v-model="form.email" clearable placeholder="请输入邮箱账号" show-icon>
+        <el-input v-model="form.email" clearable placeholder="请输入邮箱账号" >
           <template #prepend><i class="el-icon-user"></i></template>
         </el-input>
       </el-form-item>
       <el-form-item prop="password">
-        <el-input v-model.trim="form.password" clearable placeholder="请输入密码" show-icon type="password">
+        <el-input v-model.trim="form.password" clearable placeholder="请输入密码"  type="password">
           <template #prepend><i class="el-icon-key"></i></template>
         </el-input>
       </el-form-item>
       <el-form-item prop="verify_code">
         <el-input
           v-model.trim="form.verify_code"
-          :style="accountAttr.style"
           clearable
           maxlength="6"
-          placeholder="请输入验证码"
-          show-icon>
+          placeholder="请输入验证码">
           <template #prepend>
             <i class="el-icon-postcard"></i>
           </template>
+          <template #append>
+            <Identify :identify-code="accountAttr.verifyCode" @click="refreshCode"></Identify>
+          </template>
         </el-input>
-        <Identify :identify-code="accountAttr.verifyCode" style="float: right" @click="refreshCode"></Identify>
       </el-form-item>
     </el-form>
     <el-footer style="text-align: center;height: 30px !important">
@@ -59,8 +59,13 @@ export default {
     /**
      * todo:刷新验证码
      */
-    refreshCode() {
-      this.$emit('refreshCode');
+    async refreshCode() {
+      await this.$refs['password'].validateField(['email', 'password'], async(valid) => {
+        if (valid) {
+          return false;
+        }
+        this.$emit('refreshCode');
+      });
     },
     /**
      * todo:登录系统
@@ -78,6 +83,13 @@ export default {
 };
 </script>
 
-<style scoped>
-
+<style lang="less">
+#account {
+  .el-input-group__append {
+    padding-top: 1px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border: none !important;
+  }
+}
 </style>

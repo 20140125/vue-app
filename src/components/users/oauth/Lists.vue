@@ -50,11 +50,6 @@ export default {
     return {
       URL: urls.oauth.update
     };
-  },
-  computed: {
-    userInfo() {
-      return this.$store.state.login.userInfo;
-    }
   }
 };
 </script>

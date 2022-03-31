@@ -8,11 +8,11 @@
       <!--主题信息-->
       <el-main>
         <slot name="body"></slot>
-        <div v-if="T_pagination.show_page" class="pagination">
+        <div v-if="baseLayoutPagination.show_page" class="pagination">
           <el-pagination
-            :current-page="T_pagination.page"
-            :page-size="T_pagination.limit"
-            :total="T_pagination.total"
+            :current-page="baseLayoutPagination.page"
+            :page-size="baseLayoutPagination.limit"
+            :total="baseLayoutPagination.total"
             layout="total, prev, pager, next"
             @current-change="currentChange">
           </el-pagination>
@@ -45,13 +45,13 @@ export default {
   },
   watch: {
     pagination: function () {
-      this.T_pagination = this.pagination;
+      this.baseLayoutPagination = this.pagination;
     }
   },
   data() {
     return {
-      T_pagination: this.pagination || { limit: 10, page: 1, total: 0, show_page: false },
-      username: `${this.$store.state.username}【${urls.baseURL}】${func.setTime(Date.parse(new Date()))}`
+      baseLayoutPagination: this.pagination || { limit: 10, page: 1, total: 0, show_page: false },
+      username: `${this.$store.state.baseLayout.username}【${urls.baseURL}】${func.setTime(Date.parse(new Date()))}`
     };
   },
   methods: {

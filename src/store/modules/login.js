@@ -33,6 +33,7 @@ export const actions = {
           userInfo: (((result || {}).data || {}).item || {}).lists || {},
           isAuthorized: true
         });
+        window.localStorage.setItem('RTX', state.userInfo.username || 'tourist');
         resolve(result);
       }).catch(error => {
         commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
@@ -132,7 +133,7 @@ export const actions = {
    * @return {Promise<boolean>}
    */
   async getOauthConfig({ commit, state }, payload) {
-    if (state.oauthConfig) {
+    if (state.oauthConfig && !payload.refresh) {
       commit('UPDATE_MUTATIONS', { oauthConfig: state.oauthConfig });
       return false;
     }

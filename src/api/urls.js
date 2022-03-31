@@ -79,7 +79,8 @@ let urls = {
   config: {
     lists: '/api/v1/config/index',
     save: '/api/v1/config/save',
-    update: '/api/v1/config/update'
+    update: '/api/v1/config/update',
+    plugin: '/api/v1/plugin/action'
   },
   /* todo:接口分类 */
   interfaceCategory: {

@@ -1,6 +1,7 @@
 <template>
-  <el-container id="base"
-                v-water-mark="{ text: username, textColor: 'rgba(0, 0, 0, .2)', font: '25px consolas, sans-serif', row: 130, col: 850 }">
+  <el-container
+    id="base"
+    v-water-mark="{ text: username, textColor: 'rgba(0, 0, 0, .2)', font: '25px consolas, sans-serif', row: 130, col: 850 }">
     <el-header>
       <!--Header头部-->
       <Header ref="header" :layoutNums="layoutNums" @setLayout="setLayout"></Header>
@@ -41,7 +42,7 @@ export default {
   data() {
     return {
       isCollapse: false,
-      username: `${this.$store.state.username}【${urls.baseURL}】${func.setTime(Date.parse(new Date()))}`,
+      username: `${this.$store.state.baseLayout.username}【${urls.baseURL}】${func.setTime(Date.parse(new Date()))}`,
       layoutNums: {
         aside: 3,
         content: 21,

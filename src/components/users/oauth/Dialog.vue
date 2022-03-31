@@ -18,7 +18,7 @@
           <el-input v-model.number="localForm.code" :readonly="!localForm.email" maxlength="8" placeholder="请输入邮箱验证码">
             <template #append>
               <el-tooltip class="item" content="请确定已经输入正确的邮箱账号" effect="dark" placement="top-start">
-                <el-button @click="getMailCode">{{ codeValue }}</el-button>
+                <el-button :disabled="disabled" @click="getMailCode">{{ codeValue }}</el-button>
               </el-tooltip>
             </template>
           </el-input>
@@ -52,7 +52,8 @@ export default {
         email: [{ required: true, message: '请输入邮箱账号', trigger: 'blur', type: 'email' }],
         code: [{ required: true, message: '请输入邮箱验证码', trigger: 'blur', type: 'number' }]
       },
-      submitForm: {}
+      submitForm: {},
+      disabled: false
     };
   },
   watch: {
@@ -88,15 +89,18 @@ export default {
      * todo:获取邮箱验证码
      */
     async getMailCode() {
-      if (!this.localForm.email) {
-        this.$message.error('请确定已经输入正确的邮箱账号');
-        return false;
-      }
-      if (this.mailLogin) {
-        this.codeValue = this.times-- + ' s';
-        return false;
-      }
-      await this.$store.dispatch('login/sendMail', { email: this.localForm.email });
+      await this.$refs[this.reForm].validateField(['email'], async(valid) => {
+        if (valid) {
+          this.disabled = false;
+          return false;
+        }
+        if (this.mailLogin) {
+          this.disabled = true;
+          this.codeValue = this.times-- + 'S重新获取';
+          return false;
+        }
+        await this.$store.dispatch('login/sendMail', { email: this.localForm.email });
+      });
     }
   }
 };
@@ -112,6 +116,10 @@ export default {
     .el-form-item__content {
       margin-left: 0 !important;
     }
+  }
+  .el-input-group__append {
+    background-color: #409EFF;
+    color: #FFFFFF;
   }
 }
 </style>

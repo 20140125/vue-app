@@ -41,7 +41,7 @@ export default {
       },
       tabPane: 'password',
       header: '账号密码登录',
-      accountAttr: { verifyCode: '', style: { width: '77.6%' }, dialogWidth: '50%' },
+      accountAttr: { verifyCode: '', dialogWidth: '50%' },
       innerWidth: window.innerWidth,
       oauthLogin: false
     };
@@ -59,19 +59,14 @@ export default {
       this.refreshCode();
       if (this.innerWidth < 768) {
         this.accountAttr.dialogWidth = '100%';
-        this.accountAttr.style = { width: '55%' };
       } else if (this.innerWidth >= 768 && this.innerWidth < 992) {
         this.accountAttr.dialogWidth = '83.3333%';
-        this.accountAttr.style = { width: '79%' };
       } else if (this.innerWidth >= 992 && this.innerWidth < 1200) {
         this.accountAttr.dialogWidth = '65.3333%';
-        this.accountAttr.style = { width: '78%' };
       } else if (this.innerWidth >= 1200 && this.innerWidth < 1920) {
         this.accountAttr.dialogWidth = '49.3333%';
-        this.accountAttr.style = { width: '79%' };
       } else if (this.innerWidth >= 1920) {
         this.accountAttr.dialogWidth = '32.3333%';
-        this.accountAttr.style = { width: '77.6%' };
       }
     },
     /**
@@ -102,6 +97,13 @@ export default {
 };
 </script>
 
-<style scoped>
-
+<style lang="less">
+.el-input__suffix {
+  top: 13px !important;
+}
+.is-disabled {
+  color: #FFFFFF !important;
+  background-color: #a0cfff !important;
+  border-color: #a0cfff !important;
+}
 </style>

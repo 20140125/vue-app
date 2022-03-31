@@ -1,7 +1,5 @@
 <template>
-  <div class="s-canvas">
-    <canvas id="s-canvas" :height="contentHeight" :width="contentWidth"></canvas>
-  </div>
+  <canvas id="s-canvas" :height="contentHeight" :width="contentWidth"></canvas>
 </template>
 <script>
 export default {
@@ -50,7 +48,7 @@ export default {
     // 容器高度
     contentHeight: {
       type: Number,
-      default: () => 38
+      default: () => 36
     }
   },
   methods: {

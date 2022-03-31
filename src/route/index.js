@@ -96,6 +96,12 @@ const router = createRouter({
           component: () => import('../pages/system/Tools'),
           meta: { title: '系统工具' }
         },
+        {
+          path: 'plugin/index',
+          name: 'PluginManage',
+          component: () => import('../pages/system/Plugin'),
+          meta: { title: '插件管理' }
+        },
         /* 用户管理 */
         {
           path: 'users/index',
@@ -129,7 +135,7 @@ const router = createRouter({
           component: () => import('../pages/Spider'),
           meta: { title: '同步工具' }
         },
-        /* 错误页面 */
+        /* 结果页 */
         {
           path: 'result/index',
           name: 'ResultManage',

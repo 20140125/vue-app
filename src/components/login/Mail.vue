@@ -1,8 +1,8 @@
 <template>
-  <el-main>
+  <el-main id="mail">
     <el-form ref="mail" :model="form" :rules="rules">
       <el-form-item prop="email">
-        <el-input v-model.trim="form.email" clearable placeholder="请输入邮箱账号" show-icon>
+        <el-input v-model.trim="form.email" clearable placeholder="请输入邮箱账号">
           <template #prepend>
             <i class="el-icon-s-custom"></i>
           </template>
@@ -14,10 +14,14 @@
           :readonly="!form.email"
           clearable
           maxlength="8"
-          placeholder="请输入邮箱验证码"
-          show-icon>
+          placeholder="请输入邮箱验证码">
           <template #append>
-            <el-button :disabled="!form.email" plain type="info" @click="getMailCode">{{ codeValue }}</el-button>
+            <el-button
+              :disabled="disabled"
+              type="primary"
+              @click="getMailCode">
+              {{ codeValue }}
+            </el-button>
           </template>
         </el-input>
       </el-form-item>
@@ -39,7 +43,8 @@ export default {
       rules: {
         email: [{ required: true, message: '请输入邮箱', trigger: 'blur', type: 'email' }],
         verify_code: [{ required: true, message: '请输入邮箱验证码', trigger: 'blur' }]
-      }
+      },
+      disabled: false
     };
   },
   created() {
@@ -53,6 +58,7 @@ export default {
         return false;
       }
       this.codeValue = '获取验证码';
+      this.disabled = false;
       this.times = 60;
     }, 1000);
   },
@@ -61,11 +67,19 @@ export default {
      * todo:获取邮箱验证码
      */
     async getMailCode() {
-      if (this.mailLogin) {
-        this.codeValue = this.times-- + ' s';
-        return false;
-      }
-      await this.$store.dispatch('login/sendMail', { email: this.form.email });
+      await this.$refs['mail'].validateField(['email'], async(valid) => {
+          if (valid) {
+            return false;
+          }
+          if (this.mailLogin) {
+            this.codeValue = this.times-- + 'S重新获取';
+            this.disabled = true;
+            return false;
+          }
+          await this.$store.dispatch('login/sendMail', { email: this.form.email }).then(() => {
+            this.$message.success('验证码发送成功');
+          });
+      });
     },
     /**
      * todo:登录系统
@@ -83,6 +97,11 @@ export default {
 };
 </script>
 
-<style scoped>
-
+<style lang="less">
+#mail {
+  .el-input-group__append {
+    background-color: #409EFF;
+    color: #FFFFFF;
+  }
+}
 </style>
