@@ -49,7 +49,7 @@ export default {
       syncVisible: false,
       reForm: 'created',
       form: {},
-      permissionAttr: { userLists: [], authList: [] },
+      permissionAttr: { userLists: [], authList: [], checkedKeys: [] },
       savePermission: URLS.permission.save
     };
   },
@@ -94,9 +94,25 @@ export default {
       await this.$store.dispatch('apply/getUserAuth', { user_id: user_id, refresh: true }).then(() => {
         this.permissionAttr = {
           userLists: this.$store.state.users.cacheUsers,
-          authLists: this.$store.state.apply.authLists
+          authLists: this.$store.state.apply.authLists,
+          checkedKeys: this.getDefaultCheckedKeys(this.$store.state.apply.authLists, [])
         };
       });
+    },
+    /**
+     * todo:获取默认权限
+     * @param authLists
+     * @param checkedKeys
+     * @returns {*}
+     */
+    getDefaultCheckedKeys(authLists, checkedKeys) {
+      authLists.forEach((item) => {
+        if (!item.disable) {
+          checkedKeys.push(item.id);
+        }
+        this.getDefaultCheckedKeys(item.__children, checkedKeys);
+      });
+      return checkedKeys;
     },
     /**
      * todo:申请权限
@@ -106,7 +122,7 @@ export default {
       this.syncVisible = true;
       /* todo:获取用户列表 */
       await this.$store.dispatch('users/getCacheUserLists', {}).then(() => {
-        this.permissionAttr = { userLists: this.$store.state.users.cacheUsers, authList: [] };
+        this.permissionAttr = { userLists: this.$store.state.users.cacheUsers, authList: [], checkedKeys: [] };
         this.form = { username: '', user_id: '', href: '', expires: '', desc: '' };
         this.reForm = 'created';
       });

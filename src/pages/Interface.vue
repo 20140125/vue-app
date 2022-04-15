@@ -62,7 +62,7 @@ export default {
       form: {},
       defaultJson: {
         source: 'json', desc: '', api_id: '', href: '', method: 'POST',
-        request: [{ name: 'token', desc: '用户token', required: 1, type: 'String', val: this.$store.state.token }],
+        request: [{ name: 'token', desc: '用户token', required: 1, type: 'String', val: this.$store.state.baseLayout.token }],
         response: [
           { name: 'code', desc: '200 成功', type: 'Number' },
           { name: 'message', desc: 'Success', type: 'String' }

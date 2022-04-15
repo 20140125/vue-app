@@ -22,22 +22,23 @@
           </el-select>
         </el-form-item>
         <el-form-item label="申请地址：" prop="href">
-          <el-select v-model="localForm.href" :disabled="reForm === 'update'" filterable>
-            <el-option
-              v-for="(item,index) in permissionAttr.authLists"
-              :key="index"
-              :disabled="item.disable"
-              :label="setAuthName(item)"
-              :value="item.api"
-              clearable>
-            </el-option>
-          </el-select>
+          <el-tree
+            :data="permissionAttr.authLists"
+            :props="props"
+            show-checkbox
+            default-expand-all
+            node-key="id"
+            ref="tree"
+            :default-checked-keys="permissionAttr.checkedKeys"
+            highlight-current>
+          </el-tree>
         </el-form-item>
         <el-form-item label="申请时间：" prop="expires">
           <el-date-picker
             v-model="localForm.expires"
             :editable="false"
             clearable
+            size="large"
             placeholder="选择申请时间"
             type="datetime"
             value-format="YYYY-MM-DD HH:mm:ss">
@@ -98,6 +99,13 @@ export default {
         href: [{ required: true, message: '请选择申请地址', trigger: 'blur' }],
         expires: [{ required: true, message: '请选择申请时间', trigger: 'change', type: 'date' }],
         desc: [{ required: true, message: '请输入申请理由', trigger: 'blur' }]
+      },
+      // todo:树形插件属性
+      props: {
+        children: '__children',
+        label: 'name',
+        value: 'api',
+        disabled: 'disable'
       }
     };
   },
@@ -105,26 +113,16 @@ export default {
     form() {
       this.localForm = this.form;
       this.$nextTick(() => {
-        setTimeout(() => {
+        setTimeout(async () => {
           this.submitForm = {
             model: this.localForm,
             $refs: this.$refs,
             url: this.reForm === 'created' ? URLS.permission.save : URLS.permission.update
           };
           this.localForm.user_id = this.$store.state.login.userInfo.id;
-          this.$parent.$parent.$parent.getUserAuth(this.localForm.user_id);
+          await this.$parent.$parent.$parent.getUserAuth(this.localForm.user_id);
         }, 1000);
       });
-    }
-  },
-  methods: {
-    /**
-     * todo：设置权限名称
-     * @param item
-     * @return {String}
-     */
-    setAuthName(item) {
-      return Array(item.level + 1).join('　　') + item.name;
     }
   }
 };

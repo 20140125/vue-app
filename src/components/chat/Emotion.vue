@@ -5,8 +5,13 @@
         <el-tab-pane v-for="(item,index) in emotionType" :key="index" :label="item.title" :name="item.type.toString()">
           <div v-for="(emotion, index) in emotionList" :key="index" class="emotion-box-line">
             <div class="emotion-item">
-              <el-image :alt="emotion.title" :src="emotion.icon" lazy style="width: 30px;height: 30px;"
-                        @click="$emit('clickEmotion', emotion)"></el-image>
+              <el-image
+                :alt="emotion.title"
+                :src="emotion.icon"
+                lazy
+                style="width: 30px;height: 30px;"
+                @click="$emit('clickEmotion', emotion)">
+              </el-image>
             </div>
           </div>
         </el-tab-pane>
@@ -39,7 +44,7 @@ export default {
         { type: 11, title: '国旗' }
       ],
       type: '1',
-      payload: { page: 1, limit: 500, type: 1 },
+      payload: { page: 1, limit: 100, type: 1 },
       pages: 0,
       offsetPage: 0
     };
@@ -55,7 +60,7 @@ export default {
      * @param item
      */
     changeEmotionLists(item) {
-      this.payload = { page: 1, limit: 500, type: parseInt(item.props.name, 10) };
+      this.payload = { page: 1, limit: 100, type: parseInt(item.props.name, 10) };
       this.getEmotionList(this.payload);
     },
     /**

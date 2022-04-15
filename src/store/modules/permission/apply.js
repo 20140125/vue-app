@@ -1,5 +1,6 @@
 import requestMethods from '../../../api/methods';
 import URLS from '../../../api/urls';
+import func from '@/utils/func';
 
 export const mutations = {
   /**
@@ -58,7 +59,7 @@ export const actions = {
     return new Promise((resolve, reject) => {
       requestMethods.commonMethods(URLS.permission.get, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
-          authLists: ((((result || {}).data || {}).item || {}).lists || {}).authLists || [],
+          authLists: func.setTree(((((result || {}).data || {}).item || {}).lists || {}).authLists || []),
           user_id: ((((result || {}).data || {}).item || {}).lists || {}).user_id || 0
         });
         resolve(result);

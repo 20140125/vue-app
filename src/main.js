@@ -57,6 +57,7 @@ router.beforeEach(async (to, from, next) => {
   }
   /* todo:地址中存在access_token (第三方授权登录) */
   if (to.params.access_token) {
+    console.log(to)
     window.localStorage.setItem('token', to.params.access_token || '');
     await store.commit('UPDATE_MUTATIONS', { token: to.params.access_token }, { root: true });
     await store.commit('home/UPDATE_MUTATIONS', {
@@ -70,14 +71,14 @@ router.beforeEach(async (to, from, next) => {
   }
   /* todo:登录页校验权限 */
   if (to.name === 'LoginManage') {
-    !store.state.baseLayout.token ? next() : await store.dispatch('login/checkAuthorized', { token: store.state.baseLayout.token }).then(() => {
+    !store.state.baseLayout.token ? next() : await store.dispatch('login/checkAuthorized', { token: window.localStorage.getItem('token') }).then(() => {
       /* todo:挂载全局属性*/
       app.config.globalProperties.Permission = store.state.login.isAuthorized ? store.state.login.userInfo : {};
       store.state.login.isAuthorized ? next({ path: '/admin/home/index', redirect: to.path }) : next();
     });
   } else {
     /* todo:登录后校验权限 */
-    await store.dispatch('login/checkAuthorized', { token: store.state.baseLayout.token }).then(() => {
+    await store.dispatch('login/checkAuthorized', { token:  window.localStorage.getItem('token') }).then(() => {
       /* todo:挂载全局属性*/
       app.config.globalProperties.Permission = store.state.login.isAuthorized ? store.state.login.userInfo : {};
       !store.state.login.isAuthorized ? next({ path: '/login', redirect: to.path }) : next();
