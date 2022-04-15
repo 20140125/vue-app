@@ -111,7 +111,6 @@ export default {
       if (tab.value === item) {
         let nextTab = store.state.home.tabs[index + 1] || store.state.home.tabs[index - 1];
         if (nextTab) {
-          console.log(nextTab);
           store.dispatch('home/deleteTabs', { index, nextTab }).then(() => router.push({ path: nextTab.value }));
         }
       }

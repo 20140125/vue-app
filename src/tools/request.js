@@ -40,7 +40,6 @@ instance.interceptors.request.use(config => {
     config.headers.Authorization = store.state.baseLayout.token || window.localStorage.getItem('token');
     config.data.token = store.state.baseLayout.token || window.localStorage.getItem('token');
   }
-  console.log(config);
   return config;
 }, error => {
   return Promise.reject(error);

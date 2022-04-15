@@ -28,7 +28,7 @@ export default {
   },
   mounted() {
     this.$nextTick(async () => {
-      if (this.$store.state.baseLayout.token) {
+      if (this.$store.state.baseLayout.token || window.localStorage.getItem('token')) {
         await this.$store.dispatch('home/getTimeLine', { page: 1, limit: 11 }).then(() => {
           this.loading = false;
         });

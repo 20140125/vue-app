@@ -52,7 +52,7 @@ export default {
   },
   mounted() {
     this.$nextTick(async () => {
-      if (this.$store.state.baseLayout.token) {
+      if (this.$store.state.baseLayout.token || window.localStorage.getItem('token')) {
         await this.$store.dispatch('home/getMenu');
         setTimeout(() => {
           this.loading = false;
