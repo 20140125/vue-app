@@ -37,9 +37,10 @@ instance.defaults.baseURL = urls.baseURL;
 instance.interceptors.request.use(config => {
   const commonURL = store.state.baseLayout.token ? [urls.login.loginSystem, urls.login.reportCode, urls.login.sendMail] : [urls.login.loginSystem, urls.login.reportCode, urls.login.oauthConfig, urls.login.sendMail];
   if (commonURL.indexOf(config.url) === -1) {
-    config.headers.Authorization = store.state.baseLayout.token;
-    config.data.token = store.state.baseLayout.token;
+    config.headers.Authorization = store.state.baseLayout.token || window.localStorage.getItem('token');
+    config.data.token = store.state.baseLayout.token || window.localStorage.getItem('token');
   }
+  console.log(config);
   return config;
 }, error => {
   return Promise.reject(error);
