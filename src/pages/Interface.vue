@@ -125,6 +125,9 @@ export default {
       this.addVisible = true;
       this.reForm = 'updated';
     },
+    /**
+     * todo:删除接口协议
+     */
     removeCategory() {
       this.$alert('开发中...');
     },
@@ -137,6 +140,11 @@ export default {
     async getDetails(form, source) {
       await this.$store.dispatch('category/getInterfaceDetails', { id: form.id, source: source }).then(() => {
         this.form = JSON.parse(JSON.stringify(this.$store.state.category.details));
+        this.form.request.forEach((item) => {
+          if (item.name === 'token') {
+            item.val = this.$store.state.baseLayout.token;
+          }
+        });
         this.reForm = 'updated';
         if (Object.keys(this.form).length === 0) {
           this.defaultJson.api_id = form.id;
