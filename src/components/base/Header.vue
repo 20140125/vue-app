@@ -100,13 +100,6 @@ export default {
      */
     unread() {
       return this.$store.state.home.unread;
-    },
-    /**
-     * todo:主题参数
-     * @return {any}
-     */
-    themeAttr() {
-      return this.$store.state.themeAttr;
     }
   },
   methods: {
@@ -186,9 +179,7 @@ export default {
     async clearPush(item) {
       item.disabled = true;
       item.see = 1;
-      await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.push.update, model: item }).then(() => {
-        console.log('aaaaaaaa');
-      });
+      await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.push.update, model: item });
     }
   }
 };

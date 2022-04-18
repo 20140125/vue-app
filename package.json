@@ -26,7 +26,8 @@
     "vue": "^3.0.0",
     "vue3-json-viewer": "^1.0.4",
     "vue3-watermark": "^1.0.2",
-    "vuex": "^4.0.2"
+    "vuex": "^4.0.2",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

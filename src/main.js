@@ -40,7 +40,6 @@ app.use(store);
 app.use(installElementPlus, { locale });
 /* 引入JsonViewer */
 app.use(JsonViewer);
-
 VMdEditor.use(githubTheme, {
   Hljs: hljs
 });
@@ -48,7 +47,6 @@ VMdEditor.use(createTodoListPlugin());
 VMdEditor.use(createLineNumberPlugin());
 VMdEditor.use(createTipPlugin());
 app.use(VMdEditor);
-
 // 权限拦截
 router.beforeEach(async (to, from, next) => {
   /* todo:设置标题 */

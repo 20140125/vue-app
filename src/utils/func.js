@@ -1,5 +1,8 @@
 import store from '../store';
 import router from '../route';
+import request from '../tools/request';
+import xlsx from 'xlsx';
+import { ElMessage } from 'element-plus';
 
 export default {
   /**
@@ -115,5 +118,62 @@ export default {
         }
       }
     });
+  },
+  /**
+   * todo:base64图片上传
+   * @param fileUrl 上传的图片地址
+   * @param images 图片资源
+   * @param imagesName 图片名称
+   */
+  async toUploadNewFile(fileUrl, images, imagesName) {
+    /* 生成二进制流上传图片 */
+    const arr = images.split(',');
+    const mime = ((arr[0] || []).match(/:(.*?);/) || [])[1];
+    const bstr = atob(arr[1] || []);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n) {
+      n -= 1;
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    const file = new File([u8arr], fileUrl, { type: mime });
+    file.uid = new Date().getTime();
+    /* 创建form对象 */
+    const param = new FormData();
+    param.append('file', file);
+    param.append('filename', `${imagesName}.png`);
+    /* 添加请求头 */
+    const config = { headers: { 'Content-Type': 'multipart/form-data', 'Authorization': store.state.baseLayout.token } };
+    request.post(this.action, param, config).then((response) => {
+      return response;
+    });
+  },
+  /**
+   * todo:本地读取EXCEL文件
+   * @returns {Promise<boolean>}
+   */
+  async uploadExcel() {
+    const { type } = file.raw;
+    if (type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+      ElMessage.error('请上传正确格式的Excel文件');
+      return false;
+    }
+    const f = event.currentTarget.files[0];
+    const reader = new FileReader();
+    FileReader.prototype.readAsBinaryString = (f) => {
+      let binary = '';
+      const reader = new FileReader();
+      reader.onload = () => {
+        const bytes = new Uint8Array(reader.result);
+        const length = bytes.byteLength;
+        for (let i = 0; i < length; i++) {
+          binary += String.fromCharCode(bytes[i]);
+        }
+        const wb = xlsx.read(binary, { type: 'binary' });
+        return xlsx.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+      };
+      reader.readAsArrayBuffer(f);
+    };
+    reader.readAsBinaryString(f);
   }
 };

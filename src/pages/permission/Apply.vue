@@ -72,6 +72,7 @@ export default {
     async getPermissionApply(pagination) {
       this.loading = true;
       this.syncVisible = false;
+      this.pagination.page = pagination.page;
       await this.$store.dispatch('apply/getPermissionApply', pagination).then(() => {
         this.loading = false;
         this.pagination.total = this.$store.state.apply.total;
@@ -109,6 +110,7 @@ export default {
       authLists.forEach((item) => {
         if (!item.disable) {
           checkedKeys.push(item.id);
+          this.form.href.push(item.api);
         }
         this.getDefaultCheckedKeys(item.__children, checkedKeys);
       });
@@ -123,7 +125,7 @@ export default {
       /* todo:获取用户列表 */
       await this.$store.dispatch('users/getCacheUserLists', {}).then(() => {
         this.permissionAttr = { userLists: this.$store.state.users.cacheUsers, authList: [], checkedKeys: [] };
-        this.form = { username: '', user_id: '', href: '', expires: '', desc: '' };
+        this.form = { user_id: '', href: [], expires: '', desc: '' };
         this.reForm = 'created';
       });
     },

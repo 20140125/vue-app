@@ -45,9 +45,16 @@ instance.interceptors.request.use(config => {
   return Promise.reject(error);
 });
 // http response 拦截器
-instance.interceptors.response.use(response => {
+instance.interceptors.response.use( (response) => {
   try {
-    return parseInt(response.data.item.code, 10) !== 20000 ? ErrorHandler(response) : Promise.resolve(response);
+    if (parseInt(response.data.item.code, 10) !== 20000) {
+      return ErrorHandler(response);
+    }
+    if (response.data.item.message !== 'successfully') {
+      ElMessage.success(response.data.item.message);
+    }
+    return Promise.resolve(response);
+
   } catch (error) {
     return Promise.reject(error);
   }

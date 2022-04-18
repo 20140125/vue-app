@@ -33,8 +33,6 @@ import Header from '../base/Header';
 import Menu from '../base/Menu';
 import Content from '../base/Content';
 import ToUp from '../common/ToUp';
-import urls from '../../api/urls';
-import func from '../../utils/func';
 
 export default {
   name: 'BaseLayout',
@@ -42,7 +40,7 @@ export default {
   data() {
     return {
       isCollapse: false,
-      username: `${this.$store.state.baseLayout.username}【${urls.baseURL}】${func.setTime(Date.parse(new Date()))}`,
+      username: `${this.$store.state.baseLayout.username}【${this.$store.state.login.userInfo.local}】${this.$store.state.login.userInfo.now_time}`,
       layoutNums: {
         aside: 3,
         content: 21,

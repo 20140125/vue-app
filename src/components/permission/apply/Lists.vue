@@ -9,10 +9,14 @@
         </el-table>
       </template>
     </el-table-column>
-    <el-table-column label="#ID" prop="id" width="100px"></el-table-column>
+    <el-table-column label="#ID" prop="id" width="100"></el-table-column>
     <el-table-column label="申请人" prop="username"></el-table-column>
-    <el-table-column label="申请地址" prop="href"></el-table-column>
-    <el-table-column align="center" label="授权通过" width="150px">
+    <el-table-column label="权限地址" width="300" align="center" show-tooltip-when-overflow>
+      <template #default="scope">
+        {{ `${baseURL}${scope.row.href}` }}
+      </template>
+    </el-table-column>
+    <el-table-column align="center" label="授权通过" width="150">
       <template #default="scope">
         <StatusRadio
           :status-model="scope.row"
@@ -50,7 +54,8 @@ export default {
   components: { StatusRadio },
   data() {
     return {
-      URL: URLS.permission.update
+      URL: URLS.permission.update,
+      baseURL: URLS.baseURL
     };
   }
 };

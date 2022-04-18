@@ -25,8 +25,6 @@
 </template>
 
 <script>
-import urls from '../api/urls';
-import func from '../utils/func';
 
 export default {
   name: 'BaseLayout',
@@ -51,7 +49,7 @@ export default {
   data() {
     return {
       baseLayoutPagination: this.pagination || { limit: 10, page: 1, total: 0, show_page: false },
-      username: `${this.$store.state.baseLayout.username}【${urls.baseURL}】${func.setTime(Date.parse(new Date()))}`
+      username: `${this.$store.state.baseLayout.username}【${this.$store.state.login.userInfo.local}】${this.$store.state.login.userInfo.now_time}`
     };
   },
   methods: {
