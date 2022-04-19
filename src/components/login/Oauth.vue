@@ -27,7 +27,7 @@ export default {
   watch: {
     async oauthLogin() {
       if (this.oauthLogin) {
-        await this.$store.dispatch('login/getOauthConfig', { name: 'Oauth', login: 'before', refresh: false });
+        await this.$store.dispatch('login/getOauthConfig', { name: 'Oauth', refresh: false });
       }
     }
   },

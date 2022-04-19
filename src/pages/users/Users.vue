@@ -15,7 +15,7 @@
       <UsersDialog
         :form="form"
         :re-form="reForm"
-        :sync-visible="syncVisible"
+        :syncVisible="syncVisible"
         :users-attr="usersAttr"
         @getUsersLists="getUsersLists">
       </UsersDialog>
@@ -36,6 +36,7 @@ export default {
       loading: true,
       pagination: { page: 1, limit: 15, total: 0, show_page: true, refresh: false, username: '' },
       syncVisible: false,
+      oAuthLoginVisible: false,
       reForm: 'created',
       form: {},
       usersAttr: {}
@@ -69,6 +70,7 @@ export default {
     async getUsersLists(pagination) {
       this.loading = true;
       this.syncVisible = false;
+      this.pagination.page = pagination.page;
       await this.$store.dispatch('users/getUsersLists', pagination).then(() => {
         this.loading = false;
         this.pagination.total = this.$store.state.users.total;
