@@ -36,8 +36,8 @@
           @click="requestAdd()">
         </el-button>
         <div v-for="(request, index) in localForm.request" :key="index">
-          <el-input v-model.trim="request.name" placeholder="参数名"></el-input>
-          <el-select v-model.trim="request.type" placeholder="字段类型">
+          <el-input v-model.trim="request.name" placeholder="参数名" :readonly="index === 0"></el-input>
+          <el-select v-model.trim="request.type" placeholder="字段类型" :disabled="index === 0">
             <el-option
               v-for="(item,index) in attr.type"
               :key="index"
@@ -45,14 +45,14 @@
               :value="item.value">
             </el-option>
           </el-select>
-          <el-select v-model.trim="request.required" placeholder="是否必须">
+          <el-select v-model.trim="request.required" placeholder="是否必须" :disabled="index === 0">
             <el-option :value="1" label="是"></el-option>
             <el-option :value="0" label="否"></el-option>
           </el-select>
-          <el-input v-model.trim="request.desc" auto-complete="true" placeholder="参数描述"></el-input>
-          <el-input v-model.trim="request.val" auto-complete="true" placeholder="参数值"></el-input>
+          <el-input v-model.trim="request.desc" auto-complete="true" placeholder="参数描述" :readonly="index === 0"></el-input>
+          <el-input v-model.trim="request.val" auto-complete="true" placeholder="参数值" :readonly="index === 0"></el-input>
           <el-button
-            v-if="localForm.request.length > 1"
+            v-if="index >= 1"
             icon="el-icon-delete"
             plain
             size="medium"
@@ -70,8 +70,8 @@
           @click="responseAdd()">
         </el-button>
         <div v-for="(response, index) in localForm.response" :key="index">
-          <el-input v-model.trim="response.name" placeholder="参数名"></el-input>
-          <el-select v-model.trim="response.type" placeholder="字段类型">
+          <el-input v-model.trim="response.name" placeholder="参数名" :readonly="index <= 1"></el-input>
+          <el-select v-model.trim="response.type" placeholder="字段类型" :disabled="index <= 1">
             <el-option
               v-for="(item,index) in attr.type"
               :key="index"
@@ -79,9 +79,9 @@
               :value="item.value">
             </el-option>
           </el-select>
-          <el-input v-model.trim="response.desc" placeholder="参数描述"></el-input>
+          <el-input v-model.trim="response.desc" placeholder="参数描述" :readonly="index <= 1"></el-input>
           <el-button
-            v-if="localForm.response.length > 1"
+            v-if="index >= 2"
             icon="el-icon-delete"
             plain
             size="medium"
@@ -153,7 +153,7 @@ export default {
      * todo:添加请求参数
      */
     requestAdd() {
-      this.localForm.request.push({ name: '', desc: '', required: 1, type: '', val: '' });
+      this.localForm.request.push({ name: '', desc: '', required: 1, type: 'String', val: '' });
     },
     /**
      * todo:删除请求参数

@@ -64,8 +64,8 @@ export default {
         source: 'json', desc: '', api_id: '', href: '', method: 'POST',
         request: [{ name: 'token', desc: '用户token', required: 1, type: 'String', val: this.$store.state.baseLayout.token }],
         response: [
-          { name: 'code', desc: '200 成功', type: 'Number' },
-          { name: 'message', desc: 'Success', type: 'String' }
+          { name: 'code', desc: '20000 成功', type: 'Number' },
+          { name: 'message', desc: 'successfully', type: 'String' }
         ],
         response_string: [], remark: '接口调用必须添加header头Authorization以便验证用户的合法性', apiLog: []
       },
@@ -141,7 +141,7 @@ export default {
       await this.$store.dispatch('category/getInterfaceDetails', { id: form.id, source: source }).then(() => {
         this.form = JSON.parse(JSON.stringify(this.$store.state.category.details));
         if (source === 'json') {
-          this.form.request.forEach((item) => {
+          ((this.form || {}).request || []).forEach((item) => {
             if (item.name === 'token') {
               item.val = this.$store.state.baseLayout.token;
             }
