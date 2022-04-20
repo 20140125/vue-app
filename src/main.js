@@ -6,17 +6,27 @@ import locale from 'element-plus/lib/locale/lang/zh-cn';
 import JsonViewer from 'vue3-json-viewer';
 
 import VMdEditor from '@kangc/v-md-editor';
+/* TODO:MARKDOWN主题*/
 import '@kangc/v-md-editor/lib/style/base-editor.css';
 import githubTheme from '@kangc/v-md-editor/lib/theme/github.js';
-/* todo: TodoList 任务列表*/
+/* TODO:TODOLIST 任务列表*/
 import '@kangc/v-md-editor/lib/theme/style/github.css';
 import createTodoListPlugin from '@kangc/v-md-editor/lib/plugins/todo-list/index';
-/* todo: LineNumber 代码行号*/
+/* TODO:LINENUMBER 代码行号*/
 import '@kangc/v-md-editor/lib/plugins/todo-list/todo-list.css';
 import createLineNumberPlugin from '@kangc/v-md-editor/lib/plugins/line-number/index';
-/* todo: Tip 提示插件*/
+/* TODO:TIP 提示插件*/
 import createTipPlugin from '@kangc/v-md-editor/lib/plugins/tip/index';
 import '@kangc/v-md-editor/lib/plugins/tip/tip.css';
+/* TODO:引入表情包 */
+import createEmojiPlugin from '@kangc/v-md-editor/lib/plugins/emoji/index';
+import '@kangc/v-md-editor/lib/plugins/emoji/emoji.css';
+/* TODO:高亮代码行 */
+import createHighlightLinesPlugin from '@kangc/v-md-editor/lib/plugins/highlight-lines/index';
+import '@kangc/v-md-editor/lib/plugins/highlight-lines/highlight-lines.css';
+/* TODO:内容定位 */
+import createAlignPlugin from '@kangc/v-md-editor/lib/plugins/align';
+
 /* 水印 */
 import waterMark from 'vue3-watermark';
 
@@ -40,12 +50,15 @@ app.use(store);
 app.use(installElementPlus, { locale });
 /* 引入JsonViewer */
 app.use(JsonViewer);
-VMdEditor.use(githubTheme, {
-  Hljs: hljs
-});
+
+VMdEditor.use(githubTheme, { Hljs: hljs });
 VMdEditor.use(createTodoListPlugin());
 VMdEditor.use(createLineNumberPlugin());
 VMdEditor.use(createTipPlugin());
+VMdEditor.use(createEmojiPlugin());
+VMdEditor.use(createHighlightLinesPlugin());
+VMdEditor.use(createAlignPlugin());
+
 app.use(VMdEditor);
 // 权限拦截
 router.beforeEach(async (to, from, next) => {

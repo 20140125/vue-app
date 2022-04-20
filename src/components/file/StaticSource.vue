@@ -6,12 +6,12 @@
       :close-on-press-escape="false"
       :title="staticSource.title"
       center
-      width="30%"
+      :width="dialogWidth"
       @close="$emit('closeDialog')">
       <!--图片滚动-->
-      <el-carousel v-if="staticSource.image.length > 0">
+      <el-carousel v-if="staticSource.image.length > 0" :height="carouselHeight" :autoplay="false" @change="carouselChange">
         <el-carousel-item v-for="(item, index) in staticSource.image" :key="index">
-          <el-image :alt="item.title" :src="item.url" fit="cover" style="width: 100%;height: 100%"></el-image>
+          <el-image :alt="item.title" :src="item.url" fit="cover" style="width: 100%; height: 100%"></el-image>
         </el-carousel-item>
       </el-carousel>
       <!--视频滚动-->
@@ -30,7 +30,46 @@ import { toggle } from '../mixins/toggle';
 export default {
   name: 'StaticSource',
   props: ['staticSource'],
-  mixins: [toggle]
+  mixins: [toggle],
+  data() {
+    return {
+      carouselHeight: '300px',
+      dialogWidth: '580px'
+    }
+  },
+  watch: {
+    /**
+     * todo:监听图片资源
+     * @returns {Promise<void>}
+     */
+    async 'staticSource.image'() {
+      if (this.staticSource.image.length > 0) {
+        await this.staticSource.image.forEach((item, index) => {
+          const image = new Image();
+          image.src = item.url;
+          image.setAttribute('crossOrigin', 'anonymous');
+          image.onload = async () => {
+            item.width = image.width;
+            item.height = image.height;
+            if (index === 0) {
+              this.carouselHeight = `${image.height}px`;
+              this.dialogWidth = `${image.width}px`;
+            }
+          };
+        });
+      }
+    }
+  },
+  methods: {
+    /**
+     * todo:跑马灯切换
+     * @param index
+     */
+    carouselChange(index) {
+      this.carouselHeight = `${this.staticSource.image[index].height}px`;
+      this.dialogWidth = `${this.staticSource.image[index].width}px`;
+    }
+  }
 };
 </script>
 
@@ -38,7 +77,7 @@ export default {
 #source {
 
   .el-dialog__body {
-    padding: 10px 0 0 0 !important;
+    padding: 1px !important;
     line-height: 0 !important;
 
     .el-carousel__indicator--horizontal {

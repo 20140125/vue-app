@@ -13,6 +13,9 @@
 
 <script>
 
+import $http from '../../tools/request';
+import URLS from '../../api/urls';
+
 export default {
   name: 'MarkDown',
   props: {
@@ -20,28 +23,51 @@ export default {
       type: String,
       default: () => ''
     },
-    /* todo：edit(纯编辑模式) editable(编辑与预览模式) preview(纯预览模式). */
+    /* TODO:EDIT(纯编辑模式) EDITABLE(编辑与预览模式) PREVIEW(纯预览模式). */
     mode: {
       type: String,
       default: () => 'editable'
     },
-    /* todo：数据保存 */
+    /* TODO:数据保存 */
     saveHandle: {
       type: Function
     },
-    /* todo：数据修改 */
+    /* TODO:数据修改 */
     changeHandle: {
-      type: Function
-    },
-    /* todo：图片上传 */
-    uploadFile: {
       type: Function
     }
   },
   data() {
     return {
-      model: this.markdown
+      model: this.markdown,
+      action: URLS.baseURL + URLS.file.upload
     };
+  },
+  methods: {
+    /**
+     * todo:上传图片
+     * @param event
+     * @param insertImage
+     * @param files
+     */
+    uploadFile(event, insertImage, files) {
+      try {
+        /* todo:创建form对象 */
+        const param = new FormData();
+        param.append('file', files[0]);
+        param.append('filename', files[0].name);
+        param.append('token', this.$store.state.baseLayout.token);
+        param.append('round_name', 'YES');
+        param.append('file_type', 'image');
+        /* todo:添加请求头 */
+        const config = { headers: { 'Content-Type': 'multipart/form-data', 'Authorization': this.$store.state.baseLayout.token } };
+        $http.post(this.action, param, config).then((response) => {
+          insertImage({ url: response.data.item.lists.src, desc: files[0].name });
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    }
   }
 };
 </script>

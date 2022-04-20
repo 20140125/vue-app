@@ -141,7 +141,7 @@ export default {
       const source = [];
       fileLists.forEach(file => {
         source.push({
-          url: this.$store.state.login.userInfo.local + 'storage' + file.path.substr(file.path.indexOf('public') + 6, file.path.length - file.path.indexOf('public')),
+          url: this.$store.state.login.userInfo.local + '/storage' + file.path.substr(file.path.indexOf('public') + 6, file.path.length - file.path.indexOf('public')),
           title: file.filename
         });
       });

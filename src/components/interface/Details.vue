@@ -18,7 +18,10 @@
         </SubmitButton>
       </div>
       <div v-if="localForm.source === 'markdown'" class="markdown">
-        <MarkDown :markdown="localForm.markdown" :saveHandle="saveHandle"></MarkDown>
+        <MarkDown
+          :markdown="localForm.markdown"
+          :saveHandle="saveHandle">
+        </MarkDown>
         <InterfaceLog :lists="localForm.apiLog"></InterfaceLog>
         <el-main>
           <el-button plain @click="$emit('getInterfaceCategory', true)">取消</el-button>
