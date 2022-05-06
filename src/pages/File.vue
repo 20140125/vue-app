@@ -19,6 +19,7 @@
       <FileLists
         :fileURL="fileURL"
         :lists="fileLists"
+        :iconMap="iconMap"
         @addFile="addFile"
         @chmodFile="chmodFile"
         @deleteFile="deleteFile"
@@ -74,6 +75,7 @@ export default {
       fileDetail: [],
       visible: { detail: false, source: false, chmod: false, upload: false },
       staticSource: { image: [], video: [], title: '', file: '' },
+      iconMap: { dir: 'el-icon-folder-opened', file: 'el-icon-files' },
       chmod: {},
       loading: true,
       fileAtt: { multipleSelection: [] },

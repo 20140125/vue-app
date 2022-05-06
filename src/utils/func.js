@@ -1,8 +1,6 @@
 import store from '../store';
 import router from '../route';
 import request from '../tools/request';
-import xlsx from 'xlsx';
-import { ElMessage } from 'element-plus';
 
 export default {
   /**
@@ -147,33 +145,5 @@ export default {
     request.post(this.action, param, config).then((response) => {
       return response;
     });
-  },
-  /**
-   * todo:本地读取EXCEL文件
-   * @returns {Promise<boolean>}
-   */
-  async uploadExcel() {
-    const { type } = file.raw;
-    if (type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
-      ElMessage.error('请上传正确格式的Excel文件');
-      return false;
-    }
-    const f = event.currentTarget.files[0];
-    const reader = new FileReader();
-    FileReader.prototype.readAsBinaryString = (f) => {
-      let binary = '';
-      const reader = new FileReader();
-      reader.onload = () => {
-        const bytes = new Uint8Array(reader.result);
-        const length = bytes.byteLength;
-        for (let i = 0; i < length; i++) {
-          binary += String.fromCharCode(bytes[i]);
-        }
-        const wb = xlsx.read(binary, { type: 'binary' });
-        return xlsx.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-      };
-      reader.readAsArrayBuffer(f);
-    };
-    reader.readAsBinaryString(f);
   }
 };

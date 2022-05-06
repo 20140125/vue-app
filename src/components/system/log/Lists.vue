@@ -2,7 +2,7 @@
   <el-table :data="systemLogLists" :default-expand-all="false">
     <el-table-column type="expand">
       <template #default="scope">
-        <JsonView :items="JSON.parse(JSON.stringify(scope.row.log))"></JsonView>
+        <JsonView :items="JSON.parse(JSON.stringify(scope.row.log || []))"></JsonView>
       </template>
     </el-table-column>
     <el-table-column label="#ID" prop="id" width="100px"></el-table-column>
@@ -30,10 +30,7 @@ import JsonView from '../../common/JsonView';
 export default {
   name: 'SystemLogLists',
   components: { JsonView },
-  props: ['systemLogLists'],
-  data() {
-    return {};
-  }
+  props: ['systemLogLists']
 };
 </script>
 

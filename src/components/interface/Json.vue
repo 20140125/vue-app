@@ -1,7 +1,7 @@
 <template>
   <div id="json">
     <el-form :ref="reForm" :model="localForm" :rules="rules" label-position="left" label-width="100px">
-      <el-form-item label="接口名称：" prop="api_id">
+      <el-form-item label="接口名称：" prop="api_id" class="is-required">
         <el-select v-model.number="localForm.api_id" disabled placeholder="接口名称">
           <el-option
             v-for="(item,index) in categoryLists"
@@ -27,7 +27,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item class="response" label="请求字段：" prop="request">
+      <el-form-item class="response is-required" label="请求字段：" prop="request">
         <el-button
           icon="el-icon-circle-plus-outline"
           plain
@@ -61,7 +61,7 @@
           </el-button>
         </div>
       </el-form-item>
-      <el-form-item class="response" label="返回字段：" prop="response">
+      <el-form-item class="response is-required" label="返回字段：" prop="response">
         <el-button
           icon="el-icon-circle-plus-outline"
           plain
@@ -100,10 +100,10 @@
           show-word-limit type="textarea">
         </el-input>
       </el-form-item>
-      <el-form-item label="接口请求：">
+      <el-form-item label="接口请求：" class="is-required">
         <el-button plain type="primary" @click="getInterfaceDetails">接口调用</el-button>
       </el-form-item>
-      <el-form-item label="返回参数：" prop="response_string">
+      <el-form-item label="返回参数：" prop="response_string" class="is-required">
         <JsonView :items="localForm.response_string"></JsonView>
       </el-form-item>
     </el-form>
@@ -137,7 +137,12 @@ export default {
           { label: '时间戳(Timestamp)', value: 'Timestamp' }
         ]
       },
-      rules: {}
+      rules: {
+        desc: [{ required: true, message: '请输入接口描述', trigger: 'blur' }],
+        href: [{ required: true, message: '请输入接口地址', trigger: 'blur' }],
+        method: [{ required: true, message: '请选择请求方法', trigger: 'change' }],
+        remark: [{ required: true, message: '请输入接口说明', trigger: 'blur' }]
+      }
     };
   },
   methods: {

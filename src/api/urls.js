@@ -46,6 +46,7 @@ let urls = {
   /* todo:日志 */
   log: {
     lists: '/api/v1/log/index',
+    get: '/api/v1/log/get',
     delete: '/api/v1/log/delete'
   },
   /* todo:角色 */

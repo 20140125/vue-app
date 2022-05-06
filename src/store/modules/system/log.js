@@ -41,6 +41,32 @@ export const actions = {
         reject(error);
       });
     });
+  },
+  /**
+   * todo:获取日志详细信息
+   * @param commit
+   * @param state
+   * @param payload
+   * @returns {Promise<unknown>}
+   */
+  async getSystemLog({ commit, state }, payload) {
+    /* 如果页码没有变，直接读取vuex里面的数据 */
+    if (state.id === payload.id) {
+      commit('UPDATE_MUTATIONS', { systemLog: state.systemLog });
+      return false;
+    }
+    return new Promise((resolve, reject) => {
+      requestMethods.commonMethods(URLS.log.get, payload).then(result => {
+        commit('UPDATE_MUTATIONS', {
+          systemLog: (((result || {}).data || {}).item || {}).lists || {},
+          id: payload.id || 0
+        });
+        resolve(result);
+      }).catch(error => {
+        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+        reject(error);
+      });
+    });
   }
 };
 export default {

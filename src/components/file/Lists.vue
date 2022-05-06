@@ -3,13 +3,14 @@
     <el-table-column type="selection" width="60"></el-table-column>
     <el-table-column label="文件名" width="600">
       <template #default="scope">
+        <i :class="iconMap[scope.row.file_type]" style="font-size: 18px; color: #409EFF"></i>
         <span
           v-if="scope.row.file_type !== 'file'"
-          style="cursor: pointer;"
+          style="cursor: pointer;margin-left: 10px;"
           @click="$emit('getFileLists', scope.row)"
           v-html="scope.row.filename">
         </span>
-        <span v-else style="cursor: pointer;" @click="$emit('getFiles',scope.row)" v-html="scope.row.filename"></span>
+        <span v-else style="cursor: pointer; margin-left: 10px;" @click="$emit('getFiles',scope.row)" v-html="scope.row.filename"></span>
       </template>
     </el-table-column>
     <el-table-column label="类型" width="100">
@@ -93,7 +94,7 @@
 <script>
 export default {
   name: 'FileLists',
-  props: ['lists', 'fileURL']
+  props: ['lists', 'fileURL', 'iconMap']
 };
 </script>
 

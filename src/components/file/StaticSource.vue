@@ -35,7 +35,7 @@ export default {
     return {
       carouselHeight: '300px',
       dialogWidth: '580px'
-    }
+    };
   },
   watch: {
     /**

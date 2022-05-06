@@ -28,11 +28,11 @@
             :filter-node-method="filterNode"
             :highlight-current="true"
             :indent="20"
+            empty-text="暂无数据"
             :props="treeProps"
-            accordion
-            icon="el-icon-edit"
+            icon-class="el-icon-files"
             node-key="name"
-            style="background-color: #272822;line-height: 20px"
+            style="background-color: #272822;line-height: 20px;"
             @node-click="getFileContent">
           </el-tree>
         </el-col>
