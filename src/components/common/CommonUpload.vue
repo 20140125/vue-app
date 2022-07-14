@@ -192,24 +192,34 @@ export default {
       if (!this.imgHeight && !this.imgWidth) {
         return isJPG && isLt30KB;
       }
+      let tips = [];
       const isSize = new Promise((resolve, reject) => {
-        let width = this.imgWidth;
-        let height = this.imgHeight;
-        let _URL = window.URL || window.webkitURL;
-        let image = new Image();
+        const width = this.imgWidth;
+        const height = this.imgHeight;
+        let valid = false;
+        let validArray = [];
+        const _URL = window.URL || window.webkitURL;
+        const image = new Image();
         image.onload = function () {
-          let valid = (image.width === width && image.height === height)
-            || (image.width >= width - 10 && image.height >= height - 10 && image.width <= width + 10 && image.height <= height + 10);
+          if (typeof width === 'number' && typeof height === 'number') {
+            valid = (image.width === width && image.height === height) || (image.width >= width - 10 && image.height >= height - 10 && image.width <= width + 10 && image.height <= height + 10);
+          } else {
+            /* 图片宽高相等 */
+            validArray.push(width.includes(image.width) && height.includes(image.height) ? 1 : 0);
+            /* 图片宽高上下浮动10px */
+            width.forEach((item, index) => {
+              tips.push(`${item}*${height[index]}`);
+              validArray.push((image.width >= item - 10 && image.height >= height[index] - 10 && image.width <= item + 10 && image.height <= height[index] + 10) ? 1 : 0);
+            });
+            valid = validArray.includes(1);
+          }
           valid ? resolve() : reject();
         };
         image.src = _URL.createObjectURL(file);
-      }).then(() => {
-          return file;
-        }, () => {
-          this.$message.error(`上传图片尺寸不符合,只能是${this.imgWidth}*${this.imgHeight}!`);
-          return Promise.reject();
-        }
-      );
+      }).then(() => file, () => {
+        this.$message.error(`上传图片尺寸不符合,只能是${tips.length === 0 ? `${this.imgWidth}*${this.imgHeight}` : tips.join(' / ')}!`);
+        return Promise.reject();
+      });
       return isJPG && isLt30KB && isSize;
     }
   }
