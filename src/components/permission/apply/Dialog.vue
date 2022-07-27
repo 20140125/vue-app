@@ -33,13 +33,13 @@
             highlight-current>
           </el-tree>
         </el-form-item>
-        <el-form-item label="申请时间：" prop="expires">
+        <el-form-item label="过期时间：" prop="expires">
           <el-date-picker
             v-model="localForm.expires"
             :editable="false"
             clearable
             size="large"
-            placeholder="选择申请时间"
+            placeholder="选择过期时间"
             type="datetime"
             value-format="YYYY-MM-DD HH:mm:ss">
           </el-date-picker>

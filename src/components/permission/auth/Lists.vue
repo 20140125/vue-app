@@ -4,7 +4,7 @@
     <el-table-column label="权限链接" prop="href"></el-table-column>
     <el-table-column align="center" label="显示状态">
       <template #default="scope">
-        <StatusRadio :status-model="scope.row" :url="URL"></StatusRadio>
+        <StatusRadio :statusModel="scope.row" :url="URL"></StatusRadio>
       </template>
     </el-table-column>
     <el-table-column align="right" label="操作">

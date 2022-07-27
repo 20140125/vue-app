@@ -4,7 +4,7 @@
     <el-table-column label="角色名称" prop="role_name"></el-table-column>
     <el-table-column label="角色状态">
       <template #default="scope">
-        <StatusRadio :status-model="scope.row" :url="URL"></StatusRadio>
+        <StatusRadio :statusModel="scope.row" :url="URL"></StatusRadio>
       </template>
     </el-table-column>
     <el-table-column label="创建时间" prop="created_at"></el-table-column>

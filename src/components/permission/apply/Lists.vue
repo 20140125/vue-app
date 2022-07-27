@@ -19,10 +19,18 @@
     <el-table-column align="center" label="授权通过" width="150">
       <template #default="scope">
         <StatusRadio
-          :status-model="scope.row"
-          :url="URL"
-          @closeDialog="$emit('getPermissionApply', { page: 1, limit: 15, show_page: true, refresh: true })">
+          v-if="Permission.auth.indexOf(URL) > -1"
+          :statusModel="scope.row"
+          :url="URL">
         </StatusRadio>
+        <el-button
+          v-else
+          :icon="['el-icon-check', 'el-icon-close'][scope.row.status - 1]"
+          :type="['success', 'danger'][scope.row.status - 1]"
+          circle
+          plain
+          size="medium">
+        </el-button>
       </template>
     </el-table-column>
     <el-table-column align="center" label="申请时间" prop="created_at"></el-table-column>
@@ -31,7 +39,7 @@
     <el-table-column align="right" label="操作" width="200px">
       <template #default="scope">
         <el-button
-          v-if="scope.row.refresh"
+          v-if="scope.row.refresh && scope.row.status === 1"
           icon="el-icon-refresh-right"
           plain
           size="mini"
