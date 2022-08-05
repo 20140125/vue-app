@@ -34,7 +34,7 @@ export default {
   },
   computed: {
     error() {
-      return this.$store.state.error || { code: '20000', message: 'Successfully' };
+      return this.$store.state.error || { code: '20000', message: 'successfully' };
     }
   },
   mounted() {

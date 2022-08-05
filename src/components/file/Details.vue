@@ -20,7 +20,8 @@
             clearable
             placeholder="输入关键字搜索"
             style="margin-bottom: 20px"
-            suffix-icon="el-icon-search"></el-input>
+            suffix-icon="el-icon-search">
+          </el-input>
           <el-tree
             ref="tree"
             :data="details"

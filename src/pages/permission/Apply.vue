@@ -138,8 +138,8 @@ export default {
       this.$store.dispatch('UPDATE_ACTIONS', {
         url: URLS.permission.update,
         model: { id: form.id, status: form.status }
-      }).then(() => {
-        this.$message.success('权限续期成功');
+      }).then((response) => {
+        this.$message.success(response.data.message);
         this.getPermissionApply({ page: 1, limit: 15, show_page: true, refresh: true });
       });
     }

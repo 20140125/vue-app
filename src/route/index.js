@@ -50,7 +50,7 @@ const router = createRouter({
           path: 'permission/index',
           name: 'PermissionApply',
           component: () => import('../pages/permission/Apply'),
-          meta: { title: '权限申请' }
+          meta: { title: '授权列表' }
         },
         /* 文件管理 */
         {

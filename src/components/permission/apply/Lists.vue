@@ -21,7 +21,8 @@
         <StatusRadio
           v-if="Permission.auth.indexOf(URL) > -1"
           :statusModel="scope.row"
-          :url="URL">
+          :url="URL"
+          @closeDialog="$emit('getPermissionApply', { page: 1, limit: 15, show_page: true, refresh: true })">
         </StatusRadio>
         <el-button
           v-else
