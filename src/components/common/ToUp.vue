@@ -5,7 +5,7 @@
 </template>
 
 <script>
-
+import { scrollToUp } from '@/utils/func';
 export default {
   name: 'ToUp',
   props: {
@@ -48,18 +48,7 @@ export default {
      * todo:返回顶部
      */
     toUp() {
-      /* 每次开启定时器都重新计算速度 */
-      let timer = setInterval(() => {
-        /* 获取滚动条的滚动高度 */
-        let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-        /* 用于设置速度差，产生缓动的效果 */
-        let speed = Math.floor(-scrollTop / this.speed);
-        /* 用纯数字赋值 */
-        document.documentElement.scrollTop = document.body.scrollTop = scrollTop + speed;
-        if (scrollTop === 0) {
-          clearInterval(timer);
-        }
-      }, this.interval);
+      scrollToUp(this.speed, this.interval);
     }
   }
 };

@@ -101,6 +101,7 @@ export const actions = {
     try {
       let newTabs = JSON.parse(JSON.stringify(state.tabs));
       newTabs.splice(payload.index, 1);
+      console.log(payload)
       commit('UPDATE_MUTATIONS', { tabs: newTabs, tabModel: payload.nextTab });
     } catch (error) {
       commit('UPDATE_MUTATIONS', { error: error }, { root: true });

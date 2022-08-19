@@ -9,13 +9,13 @@ import request from '../tools/request';
  * @return {string}
  */
 export function setTime(timestamp, language = 'en') {
-  let date = new Date(timestamp);
-  let Y = date.getFullYear();
-  let M = (date.getMonth() + 1) < 10 ? `0${(date.getMonth() + 1)}` : date.getMonth() + 1;
-  let D = (date.getDate() < 10) ? `0${date.getDate()}` : date.getDate();
-  let h = (date.getHours() < 10) ? `0${date.getHours()}` : date.getHours();
-  let m = (date.getMinutes()) < 10 ? `0${date.getMinutes()}` : date.getMinutes();
-  let s = (date.getSeconds() < 10) ? `0${date.getSeconds()}` : date.getSeconds();
+  const date = new Date(timestamp);
+  const Y = date.getFullYear();
+  const M = (date.getMonth() + 1) < 10 ? `0${(date.getMonth() + 1)}` : date.getMonth() + 1;
+  const D = (date.getDate() < 10) ? `0${date.getDate()}` : date.getDate();
+  const h = (date.getHours() < 10) ? `0${date.getHours()}` : date.getHours();
+  const m = (date.getMinutes()) < 10 ? `0${date.getMinutes()}` : date.getMinutes();
+  const s = (date.getSeconds() < 10) ? `0${date.getSeconds()}` : date.getSeconds();
   switch (language) {
     case 'en':
       return Y + '-' + M + '-' + D + ' ' + h + ':' + m + ':' + s;
@@ -56,22 +56,23 @@ export function scrollToBottom(selector) {
     domWrapper.scrollTop = domWrapper.scrollHeight;
   }, 10);
 }
+
 /**
  * todo:返回顶部
+ * @param speed 配速
+ * @param timeout 定时器执行时间
  */
-export function scrollToUp() {
+export function scrollToUp(speed, timeout) {
   /* 每次开启定时器都重新计算速度 */
-  let timer = setInterval(function () {
+  const timer = setInterval(function () {
     /* 获取滚动条的滚动高度 */
     let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
     /* 用于设置速度差，产生缓动的效果 */
-    let speed = Math.floor(-scrollTop / 8.888);
-    /* 用纯数字赋值 */
-    document.documentElement.scrollTop = document.body.scrollTop = scrollTop + speed;
+    document.documentElement.scrollTop = document.body.scrollTop = scrollTop + Math.floor(-scrollTop / speed);
     if (scrollTop === 0) {
       clearInterval(timer);
     }
-  }, 50);
+  }, timeout);
 }
 /**
  * todo:像素转换
@@ -79,7 +80,7 @@ export function scrollToUp() {
  * @return {string}
  */
 export function rgbToHex(val) {
-  let color = [];
+  const color = [];
   let r = 0;
   let g = 0;
   let b = 0;
@@ -106,10 +107,10 @@ export function rgbToHex(val) {
  * todo:删除tab标签
  * @param item
  */
-export async function removeTabs(item) {
-  await store.state.home.tabs.forEach((tab, index) => {
+export function removeTabs(item) {
+  store.state.home.tabs.forEach((tab, index) => {
     if (tab.value === item) {
-      let nextTab = store.state.home.tabs[index + 1] || store.state.home.tabs[index - 1];
+      const nextTab = store.state.home.tabs[index + 1] || store.state.home.tabs[index - 1];
       if (nextTab) {
         store.dispatch('home/deleteTabs', { index, nextTab }).then(() => router.push({ path: nextTab.value }));
       }
@@ -122,7 +123,7 @@ export async function removeTabs(item) {
  * @param images 图片资源
  * @param imagesName 图片名称
  */
-export async function toUploadNewFile(fileUrl, images, imagesName) {
+export function toUploadNewFile(fileUrl, images, imagesName) {
   /* 生成二进制流上传图片 */
   const arr = images.split(',');
   const mime = ((arr[0] || []).match(/:(.*?);/) || [])[1];

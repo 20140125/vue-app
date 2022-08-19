@@ -36,7 +36,8 @@
           </el-badge>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item :style="`color: ${activeColor} !important`" class="web-notice" disabled>系统通知
+              <el-dropdown-item :style="`color: ${activeColor} !important`" class="web-notice" disabled>
+                系统通知
               </el-dropdown-item>
               <el-dropdown-item
                 v-for="(item,index) in notice" :key="index" :command="item"
@@ -45,7 +46,8 @@
                 <el-badge v-if="!item.disabled" is-dot></el-badge>
                 【{{ item.title }}】 {{ item.info }}
               </el-dropdown-item>
-              <el-dropdown-item :style="`color: ${activeColor} !important`" class="web-notice" command="more">查看更多
+              <el-dropdown-item :style="`color: ${activeColor} !important`" class="web-notice" command="more">
+                查看更多
               </el-dropdown-item>
             </el-dropdown-menu>
           </template>

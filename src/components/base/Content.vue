@@ -10,7 +10,6 @@
     <el-card shadow="always">
       <router-view></router-view>
     </el-card>
-
   </el-tabs>
 </template>
 
@@ -24,7 +23,7 @@ export default {
       return this.$store.state.home.tabs;
     },
     tabModel() {
-      return { ...this.$store.state.home.tabModel };
+      return {...this.$store.state.home.tabModel};
     }
   },
   mounted() {
@@ -37,8 +36,8 @@ export default {
      * todo:页面跳转
      * @return {Promise<void>}
      */
-    async goto() {
-      await this.$router.push({ path: this.tabModel.value });
+    async goto(value) {
+      await this.$router.push({ path: value.props.name });
     },
     /**
      * todo:删除标签
