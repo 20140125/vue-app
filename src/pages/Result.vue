@@ -34,17 +34,16 @@ export default {
   },
   computed: {
     error() {
-      return this.$store.state.error || { code: '20000', message: 'successfully' };
+      return this.$store.state.errorInfo;
     }
   },
   mounted() {
     this.$nextTick(async () => {
-      const timer = setInterval(async () => {
+      const timer = setInterval( () => {
         this.timeout -= 1;
         if (!this.timeout) {
-          await removeTabs(this.$store.state.home.tabModel.value).then(() => {
-            clearInterval(timer);
-          });
+          clearInterval(timer);
+          removeTabs(this.$store.state.home.tabModel.value);
         }
       }, 1000);
     });

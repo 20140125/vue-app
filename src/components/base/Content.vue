@@ -44,8 +44,8 @@ export default {
      * @param item
      * @return {Promise<void>}
      */
-    async removeTabs(item) {
-      await removeTabs(item);
+    removeTabs(item) {
+      removeTabs(item);
     }
   }
 };

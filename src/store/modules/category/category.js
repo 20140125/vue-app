@@ -34,7 +34,7 @@ export const actions = {
       commonMethods(URLS.interfaceCategory.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
           categoryLists: ((result.data || {}).item || {}).lists || {},
-          categoryTree: setTree((((result || {}).data || {}).item || {}).lists || {}, 0, 'children')
+          categoryTree: setTree((((result || {}).data || {}).item || {}).lists || [], 0, 'children')
         });
         resolve(result);
       }).catch(error => {

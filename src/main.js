@@ -70,10 +70,7 @@ router.beforeEach(async (to, from, next) => {
   if (to.params.access_token) {
     window.localStorage.setItem('token', to.params.access_token || '');
     await store.commit('UPDATE_MUTATIONS', { token: to.params.access_token }, { root: true });
-    await store.commit('home/UPDATE_MUTATIONS', {
-      tabs: [{ label: '欢迎页', value: '/admin/home/index' }],
-      tabModel: { label: '欢迎页', value: '/admin/home/index' }
-    });
+    await store.commit('home/UPDATE_MUTATIONS', { tabs: store.state.home.tabs, tabModel: store.state.home.tabModel });
     next({ path: '/admin/home/index', redirect: to.path });
   }
   if (to.name === 'IndexManage' && !to.params.access_token) {
@@ -88,7 +85,11 @@ router.beforeEach(async (to, from, next) => {
     });
   } else {
     /* todo:登录后校验权限 */
-    await store.dispatch('login/checkAuthorized', { token:  store.state.baseLayout.token || to.params.access_token }).then(() => {
+    await store.dispatch('login/checkAuthorized', { token:  store.state.baseLayout.token || to.params.access_token }).then(async () => {
+      /* todo:没有登录，令牌无效直接跳转到登录页*/
+      if (['20003', '40002'].includes(store.state.errorInfo.code)) {
+        await store.commit('login/UPDATE_MUTATIONS', { userInfo: {} ,isAuthorized: false })
+      }
       /* todo:挂载全局属性*/
       app.config.globalProperties.Permission = store.state.login.isAuthorized ? store.state.login.userInfo : {};
       !store.state.login.isAuthorized ? next({ path: '/login', redirect: to.path }) : next();

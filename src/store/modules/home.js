@@ -35,7 +35,7 @@ export const actions = {
     }
     return new Promise((resolve, reject) => {
       commonMethods(URLS.home.getMenu, payload).then(result => {
-        commit('UPDATE_MUTATIONS', { menuLists: setTree((((result || {}).data || {}).item || {}).lists || {}) });
+        commit('UPDATE_MUTATIONS', { menuLists: setTree((((result || {}).data || {}).item || {}).lists || []) });
         resolve(result);
       }).catch(error => {
         commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
@@ -101,7 +101,6 @@ export const actions = {
     try {
       let newTabs = JSON.parse(JSON.stringify(state.tabs));
       newTabs.splice(payload.index, 1);
-      console.log(payload)
       commit('UPDATE_MUTATIONS', { tabs: newTabs, tabModel: payload.nextTab });
     } catch (error) {
       commit('UPDATE_MUTATIONS', { error: error }, { root: true });

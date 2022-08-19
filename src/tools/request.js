@@ -12,13 +12,13 @@ const ErrorHandler = (response) => {
   if (!store.state.baseLayout.token) {
     return router.push({ path: '/login' }).then(() => {
       ElMessage.error(response.data.item.message);
-      store.commit('UPDATE_MUTATIONS', { error: response.data.item }, { root: true });
-      return Promise.resolve({ error: response.data.item });
+      store.commit('UPDATE_MUTATIONS', { errorInfo: response.data.item }, { root: true });
+      return Promise.resolve({ errorInfo: response.data.item });
     });
   }
   router.push({ path: '/admin/result/index' }).then(() => {
-    store.commit('UPDATE_MUTATIONS', { error: response.data.item }, { root: true });
-    return Promise.resolve({ error: response.data.item });
+    store.commit('UPDATE_MUTATIONS', { errorInfo: response.data.item }, { root: true });
+    return Promise.resolve({ errorInfo: response.data.item });
   });
 };
 
