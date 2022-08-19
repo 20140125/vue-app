@@ -16,7 +16,7 @@
 <script>
 
 import SocketIO from 'socket.io-client';
-import func from '../../utils/func';
+import { setTime } from '@/utils/func';
 
 export default {
   name: 'WebPush',
@@ -36,7 +36,7 @@ export default {
       });
       /* todo:链接系统 */
       SocketService.on('connect', () => {
-        console.info(`【登录系统】${func.setTime(Date.parse(new Date()))}`);
+        console.info(`【登录系统】${setTime(Date.parse(new Date()))}`);
         /* todo:用户登录 */
         SocketService.emit('login', this.$store.state.login.userInfo.uuid);
       });
@@ -60,16 +60,16 @@ export default {
       /* todo:站内消息推送 */
       SocketService.on('new_message', ($message) => {
         this.pushMessage.push({ message: $message, timestamp: Date.parse(new Date()) / 1000 });
-        let clientLog = { time: func.setTime(Date.parse(new Date()), 'ch'), message: $message, username: '系统公告' };
+        let clientLog = { time: setTime(Date.parse(new Date()), 'ch'), message: $message, username: '系统公告' };
         this.$store.dispatch('chat/addClientLog', clientLog);
       });
       /* todo:链接断开 */
       SocketService.on('disconnect', ($error) => {
-        console.info(`【系统断开】${func.setTime(Date.parse(new Date()))}${JSON.stringify($error)}`);
+        console.info(`【系统断开】${setTime(Date.parse(new Date()))}${JSON.stringify($error)}`);
       });
       /* todo:链接错误 */
       SocketService.on('connect_error', ($error) => {
-        console.error(`【系统链接错误】${func.setTime(Date.parse(new Date()))}${JSON.stringify($error)}`);
+        console.error(`【系统链接错误】${setTime(Date.parse(new Date()))}${JSON.stringify($error)}`);
       });
     });
   }

@@ -40,7 +40,7 @@
 
 <script>
 import SocketIO from 'socket.io-client';
-import func from '../../utils/func';
+import { setTime } from '@/utils/func';
 
 export default {
   name: 'SpiderIndex',
@@ -61,7 +61,7 @@ export default {
       });
       /* todo:链接系统 */
       SocketService.on('connect', () => {
-        console.info(`【登录系统】${func.setTime(Date.parse(new Date()))}`);
+        console.info(`【登录系统】${setTime(Date.parse(new Date()))}`);
         /* todo:用户登录 */
         SocketService.emit('login', this.$store.state.login.userInfo.uuid);
       });
@@ -70,7 +70,7 @@ export default {
         if (this.messageLists.length > 100) {
           this.messageLists = [];
         }
-        this.messageLists.push({ time: func.setTime(Date.parse(new Date()), 'ch'), message: $message });
+        this.messageLists.push({ time: setTime(Date.parse(new Date()), 'ch'), message: $message });
         func.scrollToBottom('.messageLists');
         this.loading = this.messageLists.length <= 0;
       });

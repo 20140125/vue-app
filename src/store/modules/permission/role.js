@@ -1,4 +1,4 @@
-import requestMethods from '../../../api/methods';
+import { commonMethods } from '@/api/methods';
 import URLS from '../../../api/urls';
 
 export const mutations = {
@@ -29,7 +29,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      requestMethods.commonMethods(URLS.role.lists, payload).then(result => {
+      commonMethods(URLS.role.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
           roleLists: ((((result || {}).data || {}).item || {}).lists || {}).data || [],
           total: ((((result || {}).data || {}).item || {}).lists || {}).total || 0,
@@ -56,7 +56,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      requestMethods.commonMethods(URLS.role.auth, payload).then(result => {
+      commonMethods(URLS.role.auth, payload).then(result => {
         commit('UPDATE_MUTATIONS', { authLists: (((result || {}).data || {}).item || {}).lists || [] });
         resolve(result);
       }).catch(error => {

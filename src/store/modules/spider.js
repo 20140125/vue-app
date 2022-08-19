@@ -1,4 +1,4 @@
-import requestMethods from '../../api/methods';
+import { commonMethods } from '@/api/methods';
 import URLS from '../../api/urls';
 
 export const mutations = {
@@ -26,7 +26,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      requestMethods.commonMethods(URLS.spider.lists).then(result => {
+      commonMethods(URLS.spider.lists).then(result => {
         commit('UPDATE_MUTATIONS', { spiderConfig: (((result || {}).data || {}).item || {}).lists || {} });
         resolve(result);
       }).catch(error => {
@@ -43,7 +43,7 @@ export const actions = {
    */
   async runningSpider({ commit }, payload) {
     return new Promise((resolve, reject) => {
-      requestMethods.commonMethods(URLS.spider.running, payload).then(result => {
+      commonMethods(URLS.spider.running, payload).then(result => {
         resolve(result);
       }).catch(error => {
         commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });

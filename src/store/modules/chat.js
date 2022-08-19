@@ -1,4 +1,4 @@
-import requestMethods from '../../api/methods';
+import { commonMethods } from '@/api/methods';
 import URLS from '../../api/urls';
 
 export const mutations = {
@@ -88,7 +88,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      requestMethods.commonMethods(URLS.emotion.lists, payload).then(result => {
+      commonMethods(URLS.emotion.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
           emotion: (((result.data || {}).item || {}).lists || {}).data || [],
           total: (((result.data || {}).item || {}).lists || {}).total || 0,

@@ -65,7 +65,7 @@
 <script>
 import SubmitButton from '../../common/SubmitForm';
 import URLS from '../../../api/urls';
-import func from '../../../utils/func';
+import { setTime } from '@/utils/func';
 import { toggle } from '../../mixins/toggle';
 
 export default {
@@ -100,7 +100,7 @@ export default {
       });
     },
     'localForm.status'() {
-      this.localForm.created_at = this.localForm.status === 1 ? func.setTime(Date.parse(new Date())) : this.form.created_at;
+      this.localForm.created_at = this.localForm.status === 1 ? setTime(Date.parse(new Date())) : this.form.created_at;
     }
   },
   methods: {

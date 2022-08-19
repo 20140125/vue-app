@@ -2,7 +2,7 @@ import axios from 'axios';
 import { ElMessage } from 'element-plus';
 import store from '../store';
 import router from '../route';
-import urls from '../api/urls';
+import URLS from '../api/urls';
 
 /**
  * todo:错误跳转
@@ -24,6 +24,7 @@ const ErrorHandler = (response) => {
 
 const TIMEOUT = 0;
 const instance = axios.create({
+  baseURL: URLS.baseURL,
   timeout: TIMEOUT,
   headers: {
     common: {
@@ -32,11 +33,10 @@ const instance = axios.create({
     }
   }
 });
-instance.defaults.baseURL = urls.baseURL;
 // http request 拦截器
-instance.interceptors.request.use(config => {
-  const commonURL = store.state.baseLayout.token ? [urls.login.loginSystem, urls.login.reportCode, urls.login.sendMail] : [urls.login.loginSystem, urls.login.reportCode, urls.login.oauthConfig, urls.login.sendMail];
-  if (commonURL.indexOf(config.url) === -1) {
+instance.interceptors.request.use((config) => {
+  const authorizationURL = store.state.baseLayout.token ? [URLS.login.loginSystem, URLS.login.reportCode, URLS.login.sendMail] : [URLS.login.loginSystem, URLS.login.reportCode, URLS.login.oauthConfig, URLS.login.sendMail];
+  if (authorizationURL.indexOf(config.url) === -1) {
     config.headers.Authorization = store.state.baseLayout.token || window.localStorage.getItem('token');
     config.data.token = store.state.baseLayout.token || window.localStorage.getItem('token');
   }

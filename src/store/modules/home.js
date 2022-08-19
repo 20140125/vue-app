@@ -1,6 +1,6 @@
-import requestMethods from '../../api/methods';
+import { commonMethods } from '@/api/methods';
 import URLS from '../../api/urls';
-import func from '../../utils/func';
+import { setTree } from '@/utils/func';
 
 export const state = {
   tabs: [{ label: '欢迎页', value: '/admin/home/index' }],
@@ -34,8 +34,8 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      requestMethods.commonMethods(URLS.home.getMenu, payload).then(result => {
-        commit('UPDATE_MUTATIONS', { menuLists: func.setTree((((result || {}).data || {}).item || {}).lists || {}) });
+      commonMethods(URLS.home.getMenu, payload).then(result => {
+        commit('UPDATE_MUTATIONS', { menuLists: setTree((((result || {}).data || {}).item || {}).lists || {}) });
         resolve(result);
       }).catch(error => {
         commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
@@ -65,7 +65,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      requestMethods.commonMethods(URLS.timeline.lists, payload).then(result => {
+      commonMethods(URLS.timeline.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', { timeline: ((((result || {}).data || {}).item || {}).lists || {}).data || [] });
         resolve(result);
       }).catch(error => {

@@ -1,6 +1,6 @@
-import requestMethods from '../../../api/methods';
+import { commonMethods } from '@/api/methods';
 import URLS from '../../../api/urls';
-import func from '../../../utils/func';
+import { setTree } from '@/utils/func';
 
 export const mutations = {
   /**
@@ -26,15 +26,15 @@ export const actions = {
     if (state.categoryLists && !payload.refresh) {
       commit('UPDATE_MUTATIONS', {
         categoryLists: state.categoryLists,
-        categoryTree: func.setTree(state.categoryLists, 0, 'children')
+        categoryTree: setTree(state.categoryLists, 0, 'children')
       });
       return false;
     }
     return new Promise((resolve, reject) => {
-      requestMethods.commonMethods(URLS.interfaceCategory.lists, payload).then(result => {
+      commonMethods(URLS.interfaceCategory.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
           categoryLists: ((result.data || {}).item || {}).lists || {},
-          categoryTree: func.setTree((((result || {}).data || {}).item || {}).lists || {}, 0, 'children')
+          categoryTree: setTree((((result || {}).data || {}).item || {}).lists || {}, 0, 'children')
         });
         resolve(result);
       }).catch(error => {
@@ -56,7 +56,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      requestMethods.commonMethods(URLS.interface.get, payload).then(result => {
+      commonMethods(URLS.interface.get, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
           details: (((result || {}).data || {}).item || {}).lists || {},
           id: payload.id || 0,

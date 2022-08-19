@@ -10,8 +10,9 @@
             </el-card>
           </el-col>
           <!--消息记录-->
-          <el-col :span="(showLeftBar && showRightBar) ? 12 : ((showLeftBar || showRightBar) ? 18 : 24)"
-                  class="main-bar">
+          <el-col
+            :span="(showLeftBar && showRightBar) ? 12 : ((showLeftBar || showRightBar) ? 18 : 24)"
+            class="main-bar">
             <el-card shadow="hover">
               <MessageBox
                 ref="messageBox"
@@ -35,7 +36,7 @@
 </template>
 
 <script>
-import func from '../../utils/func';
+import { setTime, scrollToBottom } from '@/utils/func';
 import Push from 'push.js';
 import LeftBar from '../chat/LeftBar';
 import RightBar from '../chat/RightBar';
@@ -186,7 +187,7 @@ export default {
           client_img: this.userInfo.avatar_url,
           room_id: this.receiver.to_client_name === 'all' ? this.receiver.room_id : '',
           uuid: this.receiver.uuid,
-          time: func.setTime(Date.parse(new Date()))
+          time: setTime(Date.parse(new Date()))
         };
         this.webSocketServer.send(JSON.stringify(jsonStr));
         this.$refs['messageBox'].$refs['message'].innerHTML = '';
@@ -207,7 +208,7 @@ export default {
         }
       }
       await this.$store.dispatch('chat/addMessageLists', { message: message, uuid: this.userInfo.uuid });
-      func.scrollToBottom('.messageLists');
+      scrollToBottom('.messageLists');
       this.pushMessage(message.content);
     },
     /**
@@ -216,7 +217,7 @@ export default {
      * @param username
      */
     async pushClientLog(message, username = '通知') {
-      let clientLog = { time: func.setTime(Date.parse(new Date()), 'ch'), message: message, username: username };
+      let clientLog = { time: setTime(Date.parse(new Date()), 'ch'), message: message, username: username };
       await this.$store.dispatch('chat/addClientLog', clientLog);
     },
     /**

@@ -1,6 +1,6 @@
-import requestMethods from '../../../api/methods';
+import { commonMethods } from '@/api/methods';
 import URLS from '../../../api/urls';
-import func from '../../../utils/func';
+import { setTree } from '@/utils/func';
 
 export const mutations = {
   /**
@@ -26,15 +26,15 @@ export const actions = {
   async getAuthLists({ commit, state }, payload) {
     if (state.authLists && !payload.refresh) {
       commit('UPDATE_MUTATIONS', {
-        authTree: func.setTree(JSON.parse(JSON.stringify(state.authLists)), 0, 'children'),
+        authTree: setTree(JSON.parse(JSON.stringify(state.authLists)), 0, 'children'),
         authLists: state.authLists
       });
       return false;
     }
     return new Promise((resolve, reject) => {
-      requestMethods.commonMethods(URLS.auth.lists, payload).then(result => {
+      commonMethods(URLS.auth.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
-          authTree: func.setTree((((result || {}).data || {}).item || {}).lists || [], 0, 'children'),
+          authTree: setTree((((result || {}).data || {}).item || {}).lists || [], 0, 'children'),
           authLists: (((result || {}).data || {}).item || {}).lists || []
         });
         resolve(result);

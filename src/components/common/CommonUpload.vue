@@ -41,7 +41,7 @@
 
 <script>
 
-import func from '../../utils/func';
+import { rgbToHex } from '@/utils/func';
 import URLS from '../../api/urls';
 import $http from '../../tools/request';
 
@@ -104,21 +104,21 @@ export default {
     /* 用户头像 */
     avatarImage: {
       type: Object,
-      default() {
+      default: () => {
         return { avatar_url: '', username: '', size: 100 };
       }
     },
     /* 图片上传属性 */
     data: {
       type: Object,
-      default() {
+      default: () => {
         return { name: 'file', round_name: true, file: {} };
       }
     },
     /* 上传控件 */
     uploadControls: {
       type: Object,
-      default() {
+      default: () => {
         return { button_type: 'picture', show_tips: true, show_file_list: true };
       }
     }
@@ -169,7 +169,7 @@ export default {
           const canvas = document.getElementById('s-award-canvas');
           const ctx = canvas.getContext('2d');
           ctx.drawImage(image, 0, 0, this.imgWidth, this.imgHeight);
-          this.$emit('setBackgroundColor', func.rgbToHex(ctx.getImageData(0, 0, image.width, image.height).data));
+          this.$emit('setBackgroundColor', rgbToHex(ctx.getImageData(0, 0, image.width, image.height).data));
         };
       };
     },

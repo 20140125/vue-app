@@ -57,7 +57,7 @@
 import BaseLayout from '../../components/BaseLayout';
 import PushLists from '../../components/system/push/Lists';
 import PushDialog from '../../components/system/push/Dialog';
-import func from '../../utils/func';
+import { setTime } from '@/utils/func';
 import URLS from '../../api/urls';
 
 export default {
@@ -141,7 +141,7 @@ export default {
         info: '',
         status: 1,
         state: 'failed',
-        created_at: func.setTime(Date.parse(new Date()), 'en')
+        created_at: setTime(Date.parse(new Date()), 'en')
       };
       this.reForm = 'created';
       this.syncVisible = true;

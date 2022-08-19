@@ -21,7 +21,7 @@
 
 <script>
 import BaseLayout from '../components/BaseLayout';
-import func from '../utils/func';
+import { removeTabs } from '@/utils/func';
 
 export default {
   name: 'Result',
@@ -39,10 +39,10 @@ export default {
   },
   mounted() {
     this.$nextTick(async () => {
-      const timer = setInterval(() => {
+      const timer = setInterval(async () => {
         this.timeout -= 1;
         if (!this.timeout) {
-          func.removeTabs(this.$store.state.home.tabModel.value).then(() => {
+          await removeTabs(this.$store.state.home.tabModel.value).then(() => {
             clearInterval(timer);
           });
         }

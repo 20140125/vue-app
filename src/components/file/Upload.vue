@@ -30,9 +30,3 @@ export default {
   mixins: [toggle]
 };
 </script>
-
-<style lang="less">
-#upload {
-
-}
-</style>

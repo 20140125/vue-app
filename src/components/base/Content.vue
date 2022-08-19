@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import func from '../../utils/func';
+import { removeTabs } from '@/utils/func';
 
 export default {
   name: 'Content',
@@ -46,7 +46,7 @@ export default {
      * @return {Promise<void>}
      */
     async removeTabs(item) {
-      await func.removeTabs(item);
+      await removeTabs(item);
     }
   }
 };
