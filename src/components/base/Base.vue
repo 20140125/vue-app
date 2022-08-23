@@ -15,7 +15,7 @@
           </el-col>
           <el-col :span="layoutNums.content" class="content">
             <!-- 站内通知 -->
-            <WebPush ref='webPush'></WebPush>
+            <WebPush></WebPush>
             <!-- 详细内容 -->
             <Content></Content>
             <!-- 返回顶部 -->
@@ -99,7 +99,7 @@ export default {
   }
 
   .content {
-    margin-top: 80px;
+    margin-top: 70px;
     margin-bottom: 40px !important;
   }
 

@@ -2,12 +2,18 @@
   <div id="webPush">
     <el-carousel
       v-if="pushMessage.length > 0"
-      :interval="2000"
+      :interval="interval"
       arrow="never"
       direction="vertical"
       indicator-position="none">
       <el-carousel-item v-for="(item,index) in pushMessage" :key="index">
-        <el-alert :title="item.message" effect="light" show-icon type="success"></el-alert>
+        <el-alert
+          :title="item.message"
+          :effect="effect"
+          :show-icon="showIcon"
+          :closable="closable"
+          :type="alertType">
+        </el-alert>
       </el-carousel-item>
     </el-carousel>
   </div>
@@ -20,16 +26,45 @@ import { setTime } from '@/utils/func';
 
 export default {
   name: 'WebPush',
-  data() {
-    return {
-      pushMessage: [{
-        message: JSON.stringify(this.$store.state.login.userInfo.weather),
-        timestamp: Date.parse(new Date()) / 1000
-      }]
-    };
+  props: {
+    showIcon: {
+      type: Boolean,
+      default: () => true
+    },
+    closable: {
+      type: Boolean,
+      default: () => true
+    },
+    showWeather: {
+      type: Boolean,
+      default: () => true
+    },
+    interval: {
+      type: Number,
+      default: () => 2000
+    },
+    alertType: {
+      type: String,
+      default: () => 'success'
+    },
+    effect: {
+      type: String,
+      default: () => 'light'
+    }
+  },
+  computed: {
+    pushMessage() {
+      const data = this.$store.state.index.configuration.notice;
+      const lists = this.showWeather ? [{ message: JSON.stringify((this.$store.state.login.userInfo.weather || {}).casts || ''), timestamp: Date.parse(new Date()) / 1000 }] : [];
+      data.forEach((item, index) => {
+        lists.push({ message: item, timestamp: Date.parse(new Date()) / 1000 + index});
+      });
+      return lists;
+    }
   },
   mounted() {
-    this.$nextTick(() => {
+    this.$nextTick(async () => {
+      await this.getConfiguration();
       const SocketService = SocketIO(this.$store.state.login.userInfo.socket, {
         transports: ['websocket'],
         autoConnect: true
@@ -72,6 +107,15 @@ export default {
         console.error(`【系统链接错误】${setTime(Date.parse(new Date()))}${JSON.stringify($error)}`);
       });
     });
+  },
+  methods: {
+    /**
+     * todo:获取系统通知
+     * @returns {Promise<void>}
+     */
+    async getConfiguration() {
+      await this.$store.dispatch('index/getConfiguration', { keywords: 'NOTICE', type: 'notice' });
+    }
   }
 };
 </script>
@@ -79,8 +123,8 @@ export default {
 <style lang="less">
 #webPush {
   .el-carousel__container {
-    height: 80px !important;
-    line-height: 25px;
+    height: 40px !important;
+    margin: 0 5px;
   }
 }
 </style>

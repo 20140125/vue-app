@@ -1,8 +1,8 @@
 import { createLogger, createStore } from 'vuex';
 import login from './modules/login';
-import home from './modules/home';
-import chat from './modules/chat';
-import file from './modules/file';
+import home from './modules/admin/home';
+import chat from './modules/admin/chat';
+import file from './modules/file/file';
 /* 权限管理 */
 import auth from './modules/permission/auth';
 import role from './modules/permission/role';
@@ -19,7 +19,9 @@ import log from './modules/system/log';
 /* 接口管理 */
 import category from './modules/category/category';
 /* 爬虫管理 */
-import spider from './modules/spider';
+import spider from './modules/system/spider';
+/* 首页数据 */
+import index from './modules/home/index';
 /* Vuex */
 import mutations from './mutaions';
 import state from './state';
@@ -48,7 +50,8 @@ export default createStore({
     database,
     log,
     category,
-    spider
+    spider,
+    index
   },
   mutations,
   state,

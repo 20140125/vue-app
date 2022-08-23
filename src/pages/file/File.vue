@@ -54,13 +54,13 @@
 </template>
 
 <script>
-import FileLists from '../components/file/Lists';
-import FileDetails from '../components/file/Details';
-import BaseLayout from '../components/BaseLayout';
-import URLS from '../api/urls';
-import StaticSource from '../components/file/StaticSource';
-import FileChmod from '../components/file/chmod';
-import FileUpload from '../components/file/Upload';
+import FileLists from '../../components/file/Lists';
+import FileDetails from '../../components/file/Details';
+import BaseLayout from '../../components/BaseLayout';
+import URLS from '../../api/urls';
+import StaticSource from '../../components/file/StaticSource';
+import FileChmod from '../../components/file/chmod';
+import FileUpload from '../../components/file/Upload';
 
 export default {
   name: 'File',

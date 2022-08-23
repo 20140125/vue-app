@@ -28,8 +28,8 @@
 </template>
 
 <script>
-import Charts from '../components/index/Charts';
-import Timeline from '../components/index/Timeline';
+import Charts from '../../components/index/Charts';
+import Timeline from '../../components/index/Timeline';
 
 export default {
   name: 'Index',

@@ -60,12 +60,15 @@ export default {
      * todo:刷新验证码
      */
     async refreshCode() {
+      let accountLoginError = 0;
       await this.$refs['password'].validateField(['email', 'password'], async(valid) => {
         if (valid) {
-          return false;
+          accountLoginError += 1;
         }
-        this.$emit('refreshCode');
       });
+      if (accountLoginError === 0) {
+        this.$emit('refreshCode');
+      }
     },
     /**
      * todo:登录系统

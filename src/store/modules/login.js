@@ -100,7 +100,7 @@ export const actions = {
   async reportCode({ commit }, payload) {
     return new Promise((resolve, reject) => {
      commonMethods(URLS.login.reportCode, payload).then(result => {
-        commit('UPDATE_MUTATIONS', { verifyCode: ((((result || {}).data || {}).item || {}).lists || {}).key || '' });
+        commit('UPDATE_MUTATIONS', { verifyCode: ((((result || {}).data || {}).item || {}).lists || {}).key || payload.verify_code });
         resolve(result);
       }).catch(error => {
         commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
@@ -139,7 +139,7 @@ export const actions = {
     }
     return new Promise((resolve, reject) => {
       commonMethods(URLS.login.oauthConfig, payload).then(result => {
-        commit('UPDATE_MUTATIONS', { oauthConfig: (((result || {}).data || {}).item || {}).lists || {} });
+        commit('UPDATE_MUTATIONS', { oauthConfig: (((result || {}).data || {}).item || {}).lists || [] });
         resolve(result);
       }).catch(error => {
         commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });

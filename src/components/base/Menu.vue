@@ -10,7 +10,8 @@
     </template>
     <template #default>
       <el-menu
-        :active-text-color="activeColor" :collapse="isCollapse"
+        :collapse="isCollapse"
+        :active-text-color="activeColor"
         background-color="#393d49"
         text-color="#fff"
         unique-opened>

@@ -3,11 +3,33 @@ import { createRouter, createWebHistory } from 'vue-router';
 const router = createRouter({
   history: createWebHistory(),
   routes: [
+    /* 首页 */
     {
       path: '/',
-      name: 'IndexManage',
-      component: () => import('../pages/Login'),
-      meta: { title: '登录页' }
+      name: 'HomeIndex',
+      component: () => import('../pages/home/Home'),
+      meta: { title: '首页' }
+    },
+    /* 搜索页 */
+    {
+      path: '/home/search',
+      name: 'HomeSearch',
+      component: () => import('../pages/home/Search'),
+      meta: { title: '搜索页' }
+    },
+    /* 联系人 */
+    {
+      path: '/home/chat',
+      name: 'ConnectPerson',
+      component: () => import('../pages/home/Chat'),
+      meta: { title: '联系人' }
+    },
+    /* 个人中心 */
+    {
+      path: '/home/users',
+      name: 'UserCenter',
+      component: () => import('../pages/home/Users'),
+      meta: { title: '个人中心' }
     },
     {
       path: '/login',
@@ -24,13 +46,13 @@ const router = createRouter({
     {
       path: '/admin',
       name: 'AdminManage',
-      component: () => import('../pages/Home'),
+      component: () => import('../pages/admin/Home'),
       children: [
         /* 欢迎页 */
         {
           path: 'home/index/:access_token?',
           name: 'HomeManage',
-          component: () => import('../pages/Index'),
+          component: () => import('../pages/admin/Index'),
           meta: { title: '欢迎页' }
         },
         /* 权限管理 */
@@ -56,7 +78,7 @@ const router = createRouter({
         {
           path: 'file/index',
           name: 'FileManage',
-          component: () => import('../pages/File'),
+          component: () => import('../pages/file/File'),
           meta: { title: '文件列表' }
         },
         /* 系统管理 */
@@ -125,14 +147,14 @@ const router = createRouter({
         {
           path: 'interfaceCategory/index',
           name: 'InterfaceManage',
-          component: () => import('../pages/Interface'),
+          component: () => import('../pages/interface/Interface'),
           meta: { title: '接口列表' }
         },
         /* 同步工具 */
         {
           path: 'spider/index',
           name: 'SpiderManage',
-          component: () => import('../pages/Spider'),
+          component: () => import('../pages/system/Spider'),
           meta: { title: '同步工具' }
         },
         /* 结果页 */

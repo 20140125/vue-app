@@ -66,15 +66,21 @@ router.beforeEach(async (to, from, next) => {
   if ((to.meta || {}).title || '') {
     document.title = `RBAC权限系统 -- ${to.meta.title}`;
   }
+  /* todo:系统首页 */
+  if (to.name === 'HomeIndex' || to.path.includes('home')) {
+    if (store.state.baseLayout.token) {
+      await store.dispatch('login/checkAuthorized', { token: store.state.baseLayout.token });
+      /* todo:挂载全局属性*/
+      app.config.globalProperties.Permission = store.state.login.isAuthorized ? store.state.login.userInfo : {};
+    }
+    next();
+  }
   /* todo:地址中存在access_token (第三方授权登录) */
   if (to.params.access_token) {
     window.localStorage.setItem('token', to.params.access_token || '');
     await store.commit('UPDATE_MUTATIONS', { token: to.params.access_token }, { root: true });
     await store.commit('home/UPDATE_MUTATIONS', { tabs: store.state.home.tabs, tabModel: store.state.home.tabModel });
     next({ path: '/admin/home/index', redirect: to.path });
-  }
-  if (to.name === 'IndexManage' && !to.params.access_token) {
-    next({ path: '/login', redirect: to.path });
   }
   /* todo:登录页校验权限 */
   if (to.name === 'LoginManage') {
@@ -83,12 +89,13 @@ router.beforeEach(async (to, from, next) => {
       app.config.globalProperties.Permission = store.state.login.isAuthorized ? store.state.login.userInfo : {};
       store.state.login.isAuthorized ? next({ path: '/admin/home/index', redirect: to.path }) : next();
     });
-  } else {
-    /* todo:登录后校验权限 */
+  }
+  /* todo:登录后校验权限 */
+  if (to.path.includes('admin')) {
     await store.dispatch('login/checkAuthorized', { token:  store.state.baseLayout.token || to.params.access_token }).then(async () => {
       /* todo:没有登录，令牌无效直接跳转到登录页*/
       if (['20003', '40002'].includes(store.state.errorInfo.code)) {
-        await store.commit('login/UPDATE_MUTATIONS', { userInfo: {} ,isAuthorized: false })
+        await store.commit('login/UPDATE_MUTATIONS', { userInfo: {}, isAuthorized: false });
       }
       /* todo:挂载全局属性*/
       app.config.globalProperties.Permission = store.state.login.isAuthorized ? store.state.login.userInfo : {};

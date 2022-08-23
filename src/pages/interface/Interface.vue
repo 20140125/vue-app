@@ -44,11 +44,11 @@
 </template>
 
 <script>
-import BaseLayout from '../components/BaseLayout';
-import CategoryLists from '../components/interface/Category';
-import InterfaceDetails from '../components/interface/Details';
-import AddCategory from '../components/interface/Add';
-import URLS from '../api/urls';
+import BaseLayout from '../../components/BaseLayout';
+import CategoryLists from '../../components/interface/Category';
+import InterfaceDetails from '../../components/interface/Details';
+import AddCategory from '../../components/interface/Add';
+import URLS from '../../api/urls';
 
 export default {
   name: 'Interface',

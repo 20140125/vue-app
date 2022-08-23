@@ -116,13 +116,20 @@ let urls = {
     save: '/api/v1/push/save',
     update: '/api/v1/push/update'
   },
+  /* todo:工具 */
   tools: {
     getAddress: '/api/v1/tools/getAddress',
     getWeather: '/api/v1/tools/getWeather'
   },
+  /* todo:爬虫 */
   spider: {
     lists: '/api/v1/spider/index',
     running: '/api/v1/spider/running'
+  },
+  /* todo:图片列表 */
+  image: {
+    list: '/api/v1/image/lists',
+    config: '/api/v1/image/hotKeyWord'
   },
   /* todo:域名 */
   // baseURL: process.env.NODE_ENV !== 'production' ? 'http://www.laravel.com' : 'https://www.fanglonger.com'
