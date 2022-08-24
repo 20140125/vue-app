@@ -57,7 +57,7 @@ export default {
       const data = this.$store.state.index.configuration.notice;
       const lists = this.showWeather ? [{ message: JSON.stringify((this.Permission.weather || {}).casts || ''), timestamp: Date.parse(new Date()) / 1000 }] : [];
       data.forEach((item, index) => {
-        lists.push({ message: item, timestamp: Date.parse(new Date()) / 1000 + index});
+        lists.push({ message: item.message || item, timestamp: Date.parse(new Date()) / 1000 + index});
       });
       return lists;
     }
@@ -105,8 +105,10 @@ export default {
       /* todo:站内消息推送 */
       SocketService.on('new_message', ($message) => {
         this.pushMessage.push({ message: $message, timestamp: Date.parse(new Date()) / 1000 });
-        let clientLog = { time: setTime(Date.parse(new Date()), 'ch'), message: $message, username: '系统公告' };
-        this.$store.dispatch('chat/addClientLog', clientLog);
+        /* 推送消息到站内系统通知 */
+        this.$store.commit('index/UPDATE_MUTATIONS', { configuration: { notice: this.pushMessage, hotKeyWord: this.$store.state.index.configuration.hotKeyWord } });
+        /* 推送消息到活动窗口 */
+        this.$store.dispatch('chat/addClientLog', { time: setTime(Date.parse(new Date()), 'ch'), message: $message, username: '系统公告' });
       });
       /* todo:链接断开 */
       SocketService.on('disconnect', ($error) => {
