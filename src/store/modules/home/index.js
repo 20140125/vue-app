@@ -1,5 +1,5 @@
 import { commonMethods } from '@/api/methods';
-import URLS from '../../../api/urls';
+import URLS from '@/api/urls';
 
 export const state = {
   imageLists: {
@@ -15,6 +15,13 @@ export const state = {
     { label: '热搜', icon: 'el-icon-search', path: '/home/search' },
     { label: '消息', icon: 'el-icon-chat-dot-round', path: '/home/chat' },
     { label: '我的', icon: 'el-icon-user', path: '/home/users' }
+  ],
+  accountSetting: [
+    { label: '账号信息', icon: 'el-icon-user', path: '' },
+    { label: '图片收藏', icon: 'el-icon-collection', path: '' },
+    { label: '系统设置', icon: 'el-icon-setting', path: '' },
+    { label: '退出系统', icon: 'el-icon-upload2', path: '' },
+    { label: '敬请期待', icon: 'el-icon-loading', path: '' }
   ]
 };
 

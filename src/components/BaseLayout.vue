@@ -51,7 +51,7 @@ export default {
   data() {
     return {
       baseLayoutPagination: this.pagination || { limit: 10, page: 1, total: 0, show_page: false },
-      username: `${this.$store.state.baseLayout.username}【${this.$store.state.login.userInfo.local || URLS.baseURL}】${this.$store.state.login.userInfo.now_time || setTime(new Date())}`
+      username: `${this.$store.state.baseLayout.username}【${(this.Permission || {}).local || URLS.baseURL}】${(this.Permission || {}).now_time || setTime(new Date())}`
     };
   },
   methods: {

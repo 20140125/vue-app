@@ -21,29 +21,37 @@
           <li v-for="(char, index) in indexLists" @click="scrollToPosition(index)" :key="index">{{ char }}</li>
         </ul>
       </div>
+      <ErrorPage v-if="error.code !== '20000'"></ErrorPage>
     </template>
   </HomeLayout>
 </template>
 
 <script>
 import HomeLayout from '@/components/HomeLayout';
+import ErrorPage from '@/components/home/ErrorPage';
 
 export default {
   name: 'Chat',
-  components: { HomeLayout },
+  components: { ErrorPage, HomeLayout },
   data() {
     return {
       usersLists: [],
-      indexLists: [],
-      scrollTop: 0
+      indexLists: []
     };
+  },
+  computed: {
+    error() {
+      return this.$store.state.errorInfo;
+    }
   },
   mounted() {
     this.$nextTick(() => {
-      if (this.Permission.remember_token) {
+      if (this.Permission) {
         this.getConnection(this.Permission.websocket);
+        return false;
       }
-    })
+      this.$store.commit('UPDATE_MUTATIONS', { errorInfo: { code: '20003', message: 'Please Login System'} });
+    });
   },
   methods: {
     /**

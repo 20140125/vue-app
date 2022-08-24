@@ -55,7 +55,7 @@ export default {
   computed: {
     pushMessage() {
       const data = this.$store.state.index.configuration.notice;
-      const lists = this.showWeather ? [{ message: JSON.stringify((this.$store.state.login.userInfo.weather || {}).casts || ''), timestamp: Date.parse(new Date()) / 1000 }] : [];
+      const lists = this.showWeather ? [{ message: JSON.stringify((this.Permission.weather || {}).casts || ''), timestamp: Date.parse(new Date()) / 1000 }] : [];
       data.forEach((item, index) => {
         lists.push({ message: item, timestamp: Date.parse(new Date()) / 1000 + index});
       });
@@ -65,7 +65,17 @@ export default {
   mounted() {
     this.$nextTick(async () => {
       await this.getConfiguration();
-      const SocketService = SocketIO(this.$store.state.login.userInfo.socket, {
+      if (this.Permission) {
+        this.getConnection();
+      }
+    });
+  },
+  methods: {
+    /**
+     * todo:获取推送链接
+     */
+    getConnection() {
+      const SocketService = SocketIO(this.Permission.socket, {
         transports: ['websocket'],
         autoConnect: true
       });
@@ -73,7 +83,7 @@ export default {
       SocketService.on('connect', () => {
         console.info(`【登录系统】${setTime(Date.parse(new Date()))}`);
         /* todo:用户登录 */
-        SocketService.emit('login', this.$store.state.login.userInfo.uuid);
+        SocketService.emit('login', this.Permission.uuid);
       });
       /* todo:获取站内推送信息 */
       SocketService.on('notice', ($response) => {
@@ -106,9 +116,7 @@ export default {
       SocketService.on('connect_error', ($error) => {
         console.error(`【系统链接错误】${setTime(Date.parse(new Date()))}${JSON.stringify($error)}`);
       });
-    });
-  },
-  methods: {
+    },
     /**
      * todo:获取系统通知
      * @returns {Promise<void>}

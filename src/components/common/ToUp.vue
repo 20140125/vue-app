@@ -63,6 +63,6 @@ export default {
   position: fixed;
   bottom: 80px;
   right: 20px;
-  z-index: 2004
+  z-index: 2001
 }
 </style>

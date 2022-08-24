@@ -83,7 +83,7 @@ export const actions = {
         commit('UPDATE_MUTATIONS', { baseLayout: { token: '', username: 'tourist' } }, { root: true });
         window.localStorage.removeItem('token');
         window.localStorage.removeItem('RTX');
-        router.push({ path: '/login' });
+        router.push({ path: '/admin/home/login' });
         resolve(result);
       }).catch(error => {
         commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });

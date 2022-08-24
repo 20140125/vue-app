@@ -71,18 +71,14 @@ export default {
       'background-repeat': 'no-repeat',
       'height': (window.innerHeight) + 'px'
     };
-    if (!this.Permission) {
+    if (!this.Permission.remember_token) {
       router.push({ path: '/login' });
     }
   },
   computed: {
-    /** todo:登录用户信息  **/
-    userInfo() {
-      return { ...this.$store.state.login.userInfo };
-    },
     /** todo:webSocketServer  **/
     webSocketServer() {
-      return new WebSocket(this.userInfo.websocket);
+      return new WebSocket(this.Permission.websocket);
     },
     /** todo:所有用户  **/
     clientUsers() {
@@ -119,11 +115,11 @@ export default {
       webSocketServer.addEventListener('open', async () => {
         const jsonStr = {
           type: 'login',
-          from_client_id: this.userInfo.uuid,
-          client_name: this.userInfo.username,
-          room_id: this.userInfo.room_id,
-          client_img: this.userInfo.avatar_url,
-          uuid: this.userInfo.uuid
+          from_client_id: this.Permission.uuid,
+          client_name: this.Permission.username,
+          room_id: this.Permission.room_id,
+          client_img: this.Permission.avatar_url,
+          uuid: this.Permission.uuid
         };
         await this.pushClientLog('正在登入系统。。。', jsonStr.client_name);
         webSocketServer.send(JSON.stringify(jsonStr));
@@ -181,19 +177,19 @@ export default {
           type: 'say',
           to_client_id: this.receiver.uuid,
           to_client_name: this.receiver.client_name,
-          from_client_name: this.userInfo.username,
-          from_client_id: this.userInfo.uuid,
+          from_client_name: this.Permission.username,
+          from_client_id: this.Permission.uuid,
           content: message,
-          client_img: this.userInfo.avatar_url,
+          client_img: this.Permission.avatar_url,
           room_id: this.receiver.to_client_name === 'all' ? this.receiver.room_id : '',
           uuid: this.receiver.uuid,
           time: setTime(Date.parse(new Date()))
         };
         this.webSocketServer.send(JSON.stringify(jsonStr));
         this.$refs['messageBox'].$refs['message'].innerHTML = '';
-        this.$store.dispatch('chat/addMessageLists', { message: jsonStr, uuid: this.userInfo.uuid });
-        this.pushClientLog('发送消息成功', this.userInfo.username);
-        func.scrollToBottom('.messageLists');
+        this.$store.dispatch('chat/addMessageLists', { message: jsonStr, uuid: this.Permission.uuid });
+        this.pushClientLog('发送消息成功', this.Permission.username);
+        scrollToBottom('.messageLists');
       }
     },
     /**
@@ -207,7 +203,7 @@ export default {
           this.receiver = this.clientUsers[index];
         }
       }
-      await this.$store.dispatch('chat/addMessageLists', { message: message, uuid: this.userInfo.uuid });
+      await this.$store.dispatch('chat/addMessageLists', { message: message, uuid: this.Permission.uuid });
       scrollToBottom('.messageLists');
       this.pushMessage(message.content);
     },

@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       isCollapse: false,
-      username: `${this.$store.state.baseLayout.username}【${this.$store.state.login.userInfo.local || URLS.baseURL}】${this.$store.state.login.userInfo.now_time || setTime(new Date())}`,
+      username: `${this.$store.state.baseLayout.username}【${(this.Permission || {}).local || URLS.baseURL}】${(this.Permission || {}).now_time || setTime(new Date())}`,
       layoutNums: {
         aside: 3,
         content: 21,

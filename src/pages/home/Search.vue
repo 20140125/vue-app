@@ -45,7 +45,7 @@
         </template>
         <!--列表页-->
         <template v-if="loadMore.length > 0">
-          <Lists :load-more="loadMore" style="padding-top: 50px;"></Lists>
+          <Lists :load-more="loadMore" style="padding: 50px 0 80px 0;"></Lists>
         </template>
       </div>
     </template>
@@ -140,7 +140,7 @@ export default {
           dangerouslyUseHTMLString: true,
           duration: 1000
         });
-      }, showLoading ? 500 : 0)
+      }, showLoading ? 500 : 0);
     },
     /**
      * todo:设置搜索字段
@@ -201,7 +201,6 @@ export default {
 
 <style lang="less">
 .el-message {
-  width: 220px;
   border-radius: 10px;
 }
 .el-message-box {

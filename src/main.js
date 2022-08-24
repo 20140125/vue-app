@@ -66,6 +66,13 @@ router.beforeEach(async (to, from, next) => {
   if ((to.meta || {}).title || '') {
     document.title = `RBAC权限系统 -- ${to.meta.title}`;
   }
+  /* todo:地址中存在access_token (第三方授权登录) */
+  if (to.params.access_token) {
+    window.localStorage.setItem('token', to.params.access_token || '');
+    await store.commit('UPDATE_MUTATIONS', { token: to.params.access_token }, { root: true });
+    await store.commit('home/UPDATE_MUTATIONS', { tabs: store.state.home.tabs, tabModel: store.state.home.tabModel });
+    next({ path: to.path.includes('admin') ? '/admin/home/index' : '/', redirect: to.path });
+  }
   /* todo:系统首页 */
   if (to.name === 'HomeIndex' || to.path.includes('home')) {
     if (store.state.baseLayout.token) {
@@ -73,14 +80,7 @@ router.beforeEach(async (to, from, next) => {
       /* todo:挂载全局属性*/
       app.config.globalProperties.Permission = store.state.login.isAuthorized ? store.state.login.userInfo : {};
     }
-    next();
-  }
-  /* todo:地址中存在access_token (第三方授权登录) */
-  if (to.params.access_token) {
-    window.localStorage.setItem('token', to.params.access_token || '');
-    await store.commit('UPDATE_MUTATIONS', { token: to.params.access_token }, { root: true });
-    await store.commit('home/UPDATE_MUTATIONS', { tabs: store.state.home.tabs, tabModel: store.state.home.tabModel });
-    next({ path: '/admin/home/index', redirect: to.path });
+    to.params.access_token ? next('/') : next();
   }
   /* todo:登录页校验权限 */
   if (to.name === 'LoginManage') {
@@ -99,7 +99,7 @@ router.beforeEach(async (to, from, next) => {
       }
       /* todo:挂载全局属性*/
       app.config.globalProperties.Permission = store.state.login.isAuthorized ? store.state.login.userInfo : {};
-      !store.state.login.isAuthorized ? next({ path: '/login', redirect: to.path }) : next();
+      !store.state.login.isAuthorized ? next({ path: '/admin/home/login', redirect: to.path }) : next();
     });
   }
 });

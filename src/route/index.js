@@ -5,7 +5,7 @@ const router = createRouter({
   routes: [
     /* 首页 */
     {
-      path: '/',
+      path: '/:access_token?',
       name: 'HomeIndex',
       component: () => import('../pages/home/Home'),
       meta: { title: '首页' }
@@ -32,13 +32,13 @@ const router = createRouter({
       meta: { title: '个人中心' }
     },
     {
-      path: '/login',
+      path: '/admin/home/login',
       name: 'LoginManage',
       component: () => import('../pages/Login'),
       meta: { title: '登录页' }
     },
     {
-      path: '/chat',
+      path: '/admin/home/chat',
       name: 'ChatManage',
       component: () => import('../components/chat/Main'),
       meta: { title: '聊天窗口' }

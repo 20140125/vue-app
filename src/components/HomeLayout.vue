@@ -1,5 +1,5 @@
 <template>
-  <el-card>
+  <el-card shadow="always" v-water-mark="{ text: text, textColor: 'rgba(0, 0, 0, .2)', font: '20px consolas, sans-serif', row: 100, col: 500 }">
     <!-- 网站标题 -->
     <template #header>{{ headerTitle }}</template>
     <!-- 页面内容 -->
@@ -18,15 +18,18 @@
     </div>
     <!--返回顶部-->
     <ToUp></ToUp>
+    <!-- 授权登录 -->
+    <OauthLogin :showOAuth="error.code !== '20000'"></OauthLogin>
   </el-card>
 </template>
 
 <script>
 import ToUp from '@/components/common/ToUp';
+import OauthLogin from '@/components/home/OauthLogin';
 
 export default {
   name: 'HomeLayout',
-  components: { ToUp },
+  components: { ToUp, OauthLogin },
   props: {
     headerTitle: {
       type: String,
@@ -35,12 +38,16 @@ export default {
   },
   data() {
     return {
-      route: this.$route.path
-    }
+      route: this.$route.path,
+      text: this.$store.state.baseLayout.username
+    };
   },
   computed: {
     menuLists() {
       return this.$store.state.index.menuLists;
+    },
+    error() {
+      return this.$store.state.errorInfo;
     }
   },
   methods: {
@@ -54,7 +61,7 @@ export default {
       this.$router.push({ path: item.path });
       setTimeout(() => {
         loading.close();
-      }, item.path === '/' ? 0 : 500)
+      }, item.path === '/' ? 0 : 500);
     }
   }
 };
