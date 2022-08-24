@@ -100,6 +100,7 @@ router.beforeEach(async (to, from, next) => {
       /* todo:挂载全局属性*/
       app.config.globalProperties.Permission = store.state.login.isAuthorized ? store.state.login.userInfo : {};
       !store.state.login.isAuthorized ? next({ path: '/admin/home/login', redirect: to.path }) : next();
+      !store.state.login.isAuthorized ? window.localStorage.setItem('token', '') : '';
     });
   }
 });

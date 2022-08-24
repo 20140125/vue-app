@@ -10,7 +10,7 @@
         effect="dark">
       </WebPush>
       <!--列表页-->
-      <Lists :load-more="loadMore"></Lists>
+      <Lists :load-more="loadMore" style="padding-bottom: 80px;"></Lists>
     </template>
   </HomeLayout>
 </template>
@@ -75,7 +75,7 @@ export default {
     async handleScroll() {
       let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
       let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
-      if (scrollTop >= scrollHeight - window.innerHeight && this.imageLists.length < this.total) {
+      if (scrollTop >= (scrollHeight - 1000 - (10 * this.pagination.page)) && this.imageLists.length < this.total) {
         this.pagination.page = this.pagination.page + 1;
         await this.getImageLists(this.pagination);
       }
