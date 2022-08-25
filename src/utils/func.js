@@ -146,3 +146,38 @@ export function toUploadNewFile(fileUrl, images, imagesName) {
     return response;
   });
 }
+
+/**
+ * todo:函数节流
+ * @param fn
+ * @param delay
+ * @returns {(function(): void)|*}
+ */
+export function debounce(fn, delay) {
+  let timer;
+  return function () {
+    const _this = this;
+    const args = arguments;
+    if (timer) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(function () {
+      fn.apply(_this, args);
+    }, delay);
+  };
+}
+
+/**
+ * todo:滚动条是否触底
+ * @returns {boolean}
+ */
+export function scrollBottom0() {
+  /* 滚动视口高度(也就是当前元素的真实高度) */
+  const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+  /* 可见区域高度 */
+  const clientHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+  /* 滚动条顶部到浏览器顶部高度 */
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+  /* 滚动条是否触底 */
+  return clientHeight + scrollTop >= scrollHeight
+}

@@ -55,6 +55,7 @@
 <script>
 import HomeLayout from '@/components/HomeLayout';
 import Lists from '@/components/home/Lists';
+import { debounce, scrollBottom0 } from '@/utils/func';
 
 export default {
   name: 'Search',
@@ -188,11 +189,9 @@ export default {
      * @returns {Promise<void>}
      */
     async handleScroll() {
-      let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-      let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
-      if (scrollTop >= (scrollHeight - 1000 - (10 * this.pagination.page)) && this.imageLists.length < this.total) {
+      if (scrollBottom0() && this.loadMore.length < this.total) {
         this.pagination.page = this.pagination.page + 1;
-        await this.getImageLists(this.pagination);
+        debounce(await this.getImageLists(this.pagination), 500);
       }
     }
   }

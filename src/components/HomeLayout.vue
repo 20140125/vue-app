@@ -92,20 +92,18 @@ export default {
             const clientLists = message.client_lists || [];
             this.$store.commit('index/UPDATE_MUTATIONS', { userLists: clientLists });
             /* 获取接收者 */
-            for (let i in this.userLists) {
-              if (this.userLists[i].id === this.$route.params.id) {
-                this.$store.commit('index/UPDATE_MUTATIONS', { receiver: this.userLists[i] });
-              }
-            }
             const indexLists = [];
+            const userLists = [];
+            const online = [];
             for (let i in clientLists) {
+              if (clientLists[i].id === this.$route.params.id) {
+                this.$store.commit('index/UPDATE_MUTATIONS', { receiver: clientLists[i] });
+              }
               if (indexLists.indexOf(clientLists[i].char) < 0) {
                 indexLists.push(clientLists[i].char);
               }
             }
             indexLists.sort();
-            const userLists = [];
-            const online = [];
             for (let j in indexLists) {
               const item = [];
               for (let k in clientLists) {
