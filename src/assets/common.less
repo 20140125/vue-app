@@ -24,6 +24,9 @@ body {
   line-height: 15px;
   border-bottom: 1px solid #000;
   margin: 0 !important;
+  top: 0;
+  right: 0;
+  left: 0;
 }
 
 /* 列表页 */
@@ -145,6 +148,8 @@ body {
   line-height: 20px;
   height: 70px;
   border-top: 1px solid #d3d3d3;
+  left: 0;
+  right: 0;
 
   .item-list {
     width: 25%;
@@ -303,14 +308,11 @@ body {
 
 /* 消息体 */
 .message-box {
-  height: calc(100vh - 120px);
 
   .message-content {
-    height: calc(100vh - 200px);
     overflow: scroll;
     overflow-x: hidden;
     margin-bottom: 10px;
-    border-bottom: 10px solid #eaeef3;
 
     .user-info__message {
       align-items: center;
@@ -346,6 +348,11 @@ body {
     display: flex;
     width: 100%;
     align-items: center;
+    position: fixed;
+    bottom: 80px;
+    left: 0;
+    right: 0;
+    border-top: 2px solid #000000;
 
     .input-content {
       border: 1px solid #409EFF;
@@ -356,11 +363,12 @@ body {
       font-size: 14px;
       width: 100%;
       margin-left: 5px;
+      margin-top: 10px;
     }
 
     i {
       font-size: 35px;
-      margin: 0 5px;
+      margin: 10px 5px 0 5px;
     }
   }
 }

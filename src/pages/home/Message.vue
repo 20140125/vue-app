@@ -1,13 +1,16 @@
 <template>
   <HomeLayout :header-title="receiver.client_name" ref="homeLayout">
     <template #body>
-      <div class="message-box">
-        <div class="message-content">
+      <div class="message-box" :style="cssStyle.box">
+        <div class="message-content" :style="cssStyle.content">
           <div v-for="(item, index) in messageLists" :key="index">
             <div :class="`${item.from_client_name === Permission.username ? 'self-state' : ''}`" class="user-info__message">
               <el-avatar :class="`${item.from_client_name === Permission.username ? 'self-state' : ''}`" :size="40" :src="item.client_img"></el-avatar>
-              <div :class="`${item.from_client_name === Permission.username ? 'self-state' : ''}`" class="content"
-                   v-html="replaceContent(item.content)"></div>
+              <div
+                :class="`${item.from_client_name === Permission.username ? 'self-state' : ''}`"
+                class="content"
+                v-html="replaceContent(item.content)">
+              </div>
             </div>
           </div>
         </div>
@@ -36,10 +39,12 @@ export default {
         token: this.$store.state.baseLayout.token || window.localStorage.getItem('token'),
         file_type: 'text',
         round_name: true
-      }
+      },
+      cssStyle: { box: '', content: '' }
     };
   },
   computed: {
+    /* 消息列表 */
     messageLists() {
       const data = JSON.parse(JSON.stringify(this.$store.state.index.messageLists));
       const lists = [];
@@ -66,6 +71,11 @@ export default {
       }
     });
   },
+  created() {
+    let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+    this.cssStyle.box = `height: ${scrollHeight - 120}px`;
+    this.cssStyle.content = `height: ${scrollHeight - 200}px`;
+  },
   methods: {
     /**
      * todo:发送消息
@@ -82,7 +92,7 @@ export default {
         from_client_name: this.Permission.username,
         from_client_id: this.Permission.uuid,
         client_img: this.Permission.avatar_url,
-        content: this.$refs.message.innerHTML.trim(),
+        content: this.$refs.message.innerHTML.trim().replace('<div><br></div>', ''),
         room_id: this.receiver.room_id,
         uuid: this.receiver.uuid,
         time: setTime(Date.parse(new Date()))

@@ -10,7 +10,7 @@
             style="width:100%;height:100%">
           </el-image>
         </div>
-        <div class="card-num-view">{{ item.width ? `${item.width}px` : '' }}</div>
+        <div class="card-num-view">{{ item.width ? `${item.width}p` : '' }}</div>
         <div class="card-bottom">
           <div class="card-title-view row">
             <div class="card-title">
