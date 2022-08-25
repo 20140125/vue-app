@@ -11,10 +11,10 @@ export const state = {
     hotKeyWord: []
   },
   menuLists: [
-    { label: '首页', icon: 'el-icon-house', path: '/' },
-    { label: '热搜', icon: 'el-icon-search', path: '/home/search' },
-    { label: '消息', icon: 'el-icon-chat-dot-round', path: '/home/chat' },
-    { label: '我的', icon: 'el-icon-user', path: '/home/users' }
+    { label: '首页', icon: 'el-icon-house', path: '/', highlight: ['HomeIndex'] },
+    { label: '热搜', icon: 'el-icon-search', path: '/home/search', highlight: ['HomeSearch'] },
+    { label: '信息', icon: 'el-icon-chat-dot-square', path: '/home/chat', highlight: ['ConnectPerson', 'MessageBox'] },
+    { label: '我的', icon: 'el-icon-user', path: '/home/users', highlight: ['UserCenter'] }
   ],
   accountSetting: [
     { label: '账号信息', icon: 'el-icon-user', path: '' },
@@ -22,7 +22,17 @@ export const state = {
     { label: '系统设置', icon: 'el-icon-setting', path: '' },
     { label: '退出系统', icon: 'el-icon-upload2', path: '' },
     { label: '敬请期待', icon: 'el-icon-loading', path: '' }
-  ]
+  ],
+  chatBody: {
+    userLists: [],
+    indexLists: []
+  },
+  /* 接收者 */
+  receiver: {},
+  /* 用户列表 */
+  userLists: [],
+  /* 消息列表 */
+  messageLists: []
 };
 
 export const mutations = {

@@ -260,7 +260,6 @@ body {
 
 }
 
-
 /* 授权登录 */
 .oauth-login {
   height: 100%;
@@ -299,5 +298,69 @@ body {
     padding-right: 5px;
     box-sizing: border-box;
     height: 0;
+  }
+}
+
+/* 消息体 */
+.message-box {
+  height: calc(100vh - 120px);
+
+  .message-content {
+    height: calc(100vh - 200px);
+    overflow: scroll;
+    overflow-x: hidden;
+    margin-bottom: 10px;
+    border-bottom: 10px solid #eaeef3;
+
+    .user-info__message {
+      align-items: center;
+      display: flex;
+      position: relative;
+      width: 100%;
+      margin: 20px 0;
+      padding: 0 2px;
+
+      .content {
+        font-size:14px;
+        background: #eaeef3;
+        border-radius: 5px;
+        line-height: 30px;
+        padding: 5px;
+        margin-left: 10px;
+        white-space: normal;
+        word-break: break-all;
+        max-width: 70%;
+      }
+    }
+
+    /* 主人态 */
+    .self-state {
+      transform: rotateY(180deg);
+    }
+  }
+
+  .message-input__item {
+    height: auto;
+    overflow: scroll;
+    overflow-x: hidden;
+    display: flex;
+    width: 100%;
+    align-items: center;
+
+    .input-content {
+      border: 1px solid #409EFF;
+      height: 20px;
+      padding: 10px;
+      overflow: scroll;
+      overflow-x: hidden;
+      font-size: 14px;
+      width: 100%;
+      margin-left: 5px;
+    }
+
+    i {
+      font-size: 35px;
+      margin: 0 5px;
+    }
   }
 }

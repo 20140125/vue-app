@@ -44,15 +44,6 @@ export const actions = {
     });
   },
   /**
-   * todo:保存长链接通知信息
-   * @param commit
-   * @param payload
-   * @return {Promise<void>}
-   */
-  async saveSocketMessage({ commit }, payload) {
-    commit('UPDATE_MUTATIONS', payload);
-  },
-  /**
    * todo:获取时间线
    * @param commit
    * @param state

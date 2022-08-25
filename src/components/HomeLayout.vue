@@ -1,5 +1,7 @@
 <template>
-  <el-card shadow="always" v-water-mark="{ text: text, textColor: 'rgba(0, 0, 0, .2)', font: '20px consolas, sans-serif', row: 100, col: 500 }">
+  <el-card
+    v-water-mark="{ text: text, textColor: 'rgba(0, 0, 0, .2)', font: '20px consolas, sans-serif', row: 150, col: 150 }"
+    shadow="always">
     <!-- 网站标题 -->
     <template #header>{{ headerTitle }}</template>
     <!-- 页面内容 -->
@@ -9,8 +11,8 @@
       <div
         v-for="(item, index) in menuLists"
         :key="index"
+        :class="`${item.highlight.includes(highlight) ? 'active' : ''}`"
         class="item-list"
-        :class="`${item.path === route ? 'active' : ''}`"
         @click="goto(item)">
         <i :class="item.icon"></i>
         <div class="icon">{{ item.label }}</div>
@@ -26,6 +28,7 @@
 <script>
 import ToUp from '@/components/common/ToUp';
 import OauthLogin from '@/components/home/OauthLogin';
+import { scrollToBottom } from "@/utils/func";
 
 export default {
   name: 'HomeLayout',
@@ -38,7 +41,7 @@ export default {
   },
   data() {
     return {
-      route: this.$route.path,
+      highlight: this.$route.name,
       text: this.$store.state.baseLayout.username
     };
   },
@@ -48,9 +51,123 @@ export default {
     },
     error() {
       return this.$store.state.errorInfo;
+    },
+    webSocketServer() {
+      return new WebSocket(this.Permission.websocket)
     }
   },
+  mounted() {
+    this.$nextTick(async () => {
+      if (this.Permission) {
+        await this.getConnection();
+      }
+    })
+  },
   methods: {
+    /**
+     * todo:长链接
+     */
+    getConnection() {
+      /* 监听打开事件 */
+      this.webSocketServer.addEventListener('open', () => {
+        const jsonStr = {
+          type: 'login',
+          from_client_id: this.Permission.uuid,
+          client_name: this.Permission.username,
+          room_id: this.Permission.room_id,
+          client_img: this.Permission.avatar_url,
+          uuid: this.Permission.uuid
+        };
+        this.sendMessage(JSON.stringify(jsonStr));
+      });
+      /* 监听发送消息事件 */
+      this.webSocketServer.addEventListener('message', (events) => {
+        const message = JSON.parse(events.data);
+        switch (message.type) {
+          case 'ping':
+            this.sendMessage('{"type":"ping"}');
+            break;
+          case 'login':
+            /* 用户列表 */
+            const clientLists = message.client_lists || [];
+            this.$store.commit('index/UPDATE_MUTATIONS', { userLists: clientLists });
+            /* 获取接收者 */
+            for (let i in this.userLists) {
+              if (this.userLists[i].id === this.$route.params.id) {
+                this.$store.commit('index/UPDATE_MUTATIONS', { receiver: this.userLists[i] });
+              }
+            }
+            const indexLists = [];
+            for (let i in clientLists) {
+              if (indexLists.indexOf(clientLists[i].char) < 0) {
+                indexLists.push(clientLists[i].char);
+              }
+            }
+            indexLists.sort();
+            const userLists = [];
+            const online = [];
+            for (let j in indexLists) {
+              const item = [];
+              for (let k in clientLists) {
+                if (indexLists[j] === clientLists[k].char) {
+                  item.push(clientLists[k]);
+                }
+              }
+              userLists[j] = item;
+            }
+            /* 数组前面追加 */
+            indexLists.unshift('↑');
+            /* 获取在线用户 */
+            userLists.forEach(item => {
+              item.forEach((user, index) => {
+                if (user.online) {
+                  online.push(user);
+                  item.splice(index, 1);
+                }
+              });
+            });
+            /* 字母排序 */
+            online.sort((a, b) => {
+              return a.char > b.char ? 1 : -1;
+            });
+            /* 追加在线用户 */
+            userLists.unshift(online);
+            this.$store.commit('index/UPDATE_MUTATIONS', { chatBody: { userLists, indexLists } });
+            break;
+          case 'say':
+            if (message.to_client_id === this.Permission.uuid) {
+              this.messageLists.push(message);
+              this.$store.commit('index/UPDATE_MUTATIONS', { messageLists: this.messageLists });
+              setTimeout(() => {
+                scrollToBottom('.message-content');
+              }, 100);
+            }
+            break;
+        }
+      });
+      this.webSocketServer.addEventListener('close', (e) => {
+        this.getConnection();
+        console.error(`链接被关闭：${JSON.stringify(e)}`);
+      });
+      this.webSocketServer.addEventListener('error', (e) => {
+        console.error(`链接异常：${JSON.stringify(e)}`);
+      });
+    },
+    /**
+     * todo:发送消息
+     * @param message
+     */
+    sendMessage(message) {
+      try {
+        this.webSocketServer.send(message);
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    /**
+     * todo:地址跳转
+     * @param item
+     */
     goto(item) {
       const loading = this.$loading({
         lock: true,

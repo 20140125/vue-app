@@ -1,7 +1,6 @@
 import { createLogger, createStore } from 'vuex';
 import login from './modules/login';
 import home from './modules/admin/home';
-import chat from './modules/admin/chat';
 import file from './modules/file/file';
 /* 权限管理 */
 import auth from './modules/permission/auth';
@@ -37,7 +36,6 @@ export default createStore({
   modules: {
     login,
     home,
-    chat,
     file,
     auth,
     role,

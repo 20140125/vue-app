@@ -12,7 +12,7 @@ const ErrorHandler = (response) => {
   if (!store.state.baseLayout.token) {
     return router.push({ path: response.config.url === URLS.image.list ? '/' : '/admin/home/login' }).then(() => {
       ElMessage.error(response.data.item.message);
-      window.localStorage.setItem('token', '');
+      window.localStorage.removeItem('token')
       store.commit('UPDATE_MUTATIONS', { errorInfo: response.data.item }, { root: true });
       return Promise.resolve({ errorInfo: response.data.item });
     });

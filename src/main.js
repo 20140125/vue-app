@@ -64,7 +64,7 @@ app.use(VMdEditor);
 router.beforeEach(async (to, from, next) => {
   /* todo:设置标题 */
   if ((to.meta || {}).title || '') {
-    document.title = `RBAC权限系统 -- ${to.meta.title}`;
+    document.title = `${to.path.includes('admin') ? 'RBAC权限系统' : '魔盒逗图'} -- ${to.meta.title}`;
   }
   /* todo:地址中存在access_token (第三方授权登录) */
   if (to.params.access_token) {
@@ -100,7 +100,7 @@ router.beforeEach(async (to, from, next) => {
       /* todo:挂载全局属性*/
       app.config.globalProperties.Permission = store.state.login.isAuthorized ? store.state.login.userInfo : {};
       !store.state.login.isAuthorized ? next({ path: '/admin/home/login', redirect: to.path }) : next();
-      !store.state.login.isAuthorized ? window.localStorage.setItem('token', '') : '';
+      !store.state.login.isAuthorized ? window.localStorage.removeItem('token') : '';
     });
   }
 });

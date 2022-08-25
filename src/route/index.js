@@ -15,7 +15,7 @@ const router = createRouter({
       path: '/home/search',
       name: 'HomeSearch',
       component: () => import('../pages/home/Search'),
-      meta: { title: '搜索页' }
+      meta: { title: '热搜' }
     },
     /* 联系人 */
     {
@@ -24,24 +24,24 @@ const router = createRouter({
       component: () => import('../pages/home/Chat'),
       meta: { title: '联系人' }
     },
+    {
+      path: '/home/message/:id',
+      name: 'MessageBox',
+      component: () => import('../pages/home/Message'),
+      meta: { title: '消息记录' }
+    },
     /* 个人中心 */
     {
       path: '/home/users',
       name: 'UserCenter',
       component: () => import('../pages/home/Users'),
-      meta: { title: '个人中心' }
+      meta: { title: '我的' }
     },
     {
       path: '/admin/home/login',
       name: 'LoginManage',
       component: () => import('../pages/Login'),
       meta: { title: '登录页' }
-    },
-    {
-      path: '/admin/home/chat',
-      name: 'ChatManage',
-      component: () => import('../components/chat/Main'),
-      meta: { title: '聊天窗口' }
     },
     {
       path: '/admin',
