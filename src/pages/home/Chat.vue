@@ -1,7 +1,7 @@
 <template>
   <HomeLayout header-title="魔盒逗图 -- 通讯录">
     <template #body>
-      <div class="user-chat__menu grid">
+      <div class="user-chat__menu" v-if="error.code === '20000'">
         <div v-for="(char, index) in indexLists" :key="index" class="index-menu__number">
           <div class="char" v-html="char"></div>
           <div v-for="(item, key) in userLists[index]" :key="key">
@@ -21,7 +21,7 @@
           <li v-for="(char, index) in indexLists" @click="scrollToPosition(index)" :key="index">{{ char }}</li>
         </ul>
       </div>
-      <ErrorPage v-if="error.code !== '20000'"></ErrorPage>
+      <ErrorPage v-if="error.code === '40001'"></ErrorPage>
     </template>
   </HomeLayout>
 </template>

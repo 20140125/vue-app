@@ -5,7 +5,7 @@
     <!-- 网站标题 -->
     <template #header>{{ headerTitle }}</template>
     <!-- 页面内容 -->
-    <slot name="body"></slot>
+    <slot name="body" v-if="error.code !== '20003'"></slot>
     <!-- 底部导航栏 -->
     <div class="item">
       <div
@@ -21,7 +21,7 @@
     <!--返回顶部-->
     <ToUp></ToUp>
     <!-- 授权登录 -->
-    <OauthLogin :showOAuth="error.code !== '20000'"></OauthLogin>
+    <OauthLogin></OauthLogin>
   </el-card>
 </template>
 
@@ -46,14 +46,17 @@ export default {
     };
   },
   computed: {
+    /* 底部导航栏 */
     menuLists() {
       return this.$store.state.index.menuLists;
     },
-    error() {
-      return this.$store.state.errorInfo;
-    },
+    /* webSocket服务 */
     webSocketServer() {
       return new WebSocket(this.Permission.websocket);
+    },
+    /* 错误信息 */
+    error() {
+      return this.$store.state.errorInfo;
     },
     /* 接收者 */
     receiver() {
@@ -171,7 +174,7 @@ export default {
      * todo:发送消息
      * @param message
      */
-      sendMessage(message) {
+    sendMessage(message) {
       try {
         this.webSocketServer.send(message);
       } catch (e) {

@@ -1,9 +1,9 @@
 <template>
-  <div class="oauth-login" v-if="showShadow">
+  <div class="oauth-login" v-if="error.code === '20003'">
     <div class="oauth-login__list">
-      <div class="oauth-login__title" @click="closeShadow">授权登录</div>
+      <div class="oauth-login__title" @click="closeShadow">取消授权</div>
       <div class="oauth-login__item" v-for="(item, index) in (oAuthConfig || {}).children" :key="index">
-        <el-button size="mini" type="primary" @click="loginSYS(item)" style="min-width: 100px">
+        <el-button size="mini" type="primary" plain @click="loginSYS(item)" style="min-width: 100px">
           {{ item.name.toUpperCase() }}
         </el-button>
       </div>
@@ -14,38 +14,12 @@
 <script>
 export default {
   name: 'OauthLogin',
-  props: {
-    showOAuth: {
-      type: Boolean,
-      default: () => false
-    }
-  },
-  data() {
-    return {
-      showShadow: false
-    };
-  },
-  watch: {
-    async showOAuth() {
-      if (this.showOAuth) {
-        await this.$confirm(this.$store.state.errorInfo.message, this.$store.state.errorInfo.code, { type: 'success', showClose: false }).then(() => {
-          this.$message({
-            message:'单击授权登录按钮可关闭浮层',
-            type: 'success',
-            offset: 350,
-            dangerouslyUseHTMLString: true,
-            duration: 1000
-          });
-          this.showShadow = true;
-        }).catch(() => {
-          this.showShadow = false;
-        });
-      }
-    }
-  },
   computed: {
     oAuthConfig() {
       return this.$store.state.login.oauthConfig;
+    },
+    error() {
+      return this.$store.state.errorInfo;
     }
   },
   mounted() {
@@ -58,8 +32,7 @@ export default {
      * todo:关闭浮层
      */
     closeShadow() {
-      this.showShadow = false;
-      this.$store.commit('UPDATE_MUTATIONS', { errorInfo: { code: '20000', message: 'Cancelled Login System' } });
+      this.$store.commit('UPDATE_MUTATIONS', { errorInfo: { code: '40001', message: 'Token Is Not Provided' } });
     },
     /**
      * todo:获取系统配置
