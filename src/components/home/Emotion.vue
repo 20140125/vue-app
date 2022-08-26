@@ -29,14 +29,14 @@ export default {
     return {
       value: '1',
       payload: { page: 1, limit: 100, type: 1 }
-    }
+    };
   },
   computed: {
     emotionMenu() {
       return this.$store.state.index.emotionMenu;
     },
     emotionLists() {
-      return this.$store.state.index.emotionLists
+      return this.$store.state.index.emotionLists;
     }
   },
   mounted() {
@@ -44,11 +44,11 @@ export default {
       if (this.showEmotion) {
         await this.getEmotionLists(this.payload);
       }
-    })
+    });
   },
   methods: {
     async changeEmotionLists(item) {
-      console.log(item)
+      console.log(item);
     },
     /**
      * todo:获取表情列表

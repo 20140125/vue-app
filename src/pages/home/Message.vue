@@ -106,7 +106,7 @@ export default {
         uuid: this.receiver.uuid,
         time: setTime(Date.parse(new Date()))
       };
-      this.$refs.homeLayout.sendMessage(JSON.stringify(sayJSON))
+      this.$refs.homeLayout.sendMessage(JSON.stringify(sayJSON));
       this.messageLists.push(sayJSON);
       this.$store.commit('index/UPDATE_MUTATIONS', { messageLists: this.messageLists });
       setTimeout(() => {

@@ -81,7 +81,7 @@ export default {
       if (this.Permission) {
         await this.getConnection();
       }
-    })
+    });
   },
   methods: {
     /**

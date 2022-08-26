@@ -175,7 +175,7 @@ export const actions = {
         commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
         reject(error);
       });
-    })
+    });
   }
 };
 
