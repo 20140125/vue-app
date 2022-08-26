@@ -1,11 +1,16 @@
 <template>
-  <HomeLayout :header-title="receiver.client_name" ref="homeLayout">
+  <HomeLayout ref="homeLayout" :header-title="receiver.client_name">
     <template #body>
-      <div class="message-box" :style="cssStyle.box">
-        <div class="message-content" :style="cssStyle.content">
+      <div :style="cssStyle.box" class="message-box">
+        <div :style="cssStyle.content" class="message-content">
           <div v-for="(item, index) in messageLists" :key="index">
-            <div :class="`${item.from_client_name === Permission.username ? 'self-state' : ''}`" class="user-info__message">
-              <el-avatar :class="`${item.from_client_name === Permission.username ? 'self-state' : ''}`" :size="40" :src="item.client_img"></el-avatar>
+            <div
+              :class="`${item.from_client_name === Permission.username ? 'self-state' : ''}`"
+              class="user-info__message">
+              <el-avatar
+                :class="`${item.from_client_name === Permission.username ? 'self-state' : ''}`"
+                :size="40"
+                :src="item.client_img"></el-avatar>
               <div
                 :class="`${item.from_client_name === Permission.username ? 'self-state' : ''}`"
                 class="content"
@@ -20,6 +25,8 @@
           <i class="el-icon-picture-outline-round"></i>
           <i class="el-icon-circle-plus-outline"></i>
         </div>
+        <!--表情组件-->
+        <Emotion :show-emotion="showEmotion"></Emotion>
       </div>
     </template>
   </HomeLayout>
@@ -29,10 +36,11 @@
 import HomeLayout from '@/components/HomeLayout';
 import { scrollToBottom, setTime } from '@/utils/func';
 import Push from 'push.js';
+import Emotion from '@/components/home/Emotion';
 
 export default {
   name: 'Message',
-  components: { HomeLayout },
+  components: { Emotion, HomeLayout },
   data() {
     return {
       uploadData: {
@@ -40,7 +48,8 @@ export default {
         file_type: 'text',
         round_name: true
       },
-      cssStyle: { box: '', content: '' }
+      cssStyle: { box: '', content: '' },
+      showEmotion: true
     };
   },
   computed: {
@@ -66,9 +75,9 @@ export default {
   },
   mounted() {
     this.$nextTick(async () => {
-      if (!this.Permission) {
-        await this.$router.push({ path: '/' });
-      }
+      // if (!this.Permission) {
+      //   await this.$router.push({ path: '/' });
+      // }
     });
   },
   created() {
@@ -109,7 +118,7 @@ export default {
      * todo:图片选择
      * @param item
      */
-    clickEmotion(item) {
+    getEmotion(item) {
       this.$refs.message.innerHTML += '<img src=\'' + item.icon + '\' width=\'30px\' height=\'30px\' style=\'object-fit: contain;\' alt=\'' + item.title + '\'>';
     },
     /**
@@ -162,14 +171,6 @@ export default {
         icon: 'https://www.fanglonger.com/favicon.ico',
         timeout: 60000
       });
-    },
-    /**
-     * todo:控制台信息
-     * @param message
-     * @returns {Promise<void>}
-     */
-    async pushNotice(message) {
-      await this.$store.commit('index/UPDATE_MUTATIONS', { configuration: { notice: { timestamp: Date.parse(new Date()) / 1000, message } } });
     },
     /**
      * todo:字符串替换

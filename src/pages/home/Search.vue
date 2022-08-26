@@ -1,7 +1,7 @@
 <template>
   <HomeLayout header-title="魔盒逗图 -- 热搜">
     <template #body>
-      <div class="grid" style="padding: 0 5px !important">
+      <div class="grid">
         <div class="input-group">
           <el-input v-model="pagination.name" placeholder="请输入">
             <template #append>
@@ -29,13 +29,17 @@
             <div class="hot-keywords">
               <div class="icon">
                 <span>热门搜索</span>
-                <i :class="showHotWords ? 'el-icon-open' : 'el-icon-turn-off'" @click="showHotWords = !showHotWords"></i>
+                <i
+                  :class="showHotWords ? 'el-icon-open' : 'el-icon-turn-off'"
+                   @click="showHotWords = !showHotWords">
+                </i>
               </div>
               <template v-if="showHotWords">
                 <el-tag
                   v-for="(item, index) in hotKeyWord"
                   :key="index"
                   effect="dark"
+                  type="danger"
                   @click="doSearch(item)">
                   {{ item }}
                 </el-tag>
@@ -65,8 +69,31 @@ export default {
       showHotWords: true,
       oldKeywords: [],
       loadMore: this.$store.state.index.imageLists.search.lists,
-      pagination: { page: 1, limit: 20, source: 'h5', name: this.$store.state.index.imageLists.search.searchKeys, type: 'search' }
+      pagination: {
+        page: 1,
+        limit: 20,
+        source: 'h5',
+        name: this.$store.state.index.imageLists.search.searchKeys,
+        type: 'search'
+      }
     };
+  },
+  watch: {
+    '$route'() {
+      this.$store.commit('index/UPDATE_MUTATIONS', {
+        imageLists: {
+          search: {
+            lists: [],
+            total: 0,
+            searchKeys: this.pagination.name
+          },
+          index: {
+            lists: this.$store.state.index.imageLists.index
+            , total: 0
+          }
+        }
+      })
+    }
   },
   computed: {
     /* 热搜词 */
@@ -135,7 +162,7 @@ export default {
       setTimeout(async () => {
         loading.close();
         await this.$message({
-          message:message,
+          message: message,
           type: type,
           offset: 350,
           dangerouslyUseHTMLString: true,
@@ -156,6 +183,7 @@ export default {
         }, 500);
         return false;
       }
+      this.loadMore = [];
       const index = this.oldKeywords.indexOf(keyword);
       if (index === -1) {
         this.oldKeywords.unshift(keyword);
@@ -166,6 +194,20 @@ export default {
       this.oldKeywords.length > 20 && this.oldKeywords.pop();
       window.localStorage.setItem('OldKeys', JSON.stringify(this.oldKeywords));
       this.pagination = { page: 1, limit: 20, source: 'h5', name: keyword, type: 'search' };
+      /* 设置记录为空 */
+      this.$store.commit('index/UPDATE_MUTATIONS', {
+        imageLists: {
+          search: {
+            lists: [],
+            total: 0,
+            searchKeys: this.pagination.name
+          },
+          index: {
+            lists: this.$store.state.index.imageLists.index,
+            total: 0
+          }
+        }
+      });
       await this.getImageLists(this.pagination);
     },
     /**
@@ -202,6 +244,7 @@ export default {
 .el-message {
   border-radius: 10px;
 }
+
 .el-message-box {
   width: 300px !important;
 }

@@ -21,7 +21,9 @@
     <!--返回顶部-->
     <ToUp></ToUp>
     <!-- 授权登录 -->
-    <OauthLogin></OauthLogin>
+    <el-collapse-transition>
+      <OauthLogin></OauthLogin>
+    </el-collapse-transition>
   </el-card>
 </template>
 

@@ -129,6 +129,7 @@ let urls = {
   /* todo:图片列表 */
   image: {
     list: '/api/v1/image/lists',
+    hot: '/api/v1/image/hotLists',
     config: '/api/v1/image/hotKeyWord'
   },
   /* todo:域名 */

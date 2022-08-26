@@ -1,25 +1,26 @@
 import axios from 'axios';
-import { ElMessage } from 'element-plus';
 import store from '@/store';
 import router from '@/route';
 import URLS from '@/api/urls';
 
 /* h5固有地址 */
-const webURL = [URLS.image.list, URLS.image.config];
+const homeURL = [URLS.image.list, URLS.image.config, URLS.image.hot];
+const jumpHome = [URLS.image.list, URLS.image.config];
+const notJump = [URLS.image.hot];
 /**
  * todo:错误跳转
  * @param response
  */
 const ErrorHandler = (response) => {
   if (!store.state.baseLayout.token) {
-    return router.push({ path: webURL.includes(response.config.url) ? '/' : '/admin/home/login' }).then(() => {
-      !webURL.includes(response.config.url) ? ElMessage.error(response.data.item.message) : '';
+    const path = jumpHome.includes(response.config.url) ? '/' : notJump.includes(response.config.url) ? '/home/search' : '/admin/home/login'
+    return router.push({ path }).then(() => {
       window.localStorage.removeItem('token')
       store.commit('UPDATE_MUTATIONS', { errorInfo: response.data.item }, { root: true });
       return Promise.resolve({ errorInfo: response.data.item });
     });
   }
-  router.push({ path: webURL.includes(response.config.url) ? '/' : '/admin/result/index' }).then(() => {
+  return router.push({ path: homeURL.includes(response.config.url) ? '/' : '/admin/result/index' }).then(() => {
     store.commit('UPDATE_MUTATIONS', { errorInfo: response.data.item }, { root: true });
     return Promise.resolve({ errorInfo: response.data.item });
   });
@@ -49,17 +50,7 @@ instance.interceptors.request.use((config) => {
 });
 // http response 拦截器
 instance.interceptors.response.use( (response) => {
-  try {
-    if (parseInt(response.data.item.code, 10) !== 20000) {
-      return ErrorHandler(response);
-    }
-    if (response.data.item.message !== 'successfully') {
-      ElMessage.success(response.data.item.message);
-    }
-    return Promise.resolve(response);
-  } catch (error) {
-    return Promise.reject(error);
-  }
+  return parseInt((((response.data || {}).item || {}).code || '0'), 10) === 20000 ? Promise.resolve(response) : ErrorHandler(response);
 }, error => {
   return Promise.reject(error);
 });

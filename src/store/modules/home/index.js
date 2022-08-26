@@ -17,11 +17,24 @@ export const state = {
     { label: '我的', icon: 'el-icon-user', path: '/home/users', highlight: ['UserCenter'] }
   ],
   accountSetting: [
-    { label: '账号信息', icon: 'el-icon-user', path: '' },
-    { label: '图片收藏', icon: 'el-icon-collection', path: '' },
-    { label: '系统设置', icon: 'el-icon-setting', path: '' },
-    { label: '退出系统', icon: 'el-icon-upload2', path: '' },
-    { label: '敬请期待', icon: 'el-icon-loading', path: '' }
+    { label: '账号信息', icon: 'el-icon-user', path: '', value: 'account' },
+    { label: '图片收藏', icon: 'el-icon-collection', path: '', value: 'collection' },
+    { label: '系统设置', icon: 'el-icon-setting', path: '', value: 'setting' },
+    { label: '退出系统', icon: 'el-icon-upload2', path: '', value: 'logout' },
+    { label: '敬请期待', icon: 'el-icon-loading', path: '', value: 'loading' }
+  ],
+  emotionMenu: [
+    { value: 1, label: '表情' },
+    { value: 2, label: '人物' },
+    { value: 3, label: '动作' },
+    { value: 4, label: '家庭' },
+    { value: 5, label: '自然' },
+    { value: 6, label: '食物' },
+    { value: 7, label: '体育' },
+    { value: 8, label: '建筑' },
+    { value: 9, label: '用品' },
+    { value: 10, label: '符号' },
+    { value: 11, label: '国旗' }
   ],
   chatBody: {
     userLists: [],
@@ -32,7 +45,9 @@ export const state = {
   /* 用户列表 */
   userLists: [],
   /* 消息列表 */
-  messageLists: []
+  messageLists: [],
+  /* 表情列表 */
+  emotionLists: []
 };
 
 export const mutations = {
@@ -58,7 +73,7 @@ export const actions = {
    */
   getImageLists({ commit, state }, payload) {
     return new Promise((resolve, reject) => {
-      commonMethods(URLS.image.list, payload).then((result) => {
+      commonMethods(payload.value === 'index' ? URLS.image.list : URLS.image.hot, payload).then((result) => {
         switch(payload.type) {
           case 'index':
             commit('UPDATE_MUTATIONS', {
@@ -141,6 +156,26 @@ export const actions = {
         reject(error);
       });
     });
+  },
+  /**
+   * todo:获取表情列表
+   * @param commit
+   * @param payload
+   * @returns {Promise<unknown>}
+   */
+  getEmotionList({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      commonMethods(URLS.emotion.lists, payload).then(result => {
+        commit('UPDATE_MUTATIONS', {
+          emotionLists: (((result.data || {}).item || {}).lists || {}).data || [],
+          total: (((result.data || {}).item || {}).lists || {}).total || 0
+        });
+        resolve(result);
+      }).catch(error => {
+        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+        reject(error);
+      });
+    })
   }
 };
 

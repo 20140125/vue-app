@@ -1,27 +1,31 @@
 <template>
   <HomeLayout header-title="魔盒逗图 -- 通讯录">
     <template #body>
-      <div class="user-chat__menu" v-if="error.code === '20000'">
-        <div v-for="(char, index) in indexLists" :key="index" class="index-menu__number">
-          <div class="char" v-html="char"></div>
-          <div v-for="(item, key) in userLists[index]" :key="key">
-            <div class="user-chat__menu-item" @click="receiveMessage(item)">
-              <el-avatar :src="item.client_img"></el-avatar>
-              <div :style="`${item.online ? 'color: #409EFF' : 'color: #9d9a9a'}`" class="user-online">
-                {{ item.online ? `[在线] ${item.client_name}` : `[离线] ${item.client_name}` }}
-                <br/>
-                <span class="desc">{{ (item.centerInfo || {}).desc || '' }}</span>
+      <transition name="el-zoom-in-center">
+        <div v-if="error.code === '20000'" class="user-chat__menu">
+          <div v-for="(char, index) in indexLists" :key="index" class="index-menu__number">
+            <div class="char" v-html="char"></div>
+            <div v-for="(item, key) in userLists[index]" :key="key">
+              <div class="user-chat__menu-item" @click="receiveMessage(item)">
+                <el-avatar :src="item.client_img"></el-avatar>
+                <div :style="`${item.online ? 'color: #409EFF' : 'color: #9d9a9a'}`" class="user-online">
+                  {{ item.online ? `[在线] ${item.client_name}` : `[离线] ${item.client_name}` }}
+                  <br/>
+                  <span class="desc">{{ (item.centerInfo || {}).desc || '' }}</span>
+                </div>
               </div>
+              <hr>
             </div>
-            <hr>
           </div>
+          <!-- 字母侧边栏定位 -->
+          <ul>
+            <li v-for="(char, index) in indexLists" :key="index" @click="scrollToPosition(index)">{{ char }}</li>
+          </ul>
         </div>
-        <!-- 字母侧边栏定位 -->
-        <ul>
-          <li v-for="(char, index) in indexLists" @click="scrollToPosition(index)" :key="index">{{ char }}</li>
-        </ul>
-      </div>
-      <ErrorPage v-if="error.code === '40001'"></ErrorPage>
+      </transition>
+      <transition name="el-zoom-in-center">
+        <ErrorPage v-if="error.code === '40001'"></ErrorPage>
+      </transition>
     </template>
   </HomeLayout>
 </template>
@@ -47,7 +51,9 @@ export default {
   mounted() {
     this.$nextTick(() => {
       if (!this.Permission) {
-        this.$store.commit('UPDATE_MUTATIONS', { errorInfo: { code: '20003', message: 'Please Login System'} });
+        setTimeout(() => {
+          this.$store.commit('UPDATE_MUTATIONS', { errorInfo: { code: '20003', message: 'Please Login System' } });
+        }, 500);
       }
     });
   },

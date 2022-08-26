@@ -3,10 +3,14 @@
     <template #body>
       <div class="grid">
         <div class="grid-item">
-          <el-avatar :src="(Permission || {}).avatar_url || ''" :size="80"></el-avatar>
+          <el-avatar :size="80" :src="(Permission || {}).avatar_url || ''"></el-avatar>
           <div class="info">{{ (Permission || {}).username || '' }}</div>
         </div>
-        <div class="grid-item" v-for="(item, index) in accountSetting" :key="index">
+        <div
+          v-for="(item, index) in accountSetting"
+          :key="index"
+          class="grid-item"
+          @click="handleClick(item)">
           <i :class="`${item.icon}`"></i>
           <div class="info">{{ item.label }}</div>
           <i class="el-icon-arrow-right icon"></i>
@@ -30,9 +34,16 @@ export default {
   mounted() {
     this.$nextTick(() => {
       if (!this.Permission) {
-         this.$store.commit('UPDATE_MUTATIONS', { errorInfo: { code: '20003', message: 'Please Login System'} });
+        setTimeout(() => {
+          this.$store.commit('UPDATE_MUTATIONS', { errorInfo: { code: '20003', message: 'Please Login System' } });
+        }, 500);
       }
     });
+  },
+  methods: {
+    handleClick(item) {
+      console.log(item);
+    }
   }
 };
 </script>
