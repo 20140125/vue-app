@@ -179,5 +179,5 @@ export function scrollBottom0() {
   /* 滚动条顶部到浏览器顶部高度 */
   const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
   /* 滚动条是否触底 */
-  return clientHeight + scrollTop >= scrollHeight
+  return clientHeight + Math.ceil(scrollTop) >= scrollHeight;
 }

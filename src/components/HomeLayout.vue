@@ -28,7 +28,7 @@
 <script>
 import ToUp from '@/components/common/ToUp';
 import OauthLogin from '@/components/home/OauthLogin';
-import { scrollToBottom } from "@/utils/func";
+import { scrollToBottom } from '@/utils/func';
 
 export default {
   name: 'HomeLayout',
@@ -53,7 +53,22 @@ export default {
       return this.$store.state.errorInfo;
     },
     webSocketServer() {
-      return new WebSocket(this.Permission.websocket)
+      return new WebSocket(this.Permission.websocket);
+    },
+    /* 接收者 */
+    receiver() {
+      return this.$store.state.index.receiver;
+    },
+    /* 消息列表 */
+    messageLists() {
+      const data = JSON.parse(JSON.stringify(this.$store.state.index.messageLists));
+      const lists = [];
+      data.forEach((item) => {
+        if (item.to_client_id === this.receiver.uuid || item.from_client_id === this.receiver.uuid) {
+          lists.push(item);
+        }
+      });
+      return lists;
     }
   },
   mounted() {
@@ -78,14 +93,15 @@ export default {
           client_img: this.Permission.avatar_url,
           uuid: this.Permission.uuid
         };
-        this.sendMessage(JSON.stringify(jsonStr));
+        this.webSocketServer.send(JSON.stringify(jsonStr));
       });
       /* 监听发送消息事件 */
       this.webSocketServer.addEventListener('message', (events) => {
         const message = JSON.parse(events.data);
+        console.log(message);
         switch (message.type) {
           case 'ping':
-            this.sendMessage('{"type":"ping"}');
+            this.webSocketServer.send('{type:"ping"}');
             break;
           case 'login':
             /* 用户列表 */
@@ -133,6 +149,7 @@ export default {
             this.$store.commit('index/UPDATE_MUTATIONS', { chatBody: { userLists, indexLists } });
             break;
           case 'say':
+            console.log(message);
             if (message.to_client_id === this.Permission.uuid) {
               this.messageLists.push(message);
               this.$store.commit('index/UPDATE_MUTATIONS', { messageLists: this.messageLists });
@@ -155,7 +172,7 @@ export default {
      * todo:发送消息
      * @param message
      */
-    sendMessage(message) {
+      sendMessage(message) {
       try {
         this.webSocketServer.send(message);
       } catch (e) {

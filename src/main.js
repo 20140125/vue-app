@@ -69,7 +69,7 @@ router.beforeEach(async (to, from, next) => {
   /* todo:地址中存在access_token (第三方授权登录) */
   if (to.params.access_token) {
     window.localStorage.setItem('token', to.params.access_token || '');
-    await store.commit('UPDATE_MUTATIONS', { token: to.params.access_token }, { root: true });
+    await store.commit('UPDATE_MUTATIONS', { baseLayout : { token: to.params.access_token } }, { root: true });
     await store.commit('home/UPDATE_MUTATIONS', { tabs: store.state.home.tabs, tabModel: store.state.home.tabModel });
     next({ path: to.path.includes('admin') ? '/admin/home/index' : '/', redirect: to.path });
   }
@@ -91,8 +91,8 @@ router.beforeEach(async (to, from, next) => {
     });
   }
   /* todo:登录后校验权限 */
-  if (to.path.includes('admin')) {
-    await store.dispatch('login/checkAuthorized', { token:  store.state.baseLayout.token || to.params.access_token }).then(async () => {
+  if (to.path.includes('admin') && to.name !== 'LoginManage') {
+    await store.dispatch('login/checkAuthorized', { token:  store.state.baseLayout.token }).then(async () => {
       /* todo:没有登录，令牌无效直接跳转到登录页*/
       if (['20003', '40002'].includes(store.state.errorInfo.code)) {
         await store.commit('login/UPDATE_MUTATIONS', { userInfo: {}, isAuthorized: false });
