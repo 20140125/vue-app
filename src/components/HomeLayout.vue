@@ -149,7 +149,6 @@ export default {
             this.$store.commit('index/UPDATE_MUTATIONS', { chatBody: { userLists, indexLists } });
             break;
           case 'say':
-            console.log(message);
             if (message.to_client_id === this.Permission.uuid) {
               this.messageLists.push(message);
               this.$store.commit('index/UPDATE_MUTATIONS', { messageLists: this.messageLists });
