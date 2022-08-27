@@ -51,10 +51,16 @@ export function setTree(data, pid = 0, attr = '__children', pidAttr = 'pid') {
  * @return {number}
  */
 export function scrollToBottom(selector) {
-  setTimeout(() => {
-    const domWrapper = document.querySelector(selector);
-    domWrapper.scrollTop = domWrapper.scrollHeight;
-  }, 10);
+  try {
+    setTimeout(() => {
+      const domWrapper = document.querySelector(selector);
+      if (domWrapper) {
+        domWrapper.scrollTop = domWrapper.scrollHeight;
+      }
+    }, 10);
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 /**

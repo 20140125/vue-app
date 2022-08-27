@@ -31,6 +31,7 @@
 import ToUp from '@/components/common/ToUp';
 import OauthLogin from '@/components/home/OauthLogin';
 import { scrollToBottom } from '@/utils/func';
+import Push from 'push.js';
 
 export default {
   name: 'HomeLayout',
@@ -70,16 +71,9 @@ export default {
     receiver() {
       return this.$store.state.index.receiver;
     },
-    /* 消息列表 */
+    /* 消息总列表 */
     messageLists() {
-      const data = JSON.parse(JSON.stringify(this.$store.state.index.messageLists));
-      const lists = [];
-      data.forEach((item) => {
-        if (item.to_client_id === this.receiver.uuid || item.from_client_id === this.receiver.uuid) {
-          lists.push(item);
-        }
-      });
-      return lists;
+      return JSON.parse(JSON.stringify(this.$store.state.index.messageLists));
     }
   },
   mounted() {
@@ -170,6 +164,7 @@ export default {
               setTimeout(() => {
                 scrollToBottom('.message-content');
               }, 100);
+              this.pushMessage(message.content);
             }
             break;
         }
@@ -192,6 +187,18 @@ export default {
       } catch (e) {
         console.error(e);
       }
+    },
+    /**
+     * todo:推送弹框消息
+     * @param message
+     */
+    pushMessage(message) {
+      Push.create('你有未读消息', {
+        body: message,
+        requireInteraction: true,
+        icon: 'https://www.fanglonger.com/favicon.ico',
+        timeout: 60000
+      });
     },
     /**
      * todo:地址跳转

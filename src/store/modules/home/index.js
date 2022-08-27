@@ -3,38 +3,38 @@ import URLS from '@/api/urls';
 
 export const state = {
   imageLists: {
-    index: {lists: [], total: 0},
-    search: {lists: [], total: 0, searchKeys: ''}
+    index: { lists: [], total: 0 },
+    search: { lists: [], total: 0, searchKeys: '' }
   },
   configuration: {
     notice: [],
     hotKeyWord: []
   },
   menuLists: [
-    {label: '首页', icon: 'el-icon-house', path: '/', highlight: ['HomeIndex']},
-    {label: '热搜', icon: 'el-icon-search', path: '/home/search', highlight: ['HomeSearch']},
-    {label: '信息', icon: 'el-icon-chat-dot-square', path: '/home/chat', highlight: ['ConnectPerson', 'MessageBox']},
-    {label: '我的', icon: 'el-icon-user', path: '/home/users', highlight: ['UserCenter']}
+    { label: '首页', icon: 'el-icon-house', path: '/', highlight: ['HomeIndex'] },
+    { label: '热搜', icon: 'el-icon-search', path: '/home/search', highlight: ['HomeSearch'] },
+    { label: '信息', icon: 'el-icon-chat-dot-square', path: '/home/chat', highlight: ['ConnectPerson', 'MessageBox'] },
+    { label: '我的', icon: 'el-icon-user', path: '/home/users', highlight: ['UserCenter'] }
   ],
   accountSetting: [
-    {label: '账号信息', icon: 'el-icon-user', path: '', value: 'account'},
-    {label: '图片收藏', icon: 'el-icon-collection', path: '', value: 'collection'},
-    {label: '系统设置', icon: 'el-icon-setting', path: '', value: 'setting'},
-    {label: '退出系统', icon: 'el-icon-upload2', path: '', value: 'logout'},
-    {label: '敬请期待', icon: 'el-icon-loading', path: '', value: 'loading'}
+    { label: '账号信息', icon: 'el-icon-user', path: '', value: 'account' },
+    { label: '图片收藏', icon: 'el-icon-collection', path: '', value: 'collection' },
+    { label: '系统设置', icon: 'el-icon-setting', path: '', value: 'setting' },
+    { label: '退出系统', icon: 'el-icon-upload2', path: '', value: 'logout' },
+    { label: '敬请期待', icon: 'el-icon-loading', path: '', value: 'loading' }
   ],
   emotionMenu: [
-    {value: 1, label: '表情'},
-    {value: 2, label: '人物'},
-    {value: 3, label: '动作'},
-    {value: 4, label: '家庭'},
-    {value: 5, label: '自然'},
-    {value: 6, label: '食物'},
-    {value: 7, label: '体育'},
-    {value: 8, label: '建筑'},
-    {value: 9, label: '用品'},
-    {value: 10, label: '符号'},
-    {value: 11, label: '国旗'}
+    { value: 1, label: '表情' },
+    { value: 2, label: '人物' },
+    { value: 3, label: '动作' },
+    { value: 4, label: '家庭' },
+    { value: 5, label: '自然' },
+    { value: 6, label: '食物' },
+    { value: 7, label: '体育' },
+    { value: 8, label: '建筑' },
+    { value: 9, label: '用品' },
+    { value: 10, label: '符号' },
+    { value: 11, label: '国旗' }
   ],
   chatBody: {
     userLists: [],
@@ -45,7 +45,10 @@ export const state = {
   /* 用户列表 */
   userLists: [],
   /* 消息列表 */
-  messageLists: []
+  messageLists: [],
+  /* 个人消息记录 */
+  selfMessage: []
+
 };
 export const mutations = {
   /**
@@ -71,7 +74,7 @@ export const actions = {
   getImageLists({ commit, state }, payload) {
     return new Promise((resolve, reject) => {
       commonMethods(payload.value === 'index' ? URLS.image.list : URLS.image.hot, payload).then((result) => {
-        switch(payload.type) {
+        switch (payload.type) {
           case 'index':
             commit('UPDATE_MUTATIONS', {
               imageLists: {
@@ -79,7 +82,11 @@ export const actions = {
                   lists: ((((result || {}).data || {}).item || {}).lists || {}).data || [],
                   total: ((((result || {}).data || {}).item || {}).lists || {}).total || 0
                 },
-                search: { lists: state.imageLists.search.lists, total: state.imageLists.search.total, searchKeys: state.imageLists.search.searchKeys }
+                search: {
+                  lists: state.imageLists.search.lists,
+                  total: state.imageLists.search.total,
+                  searchKeys: state.imageLists.search.searchKeys
+                }
               }
             });
             break;
@@ -99,7 +106,11 @@ export const actions = {
             commit('UPDATE_MUTATIONS', {
               imageLists: {
                 index: { lists: state.imageLists.index.lists, total: state.imageLists.index.total },
-                search: { lists: state.imageLists.search.lists, total: state.imageLists.search.total, searchKeys: state.imageLists.search.searchKeys }
+                search: {
+                  lists: state.imageLists.search.lists,
+                  total: state.imageLists.search.total,
+                  searchKeys: state.imageLists.search.searchKeys
+                }
               }
             });
             break;

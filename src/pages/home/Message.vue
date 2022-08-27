@@ -3,7 +3,7 @@
     <template #body>
       <div :style="cssStyle.box" class="message-box">
         <div :style="cssStyle.content" class="message-content">
-          <div v-for="(item, index) in messageLists" :key="index">
+          <div v-for="(item, index) in selfMessage" :key="index">
             <div
               :class="`${item.from_client_name === Permission.username ? 'self-state' : ''}`"
               class="user-info__message">
@@ -33,7 +33,6 @@
 <script>
 import HomeLayout from '@/components/HomeLayout';
 import { scrollToBottom, setTime } from '@/utils/func';
-import Push from 'push.js';
 
 export default {
   name: 'Message',
@@ -49,16 +48,20 @@ export default {
     };
   },
   computed: {
-    /* 消息列表 */
-    messageLists() {
-      const data = JSON.parse(JSON.stringify(this.$store.state.index.messageLists));
+    /* 自己的聊天记录 */
+    selfMessage() {
       const lists = [];
-      data.forEach((item) => {
-        if (item.to_client_id === this.receiver.uuid || item.from_client_id === this.receiver.uuid) {
+      this.messageLists.forEach((item) => {
+        if ((item.to_client_id === this.receiver.uuid || item.from_client_id === this.receiver.uuid) && this.Permission.uuid !== this.receiver.uuid) {
           lists.push(item);
         }
       });
+      this.$store.commit('index/UPDATE_MUTATIONS', { selfMessage: lists });
       return lists;
+    },
+    /* 消息总列表 */
+    messageLists() {
+      return JSON.parse(JSON.stringify(this.$store.state.index.messageLists));
     },
     /* 接收者 */
     receiver() {
@@ -109,18 +112,6 @@ export default {
         scrollToBottom('.message-content');
       }, 100);
       this.$refs.message.innerHTML = '';
-    },
-    /**
-     * todo:推送弹框消息
-     * @param message
-     */
-    pushMessage(message) {
-      Push.create('你有未读消息', {
-        body: message,
-        requireInteraction: true,
-        icon: 'https://www.fanglonger.com/favicon.ico',
-        timeout: 60000
-      });
     },
     /**
      * todo:字符串替换
