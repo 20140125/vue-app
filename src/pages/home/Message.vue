@@ -1,5 +1,5 @@
 <template>
-  <HomeLayout ref="homeLayout" :header-title="receiver.client_name">
+  <HomeLayout ref="homeLayout" :header-title="receiver.client_name" :connect-web-socket="true">
     <template #body>
       <div :style="cssStyle.box" class="message-box">
         <div :style="cssStyle.content" class="message-content">
@@ -10,7 +10,8 @@
               <el-avatar
                 :class="`${item.from_client_name === Permission.username ? 'self-state' : ''}`"
                 :size="40"
-                :src="item.client_img"></el-avatar>
+                :src="item.client_img">
+              </el-avatar>
               <div
                 :class="`${item.from_client_name === Permission.username ? 'self-state' : ''}`"
                 class="content"
@@ -21,12 +22,9 @@
         </div>
         <!--发送消息-->
         <div class="message-input__item">
-          <div ref="message" class="input-content" contentEditable="true" @keyup.enter="sendMessage"></div>
-          <i class="el-icon-picture-outline-round"></i>
-          <i class="el-icon-circle-plus-outline"></i>
+          <div ref="message" class="input-content" contentEditable="true" @keydown="inputMessage"></div>
+          <el-button type="primary" size="medium" @click="sendMessage">发送</el-button>
         </div>
-        <!--表情组件-->
-        <Emotion :show-emotion="showEmotion"></Emotion>
       </div>
     </template>
   </HomeLayout>
@@ -36,20 +34,18 @@
 import HomeLayout from '@/components/HomeLayout';
 import { scrollToBottom, setTime } from '@/utils/func';
 import Push from 'push.js';
-import Emotion from '@/components/home/Emotion';
 
 export default {
   name: 'Message',
-  components: { Emotion, HomeLayout },
+  components: { HomeLayout },
   data() {
     return {
       uploadData: {
-        token: this.$store.state.baseLayout.token || window.localStorage.getItem('token'),
+        token: this.$store.state.baseLayout.token,
         file_type: 'text',
         round_name: true
       },
-      cssStyle: { box: '', content: '' },
-      showEmotion: true
+      cssStyle: { box: '', content: '' }
     };
   },
   computed: {
@@ -75,9 +71,9 @@ export default {
   },
   mounted() {
     this.$nextTick(async () => {
-      // if (!this.Permission) {
-      //   await this.$router.push({ path: '/' });
-      // }
+      if (!this.Permission) {
+        await this.$router.push({ path: '/' });
+      }
     });
   },
   created() {
@@ -113,52 +109,6 @@ export default {
         scrollToBottom('.message-content');
       }, 100);
       this.$refs.message.innerHTML = '';
-    },
-    /**
-     * todo:图片选择
-     * @param item
-     */
-    getEmotion(item) {
-      this.$refs.message.innerHTML += '<img src=\'' + item.icon + '\' width=\'30px\' height=\'30px\' style=\'object-fit: contain;\' alt=\'' + item.title + '\'>';
-    },
-    /**
-     * todo:图片上传成功
-     * @param response
-     */
-    uploadSuccess(response) {
-      if (response.code === 200) {
-        switch ((((response || {}).item || {}).lists || {}).file_type) {
-          case 'image':
-            this.$refs.message.innerHTML += '<img src=\'' + (((response || {}).item || {}).lists || {}).src + '\' width=\'100px\' height=\'100px\' style=\'object-fit: contain;\' alt=\'' + this.userInfo.username + '\'>';
-            break;
-          case 'video':
-            this.$refs.message.innerHTML += '<video src=\'' + (((response || {}).item || {}).lists || {}).src + '\' width=\'200px\' height=\'200px\' autoplay controls=\'controls\'>';
-            break;
-          default:
-            this.$refs.message.innerHTML += '';
-            break;
-        }
-      }
-    },
-    /**
-     * todo；上传之前
-     * @param file
-     */
-    beforeUpload(file) {
-      if (['image/jpeg', 'image/jpg', 'image/png', 'image/gif'].includes(file.type)) {
-        this.uploadData.file_type = 'image';
-        if (file.size > 2 * 1024 * 1024) {
-          this.$message.error('upload image size error');
-          return false;
-        }
-      }
-      if (['audio/mp4', 'video/mp4'].includes(file.type)) {
-        this.uploadData.file_type = 'video';
-        if (file.size > 5 * 1024 * 1024) {
-          this.$message.error('upload video size error');
-          return false;
-        }
-      }
     },
     /**
      * todo:推送弹框消息

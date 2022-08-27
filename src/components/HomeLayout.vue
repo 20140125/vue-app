@@ -36,9 +36,15 @@ export default {
   name: 'HomeLayout',
   components: { ToUp, OauthLogin },
   props: {
+    /* 标题设置 */
     headerTitle: {
       type: String,
       default: () => '魔盒逗图'
+    },
+    /* 长链接 */
+    connectWebSocket: {
+      type: Boolean,
+      default: () => false
     }
   },
   data() {
@@ -77,8 +83,8 @@ export default {
     }
   },
   mounted() {
-    this.$nextTick(async () => {
-      if (this.Permission) {
+    this.$nextTick( async () => {
+      if (this.Permission && this.connectWebSocket) {
         await this.getConnection();
       }
     });
@@ -103,22 +109,24 @@ export default {
       /* 监听发送消息事件 */
       this.webSocketServer.addEventListener('message', (events) => {
         const message = JSON.parse(events.data);
-        console.log(message);
         switch (message.type) {
           case 'ping':
             this.webSocketServer.send('{type:"ping"}');
             break;
           case 'login':
-            /* 用户列表 */
+            /* WebSocket推送的用户 */
             const clientLists = message.client_lists || [];
-            this.$store.commit('index/UPDATE_MUTATIONS', { userLists: clientLists });
-            /* 获取接收者 */
+            /* 字母导航 */
             const indexLists = [];
+            /* 用户列表 */
             const userLists = [];
+            /* 在线用户 */
             const online = [];
+            /* 接收者 */
+            let receiver = {};
             for (let i in clientLists) {
               if (clientLists[i].id === this.$route.params.id) {
-                this.$store.commit('index/UPDATE_MUTATIONS', { receiver: clientLists[i] });
+                receiver = clientLists[i];
               }
               if (indexLists.indexOf(clientLists[i].char) < 0) {
                 indexLists.push(clientLists[i].char);
@@ -151,7 +159,9 @@ export default {
             });
             /* 追加在线用户 */
             userLists.unshift(online);
-            this.$store.commit('index/UPDATE_MUTATIONS', { chatBody: { userLists, indexLists } });
+            if (Object.keys(this.$store.state.index.receiver).length === 0) {
+              this.$store.commit('index/UPDATE_MUTATIONS', { chatBody: { userLists, indexLists }, userLists: clientLists, receiver });
+            }
             break;
           case 'say':
             if (message.to_client_id === this.Permission.uuid) {

@@ -71,7 +71,10 @@ router.beforeEach(async (to, from, next) => {
     window.localStorage.setItem('token', to.params.access_token || '');
     await store.commit('UPDATE_MUTATIONS', { baseLayout : { token: to.params.access_token } }, { root: true });
     await store.commit('home/UPDATE_MUTATIONS', { tabs: store.state.home.tabs, tabModel: store.state.home.tabModel });
-    next({ path: to.path.includes('admin') ? '/admin/home/index' : '/', redirect: to.path });
+    if (to.path.includes('admin')) {
+      next({ path: '/admin/home/index', redirect: to.path });
+    }
+    next();
   }
   /* todo:系统首页 */
   if (to.name === 'HomeIndex' || to.path.includes('home')) {

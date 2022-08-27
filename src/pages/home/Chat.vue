@@ -1,5 +1,5 @@
 <template>
-  <HomeLayout header-title="魔盒逗图 -- 通讯录">
+  <HomeLayout header-title="魔盒逗图 -- 通讯录" :connect-web-socket="true">
     <template #body>
       <transition name="el-zoom-in-center">
         <div v-if="error.code === '20000'" class="user-chat__menu">
@@ -38,12 +38,15 @@ export default {
   name: 'Chat',
   components: { ErrorPage, HomeLayout },
   computed: {
+    /* 错误信息 */
     error() {
       return this.$store.state.errorInfo;
     },
+    /* 用户列表 */
     userLists() {
       return this.$store.state.index.chatBody.userLists;
     },
+    /* 导航栏列表 */
     indexLists() {
       return this.$store.state.index.chatBody.indexLists;
     }
