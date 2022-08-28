@@ -1,6 +1,10 @@
 import { commonMethods } from '@/api/methods';
 import URLS from '../../../api/urls';
 
+export const state = {
+  userCenter: {}
+};
+
 export const mutations = {
   /**
    * todo: 更新vuex数据
@@ -22,14 +26,14 @@ export const actions = {
    * @param payload
    * @return {Promise<boolean>}
    */
-  async getUsersLists({ commit, state }, payload) {
+  getUsersLists: async function ({ commit, state }, payload) {
     /* 如果页码没有变，直接读取vuex里面的数据 */
     if (state.page === payload.page && !payload.refresh && state.usersLists.length > 0) {
       commit('UPDATE_MUTATIONS', { usersLists: state.usersLists });
       return false;
     }
     return new Promise((resolve, reject) => {
-      commonMethods(URLS.users.lists, payload).then(result => {
+      commonMethods(URLS.users.lists, payload).then((result) => {
         commit('UPDATE_MUTATIONS', {
           usersLists: ((((result || {}).data || {}).item || {}).lists || {}).data || [],
           total: ((((result || {}).data || {}).item || {}).lists || {}).total || 0,
@@ -49,7 +53,7 @@ export const actions = {
    * @return {Promise<boolean>}
    */
   async getUserCenter({ commit, state }) {
-    if (state.userCenter) {
+    if (Object.keys(state.userCenter).length > 0) {
       commit('UPDATE_MUTATIONS', { userCenter: state.userCenter });
       return false;
     }
@@ -90,5 +94,6 @@ export const actions = {
 export default {
   namespaced: true,
   mutations,
-  actions
+  actions,
+  state
 };

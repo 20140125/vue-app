@@ -14,14 +14,13 @@ export const state = {
     { label: '首页', icon: 'el-icon-house', path: '/', highlight: ['HomeIndex'] },
     { label: '热搜', icon: 'el-icon-search', path: '/home/search', highlight: ['HomeSearch'] },
     { label: '信息', icon: 'el-icon-chat-dot-square', path: '/home/chat', highlight: ['ConnectPerson', 'MessageBox'] },
-    { label: '我的', icon: 'el-icon-user', path: '/home/users', highlight: ['UserCenter'] }
+    { label: '我的', icon: 'el-icon-user', path: '/home/users', highlight: ['Users', 'UsersCenter', 'Settings'] }
   ],
   accountSetting: [
-    { label: '账号信息', icon: 'el-icon-user', path: '', value: 'account' },
-    { label: '图片收藏', icon: 'el-icon-collection', path: '', value: 'collection' },
-    { label: '系统设置', icon: 'el-icon-setting', path: '', value: 'setting' },
-    { label: '退出系统', icon: 'el-icon-upload2', path: '', value: 'logout' },
-    { label: '敬请期待', icon: 'el-icon-loading', path: '', value: 'loading' }
+    { label: '账号信息', icon: 'el-icon-user', path: '/home/users/info', value: 'account' },
+    { label: '系统设置', icon: 'el-icon-setting', path: '/home/users/setting', value: 'setting' },
+    { label: '退出系统', icon: 'el-icon-upload2', path: '/home/users/logout', value: 'logout' },
+    { label: '敬请期待', icon: 'el-icon-loading', path: '/home/users/loading', value: 'loading' }
   ],
   emotionMenu: [
     { value: 1, label: '表情' },

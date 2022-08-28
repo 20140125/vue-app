@@ -42,8 +42,12 @@
           <el-tabs type="border-card">
             <el-tab-pane label="信息展示"></el-tab-pane>
             <el-card shadow="hover">
-              <el-form ref="center" :model="userCenter" label-position="left" label-width="100px"
-                       style="margin-left: 20px">
+              <el-form
+                ref="center"
+                :model="userCenter"
+                label-position="left"
+                label-width="100px"
+                style="margin-left: 20px">
                 <el-form-item class="is-required avatar-url" label="头像：">
                   <el-avatar :alt="userInfo.username" :size="100" :src="userInfo.avatar_url" fit="fill"></el-avatar>
                 </el-form-item>

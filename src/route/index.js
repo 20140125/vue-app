@@ -30,12 +30,26 @@ const router = createRouter({
       component: () => import('../pages/home/Message'),
       meta: { title: '消息记录' }
     },
-    /* 个人中心 */
+    /* 我的 */
     {
       path: '/home/users',
-      name: 'UserCenter',
+      name: 'Users',
       component: () => import('../pages/home/Users'),
       meta: { title: '我的' }
+    },
+    /* 个人中心 */
+    {
+      path: '/home/users/info',
+      name: 'UsersCenter',
+      component: () => import('../pages/home/UsersCenter'),
+      meta: { title: '个人中心' }
+    },
+    /* 系统设置 */
+    {
+      path: '/home/users/setting',
+      name: 'Settings',
+      component: () => import('../pages/home/Settings'),
+      meta: { title: '系统设置' }
     },
     {
       path: '/admin/home/login',

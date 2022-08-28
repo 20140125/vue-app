@@ -7,7 +7,7 @@
     <!-- 页面内容 -->
     <slot name="body" v-if="error.code !== '20003'"></slot>
     <!-- 底部导航栏 -->
-    <div class="item">
+    <div class="item" v-if="showBottomBar">
       <div
         v-for="(item, index) in menuLists"
         :key="index"
@@ -46,6 +46,11 @@ export default {
     connectWebSocket: {
       type: Boolean,
       default: () => false
+    },
+    /* 展示底部导航栏 */
+    showBottomBar: {
+      type: Boolean,
+      default: () => true
     }
   },
   data() {
