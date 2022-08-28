@@ -45,8 +45,8 @@
         </div>
         <div class="grid-item">
           <div class="info">切换账号</div>
-          <div class="icon" @click="changeAccount">
-            <span v-html="Permission.username"></span>
+          <div class="icon">
+            <span v-html="userSetting.u_name"></span>
             <i class="el-icon-arrow-right"></i>
           </div>
         </div>
