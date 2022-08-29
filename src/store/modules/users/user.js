@@ -50,10 +50,11 @@ export const actions = {
    * todo：获取用户信息
    * @param commit
    * @param state
+   * @param payload
    * @return {Promise<boolean>}
    */
-  async getUserCenter({ commit, state }) {
-    if (Object.keys(state.userCenter).length > 0) {
+  async getUserCenter({ commit, state }, payload = { refresh: false }) {
+    if (Object.keys(state.userCenter).length > 0 && !payload.refresh) {
       commit('UPDATE_MUTATIONS', { userCenter: state.userCenter });
       return false;
     }

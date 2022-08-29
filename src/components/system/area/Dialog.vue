@@ -16,7 +16,7 @@
         v-if="showSubmitButton && Permission.auth.indexOf(savePermission) > -1"
         :form="submitForm"
         reForm="area"
-        @closeDialog="$emit('getAreaLists', { parent_id: 1 })">
+        @closeDialog="$emit('getAreaLists', { parent_id: 1, refresh: false })">
       </SubmitButton>
       <el-main v-else style="text-align: center">
         <el-button plain size="medium" type="primary" @click="$emit('closeDialog')">取消</el-button>

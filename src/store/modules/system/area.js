@@ -25,7 +25,7 @@ export const actions = {
    */
   async getAreaLists({ commit, state }, payload) {
     /* 如果页码没有变，直接读取vuex里面的数据 */
-    if (state.areaLists) {
+    if (state.areaLists && !payload.refresh) {
       commit('UPDATE_MUTATIONS', { areaLists: state.areaLists });
       return false;
     }

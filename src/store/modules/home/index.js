@@ -22,19 +22,11 @@ export const state = {
     { label: '退出系统', icon: 'el-icon-upload2', path: '/home/users/logout', value: 'logout' },
     { label: '敬请期待', icon: 'el-icon-loading', path: '/home/users/loading', value: 'loading' }
   ],
-  emotionMenu: [
-    { value: 1, label: '表情' },
-    { value: 2, label: '人物' },
-    { value: 3, label: '动作' },
-    { value: 4, label: '家庭' },
-    { value: 5, label: '自然' },
-    { value: 6, label: '食物' },
-    { value: 7, label: '体育' },
-    { value: 8, label: '建筑' },
-    { value: 9, label: '用品' },
-    { value: 10, label: '符号' },
-    { value: 11, label: '国旗' }
-  ],
+  /* 用户配置 */
+  usersConfig: { username: '名字', email: '邮箱' },
+  /* 更多配置 */
+  moreInformationConfig: { ip_address: '居住地址', local: '所在地', desc: '个性签名', tags: '个性标签', notice_status: '站内通知', u_name: '切换账号' },
+  /* 联系人 */
   chatBody: {
     userLists: [],
     indexLists: []

@@ -44,7 +44,7 @@ export default {
     async getAreaLists(parent_id = 1) {
       this.loading = true;
       this.syncVisible = false;
-      await this.$store.dispatch('area/getAreaLists', { parent_id: parent_id }).then(() => {
+      await this.$store.dispatch('area/getAreaLists', { parent_id: parent_id, refresh: false }).then(() => {
         this.areaLists = this.$store.state.area.areaLists;
         this.loading = false;
       });

@@ -27,6 +27,19 @@ body {
   top: 0;
   right: 0;
   left: 0;
+
+  i {
+    position: absolute;
+    left: 5px;
+    font-size: 20px;
+    bottom: 15px;
+  }
+  button {
+    position: absolute;
+    right: 10px;
+    bottom: 8px;
+    border-radius: 5px;
+  }
 }
 
 .el-tabs__content {
@@ -44,6 +57,16 @@ body {
   box-sizing: border-box;
   overflow: auto;
 
+  .area {
+    width: 100%;
+    font-size: 14px;
+    color: #333333;
+    border-bottom: 1px solid #eaeef3;
+    padding: 10px;
+    margin-bottom: 15px;
+    background-color: #F1F1F1;
+  }
+
   .grid-item {
     width: 100%;
     align-items: center;
@@ -52,6 +75,10 @@ body {
     margin-bottom: 20px;
     padding-bottom: 20px;
     border-bottom: 1px solid #eaeef3;
+
+    .el-tag {
+      margin-right: 10px;
+    }
 
     i {
       font-size: 18px;
@@ -63,6 +90,10 @@ body {
       display: flex;
       align-items: center;
 
+      .status {
+        color: #409EFF
+      }
+
       span {
         font-size: 14px;
       }
@@ -70,6 +101,10 @@ body {
 
     .info {
       margin-left: 10px;
+
+      i {
+        color: #409EFF
+      }
     }
   }
 
@@ -77,6 +112,7 @@ body {
     height: 50px;
     padding-top: 10px
   }
+
   .settings {
     padding-top: 10px;
   }

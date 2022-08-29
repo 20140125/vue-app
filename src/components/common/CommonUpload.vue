@@ -94,7 +94,9 @@ export default {
     /* 图片上传地址 */
     action: {
       type: String,
-      default: () => URLS.baseURL + URLS.file.upload
+      default: () => {
+        return `${URLS.baseURL}${URLS.file.upload}`;
+      }
     },
     /* 自动上传 */
     autoUpload: {

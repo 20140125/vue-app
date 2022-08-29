@@ -3,11 +3,15 @@
     v-water-mark="{ text: text, textColor: 'rgba(0, 0, 0, .2)', font: '20px consolas, sans-serif', row: 150, col: 150 }"
     shadow="always">
     <!-- 网站标题 -->
-    <template #header>{{ headerTitle }}</template>
+    <template #header>
+      <i class="el-icon-arrow-left" v-if="backButton" @click="goBack()"></i>
+      {{ headerTitle }}
+      <el-button v-if="submitButton" size="small" type="primary" @click="saveParams">保存</el-button>
+    </template>
     <!-- 页面内容 -->
     <slot name="body" v-if="error.code !== '20003'"></slot>
     <!-- 底部导航栏 -->
-    <div class="item" v-if="showBottomBar">
+    <div class="item" v-if="bottomBar">
       <div
         v-for="(item, index) in menuLists"
         :key="index"
@@ -48,9 +52,23 @@ export default {
       default: () => false
     },
     /* 展示底部导航栏 */
-    showBottomBar: {
+    bottomBar: {
       type: Boolean,
       default: () => true
+    },
+    /* 返回按钮 */
+    backButton: {
+      type: Boolean,
+      default: () => false
+    },
+    /* 保存按钮 */
+    submitButton: {
+      type: Boolean,
+      default: () => false
+    },
+    /* 保存参数 */
+    saveParams: {
+      type: Function
     }
   },
   data() {
@@ -220,6 +238,12 @@ export default {
       setTimeout(() => {
         loading.close();
       }, item.path === '/' ? 0 : 500);
+    },
+    /**
+     * todo:返回上一级页面
+     */
+    goBack() {
+      this.$router.go(-1);
     }
   }
 };

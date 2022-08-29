@@ -46,10 +46,31 @@ const router = createRouter({
     },
     /* 系统设置 */
     {
+      path: '/home/users/more',
+      name: 'MoreInformation',
+      component: () => import('../pages/home/MoreInformation'),
+      meta: { title: '更多信息' }
+    },
+    /* 系统设置 */
+    {
       path: '/home/users/setting',
       name: 'Settings',
       component: () => import('../pages/home/Settings'),
       meta: { title: '系统设置' }
+    },
+    /* 修改账号信息 */
+    {
+      path: '/home/users/update/:param',
+      name: 'UpdateUsers',
+      component: () => import('../pages/home/UpdateUsers'),
+      meta: { title: '更新信息' }
+    },
+    /* 修改账号配置 */
+    {
+      path: '/home/setting/update/:param',
+      name: 'UpdateSetting',
+      component: () => import('../pages/home/UsersConfig'),
+      meta: { title: '更新账号配置' }
     },
     {
       path: '/admin/home/login',
