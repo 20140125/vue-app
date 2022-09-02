@@ -60,7 +60,6 @@ export default {
   },
   mounted() {
     this.$nextTick(async () => {
-      console.log('aaaa');
       if (!this.Permission) {
         setTimeout(() => {
           this.$store.commit('UPDATE_MUTATIONS', { errorInfo: { code: '20003', message: 'Please Login System' } });
@@ -86,6 +85,10 @@ export default {
     setLocal(value) {
       return value.join('').replace('中华人民共和国', '');
     },
+    /**
+     * todo:修改登录账号
+     * @param param
+     */
     changeAccount(param) {
       this.$router.push({ path: `/home/setting/update/${param}` });
     }

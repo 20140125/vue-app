@@ -33,8 +33,21 @@
         </div>
       </div>
       <!--个性标签-->
-      <div class="grid" v-else-if="props === 'tags'">
-        <div class="grid-item settings">{{ params }}</div>
+      <div v-else-if="props === 'tags'">
+        <div class="grid" >
+          <div class="grid-item settings">
+            <el-tag
+              v-for="(item, index) in params"
+              type="success"
+              @click="addPersonTags(item)"
+              :key="index">
+              {{ item }}
+            </el-tag>
+          </div>
+          <div class="grid-item__tags">
+            <el-tag v-for="(item, index) in personLabel" :key="index">{{ item }}</el-tag>
+          </div>
+        </div>
       </div>
       <!--站内通知-->
       <div class="grid" v-else-if="props === 'notice_status'">
@@ -82,12 +95,21 @@ export default {
     /* 用户信息 */
     userSetting() {
       return JSON.parse(JSON.stringify(this.$store.state.users.userCenter));
+    },
+    /* 个人标签 */
+    personLabel() {
+      return this.$store.state.index.configuration.tags;
     }
   },
   mounted() {
     this.$nextTick(async () => {
-      await this.getAreaLists(1);
+      if (this.notInput.includes(this.props)) {
+        await this.getAreaLists(1);
+      }
       await this.getUserSettings();
+      if (this.props === 'tags') {
+        await this.getConfiguration();
+      }
     });
   },
   methods: {
@@ -108,6 +130,13 @@ export default {
       await this.$store.dispatch('users/getUserCenter', { refresh });
     },
     /**
+     * todo:获取系统通知
+     * @returns {Promise<void>}
+     */
+    async getConfiguration() {
+      await this.$store.dispatch('index/getConfiguration', { keywords: 'PersonalLabel', type: 'tags' });
+    },
+    /**
      * todo:设置地区
      * @param item
      * @returns {Promise<void>}
@@ -125,6 +154,9 @@ export default {
      */
     setLocal(value) {
       return value.join('').replace('中华人民共和国', '');
+    },
+    addPersonTags(item) {
+      console.log(item);
     },
     /**
      * todo:数据保存

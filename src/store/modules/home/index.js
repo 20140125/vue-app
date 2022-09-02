@@ -8,7 +8,8 @@ export const state = {
   },
   configuration: {
     notice: [],
-    hotKeyWord: []
+    hotKeyWord: [],
+    tags: []
   },
   menuLists: [
     { label: '首页', icon: 'el-icon-house', path: '/', highlight: ['HomeIndex'] },
@@ -128,7 +129,8 @@ export const actions = {
             commit('UPDATE_MUTATIONS', {
               configuration: {
                 notice: state.configuration.notice.length > 0 ? state.configuration.notice : (((result || {}).data || {}).item || {}).lists || [],
-                hotKeyWord: state.configuration.hotKeyWord
+                hotKeyWord: state.configuration.hotKeyWord,
+                tags: state.configuration.tags
               }
             });
             break;
@@ -136,7 +138,17 @@ export const actions = {
             commit('UPDATE_MUTATIONS', {
               configuration: {
                 notice: state.configuration.notice,
-                hotKeyWord: state.configuration.hotKeyWord.length > 0 ? state.configuration.hotKeyWord : (((result || {}).data || {}).item || {}).lists || []
+                hotKeyWord: state.configuration.hotKeyWord.length > 0 ? state.configuration.hotKeyWord : (((result || {}).data || {}).item || {}).lists || [],
+                tags: state.configuration.tags
+              }
+            });
+            break;
+          case 'tags':
+            commit('UPDATE_MUTATIONS', {
+              configuration: {
+                notice: state.configuration.notice,
+                hotKeyWord: state.configuration.hotKeyWord,
+                tags:  state.configuration.tags.length > 0 ? state.configuration.tags : (((result || {}).data || {}).item || {}).lists || []
               }
             });
             break;
@@ -144,7 +156,8 @@ export const actions = {
             commit('UPDATE_MUTATIONS', {
               configuration: {
                 notice: state.configuration.notice,
-                hotKeyWord: state.configuration.hotKeyWord
+                hotKeyWord: state.configuration.hotKeyWord,
+                tags: state.configuration.tags
               }
             });
             break;
