@@ -73,7 +73,7 @@ const router = createRouter({
       meta: { title: '更新账号配置' }
     },
     {
-      path: '/admin/home/login',
+      path: '/admin/login',
       name: 'LoginManage',
       component: () => import('../pages/Login'),
       meta: { title: '登录页' }
@@ -85,7 +85,7 @@ const router = createRouter({
       children: [
         /* 欢迎页 */
         {
-          path: 'home/index/:access_token?',
+          path: 'index/:access_token?',
           name: 'HomeManage',
           component: () => import('../pages/admin/Index'),
           meta: { title: '欢迎页' }

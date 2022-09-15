@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     saveParams() {
-      console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+      console.log(this.Permission);
     }
   }
 };

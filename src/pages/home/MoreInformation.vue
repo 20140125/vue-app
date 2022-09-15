@@ -60,12 +60,6 @@ export default {
   },
   mounted() {
     this.$nextTick(async () => {
-      if (!this.Permission) {
-        setTimeout(() => {
-          this.$store.commit('UPDATE_MUTATIONS', { errorInfo: { code: '20003', message: 'Please Login System' } });
-        }, 500);
-        return false;
-      }
       await this.getUserSettings();
     });
   },

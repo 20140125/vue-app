@@ -108,7 +108,7 @@ export default {
         /* 推送消息到站内系统通知 */
         this.$store.commit('index/UPDATE_MUTATIONS', { configuration: { notice: this.pushMessage, hotKeyWord: this.$store.state.index.configuration.hotKeyWord } });
         /* 推送消息到活动窗口 */
-        this.$store.dispatch('chat/addClientLog', { time: setTime(Date.parse(new Date()), 'ch'), message: message, username: '系统公告' });
+        this.$store.commit('index/UPDATE_MUTATIONS', { time: setTime(Date.parse(new Date()), 'ch'), message: message, username: '系统公告' });
       });
       /* todo:链接断开 */
       SocketService.on('disconnect', (error) => {

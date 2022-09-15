@@ -41,7 +41,9 @@ const instance = axios.create({
 instance.interceptors.request.use((config) => {
   const authorizationURL = store.state.baseLayout.token ? [URLS.login.loginSystem, URLS.login.reportCode, URLS.login.sendMail] : [URLS.login.loginSystem, URLS.login.reportCode, URLS.login.oauthConfig, URLS.login.sendMail];
   if (authorizationURL.indexOf(config.url) === -1) {
-    config.headers.Authorization = store.state.baseLayout.token || window.localStorage.getItem('token');
+    if (window.localStorage.getItem('token')) {
+      config.headers.Authorization = store.state.baseLayout.token || window.localStorage.getItem('token');
+    }
     config.data.token = store.state.baseLayout.token || window.localStorage.getItem('token');
   }
   return config;

@@ -41,8 +41,14 @@ export default {
     });
   },
   methods: {
+    /**
+     * todo:页面跳转
+     * @param item
+     */
     handleClick(item) {
-      this.$router.push({ path: item.path });
+      if (this.Permission) {
+        this.$router.push({ path: item.path });
+      }
     }
   }
 };
