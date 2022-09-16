@@ -1,6 +1,6 @@
 import { commonMethods } from '@/api/methods';
-import URLS from '../../api/urls';
-import router from '../../route/index';
+import URLS from '@/api/urls';
+import router from '@/route/index';
 
 export const mutations = {
   /**

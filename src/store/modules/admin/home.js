@@ -1,10 +1,10 @@
 import { commonMethods } from '@/api/methods';
-import URLS from '../../../api/urls';
+import URLS from '@/api/urls';
 import { setTree } from '@/utils/func';
 
 export const state = {
-  tabs: [{ label: '欢迎页', value: '/admin/home/index' }],
-  tabModel: { label: '欢迎页', value: '/admin/home/index' },
+  tabs: [{ label: '欢迎页', value: '/admin/index' }],
+  tabModel: { label: '欢迎页', value: '/admin/index' },
   notice: [],
   seriesData: { log: [], oauth: [], notice: [] }
 };

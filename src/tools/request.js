@@ -3,24 +3,31 @@ import store from '@/store';
 import router from '@/route';
 import URLS from '@/api/urls';
 
-/* h5固有地址 */
-const homeURL = [URLS.image.list, URLS.image.config, URLS.image.hot];
-const jumpHome = [URLS.image.list, URLS.image.config];
-const notJump = [URLS.image.hot];
+/**
+ * todo:判断系统
+ * @returns {boolean}
+ */
+const isMobile = () => {
+  const device = navigator.userAgent;
+  return device.indexOf('Android') > -1 || device.indexOf('ios') > -1;
+};
 /**
  * todo:错误跳转
  * @param response
  */
 const ErrorHandler = (response) => {
+  if (isMobile()) {
+    store.commit('UPDATE_MUTATIONS', { errorInfo: response.data.item }, { root: true });
+    return Promise.resolve({ errorInfo: response.data.item });
+  }
   if (!store.state.baseLayout.token) {
-    const path = jumpHome.includes(response.config.url) ? '/' : notJump.includes(response.config.url) ? '/home/search' : '/admin/login';
-    return router.push({ path }).then(() => {
+    return router.push({ path: '/admin/login' }).then(() => {
       window.localStorage.removeItem('token');
       store.commit('UPDATE_MUTATIONS', { errorInfo: response.data.item }, { root: true });
       return Promise.resolve({ errorInfo: response.data.item });
     });
   }
-  return router.push({ path: homeURL.includes(response.config.url) ? '/' : '/admin/result/index' }).then(() => {
+  return router.push({ path : '/admin/result/index' }).then(() => {
     store.commit('UPDATE_MUTATIONS', { errorInfo: response.data.item }, { root: true });
     return Promise.resolve({ errorInfo: response.data.item });
   });
