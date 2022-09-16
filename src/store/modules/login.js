@@ -36,6 +36,7 @@ export const actions = {
         window.localStorage.setItem('RTX', state.userInfo.username || 'tourist');
         resolve(result);
       }).catch(error => {
+        window.localStorage.removeItem('token');
         commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
         reject(error);
       });
@@ -58,7 +59,7 @@ export const actions = {
         if (Object.keys(state.userInfo).length > 0) {
           window.localStorage.setItem('token', state.userInfo.remember_token || '');
           window.localStorage.setItem('RTX', state.userInfo.username || 'tourist');
-          router.push({ path: '/admin/home/index' });
+          router.push({ path: '/admin/index' });
           setTimeout(() => {
             window.location.reload();
           }, 100);
@@ -83,7 +84,7 @@ export const actions = {
         commit('UPDATE_MUTATIONS', { baseLayout: { token: '', username: 'tourist' } }, { root: true });
         window.localStorage.removeItem('token');
         window.localStorage.removeItem('RTX');
-        router.push({ path: '/admin/home/login' });
+        router.push({ path: '/admin/login' });
         resolve(result);
       }).catch(error => {
         commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });

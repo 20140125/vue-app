@@ -13,7 +13,7 @@ const notJump = [URLS.image.hot];
  */
 const ErrorHandler = (response) => {
   if (!store.state.baseLayout.token) {
-    const path = jumpHome.includes(response.config.url) ? '/' : notJump.includes(response.config.url) ? '/home/search' : '/admin/home/login';
+    const path = jumpHome.includes(response.config.url) ? '/' : notJump.includes(response.config.url) ? '/home/search' : '/admin/login';
     return router.push({ path }).then(() => {
       window.localStorage.removeItem('token');
       store.commit('UPDATE_MUTATIONS', { errorInfo: response.data.item }, { root: true });
