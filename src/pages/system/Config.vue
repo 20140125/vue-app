@@ -64,11 +64,9 @@ export default {
     async getConfigLists(pagination) {
       this.pagination.page = pagination.page;
       this.syncVisible = false;
-      this.loading = true;
-      await this.$store.dispatch('config/getConfigLists', pagination).then(() => {
-        this.pagination.total = this.$store.state.config.total;
-        this.loading = false;
-      });
+      await this.$store.dispatch('config/getConfigLists', pagination);
+      this.pagination.total = this.$store.state.config.total;
+      this.loading = false;
     },
     /**
      * todo:页面转换

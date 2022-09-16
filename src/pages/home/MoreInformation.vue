@@ -26,14 +26,22 @@
         <div class="grid-item" @click="changeAccount('tags')">
           <div class="info">个人标签</div>
           <div class="icon">
-            <span v-html="userSetting.tags"></span>
+            <el-tag
+              effect="plain"
+              type="success"
+              v-for="(item, index) in userSetting.tags"
+              :key="index">
+              {{ item }}
+            </el-tag>
             <i class="el-icon-arrow-right"></i>
           </div>
         </div>
         <div class="grid-item"  @click="changeAccount('notice_status')">
           <div class="info">系统通知</div>
           <div class="icon">
-            <span v-html="userSetting.notice_status === 1 ? '是' : '否'"></span>
+            <el-tag effect="plain" type="success">
+              {{ userSetting.notice_status === 1 ? '是' : '否' }}
+            </el-tag>
             <i class="el-icon-arrow-right"></i>
           </div>
         </div>

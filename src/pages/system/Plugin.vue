@@ -34,10 +34,8 @@ export default {
      * @returns {Promise<void>}
      */
     async getPlugin() {
-      this.loading = true;
-      await this.$store.dispatch('login/getOauthConfig', { name: 'Oauth', refresh: true }).then(() => {
-        this.loading = false;
-      });
+      await this.$store.dispatch('login/getOauthConfig', { name: 'Oauth', refresh: true });
+      this.loading = false;
     },
     /**
      * todo:插件卸载、安装
@@ -45,9 +43,9 @@ export default {
      * @returns {Promise<void>}
      */
     async updatePlugin(scope) {
-      await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.config.plugin, model: { status: scope.status === 1 ? 2 : 1, id: scope.id, pid: scope.pid } }).then(async () => {
-        await this.getPlugin();
-      });
+      await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.config.plugin, model: { status: scope.status === 1 ? 2 : 1, id: scope.id, pid: scope.pid } });
+      this.loading = true;
+      await this.getPlugin();
     }
   }
 };

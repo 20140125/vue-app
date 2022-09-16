@@ -35,7 +35,8 @@
           @click="updateComment(scope.row)">
           更新
         </el-button>
-        <el-button v-else icon="el-icon-edit" plain size="mini" type="primary" @click="setComment(scope.row)">修改
+        <el-button v-else icon="el-icon-edit" plain size="mini" type="primary" @click="() => { name = scope.row.name }">
+          修改
         </el-button>
         <el-button
           v-if="Permission.auth.indexOf(URLS.backup) > -1"
@@ -67,14 +68,13 @@
 </template>
 
 <script>
-import URLS from '../../../api/urls';
+import URLS from '@/api/urls';
 
 export default {
   name: 'databaseLists',
   props: ['databaseLists'],
   data() {
     return {
-      edit: false,
       name: '',
       URLS: URLS.database
     };
@@ -85,44 +85,42 @@ export default {
      * @param table
      */
     async backupTable(table) {
-      await this.$store.dispatch('UPDATE_ACTIONS', {
-        url: URLS.database.backup,
-        model: { name: table.name, form: 'all' }
-      }).then(() => {
-        this.$parent.$parent.$parent.$parent.getDatabaseLists(false);
+      const loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
       });
+      await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.database.backup, model: { name: table.name, form: 'all' } });
+      loading.close();
     },
     /**
      * TODO：数据表修复
      * @param table
      */
     async repairTable(table) {
-      await this.$store.dispatch('UPDATE_ACTIONS', {
-        url: URLS.database.repair,
-        model: { name: table.name, engine: table.engine }
-      }).then(() => {
-        this.$parent.$parent.$parent.$parent.getDatabaseLists(false);
+      const loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
       });
+      await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.database.repair, model: { name: table.name, engine: table.engine } });
+      loading.close();
     },
     /**
      * TODO：数据表优化
      * @param table
      */
     async optimizeTable(table) {
-      await this.$store.dispatch('UPDATE_ACTIONS', {
-        url: URLS.database.optimize,
-        model: { name: table.name, engine: table.engine }
-      }).then(() => {
-        this.$parent.$parent.$parent.$parent.getDatabaseLists(false);
+      const loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
       });
-    },
-    /**
-     * TODO：设置
-     * @param table
-     */
-    setComment(table) {
-      this.name = table.name;
-      this.edit = true;
+      await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.database.optimize, model: { name: table.name, engine: table.engine } });
+      loading.close();
     },
     /**
      * TODO：修改注释
@@ -134,13 +132,15 @@ export default {
         this.$refs[table.name].focus();
         return false;
       }
-      await this.$store.dispatch('UPDATE_ACTIONS', {
-        url: URLS.database.alter,
-        model: { name: table.name, comment: table.comment }
-      }).then(() => {
-        this.$parent.$parent.$parent.$parent.getDatabaseLists(false);
-        this.edit = false;
+      const loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
       });
+      await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.database.alter, model: { name: table.name, comment: table.comment } });
+      loading.close();
+      this.name = '';
     }
   }
 };

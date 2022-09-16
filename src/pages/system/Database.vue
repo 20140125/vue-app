@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import BaseLayout from '../../components/BaseLayout';
-import DatabaseLists from '../../components/system/database/Lists';
+import BaseLayout from '@/components/BaseLayout';
+import DatabaseLists from '@/components/system/database/Lists';
 
 export default {
   name: 'Database',
@@ -34,10 +34,8 @@ export default {
      * @param refresh
      */
     async getDatabaseLists(refresh = true) {
-      this.loading = true;
-      await this.$store.dispatch('database/getDatabaseLists', { refresh: refresh }).then(() => {
-        this.loading = false;
-      });
+      await this.$store.dispatch('database/getDatabaseLists', { refresh: refresh });
+      this.loading = false;
     }
   }
 };

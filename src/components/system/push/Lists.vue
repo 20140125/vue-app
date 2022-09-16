@@ -33,7 +33,7 @@
         <el-tag :type="typeAttr[scope.row.state]" effect="plain">{{ scope.row.state.toUpperCase() }}</el-tag>
       </template>
     </el-table-column>
-    <el-table-column align="center" label="推送时间" prop="created_at" width="150px"></el-table-column>
+    <el-table-column align="center" label="推送时间" prop="created_at" width="200px"></el-table-column>
     <el-table-column align="center" label="操作" width="150px">
       <template #default="scope">
         <el-button

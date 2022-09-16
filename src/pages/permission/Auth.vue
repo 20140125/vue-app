@@ -75,10 +75,8 @@ export default {
      */
     async getAuthLists(refresh = false) {
       this.syncVisible = false;
-      this.loading = true;
-      await this.$store.dispatch('auth/getAuthLists', { refresh: refresh }).then(() => {
-        this.loading = false;
-      });
+      await this.$store.dispatch('auth/getAuthLists', { refresh: refresh });
+      this.loading = false;
     },
     /**
      * todo:新增权限

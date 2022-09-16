@@ -78,7 +78,7 @@ export default {
       iconMap: { dir: 'el-icon-folder-opened', file: 'el-icon-files' },
       chmod: {},
       loading: true,
-      fileAtt: { multipleSelection: [] },
+      fileAttr: { multipleSelection: [] },
       fileURL: URLS.file,
       breadcrumb: [{ path: '/', filename: 'longer' }]
     };
@@ -200,8 +200,8 @@ export default {
         this.$store.dispatch('UPDATE_ACTIONS', {
           url: URLS.file.zip, model: {
             resource: value.indexOf('.') >= 0 ? value.split('.')[0] : value,
-            docLists: file ? [file.path] : this.fileAtt.multipleSelection,
-            path: file ? file.path.replace(file.filename, '') : this.fileAtt.path
+            docLists: file ? [file.path] : this.fileAttr.multipleSelection,
+            path: file ? file.path.replace(file.filename, '') : this.fileAttr.path
           }
         }).then(() => {
           this.getFileLists();
@@ -215,12 +215,8 @@ export default {
      * @param file
      */
     async unComposeFile(file) {
-      await this.$store.dispatch('UPDATE_ACTIONS', {
-        url: URLS.file.unzip,
-        model: { resource: file.filename.split('.')[0], path: file.path }
-      }).then(() => {
-        this.getFileLists();
-      });
+      await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.file.unzip, model: { resource: file.filename.split('.')[0], path: file.path } });
+      await this.getFileLists();
     },
     /**
      * todo:删除文件
@@ -275,10 +271,10 @@ export default {
      * @param files
      */
     async getMultipleSelection(files) {
-      this.fileAtt.multipleSelection = [];
+      this.fileAttr.multipleSelection = [];
       await files.forEach(item => {
-        this.fileAtt.path = item.path.replace(item.filename, '');
-        this.fileAtt.multipleSelection.push(item.path);
+        this.fileAttr.path = item.path.replace(item.filename, '');
+        this.fileAttr.multipleSelection.push(item.path);
       });
     },
     /**

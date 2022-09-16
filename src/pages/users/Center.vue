@@ -8,15 +8,15 @@
             <el-card shadow="hover">
               <el-form>
                 <el-form-item style="text-align: center">
-                  <el-avatar :alt="userInfo.username" :size="100" :src="userInfo.avatar_url" fit="fill"></el-avatar>
+                  <el-avatar :alt="Permission.username" :size="100" :src="Permission.avatar_url" fit="fill"></el-avatar>
                 </el-form-item>
                 <el-form-item>
                   <i class="el-icon-user-solid"></i>
-                  <span v-html="userInfo.username"></span>
+                  <span v-html="Permission.username"></span>
                 </el-form-item>
                 <el-form-item>
                   <i class="el-icon-message-solid"></i>
-                  <span v-html="userInfo.email"></span>
+                  <span v-html="Permission.email"></span>
                 </el-form-item>
                 <el-form-item>
                   <i class="el-icon-s-home"></i>
@@ -49,10 +49,10 @@
                 label-width="100px"
                 style="margin-left: 20px">
                 <el-form-item class="is-required avatar-url" label="头像：">
-                  <el-avatar :alt="userInfo.username" :size="100" :src="userInfo.avatar_url" fit="fill"></el-avatar>
+                  <el-avatar :alt="Permission.username" :size="100" :src="Permission.avatar_url" fit="fill"></el-avatar>
                 </el-form-item>
                 <el-form-item class="is-required" label="用户名：">
-                  <span v-html="userInfo.username"></span>
+                  <span v-html="Permission.username"></span>
                 </el-form-item>
                 <el-form-item class="is-required" label="居住地址：">
                   <el-cascader v-model="userCenter.local" :options="options" :props="props" filterable></el-cascader>
@@ -125,7 +125,11 @@
                     </el-switch>
                   </el-tooltip>
                 </el-form-item>
-                <SubmitButton :form="submitForm" reForm="center"></SubmitButton>
+                <SubmitButton
+                  :form="submitForm"
+                  reForm="center"
+                  @closeDialog="() => { this.$message.success('successfully updated userCenter information'); }">
+                </SubmitButton>
               </el-form>
             </el-card>
           </el-tabs>
@@ -136,9 +140,9 @@
 </template>
 
 <script>
-import BaseLayout from '../../components/BaseLayout';
-import SubmitButton from '../../components/common/SubmitForm';
-import URLS from '../../api/urls';
+import BaseLayout from '@/components/BaseLayout';
+import SubmitButton from '@/components/common/SubmitForm';
+import URLS from '@/api/urls';
 
 export default {
   name: 'Center',
@@ -155,21 +159,19 @@ export default {
     };
   },
   computed: {
-    userInfo() {
-      return this.$store.state.login.userInfo;
+    cacheArea() {
+      return JSON.parse(JSON.stringify(this.$store.state.area.cacheArea));
     }
   },
   mounted() {
     this.$nextTick(async () => {
       /* 获取个人信息 */
-      await this.$store.dispatch('users/getUserCenter', {}).then(() => {
-        this.userCenter = JSON.parse(JSON.stringify(this.$store.state.users.userCenter));
-        /* 获取城市列表 */
-        this.$store.dispatch('area/getAreaCacheLists', { children: true }).then(() => {
-          this.setOptions(JSON.parse(JSON.stringify(this.$store.state.area.cacheArea)));
-          this.loading = false;
-        });
-      });
+      await this.$store.dispatch('users/getUserCenter', {});
+      this.userCenter = JSON.parse(JSON.stringify(this.$store.state.users.userCenter));
+      /* 获取城市列表 */
+      await this.$store.dispatch('area/getAreaCacheLists', { children: true });
+      this.setOptions(this.cacheArea);
+      this.loading = false;
       setTimeout(() => {
         this.submitForm = { model: this.userCenter, $refs: this.$refs, url: URLS.userCenter.update };
       }, 1000);

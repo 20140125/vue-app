@@ -70,13 +70,11 @@ export default {
      * @return {Promise<void>}
      */
     async getPermissionApply(pagination) {
-      this.loading = true;
       this.syncVisible = false;
       this.pagination.page = pagination.page;
-      await this.$store.dispatch('apply/getPermissionApply', pagination).then(() => {
-        this.loading = false;
-        this.pagination.total = this.$store.state.apply.total;
-      });
+      await this.$store.dispatch('apply/getPermissionApply', pagination);
+      this.loading = false;
+      this.pagination.total = this.$store.state.apply.total;
     },
     /**
      * todo:页面转换
@@ -92,13 +90,12 @@ export default {
      * @return {Promise<void>}
      */
     async getUserAuth(user_id) {
-      await this.$store.dispatch('apply/getUserAuth', { user_id: user_id, refresh: true }).then(() => {
-        this.permissionAttr = {
-          userLists: this.$store.state.users.cacheUsers,
-          authLists: this.$store.state.apply.authLists,
-          checkedKeys: this.getDefaultCheckedKeys(this.$store.state.apply.authLists, [])
-        };
-      });
+      await this.$store.dispatch('apply/getUserAuth', { user_id: user_id, refresh: true });
+      this.permissionAttr = {
+        userLists: this.$store.state.users.cacheUsers,
+        authLists: this.$store.state.apply.authLists,
+        checkedKeys: this.getDefaultCheckedKeys(this.$store.state.apply.authLists, [])
+      };
     },
     /**
      * todo:获取默认权限
@@ -123,11 +120,10 @@ export default {
     async permissionApply() {
       this.syncVisible = true;
       /* todo:获取用户列表 */
-      await this.$store.dispatch('users/getCacheUserLists', {}).then(() => {
-        this.permissionAttr = { userLists: this.$store.state.users.cacheUsers, authList: [], checkedKeys: [] };
-        this.form = { user_id: '', href: [], expires: '', desc: '' };
-        this.reForm = 'created';
-      });
+      await this.$store.dispatch('users/getCacheUserLists', {});
+      this.permissionAttr = { userLists: this.$store.state.users.cacheUsers, authList: [], checkedKeys: [] };
+      this.form = { user_id: '', href: [], expires: '', desc: '' };
+      this.reForm = 'created';
     },
     /**
      * todo:申请权限续期
@@ -135,13 +131,8 @@ export default {
      * @return {Promise<void>}
      */
     async permissionUpdate(form) {
-      this.$store.dispatch('UPDATE_ACTIONS', {
-        url: URLS.permission.update,
-        model: { id: form.id, status: form.status }
-      }).then((response) => {
-        this.$message.success(response.data.message);
-        this.getPermissionApply({ page: 1, limit: 15, show_page: true, refresh: true });
-      });
+      await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.permission.update, model: { id: form.id, status: form.status } });
+      await this.getPermissionApply({ page: 1, limit: 15, show_page: true, refresh: true });
     }
   }
 };

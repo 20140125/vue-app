@@ -40,24 +40,6 @@ export const actions = {
     });
   },
   /**
-   * todo:获取地区列表
-   * @param commit
-   * @param payload
-   * @return {Promise<boolean>}
-   */
-  async getChildrenLists({ commit }, payload) {
-    /* 如果页码没有变，直接读取vuex里面的数据 */
-    return new Promise((resolve, reject) => {
-      commonMethods(URLS.area.lists, payload).then(result => {
-        commit('UPDATE_MUTATIONS', { childrenLists: ((result.data || {}).item || {}).lists || [] });
-        resolve(result);
-      }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
-        reject(error);
-      });
-    });
-  },
-  /**
    * todo:获取缓存城市列表
    * @param commit
    * @param state

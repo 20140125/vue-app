@@ -20,8 +20,8 @@
               <el-tag
                 v-for="(item, index) in oldKeywords"
                 :key="index"
-                effect="dark"
-                type="info"
+                effect="plain"
+                type="danger"
                 @click="doSearch(item)">
                 {{ item }}
               </el-tag>
@@ -38,8 +38,8 @@
                 <el-tag
                   v-for="(item, index) in hotKeyWord"
                   :key="index"
-                  effect="dark"
-                  type="danger"
+                  effect="plain"
+                  type="info"
                   @click="doSearch(item)">
                   {{ item }}
                 </el-tag>

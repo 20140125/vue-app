@@ -20,7 +20,7 @@
     </el-table-column>
     <el-table-column label="权限" prop="auth" width="100"></el-table-column>
     <el-table-column label="大小" prop="size" width="100"></el-table-column>
-    <el-table-column label="修改时间" prop="time" width="150"></el-table-column>
+    <el-table-column label="修改时间" prop="time" width="200"></el-table-column>
     <el-table-column align="right" label="操作">
       <template #default="scope">
         <el-button

@@ -92,12 +92,10 @@ export default {
      * @return {Promise<void>}
      */
     async getInterfaceCategory(refresh = true) {
-      this.loading = true;
       this.syncVisible = false;
       this.addVisible = false;
-      await this.$store.dispatch('category/getInterfaceCategory', { refresh: refresh }).then(() => {
-        this.loading = false;
-      });
+      await this.$store.dispatch('category/getInterfaceCategory', { refresh: refresh });
+      this.loading = false;
     },
     /**
      * todo:保存接口分类
@@ -138,29 +136,28 @@ export default {
      * @return {Promise<void>}
      */
     async getDetails(form, source) {
-      await this.$store.dispatch('category/getInterfaceDetails', { id: form.id, source: source }).then(() => {
-        this.form = JSON.parse(JSON.stringify(this.$store.state.category.details));
-        if (source === 'json') {
-          ((this.form || {}).request || []).forEach((item) => {
-            if (item.name === 'token') {
-              item.val = this.$store.state.baseLayout.token;
-            }
-          });
-        }
-        this.reForm = 'updated';
-        if (Object.keys(this.form).length === 0) {
-          this.defaultJson.api_id = form.id;
-          this.form = source === 'json' ? this.defaultJson : {
-            api_id: form.id,
-            html: '',
-            markdown: '',
-            source: 'markdown',
-            apiLog: []
-          };
-          this.reForm = 'created';
-        }
-        this.syncVisible = true;
-      });
+      await this.$store.dispatch('category/getInterfaceDetails', { id: form.id, source: source });
+      this.form = JSON.parse(JSON.stringify(this.$store.state.category.details));
+      if (source === 'json') {
+        ((this.form || {}).request || []).forEach((item) => {
+          if (item.name === 'token') {
+            item.val = this.$store.state.baseLayout.token;
+          }
+        });
+      }
+      this.reForm = 'updated';
+      if (Object.keys(this.form).length === 0) {
+        this.defaultJson.api_id = form.id;
+        this.form = source === 'json' ? this.defaultJson : {
+          api_id: form.id,
+          html: '',
+          markdown: '',
+          source: 'markdown',
+          apiLog: []
+        };
+        this.reForm = 'created';
+      }
+      this.syncVisible = true;
     }
   }
 };

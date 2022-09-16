@@ -44,10 +44,9 @@ export default {
     async getSystemLogLists(pagination) {
       this.syncVisible = false;
       this.loading = true;
-      await this.$store.dispatch('log/getSystemLogLists', pagination).then(() => {
-        this.pagination.total = this.$store.state.log.total;
-        this.loading = false;
-      });
+      await this.$store.dispatch('log/getSystemLogLists', pagination);
+      this.pagination.total = this.$store.state.log.total;
+      this.loading = false;
     },
     /**
      * todo:页面转换
@@ -68,10 +67,9 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async () => {
-        await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.log.delete, model: { id: scope.id } }).then(async () => {
-          this.pagination.refresh = true;
-          await this.getSystemLogLists(this.pagination);
-        });
+        await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.log.delete, model: { id: scope.id } });
+        this.pagination.refresh = true;
+        await this.getSystemLogLists(this.pagination);
       }).catch(() => {
         this.$message({ type: 'info', message: 'cancel remove！' });
       });

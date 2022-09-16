@@ -66,11 +66,9 @@ export default {
      */
     async getRoleLists(pagination) {
       this.syncVisible = false;
-      this.loading = true;
-      await this.$store.dispatch('role/getRoleLists', pagination).then(() => {
-        this.pagination.total = this.$store.state.role.total;
-        this.loading = false;
-      });
+      await this.$store.dispatch('role/getRoleLists', pagination);
+      this.pagination.total = this.$store.state.role.total;
+      this.loading = false;
     },
     /**
      * todo:页面转换
@@ -95,9 +93,8 @@ export default {
       this.reForm = 'created';
       this.form = { role_name: '', auth_ids: [], status: 1 };
       this.syncVisible = true;
-      await this.getRoleAuth().then(() => {
-        this.authAttr = { authLists: this.$store.state.role.authLists, defaultChecked: [] };
-      });
+      await this.getRoleAuth();
+      this.authAttr = { authLists: this.$store.state.role.authLists, defaultChecked: [] };
     },
     /**
      * todo:更新角色
@@ -108,13 +105,12 @@ export default {
       this.form = { ...form };
       this.reForm = 'updated';
       this.syncVisible = true;
-      await this.getRoleAuth().then(() => {
-        this.authAttr = {
-          authLists: this.$store.state.role.authLists,
-          defaultChecked: form.auth_ids ? JSON.parse(form.auth_ids) : []
-        };
-        this.form.auth_ids = this.authAttr.defaultChecked;
-      });
+      await this.getRoleAuth();
+      this.authAttr = {
+        authLists: this.$store.state.role.authLists,
+        defaultChecked: form.auth_ids ? JSON.parse(form.auth_ids) : []
+      };
+      this.form.auth_ids = this.authAttr.defaultChecked;
     }
   }
 };

@@ -107,10 +107,9 @@ export default {
     async getPushLists(pagination) {
       this.loading = true;
       this.syncVisible = false;
-      await this.$store.dispatch('push/getPushLists', pagination).then(() => {
-        this.loading = false;
-        this.pagination.total = this.$store.state.push.total;
-      });
+      await this.$store.dispatch('push/getPushLists', pagination);
+      this.loading = false;
+      this.pagination.total = this.$store.state.push.total;
     },
     /**
      * TODO:检索推送
@@ -145,9 +144,8 @@ export default {
       };
       this.reForm = 'created';
       this.syncVisible = true;
-      await this.$store.dispatch('users/getCacheUserLists', {}).then(() => {
-        this.userLists = this.$store.state.users.cacheUsers;
-      });
+      await this.$store.dispatch('users/getCacheUserLists', {});
+      this.userLists = this.$store.state.users.cacheUsers;
     },
     /**
      * todo:执行站内通知
@@ -158,9 +156,8 @@ export default {
       this.form = JSON.parse(JSON.stringify(form));
       this.reForm = 'updated';
       this.syncVisible = true;
-      await this.$store.dispatch('users/getCacheUserLists', {}).then(() => {
-        this.userLists = this.$store.state.users.cacheUsers;
-      });
+      await this.$store.dispatch('users/getCacheUserLists', {});
+      this.userLists = this.$store.state.users.cacheUsers;
     }
   }
 };

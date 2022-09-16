@@ -42,12 +42,10 @@ export default {
      * @param parent_id
      */
     async getAreaLists(parent_id = 1) {
-      this.loading = true;
       this.syncVisible = false;
-      await this.$store.dispatch('area/getAreaLists', { parent_id: parent_id, refresh: false }).then(() => {
-        this.areaLists = this.$store.state.area.areaLists;
-        this.loading = false;
-      });
+      await this.$store.dispatch('area/getAreaLists', { parent_id: parent_id, refresh: false });
+      this.areaLists = this.$store.state.area.areaLists;
+      this.loading = false;
     },
     /**
      * todo:加载更多
@@ -57,10 +55,9 @@ export default {
      * @return {Promise<void>}
      */
     async loadMORE(tree, treeNode, resolve) {
-      await this.$store.dispatch('area/getChildrenLists', { parent_id: tree.id }).then(() => {
-        resolve(this.$store.state.area.childrenLists);
-        this.loading = false;
-      });
+      await this.$store.dispatch('area/getAreaLists', { parent_id: tree.id, refresh: true });
+      resolve(this.$store.state.area.areaLists);
+      this.loading = false;
     },
 
     /**

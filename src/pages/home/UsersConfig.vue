@@ -35,30 +35,43 @@
       <!--个性标签-->
       <div v-else-if="props === 'tags'">
         <div class="grid" >
-          <div class="grid-item settings">
+          <div class="grid-item__tags settings">
             <el-tag
               v-for="(item, index) in params"
               type="success"
-              @click="addPersonTags(item)"
+              effect="plain"
+              :closable="params.length > 1"
+              @close="removePersonTags(index)"
               :key="index">
               {{ item }}
             </el-tag>
           </div>
-          <div class="grid-item__tags">
-            <el-tag v-for="(item, index) in personLabel" :key="index">{{ item }}</el-tag>
+          <div class="grid-item__tags" v-if="params.length < 4">
+            <el-tag
+              type="info"
+              effect="plain"
+              v-for="(item, index) in personLabel"
+              @click="addPersonTags(item)"
+              :key="index">
+              {{ item }}
+            </el-tag>
           </div>
         </div>
       </div>
       <!--站内通知-->
       <div class="grid" v-else-if="props === 'notice_status'">
         <div class="grid-item settings" @click="params = 1">
-          <div class="info">是</div>
+          <div class="info">
+            <el-tag effect="plain" type="success">是</el-tag>
+          </div>
           <div class="icon" v-if="parseInt(params, 10) === 1">
             <i class="el-icon-circle-check status"></i>
           </div>
         </div>
         <div class="grid-item" @click="params = 2">
-          <div class="info">否</div>
+          <div class="info">
+            <el-tag effect="plain" type="success">否</el-tag>
+          </div>
           <div class="icon" v-if="parseInt(params, 10) === 2">
             <i class="el-icon-circle-check status"></i>
           </div>
@@ -78,7 +91,7 @@ export default {
     return {
       notInput: ['ip_address', 'local'],
       props: this.$route.params.param,
-      params: this.$store.state.users.userCenter[this.$route.params.param],
+      params: JSON.parse(JSON.stringify(this.$store.state.users.userCenter[this.$route.params.param] || '')),
       local: [],
       headerTitle: `${this.$store.state.index.moreInformationConfig[this.$route.params.param]}`
     };
@@ -143,9 +156,7 @@ export default {
      */
     async setUsersCenter(item) {
       !this.local.includes(item.name) ? this.local.push(item.name) : '';
-      if (item.hasChildren) {
-        await this.getAreaLists(item.id);
-      }
+      item.hasChildren ? await this.getAreaLists(item.id) : await this.saveParams();
     },
     /**
      * todo:设置文本
@@ -155,8 +166,19 @@ export default {
     setLocal(value) {
       return value.join('').replace('中华人民共和国', '');
     },
+    /**
+     * todo:添加用户标签
+     * @param item
+     */
     addPersonTags(item) {
-      console.log(item);
+      !this.params.includes(item) ? this.params.push(item) : '';
+    },
+    /**
+     * todo:删除用户标签
+     * @param index
+     */
+    removePersonTags(index) {
+      this.params.length > 1 ? this.params.splice(index, 1) : '';
     },
     /**
      * todo:数据保存
