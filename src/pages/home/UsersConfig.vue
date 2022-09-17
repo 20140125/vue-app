@@ -2,7 +2,7 @@
   <HomeLayout
     :back-button="true"
     :bottom-bar="false"
-    :submit-button="true"
+    :submit-button="props !== 'u_name'"
     :header-title="headerTitle"
     :saveParams="saveParams">
     <template #body>
@@ -29,33 +29,31 @@
       <!--个性签名-->
       <div class="grid" v-else-if="props === 'desc'">
         <div class="grid-item settings">
-          <el-input :placeholder="`请输入${headerTitle}`" v-model="params"></el-input>
+          <el-input :placeholder="`请输入${headerTitle}`" v-model="params" show-word-limit></el-input>
         </div>
       </div>
       <!--个性标签-->
-      <div v-else-if="props === 'tags'">
-        <div class="grid" >
-          <div class="grid-item__tags settings">
-            <el-tag
-              v-for="(item, index) in params"
-              type="success"
-              effect="plain"
-              :closable="params.length > 1"
-              @close="removePersonTags(index)"
-              :key="index">
-              {{ item }}
-            </el-tag>
-          </div>
-          <div class="grid-item__tags" v-if="params.length < 4">
-            <el-tag
-              type="info"
-              effect="plain"
-              v-for="(item, index) in personLabel"
-              @click="addPersonTags(item)"
-              :key="index">
-              {{ item }}
-            </el-tag>
-          </div>
+      <div class="grid" v-else-if="props === 'tags'">
+        <div class="grid-item__tags settings">
+          <el-tag
+            v-for="(item, index) in params"
+            type="success"
+            effect="plain"
+            :closable="params.length > 1"
+            @close="removePersonTags(index)"
+            :key="index">
+            {{ item }}
+          </el-tag>
+        </div>
+        <div class="grid-item__tags" v-if="params.length < 4">
+          <el-tag
+            type="info"
+            effect="plain"
+            v-for="(item, index) in personLabel"
+            @click="addPersonTags(item)"
+            :key="index">
+            {{ item }}
+          </el-tag>
         </div>
       </div>
       <!--站内通知-->
@@ -77,6 +75,26 @@
           </div>
         </div>
       </div>
+      <!-- 切换账号 -->
+      <div class="grid" v-else-if="props === 'u_name'">
+        <div class="grid-item">
+          <div class="login__account">轻触头像以切换账号</div>
+        </div>
+        <div class="grid-item" @click="loginCurrent">
+          <el-avatar :src="Permission.avatar_url" :size="60"></el-avatar>
+          <div class="info">{{ params }}</div>
+          <div class="icon">
+            <el-tag effect="plain" type="success">当前使用</el-tag>
+          </div>
+        </div>
+        <div class="grid-item">
+          <div class="login__account">
+            <el-button size="medium" type="primary" plain @click="changeAccount">
+              添加账号
+            </el-button>
+          </div>
+        </div>
+      </div>
     </template>
   </HomeLayout>
 </template>
@@ -91,15 +109,14 @@ export default {
     return {
       notInput: ['ip_address', 'local'],
       props: this.$route.params.param,
-      params: JSON.parse(JSON.stringify(this.$store.state.users.userCenter[this.$route.params.param] || '')),
-      local: [],
-      headerTitle: `${this.$store.state.index.moreInformationConfig[this.$route.params.param]}`
+      params: '',
+      local: []
     };
   },
   computed: {
-    /* 更多配置 */
-    moreInformationConfig() {
-      return this.$store.state.index.moreInformationConfig;
+    /* 头部文本 */
+    headerTitle() {
+      return this.$store.state.index.moreInformationConfig[this.$route.params.param];
     },
     /* 地址列表 */
     areaLists() {
@@ -116,16 +133,32 @@ export default {
   },
   mounted() {
     this.$nextTick(async () => {
+      if (!this.Permission) {
+        await this.$router.push({ path: '/home/users' });
+      }
       if (this.notInput.includes(this.props)) {
         await this.getAreaLists(1);
       }
       await this.getUserSettings();
+      this.params = JSON.parse(JSON.stringify(this.$store.state.users.userCenter[this.$route.params.param] || ''));
       if (this.props === 'tags') {
         await this.getConfiguration();
       }
     });
   },
   methods: {
+    /**
+     * todo:切换账号
+     */
+    changeAccount() {
+      this.$store.commit('UPDATE_MUTATIONS', { errorInfo: { code: '20003', message: 'Please Login System'} });
+    },
+    /**
+     * todo:登录当前账号
+     */
+    loginCurrent() {
+      this.$router.push({ path: '/home/users/more' });
+    },
     /**
      * todo:获取地址列表
      * @params parentId

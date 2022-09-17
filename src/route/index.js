@@ -58,17 +58,10 @@ const router = createRouter({
       component: () => import('../pages/home/Settings'),
       meta: { title: '系统设置' }
     },
-    /* 修改账号信息 */
-    {
-      path: '/home/users/update/:param',
-      name: 'UpdateUsers',
-      component: () => import('../pages/home/UpdateUsers'),
-      meta: { title: '更新信息' }
-    },
     /* 修改账号配置 */
     {
       path: '/home/setting/update/:param',
-      name: 'UpdateSetting',
+      name: 'UsersConfig',
       component: () => import('../pages/home/UsersConfig'),
       meta: { title: '更新账号配置' }
     },
