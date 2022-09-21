@@ -10,7 +10,9 @@
         effect="dark">
       </WebPush>
       <!--列表页-->
-      <Lists :load-more="loadMore" style="padding-bottom: 80px;"></Lists>
+      <transition name="el-zoom-in-center">
+        <Lists :load-more="loadMore" style="padding-bottom: 80px;"></Lists>
+      </transition>
     </template>
   </HomeLayout>
 </template>

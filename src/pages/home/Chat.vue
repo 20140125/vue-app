@@ -1,5 +1,5 @@
 <template>
-  <HomeLayout header-title="魔盒逗图 -- 通讯录" :connect-web-socket="true">
+  <HomeLayout :connect-web-socket="true" header-title="魔盒逗图 -- 通讯录">
     <template #body>
       <transition name="el-zoom-in-center">
         <div v-if="error.code === '20000'" class="user-chat__menu">
@@ -53,9 +53,10 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
+      this.$store.commit('UPDATE_MUTATIONS', { errorInfo: this.$store.state.index.error.success });
       if (!this.Permission) {
         setTimeout(() => {
-          this.$store.commit('UPDATE_MUTATIONS', { errorInfo: { code: '20003', message: 'Please Login System' } });
+          this.$store.commit('UPDATE_MUTATIONS', { errorInfo: this.$store.state.index.error.login });
         }, 500);
       }
     });

@@ -32,7 +32,7 @@ export default {
      * todo:关闭浮层
      */
     closeShadow() {
-      this.$store.commit('UPDATE_MUTATIONS', { errorInfo: { code: '40001', message: 'Token Is Not Provided' } });
+      this.$store.commit('UPDATE_MUTATIONS', { errorInfo: this.$store.state.index.error.cancel });
     },
     /**
      * todo:获取系统配置

@@ -1,4 +1,4 @@
-import request from '../tools/request.js';
+import request from '@/tools/request.js';
 
 /**
  * todo:POST方法

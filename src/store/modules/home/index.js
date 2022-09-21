@@ -20,8 +20,14 @@ export const state = {
   accountSetting: [
     { label: '账号信息', icon: 'el-icon-user', path: '/home/users/info', value: 'account' },
     { label: '系统设置', icon: 'el-icon-setting', path: '/home/users/setting', value: 'setting' },
-    { label: '退出系统', icon: 'el-icon-upload2', path: '/home/users/logout', value: 'logout' },
-    { label: '敬请期待', icon: 'el-icon-loading', path: '/home/users/loading', value: 'loading' }
+    { label: '退出系统', icon: 'el-icon-upload2', value: 'logout' },
+    { label: '敬请期待', icon: 'el-icon-loading', value: 'loading' }
+  ],
+  systemSetting: [
+    { label: '账号与安全', value: 1, class: 'grid-item settings' },
+    { label: '个人信息与权限', value: 1, class: 'grid-item' },
+    { label: '关于我们', value: 1, class: 'grid-item' },
+    { label: '插件', value: 1, class: 'grid-item' }
   ],
   /* 更多配置 */
   moreInformationConfig: { ip_address: '居住地址', local: '所在地', desc: '个性签名', tags: '个性标签', notice_status: '站内通知', u_name: '切换账号' },
@@ -37,7 +43,16 @@ export const state = {
   /* 消息列表 */
   messageLists: [],
   /* 个人消息记录 */
-  selfMessage: []
+  selfMessage: [],
+  /* 错误消息 */
+  error: {
+    /* 成功 */
+    success: { code: '20000', message: 'successfully' },
+    /* 未登录系统 */
+    login: { code: '20003', message: 'Please Login System' },
+    /* 取消授权登录 */
+    cancel: { code: '40001', message: 'Cancel Oauth Login' }
+  }
 
 };
 export const mutations = {

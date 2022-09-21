@@ -1,5 +1,5 @@
 <template>
-  <HomeLayout header-title="个人信息" :bottom-bar="false" :back-button="true">
+  <HomeLayout :back-button="true" :bottom-bar="false" header-title="个人信息">
     <template #body>
       <div class="grid">
         <div class="grid-item grid-item__image">
@@ -58,7 +58,7 @@ export default {
   mounted() {
     this.$nextTick(() => {
       if (!this.Permission) {
-        this.$router.push({ path: '/home/users'});
+        this.$router.push({ path: '/home/users' });
       }
     });
   },

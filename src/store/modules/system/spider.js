@@ -1,5 +1,5 @@
 import { commonMethods } from '@/api/methods';
-import URLS from '../../../api/urls';
+import URLS from '@/api/urls';
 
 export const mutations = {
   /**

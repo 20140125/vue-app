@@ -1,5 +1,5 @@
 <template>
-  <HomeLayout ref="homeLayout" :header-title="receiver.client_name" :connect-web-socket="true">
+  <HomeLayout ref="homeLayout" :connect-web-socket="true" :header-title="receiver.client_name">
     <template #body>
       <div :style="cssStyle.box" class="message-box">
         <div :style="cssStyle.content" class="message-content">
@@ -22,8 +22,8 @@
         </div>
         <!--发送消息-->
         <div class="message-input__item">
-          <div ref="message" class="input-content" contentEditable="true" @keydown="inputMessage"></div>
-          <el-button type="primary" size="medium" @click="sendMessage">发送</el-button>
+          <div ref="message" class="input-content" contentEditable="true"></div>
+          <el-button size="medium" type="primary" @click="sendMessage">发送</el-button>
         </div>
       </div>
     </template>

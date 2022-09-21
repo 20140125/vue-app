@@ -2,24 +2,24 @@
   <HomeLayout
     :back-button="true"
     :bottom-bar="false"
-    :submit-button="props !== 'u_name'"
     :header-title="headerTitle"
-    :saveParams="saveParams">
+    :saveParams="saveParams"
+    :submit-button="props !== 'u_name'">
     <template #body>
       <!--地区选择-->
-      <div class="grid" v-if="notInput.includes(props)">
+      <div v-if="notInput.includes(props)" class="grid">
         <div class="area">当前位置</div>
         <div class="grid-item">
           <div class="info">
             <i class="el-icon-location-outline"></i>
-            {{  local.length > 0 ? setLocal(local) : Permission.city.replace('中华人民共和国', '') }}
+            {{ local.length > 0 ? setLocal(local) : Permission.city.replace('中华人民共和国', '') }}
           </div>
           <div class="icon">
             <i class="el-icon-arrow-right"></i>
           </div>
         </div>
         <div class="area">全部地区</div>
-        <div class="grid-item" v-for="(item, index) in areaLists" :key="index" @click="setUsersCenter(item)">
+        <div v-for="(item, index) in areaLists" :key="index" class="grid-item" @click="setUsersCenter(item)">
           <div class="info" v-html="item.name"></div>
           <div class="icon">
             <i class="el-icon-arrow-right"></i>
@@ -27,42 +27,42 @@
         </div>
       </div>
       <!--个性签名-->
-      <div class="grid" v-else-if="props === 'desc'">
+      <div v-else-if="props === 'desc'" class="grid">
         <div class="grid-item settings">
-          <el-input :placeholder="`请输入${headerTitle}`" v-model="params" show-word-limit></el-input>
+          <el-input v-model="params" :placeholder="`请输入${headerTitle}`" show-word-limit></el-input>
         </div>
       </div>
       <!--个性标签-->
-      <div class="grid" v-else-if="props === 'tags'">
+      <div v-else-if="props === 'tags'" class="grid">
         <div class="grid-item__tags settings">
           <el-tag
             v-for="(item, index) in params"
-            type="success"
-            effect="plain"
+            :key="index"
             :closable="params.length > 1"
-            @close="removePersonTags(index)"
-            :key="index">
+            effect="plain"
+            type="success"
+            @close="removePersonTags(index)">
             {{ item }}
           </el-tag>
         </div>
-        <div class="grid-item__tags" v-if="params.length < 4">
+        <div v-if="params.length < 3" class="grid-item__tags">
           <el-tag
-            type="info"
-            effect="plain"
             v-for="(item, index) in personLabel"
-            @click="addPersonTags(item)"
-            :key="index">
+            :key="index"
+            effect="plain"
+            type="info"
+            @click="addPersonTags(item)">
             {{ item }}
           </el-tag>
         </div>
       </div>
       <!--站内通知-->
-      <div class="grid" v-else-if="props === 'notice_status'">
+      <div v-else-if="props === 'notice_status'" class="grid">
         <div class="grid-item settings" @click="params = 1">
           <div class="info">
             <el-tag effect="plain" type="success">是</el-tag>
           </div>
-          <div class="icon" v-if="parseInt(params, 10) === 1">
+          <div v-if="parseInt(params, 10) === 1" class="icon">
             <i class="el-icon-circle-check status"></i>
           </div>
         </div>
@@ -70,18 +70,18 @@
           <div class="info">
             <el-tag effect="plain" type="success">否</el-tag>
           </div>
-          <div class="icon" v-if="parseInt(params, 10) === 2">
+          <div v-if="parseInt(params, 10) === 2" class="icon">
             <i class="el-icon-circle-check status"></i>
           </div>
         </div>
       </div>
       <!-- 切换账号 -->
-      <div class="grid" v-else-if="props === 'u_name'">
+      <div v-else-if="props === 'u_name'" class="grid">
         <div class="grid-item">
           <div class="login__account">轻触头像以切换账号</div>
         </div>
         <div class="grid-item" @click="loginCurrent">
-          <el-avatar :src="Permission.avatar_url" :size="60"></el-avatar>
+          <el-avatar :size="60" :src="Permission.avatar_url"></el-avatar>
           <div class="info">{{ params }}</div>
           <div class="icon">
             <el-tag effect="plain" type="success">当前使用</el-tag>
@@ -89,7 +89,7 @@
         </div>
         <div class="grid-item">
           <div class="login__account">
-            <el-button size="medium" type="primary" plain @click="changeAccount">
+            <el-button plain size="medium" type="primary" @click="changeAccount">
               添加账号
             </el-button>
           </div>
@@ -102,6 +102,7 @@
 <script>
 import HomeLayout from '@/components/HomeLayout';
 import URLS from '@/api/urls';
+
 export default {
   name: 'UsersConfig',
   components: { HomeLayout },
@@ -151,7 +152,7 @@ export default {
      * todo:切换账号
      */
     changeAccount() {
-      this.$store.commit('UPDATE_MUTATIONS', { errorInfo: { code: '20003', message: 'Please Login System'} });
+      this.$store.commit('UPDATE_MUTATIONS', { errorInfo: this.$store.state.index.error.login });
     },
     /**
      * todo:登录当前账号

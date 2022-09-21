@@ -31,7 +31,7 @@
                 <span>热门搜索</span>
                 <i
                   :class="showHotWords ? 'el-icon-open' : 'el-icon-turn-off'"
-                   @click="showHotWords = !showHotWords">
+                  @click="showHotWords = !showHotWords">
                 </i>
               </div>
               <template v-if="showHotWords">
@@ -49,7 +49,9 @@
         </template>
         <!--列表页-->
         <template v-if="loadMore.length > 0">
-          <Lists :load-more="loadMore" style="padding: 50px 0 80px 0;"></Lists>
+          <transition name="el-zoom-in-center">
+            <Lists :load-more="loadMore" style="padding: 50px 0 80px 0;"></Lists>
+          </transition>
         </template>
       </div>
     </template>

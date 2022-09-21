@@ -1,5 +1,5 @@
 <template>
-  <HomeLayout header-title="更多信息" :bottom-bar="false" :back-button="true">
+  <HomeLayout :back-button="true" :bottom-bar="false" header-title="更多信息">
     <template #body>
       <div class="grid">
         <div class="grid-item settings" @click="changeAccount('ip_address')">
@@ -27,16 +27,16 @@
           <div class="info">个人标签</div>
           <div class="icon">
             <el-tag
-              effect="plain"
-              type="success"
               v-for="(item, index) in userSetting.tags"
-              :key="index">
+              :key="index"
+              effect="plain"
+              type="success">
               {{ item }}
             </el-tag>
             <i class="el-icon-arrow-right"></i>
           </div>
         </div>
-        <div class="grid-item"  @click="changeAccount('notice_status')">
+        <div class="grid-item" @click="changeAccount('notice_status')">
           <div class="info">系统通知</div>
           <div class="icon">
             <el-tag effect="plain" type="success">
@@ -45,7 +45,7 @@
             <i class="el-icon-arrow-right"></i>
           </div>
         </div>
-        <div class="grid-item"  @click="changeAccount('u_name')">
+        <div class="grid-item" @click="changeAccount('u_name')">
           <div class="info">切换账号</div>
           <div class="icon">
             <i class="el-icon-arrow-right"></i>
@@ -58,6 +58,7 @@
 
 <script>
 import HomeLayout from '@/components/HomeLayout';
+
 export default {
   name: 'MoreInformation',
   components: { HomeLayout },

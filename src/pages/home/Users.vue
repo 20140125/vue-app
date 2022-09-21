@@ -35,7 +35,7 @@ export default {
     this.$nextTick(() => {
       if (!this.Permission) {
         setTimeout(() => {
-          this.$store.commit('UPDATE_MUTATIONS', { errorInfo: { code: '20003', message: 'Please Login System' } });
+          this.$store.commit('UPDATE_MUTATIONS', { errorInfo: this.$store.state.index.error.login });
         }, 500);
       }
     });
@@ -45,10 +45,21 @@ export default {
      * todo:页面跳转
      * @param item
      */
-    handleClick(item) {
+    async handleClick(item) {
       if (this.Permission) {
-        this.$router.push({ path: item.path });
+        item.path ? await this.$router.push({ path: item.path }) : (item.value === 'logout' ? this.logoutSYS() : '');
       }
+    },
+    /**
+     * todo:登出系统
+     */
+    logoutSYS() {
+      this.$confirm('登出系统', { showClose: false, type: 'success' }).then(async () => {
+        await this.$store.dispatch('login/logoutSYS', { remember_token: this.$store.state.token });
+        await this.$router.push({ path: '/home/users' });
+      }).catch(() => {
+        console.log('cancel logoutSYS');
+      });
     }
   }
 };
