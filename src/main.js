@@ -82,29 +82,31 @@ router.beforeEach(async (to, from, next) => {
       await store.dispatch('login/checkAuthorized', { token: store.state.baseLayout.token });
       /* todo:挂载全局属性*/
       app.config.globalProperties.Permission = store.state.login.isAuthorized ? store.state.login.userInfo : {};
+      !store.state.login.isAuthorized ? window.localStorage.removeItem('token') : '';
     }
     next();
   }
   /* todo:登录页校验权限 */
   if (to.name === 'LoginManage') {
-    !store.state.baseLayout.token ? next() : await store.dispatch('login/checkAuthorized', { token: store.state.baseLayout.token }).then(() => {
-      /* todo:挂载全局属性*/
-      app.config.globalProperties.Permission = store.state.login.isAuthorized ? store.state.login.userInfo : {};
-      store.state.login.isAuthorized ? next({ path: '/admin/index', redirect: to.path }) : next();
-    });
+    !store.state.baseLayout.token ? next() : await store.dispatch('login/checkAuthorized', { token: store.state.baseLayout.token });
+    /* todo:挂载全局属性*/
+    app.config.globalProperties.Permission = store.state.login.isAuthorized ? store.state.login.userInfo : {};
+    store.state.login.isAuthorized ? next({ path: '/admin/index', redirect: to.path }) : next();
   }
   /* todo:登录后校验权限 */
   if (to.path.includes('admin') && to.name !== 'LoginManage') {
-    await store.dispatch('login/checkAuthorized', { token:  store.state.baseLayout.token }).then(async () => {
-      /* todo:没有登录，令牌无效直接跳转到登录页*/
-      if (['20003', '40002'].includes(store.state.errorInfo.code)) {
-        await store.commit('login/UPDATE_MUTATIONS', { userInfo: {}, isAuthorized: false });
-      }
-      /* todo:挂载全局属性*/
-      app.config.globalProperties.Permission = store.state.login.isAuthorized ? store.state.login.userInfo : {};
-      !store.state.login.isAuthorized ? next({ path: '/admin/login', redirect: to.path }) : next();
-      !store.state.login.isAuthorized ? window.localStorage.removeItem('token') : '';
-    });
+    await store.dispatch('login/checkAuthorized', { token:  store.state.baseLayout.token });
+    /* todo:没有登录，令牌无效直接跳转到登录页*/
+    if (['20003', '40002'].includes(store.state.errorInfo.code)) {
+      await store.commit('login/UPDATE_MUTATIONS', { userInfo: {}, isAuthorized: false });
+    }
+    /* todo:挂载全局属性*/
+    app.config.globalProperties.Permission = store.state.login.isAuthorized ? store.state.login.userInfo : {};
+    if (!store.state.login.isAuthorized) {
+      window.localStorage.removeItem('token');
+      next({ path: '/admin/login', redirect: to.path });
+    }
+    next();
   }
 });
 // 挂载实例
