@@ -1,6 +1,6 @@
-import store from '../store';
-import router from '../route';
-import request from '../tools/request';
+import store from '@/store';
+import router from '@/route';
+import request from '@/tools/request';
 
 /**
  * todo:设置时间

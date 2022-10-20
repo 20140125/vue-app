@@ -62,7 +62,7 @@ export default {
   border-radius: 30px;
   position: fixed;
   bottom: 80px;
-  right: 20px;
+  right: 15px;
   z-index: 2001
 }
 </style>
