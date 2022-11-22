@@ -91,13 +91,10 @@
   </el-table>
 </template>
 
-<script>
+<script lang="js">
 export default {
   name: 'FileLists',
   props: ['lists', 'fileURL', 'iconMap']
 };
 </script>
 
-<style scoped>
-
-</style>

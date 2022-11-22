@@ -40,7 +40,7 @@
   </el-table>
 </template>
 
-<script>
+<script lang="js">
 import StatusRadio from '../../common/StatusRadio';
 import URLS from '../../../api/urls';
 
