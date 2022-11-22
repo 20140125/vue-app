@@ -29,9 +29,9 @@
 </template>
 
 <script>
-import { toggle } from '../mixins/toggle';
-import SubmitButton from '../common/SubmitForm';
-import URLS from '../../api/urls';
+import { toggle } from '@/components/mixins/toggle';
+import SubmitButton from '@/components/common/SubmitForm';
+import URLS from '@/api/urls';
 
 export default {
   name: 'AddCategory',

@@ -20,7 +20,7 @@ export const actions = {
    * @param commit
    * @param state
    * @param payload
-   * @return {Promise<boolean>}
+   * @returns {Promise<unknown>}
    */
   async getSystemLogLists({ commit, state }, payload) {
     /* 如果页码没有变，直接读取vuex里面的数据 */

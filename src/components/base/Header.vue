@@ -119,7 +119,7 @@ export default {
           this.visible = !this.visible;
           break;
         case '3':
-          await this.routerPush({ label: '欢迎页', value: '/admin/home/index' });
+          await this.routerPush({ label: '欢迎页', value: '/admin/index' });
           break;
         case '5-1':
           await this.routerPush({ label: '会员中心', value: '/admin/userCenter/index' });
