@@ -50,7 +50,7 @@
   </el-table>
 </template>
 
-<script>
+<script lang="js">
 
 import urls from '../../../api/urls';
 

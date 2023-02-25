@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import URLS from '../api/urls';
+import URLS from '@/api/urls';
 import { setTime } from '@/utils/func';
 
 export default {

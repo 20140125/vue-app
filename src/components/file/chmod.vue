@@ -133,9 +133,3 @@ export default {
   }
 };
 </script>
-
-<style lang="less">
-#chmod {
-
-}
-</style>

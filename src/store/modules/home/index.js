@@ -24,10 +24,10 @@ export const state = {
     { label: '敬请期待', icon: 'el-icon-loading', value: 'loading' }
   ],
   systemSetting: [
-    { label: '账号与安全', value: 1, class: 'grid-item settings' },
-    { label: '个人信息与权限', value: 1, class: 'grid-item' },
-    { label: '关于我们', value: 1, class: 'grid-item' },
-    { label: '插件', value: 1, class: 'grid-item' }
+    { label: '账号安全', value: 'account', class: 'grid-item settings' },
+    { label: '个人信息', value: 'information', class: 'grid-item' },
+    { label: '关于我们', value: 'about', class: 'grid-item' },
+    { label: '邮箱登录', value: 'email-login', class: 'grid-item' }
   ],
   /* 更多配置 */
   moreInformationConfig: { ip_address: '居住地址', local: '所在地', desc: '个性签名', tags: '个性标签', notice_status: '站内通知', u_name: '切换账号' },

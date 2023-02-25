@@ -21,7 +21,7 @@
   </el-table>
 </template>
 
-<script>
+<script lang="js">
 export default {
   name: 'AreaLists',
   props: ['areaLists'],

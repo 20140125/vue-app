@@ -4,7 +4,7 @@
       <el-col
         :lg="{'span':12,'offset':6}"
         :md="{'span':16,'offset':4}"
-        :sm="{'span':20,'offset':'2'}"
+        :sm="{'span':20,'offset':2}"
         :xl="{'span':8,'offset':8}"
         :xs="{'span':24}">
         <el-header style="text-align: center;font-size: 20px;font-weight: 800" v-html="header"></el-header>
@@ -13,7 +13,7 @@
             <Account :account-attr="accountAttr" @loginSYS="loginSYS" @refreshCode="refreshCode"></Account>
           </el-tab-pane>
           <el-tab-pane label="邮箱验证码登录/注册" name="email">
-            <Mail :account-attr="accountAttr" @loginSYS="loginSYS"></Mail>
+            <Mail @loginSYS="loginSYS"></Mail>
           </el-tab-pane>
           <el-tab-pane label="账户授权登录/注册" name="oauth" style="text-align: center">
             <OAuth :oauth-login="oauthLogin"></OAuth>

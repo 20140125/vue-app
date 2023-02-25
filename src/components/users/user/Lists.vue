@@ -32,7 +32,7 @@
   </el-table>
 </template>
 
-<script>
+<script lang="js">
 import StatusRadio from '../../common/StatusRadio';
 import Urls from '../../../api/urls';
 
@@ -47,7 +47,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-
-</style>

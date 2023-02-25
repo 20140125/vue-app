@@ -363,13 +363,13 @@ body {
     flex-wrap: wrap;
     padding-top: 30px;
     box-sizing: border-box;
-  }
 
-  .oauth-login__title {
-    width: 100%;
-    font-size: 18px;
-    font-weight: 300;
-    height: 0;
+    .oauth-login__title {
+      width: 100%;
+      font-size: 18px;
+      font-weight: 300;
+      height: 0;
+    }
   }
 
   .oauth-login__item {
@@ -380,6 +380,38 @@ body {
     padding-right: 5px;
     box-sizing: border-box;
     height: 0;
+  }
+}
+
+/* 邮箱登录 */
+.email-login {
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  bottom: 260px;
+  position: fixed;
+  z-index: 2001;
+  width: 100%;
+  left: 0;
+
+  .email-login__list {
+    display: flex;
+    width: 100%;
+    bottom: 0;
+    position: fixed;
+    background: #fff;
+    text-align: center;
+    height: 230px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+
+    .email-login__title {
+      width: 100%;
+      font-size: 18px;
+      font-weight: 300;
+      height: 0;
+    }
+
   }
 }
 

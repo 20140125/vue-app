@@ -28,12 +28,12 @@
 </template>
 
 <script>
-import WebPush from '../base/WebPush';
-import Header from '../base/Header';
-import Menu from '../base/Menu';
-import Content from '../base/Content';
-import ToUp from '../common/ToUp';
-import URLS from '../../api/urls';
+import WebPush from '@/components/base/WebPush';
+import Header from '@/components/base/Header';
+import Menu from '@/components/base/Menu';
+import Content from '@/components/base/Content';
+import ToUp from '@/components/common/ToUp';
+import URLS from '@/api/urls';
 import { setTime } from '@/utils/func';
 
 export default {

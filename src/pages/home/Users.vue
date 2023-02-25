@@ -3,8 +3,8 @@
     <template #body>
       <div class="grid">
         <div class="grid-item">
-          <el-avatar :size="80" :src="Permission.avatar_url || ''"></el-avatar>
-          <div class="info">{{ Permission.username || '' }}</div>
+          <el-avatar :size="80" :src="(Permission || {}).avatar_url || ''"></el-avatar>
+          <div class="info">{{ (Permission || {}).username || '' }}</div>
         </div>
         <div
           v-for="(item, index) in accountSetting"

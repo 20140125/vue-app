@@ -28,6 +28,7 @@
     </el-form>
     <el-footer style="text-align: center;height: 30px !important">
       <el-button plain type="primary" @click="loginSYS('mail')">登录系统</el-button>
+      <el-button plain @click="$emit('cancelLogin')" v-if="showCancelButton">取消</el-button>
     </el-footer>
   </el-main>
 </template>
@@ -35,6 +36,12 @@
 <script>
 export default {
   name: 'Mail',
+  props: {
+    showCancelButton: {
+      type: Boolean,
+      default: () => false
+    }
+  },
   data() {
     return {
       form: { email: '', verify_code: '', loginType: 'mail' },

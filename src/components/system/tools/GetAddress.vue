@@ -15,7 +15,7 @@
   </div>
 </template>
 
-<script>
+<script lang="js">
 import AMap from '../../system/tools/AMap';
 import URLS from '../../../api/urls';
 

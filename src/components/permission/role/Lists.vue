@@ -28,7 +28,7 @@
   </el-table>
 </template>
 
-<script>
+<script lang="js">
 import StatusRadio from '@/components/common/StatusRadio';
 import URLS from '@/api/urls';
 

@@ -76,6 +76,7 @@ body {
 
   ::-webkit-scrollbar {
     -webkit-box-shadow: inset 0 0 5px rgb(255, 255, 255);
+    box-shadow: inset 0 0 5px rgb(255, 255, 255);;
     opacity: 0.3;
     width: 5px;
   }
@@ -84,6 +85,7 @@ body {
 
   ::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 0 rgb(255, 255, 255);
+    box-shadow: inset 0 0 0 rgb(255, 255, 255);
     opacity: 0.3;
     border-radius: 1px;
   }
@@ -95,6 +97,7 @@ body {
     background: #a7b2b8;
     opacity: 0.3;
     -webkit-box-shadow: inset 0 0 0 #fff;
+    box-shadow: inset 0 0 0 #fff;
   }
 
   /* 滚动条滑块 */
