@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     /**
-     * todo:页码切换
+     * 页码切换
      * @param page
      * @private
      */

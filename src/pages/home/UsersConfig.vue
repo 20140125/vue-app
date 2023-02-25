@@ -149,19 +149,19 @@ export default {
   },
   methods: {
     /**
-     * todo:切换账号
+     * 切换账号
      */
     changeAccount() {
       this.$store.commit('UPDATE_MUTATIONS', { errorInfo: this.$store.state.index.error.login });
     },
     /**
-     * todo:登录当前账号
+     * 登录当前账号
      */
     loginCurrent() {
       this.$router.push({ path: '/home/users/more' });
     },
     /**
-     * todo:获取地址列表
+     * 获取地址列表
      * @params parentId
      * @returns {Promise<void>}
      */
@@ -169,7 +169,7 @@ export default {
       await this.$store.dispatch('area/getAreaLists', { parent_id: parentId, refresh: true });
     },
     /**
-     * todo:获取用户设置
+     * 获取用户设置
      * @params refresh
      * @returns {Promise<void>}
      */
@@ -177,14 +177,14 @@ export default {
       await this.$store.dispatch('users/getUserCenter', { refresh });
     },
     /**
-     * todo:获取系统通知
+     * 获取系统通知
      * @returns {Promise<void>}
      */
     async getConfiguration() {
       await this.$store.dispatch('index/getConfiguration', { keywords: 'PersonalLabel', type: 'tags' });
     },
     /**
-     * todo:设置地区
+     * 设置地区
      * @param item
      * @returns {Promise<void>}
      */
@@ -193,7 +193,7 @@ export default {
       item.hasChildren ? await this.getAreaLists(item.id) : await this.saveParams();
     },
     /**
-     * todo:设置文本
+     * 设置文本
      * @param value
      * @returns {string}
      */
@@ -201,21 +201,21 @@ export default {
       return value.join('').replace('中华人民共和国', '');
     },
     /**
-     * todo:添加用户标签
+     * 添加用户标签
      * @param item
      */
     addPersonTags(item) {
       !this.params.includes(item) ? this.params.push(item) : '';
     },
     /**
-     * todo:删除用户标签
+     * 删除用户标签
      * @param index
      */
     removePersonTags(index) {
       this.params.length > 1 ? this.params.splice(index, 1) : '';
     },
     /**
-     * todo:数据保存
+     * 数据保存
      * @returns {Promise<void>}
      */
     async saveParams() {

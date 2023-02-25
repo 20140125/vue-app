@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     /**
-     * todo:初始化地图
+     * 初始化地图
      * @param center
      * @return {Promise<void>}
      */

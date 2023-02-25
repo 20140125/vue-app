@@ -81,7 +81,7 @@ export default {
   },
   methods: {
     /**
-     * TODO：数据表备份
+     * 数据表备份
      * @param table
      */
     async backupTable(table) {
@@ -95,7 +95,7 @@ export default {
       loading.close();
     },
     /**
-     * TODO：数据表修复
+     * 数据表修复
      * @param table
      */
     async repairTable(table) {
@@ -109,7 +109,7 @@ export default {
       loading.close();
     },
     /**
-     * TODO：数据表优化
+     * 数据表优化
      * @param table
      */
     async optimizeTable(table) {
@@ -123,7 +123,7 @@ export default {
       loading.close();
     },
     /**
-     * TODO：修改注释
+     * 修改注释
      * @param table
      */
     async updateComment(table) {

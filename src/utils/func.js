@@ -3,7 +3,7 @@ import router from '../route';
 import request from '../tools/request';
 
 /**
- * todo:设置时间
+ * 设置时间
  * @param timestamp
  * @param language
  * @return {string}
@@ -28,7 +28,7 @@ export function setTime(timestamp, language = 'en') {
   }
 }
 /**
- * todo：设置树形结构
+ * 设置树形结构
  * @param data
  * @param pid
  * @param attr
@@ -46,7 +46,7 @@ export function setTree(data, pid = 0, attr = '__children', pidAttr = 'pid') {
   return lists;
 }
 /**
- * todo:滚动到底部
+ * 滚动到底部
  * @param selector
  * @return {number}
  */
@@ -64,7 +64,7 @@ export function scrollToBottom(selector) {
 }
 
 /**
- * todo:返回顶部
+ * 返回顶部
  * @param speed 配速
  * @param timeout 定时器执行时间
  */
@@ -81,7 +81,7 @@ export function scrollToUp(speed, timeout) {
   }, timeout);
 }
 /**
- * todo:像素转换
+ * 像素转换
  * @param val
  * @return {string}
  */
@@ -110,7 +110,7 @@ export function rgbToHex(val) {
 }
 
 /**
- * todo:删除tab标签
+ * 删除tab标签
  * @param item
  */
 export function removeTabs(item) {
@@ -124,7 +124,7 @@ export function removeTabs(item) {
   });
 }
 /**
- * todo:base64图片上传
+ * base64图片上传
  * @param fileUrl 上传的图片地址
  * @param images 图片资源
  * @param imagesName 图片名称
@@ -154,7 +154,7 @@ export function toUploadNewFile(fileUrl, images, imagesName) {
 }
 
 /**
- * todo:函数节流
+ * 函数节流
  * @param fn
  * @param delay
  * @returns {(function(): void)|*}
@@ -174,7 +174,7 @@ export function debounce(fn, delay) {
 }
 
 /**
- * todo:滚动条是否触底
+ * 滚动条是否触底
  * @returns {boolean}
  */
 export function scrollBottom0() {

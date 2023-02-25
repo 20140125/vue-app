@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     /**
-     * todo:设置布局
+     * 设置布局
      * @param isCollapse
      */
     setLayout(isCollapse) {

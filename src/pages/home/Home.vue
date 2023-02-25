@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     /**
-     * todo:获取图片列表
+     * 获取图片列表
      * @param pagination
      * @returns {Promise<*>}
      */
@@ -72,7 +72,7 @@ export default {
       loading.close();
     },
     /**
-     * todo:下滑加载数据
+     * 下滑加载数据
      * @returns {Promise<void>}
      */
     async handleScroll() {

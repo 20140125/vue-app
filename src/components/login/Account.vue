@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     /**
-     * todo:刷新验证码
+     * 刷新验证码
      */
     async refreshCode() {
       let accountLoginError = 0;
@@ -71,7 +71,7 @@ export default {
       }
     },
     /**
-     * todo:登录系统
+     * 登录系统
      * @param formName
      */
     loginSYS(formName) {

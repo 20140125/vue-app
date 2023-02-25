@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     /**
-     * todo:授权登录
+     * 授权登录
      * @param item
      */
     toLogin(item) {

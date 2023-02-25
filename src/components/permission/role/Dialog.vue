@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     /**
-     * todo:修改值
+     * 修改值
      * @param value      当前值
      * @param direction  数据移动的方向（'left' / 'right'）
      * @param movedKeys  发生移动的数据 key 数组

@@ -189,7 +189,7 @@ export default {
   },
   methods: {
     /**
-     * todo:获取文件内容
+     * 获取文件内容
      * @param file
      */
     async getFileContent(file) {
@@ -214,7 +214,7 @@ export default {
       await this.$store.dispatch('file/getFileContent', tabs);
     },
     /**
-     * TODO:设置编辑器的mode
+     * 设置编辑器的mode
      * @param ext
      */
     setOptionsMode(ext) {
@@ -246,7 +246,7 @@ export default {
       return value ? data.filename.toLowerCase().indexOf(value.toLowerCase()) !== -1 : true;
     },
     /**
-     * todo:获取文件详情
+     * 获取文件详情
      * @param tab
      * @return {Promise<void>}
      */
@@ -262,7 +262,7 @@ export default {
       });
     },
     /**
-     * todo:删除tab
+     * 删除tab
      * @param tabName
      * @return {Promise<void>}
      */
@@ -279,7 +279,7 @@ export default {
       });
     },
     /**
-     * todo:更新文件详情
+     * 更新文件详情
      * @param content
      */
     updateContent(content) {

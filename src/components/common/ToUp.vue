@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     /**
-     * todo:返回顶部
+     * 返回顶部
      */
     toUp() {
       scrollToUp(this.speed, this.interval);

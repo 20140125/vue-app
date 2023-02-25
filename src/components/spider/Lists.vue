@@ -40,7 +40,7 @@
 
 <script>
 import SocketIO from 'socket.io-client';
-import { setTime } from '@/utils/func';
+import { scrollToBottom, setTime } from '@/utils/func';
 
 export default {
   name: 'SpiderIndex',
@@ -59,26 +59,26 @@ export default {
         transports: ['websocket'],
         autoConnect: true
       });
-      /* todo:链接系统 */
+      /* 链接系统 */
       SocketService.on('connect', () => {
         console.info(`【登录系统】${setTime(Date.parse(new Date()))}`);
-        /* todo:用户登录 */
+        /* 用户登录 */
         SocketService.emit('login', this.$store.state.login.userInfo.uuid);
       });
-      /* todo:站内消息推送 */
+      /* 站内消息推送 */
       SocketService.on('web_command', ($message) => {
         if (this.messageLists.length > 100) {
           this.messageLists = [];
         }
         this.messageLists.push({ time: setTime(Date.parse(new Date()), 'ch'), message: $message });
-        func.scrollToBottom('.messageLists');
+        scrollToBottom('.messageLists');
         this.loading = this.messageLists.length <= 0;
       });
     });
   },
   methods: {
     /**
-     * todo:设置同步方法
+     * 设置同步方法
      */
     setMethods() {
       let spiderConfig = JSON.parse(JSON.stringify(this.spiderConfig));
@@ -89,7 +89,7 @@ export default {
       });
     },
     /**
-     * todo:执行脚本
+     * 执行脚本
      * @param params
      * @return {Promise<void>}
      */

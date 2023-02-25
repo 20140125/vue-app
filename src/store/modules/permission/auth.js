@@ -4,7 +4,7 @@ import { setTree } from '@/utils/func';
 
 export const mutations = {
   /**
-   * todo: 更新vuex数据
+   * 更新vuex数据
    * @param state
    * @param update
    */
@@ -17,7 +17,7 @@ export const mutations = {
 
 export const actions = {
   /**
-   * todo:获取权限列表
+   * 获取权限列表
    * @param commit
    * @param state
    * @param payload

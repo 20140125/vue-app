@@ -1,5 +1,5 @@
 /**
- * todo:配置信息检查
+ * 配置信息检查
  * @param rule
  * @param value
  * @param callback

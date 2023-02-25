@@ -39,7 +39,7 @@ export default {
   },
   watch: {
     /**
-     * todo:监听图片资源
+     * 监听图片资源
      * @returns {Promise<void>}
      */
     async 'staticSource.image'() {
@@ -62,7 +62,7 @@ export default {
   },
   methods: {
     /**
-     * todo:跑马灯切换
+     * 跑马灯切换
      * @param index
      */
     carouselChange(index) {

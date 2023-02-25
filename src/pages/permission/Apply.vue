@@ -65,7 +65,7 @@ export default {
   },
   methods: {
     /**
-     * todo:获取站内通知
+     * 获取站内通知
      * @param pagination
      * @return {Promise<void>}
      */
@@ -77,7 +77,7 @@ export default {
       this.pagination.total = this.$store.state.apply.total;
     },
     /**
-     * todo:页面转换
+     * 页面转换
      * @param page
      */
     async currentPageChange(page) {
@@ -85,7 +85,7 @@ export default {
       await this.getPermissionApply(this.pagination);
     },
     /**
-     * todo:获取用户权限
+     * 获取用户权限
      * @param user_id
      * @return {Promise<void>}
      */
@@ -98,7 +98,7 @@ export default {
       };
     },
     /**
-     * todo:获取默认权限
+     * 获取默认权限
      * @param authLists
      * @param checkedKeys
      * @returns {*}
@@ -114,19 +114,19 @@ export default {
       return checkedKeys;
     },
     /**
-     * todo:申请权限
+     * 申请权限
      * @return {Promise<void>}
      */
     async permissionApply() {
       this.syncVisible = true;
-      /* todo:获取用户列表 */
+      /* 获取用户列表 */
       await this.$store.dispatch('users/getCacheUserLists', {});
       this.permissionAttr = { userLists: this.$store.state.users.cacheUsers, authList: [], checkedKeys: [] };
       this.form = { user_id: '', href: [], expires: '', desc: '' };
       this.reForm = 'created';
     },
     /**
-     * todo:申请权限续期
+     * 申请权限续期
      * @param form
      * @return {Promise<void>}
      */

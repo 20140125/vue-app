@@ -108,7 +108,7 @@ export default {
   },
   methods: {
     /**
-     * todo:长链接
+     * 长链接
      */
     getConnection() {
       /* 监听打开事件 */
@@ -201,7 +201,7 @@ export default {
       });
     },
     /**
-     * todo:发送消息
+     * 发送消息
      * @param message
      */
     sendMessage(message) {
@@ -212,7 +212,7 @@ export default {
       }
     },
     /**
-     * todo:推送弹框消息
+     * 推送弹框消息
      * @param message
      */
     pushMessage(message) {
@@ -224,7 +224,7 @@ export default {
       });
     },
     /**
-     * todo:地址跳转
+     * 地址跳转
      * @param item
      */
     goto(item) {
@@ -240,7 +240,7 @@ export default {
       }, item.path === '/' ? 0 : 500);
     },
     /**
-     * todo:返回上一级页面
+     * 返回上一级页面
      */
     goBack() {
       this.$router.go(-1);

@@ -10,7 +10,7 @@ export const state = {
 };
 export const mutations = {
   /**
-   * todo: 更新vuex数据
+   * 更新vuex数据
    * @param state
    * @param update
    */
@@ -22,7 +22,7 @@ export const mutations = {
 };
 export const actions = {
   /**
-   * todo:获取导航栏
+   * 获取导航栏
    * @param commit
    * @param state
    * @param payload
@@ -44,7 +44,7 @@ export const actions = {
     });
   },
   /**
-   * todo:获取时间线
+   * 获取时间线
    * @param commit
    * @param state
    * @param payload
@@ -66,7 +66,7 @@ export const actions = {
     });
   },
   /**
-   * todo：添加tabs
+   * 添加tabs
    * @param commit
    * @param state
    * @param payload
@@ -83,7 +83,7 @@ export const actions = {
     }
   },
   /**
-   * todo：删除tabs
+   * 删除tabs
    * @param commit
    * @param state
    * @param payload

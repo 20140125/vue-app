@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     /**
-     * todo:初始化
+     * 初始化
      */
     initDialog() {
       this.refreshCode();
@@ -70,7 +70,7 @@ export default {
       }
     },
     /**
-     * todo:切换tab
+     * 切换tab
      * @param tab
      */
     changeTabs(tab) {
@@ -78,7 +78,7 @@ export default {
       this.header = tab.props.label;
     },
     /**
-     * todo:设置验证码
+     * 设置验证码
      * @return {Promise<void>}
      */
     async refreshCode() {
@@ -86,7 +86,7 @@ export default {
       await this.$store.dispatch('login/reportCode', { verify_code: this.accountAttr.verifyCode });
     },
     /**
-     * todo:用戶登錄
+     * 用戶登錄
      * @param form
      * @return {Promise<void>}
      */

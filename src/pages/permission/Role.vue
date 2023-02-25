@@ -60,7 +60,7 @@ export default {
   },
   methods: {
     /**
-     * todo:获取角色列表
+     * 获取角色列表
      * @param pagination
      * @return {Promise<void>}
      */
@@ -71,7 +71,7 @@ export default {
       this.loading = false;
     },
     /**
-     * todo:页面转换
+     * 页面转换
      * @param page
      */
     async currentPageChange(page) {
@@ -79,14 +79,14 @@ export default {
       await this.getRoleLists(this.pagination);
     },
     /**
-     * todo:获取角色权限
+     * 获取角色权限
      * @return {Promise<void>}
      */
     async getRoleAuth() {
       return await this.$store.dispatch('role/getRoleAuth', {});
     },
     /**
-     * todo:添加角色
+     * 添加角色
      * @return {Promise<void>}
      */
     async addRoles() {
@@ -97,7 +97,7 @@ export default {
       this.authAttr = { authLists: this.$store.state.role.authLists, defaultChecked: [] };
     },
     /**
-     * todo:更新角色
+     * 更新角色
      * @param form
      * @return {Promise<void>}
      */

@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     /**
-     * todo:设置接口名称
+     * 设置接口名称
      * @param item
      * @return {string}
      */

@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     /**
-     * todo:获取接口列表
+     * 获取接口列表
      * @param refresh
      * @return {Promise<void>}
      */
@@ -98,7 +98,7 @@ export default {
       this.loading = false;
     },
     /**
-     * todo:保存接口分类
+     * 保存接口分类
      * @param category
      */
     addCategory(category = {}) {
@@ -108,7 +108,7 @@ export default {
       this.reForm = 'created';
     },
     /**
-     * todo:更新接口分类
+     * 更新接口分类
      * @param category
      */
     updateCategory(category) {
@@ -124,13 +124,13 @@ export default {
       this.reForm = 'updated';
     },
     /**
-     * todo:删除接口协议
+     * 删除接口协议
      */
     removeCategory() {
       this.$alert('开发中...');
     },
     /**
-     * todo:获取接口详情
+     * 获取接口详情
      * @param form
      * @param source
      * @return {Promise<void>}

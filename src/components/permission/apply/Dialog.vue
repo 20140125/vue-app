@@ -100,7 +100,7 @@ export default {
         expires: [{ required: true, message: '请选择申请时间', trigger: 'change', type: 'date' }],
         desc: [{ required: true, message: '请输入申请理由', trigger: 'blur' }]
       },
-      // todo:树形插件属性
+      // 树形插件属性
       props: {
         children: '__children',
         label: 'name',

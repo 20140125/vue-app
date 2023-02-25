@@ -29,20 +29,20 @@ export default {
   },
   methods: {
     /**
-     * todo:关闭浮层
+     * 关闭浮层
      */
     closeShadow() {
       this.$store.commit('UPDATE_MUTATIONS', { errorInfo: this.$store.state.index.error.cancel });
     },
     /**
-     * todo:获取系统配置
+     * 获取系统配置
      * @returns {Promise<void>}
      */
     async getOAuthConfig() {
       await this.$store.dispatch('login/getOauthConfig', { name: 'Oauth', refresh: false });
     },
     /**
-     * todo:授权登录
+     * 授权登录
      * @param {Object} item
      */
     loginSYS(item) {

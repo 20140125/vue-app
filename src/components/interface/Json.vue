@@ -147,7 +147,7 @@ export default {
   },
   methods: {
     /**
-     * todo:设置接口名称
+     * 设置接口名称
      * @param item
      * @return {string}
      */
@@ -155,13 +155,13 @@ export default {
       return Array(item.level + 1).join('　　') + item.name;
     },
     /**
-     * todo:添加请求参数
+     * 添加请求参数
      */
     requestAdd() {
       this.localForm.request.push({ name: '', desc: '', required: 1, type: 'String', val: '' });
     },
     /**
-     * todo:删除请求参数
+     * 删除请求参数
      * @param item
      * @param index
      */
@@ -169,13 +169,13 @@ export default {
       item.length > 1 ? item.splice(index, 1) : '';
     },
     /**
-     * todo:添加返回参数
+     * 添加返回参数
      */
     responseAdd() {
       this.localForm.response.push({ name: '', desc: '', type: '' });
     },
     /**
-     * todo:删除返回参数
+     * 删除返回参数
      * @param item
      * @param index
      */
@@ -183,7 +183,7 @@ export default {
       item.length > 1 ? item.splice(index, 1) : '';
     },
     /**
-     * todo:获取接口详情
+     * 获取接口详情
      */
     getInterfaceDetails() {
       let params = {};

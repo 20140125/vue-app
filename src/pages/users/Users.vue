@@ -54,7 +54,7 @@ export default {
   },
   methods: {
     /**
-     * todo:用户搜索
+     * 用户搜索
      * @return {Promise<boolean>}
      */
     async searchUsers() {
@@ -63,7 +63,7 @@ export default {
       await this.getUsersLists(this.pagination);
     },
     /**
-     * todo:获取管理员列表
+     * 获取管理员列表
      * @param pagination
      * @return {Promise<void>}
      */
@@ -77,7 +77,7 @@ export default {
       });
     },
     /**
-     * todo:页面转换
+     * 页面转换
      * @param page
      */
     async currentPageChange(page) {
@@ -85,7 +85,7 @@ export default {
       await this.getUsersLists(this.pagination);
     },
     /**
-     * todo:修改管理员
+     * 修改管理员
      * @param form
      * @return {Promise<void>}
      */

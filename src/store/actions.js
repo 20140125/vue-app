@@ -2,7 +2,7 @@ import { commonMethods } from '@/api/methods';
 
 export default {
   /**
-   * todo:通用方法（添加、修改、删除）
+   * 通用方法（添加、修改、删除）
    * @param commit
    * @param payload
    * @return {Promise<unknown>}

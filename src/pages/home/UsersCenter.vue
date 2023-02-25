@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     /**
-     * todo:获取个人中心信息
+     * 获取个人中心信息
      */
     getUserCenter() {
       this.$router.push({ path: '/home/users/more' });

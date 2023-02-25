@@ -1,7 +1,7 @@
 import { JSEncrypt } from 'jsencrypt';
 
 /**
- * todo:私钥解密
+ * 私钥解密
  * @param encryptData
  * @return {*}
  */
@@ -27,7 +27,7 @@ export function decryptData(encryptData) {
   return decrypt.decrypt(encryptData);
 }
 /**
- * todo:公钥加密
+ * 公钥加密
  * @param encryptData
  * @return {*}
  */
@@ -43,7 +43,7 @@ export function encryptData(encryptData) {
   return encrypt.encrypt(encryptData);
 }
 /**
- * todo:字符串转数组
+ * 字符串转数组
  * @param string
  * @param splitLength
  * @return {boolean|*[]}
@@ -65,7 +65,7 @@ export function str_split(string, splitLength) {
   return chunks;
 }
 /**
- * todo:16进制转buffer
+ * 16进制转buffer
  * @param data
  * @return {Buffer|*}
  */
@@ -78,7 +78,7 @@ export function hexToBuffer(data) {
   return Buffer.from(uarr);
 }
 /**
- * todo:buffer转16进制
+ * buffer转16进制
  * @param data
  * @return {string[]}
  */

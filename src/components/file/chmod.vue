@@ -98,7 +98,7 @@ export default {
   },
   methods: {
     /**
-     * todo:设置权限
+     * 设置权限
      * @param auth
      */
     setChmod(auth) {
@@ -115,7 +115,7 @@ export default {
       };
     },
     /**
-     * todo:权限值改变
+     * 权限值改变
      * @param form
      */
     chmodChange(form) {

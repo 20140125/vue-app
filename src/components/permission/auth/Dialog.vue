@@ -96,7 +96,7 @@ export default {
   },
   methods: {
     /**
-     * todo：设置权限名称
+     * 设置权限名称
      * @param item
      * @return {String}
      */

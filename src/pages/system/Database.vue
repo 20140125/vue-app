@@ -30,11 +30,11 @@ export default {
   },
   methods: {
     /**
-     * todo:获取数据表
+     * 获取数据表
      * @param refresh
      */
     async getDatabaseLists(refresh = true) {
-      await this.$store.dispatch('database/getDatabaseLists', { refresh: refresh });
+      await this.$store.dispatch('database/getDatabaseLists', { refresh });
       this.loading = false;
     }
   }

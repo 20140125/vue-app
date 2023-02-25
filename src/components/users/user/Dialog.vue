@@ -100,7 +100,7 @@ export default {
   },
   methods: {
     /**
-     * todo:图片上传成功
+     * 图片上传成功
      * @param response
      */
     uploadSuccess(response) {

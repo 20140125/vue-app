@@ -11,7 +11,7 @@ export default {
   props: ['confirmButton', 'cancelButton', 'form', 'reForm'],
   methods: {
     /**
-     * todo:数据保存
+     * 数据保存
      */
     async saveForm() {
       await this.form.$refs[this.reForm].validate(valid => {

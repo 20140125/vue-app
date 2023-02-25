@@ -3,7 +3,7 @@ import URLS from '@/api/urls';
 
 export const mutations = {
   /**
-   * todo: 更新vuex数据
+   *  更新vuex数据
    * @param state
    * @param update
    */
@@ -16,7 +16,7 @@ export const mutations = {
 
 export const actions = {
   /**
-   * todo:获取管理员列表
+   * 获取管理员列表
    * @param commit
    * @param state
    * @param payload

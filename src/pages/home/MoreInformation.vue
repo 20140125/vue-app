@@ -74,14 +74,14 @@ export default {
   },
   methods: {
     /**
-     * todo:获取用户设置
+     * 获取用户设置
      * @returns {Promise<void>}
      */
     async getUserSettings() {
       await this.$store.dispatch('users/getUserCenter', {});
     },
     /**
-     * todo:设置文本
+     * 设置文本
      * @param value
      * @returns {string}
      */
@@ -89,7 +89,7 @@ export default {
       return value.join('').replace('中华人民共和国', '');
     },
     /**
-     * todo:修改登录账号
+     * 修改登录账号
      * @param param
      */
     changeAccount(param) {

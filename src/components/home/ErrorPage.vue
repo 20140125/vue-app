@@ -24,6 +24,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * 设置登录
+     */
     setLogin() {
       this.$store.commit('UPDATE_MUTATIONS', { errorInfo: { code: '20003', message: 'Please Login System'} });
     }

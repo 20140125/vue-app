@@ -57,7 +57,7 @@ export const state = {
 };
 export const mutations = {
   /**
-   * todo: 更新vuex数据
+   * 更新vuex数据
    * @param state
    * @param update
    */
@@ -70,7 +70,7 @@ export const mutations = {
 
 export const actions = {
   /**
-   * todo:获取图片列表
+   * 获取图片列表
    * @param commit
    * @param state
    * @param payload
@@ -128,7 +128,7 @@ export const actions = {
     });
   },
   /**
-   * todo:获取关键字
+   * 获取关键字
    * @param commit
    * @param state
    * @param payload

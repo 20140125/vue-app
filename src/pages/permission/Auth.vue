@@ -53,11 +53,11 @@ export default {
     };
   },
   computed: {
-    /* todo：权限列表 */
+    /* 权限列表 */
     authLists() {
       return this.$store.state.auth.authLists || [];
     },
-    /* todo：权限树列表 */
+    /* 权限树列表 */
     authTree() {
       return this.$store.state.auth.authTree || [];
     }
@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     /**
-     * todo:获取权限列表
+     * 获取权限列表
      * @param refresh
      * @return {Promise<void>}
      */
@@ -79,7 +79,7 @@ export default {
       this.loading = false;
     },
     /**
-     * todo:新增权限
+     * 新增权限
      * @param form
      */
     addAuth(form = {}) {
@@ -88,7 +88,7 @@ export default {
       this.syncVisible = true;
     },
     /**
-     * todo:修改权限
+     * 修改权限
      * @param form
      */
     updateAuth(form) {

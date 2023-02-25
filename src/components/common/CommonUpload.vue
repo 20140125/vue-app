@@ -13,7 +13,7 @@
     :on-remove="handleRemove"
     :on-success="uploadSuccess"
     :show-file-list="uploadControls.show_file_list">
-    <!--todo:用户图像上传-->
+    <!--用户图像上传-->
     <el-avatar
       v-if="uploadControls.button_type === 'avatar'"
       :alt="avatarImage.username"
@@ -21,11 +21,11 @@
       :src="avatarImage.avatar_url"
       fit="cover">
     </el-avatar>
-    <!--todo:按钮形式上传-->
+    <!--按钮形式上传-->
     <el-button v-if="uploadControls.button_type === 'picture'" size="small" type="primary">点击上传</el-button>
-    <!--todo:卡片形式上传-->
+    <!--卡片形式上传-->
     <i v-if="uploadControls.button_type === 'card'" class="el-icon-plus"></i>
-    <!--todo:上传提示文案-->
+    <!--上传提示文案-->
     <span
       v-if="uploadControls.show_tips"
       class="el-upload__tip"
@@ -33,7 +33,7 @@
       {{ tips ? tips : `请上传${imgWidth}*${imgHeight}的jpg/png 图片` }}
     </span>
   </el-upload>
-  <!--todo:点击上传-->
+  <!--点击上传-->
   <el-button v-if="!autoUpload" plain size="medium" style="margin-top: 20px" type="primary" @click="submitUpload">
     上传到服务器
   </el-button>
@@ -127,28 +127,28 @@ export default {
   },
   methods: {
     /**
-     * todo:点击上传
+     * 点击上传
      */
     submitUpload() {
       this.$refs.upload.submit();
     },
     /**
-     * todo:文件上传
+     * 文件上传
      * @param file
      */
     uploadFile(file) {
-      /* todo:创建form对象 */
+      /* 创建form对象 */
       let param = new FormData();
       param.append('file', file.file);
       param.append('filename', file.file.name);
       param.append('token', this.$store.state.baseLayout.token);
       param.append('round_name', this.data.round_name || false);
       param.append('file_type', 'image');
-      /* todo:名字随机时不需要传入路径 */
+      /* 名字随机时不需要传入路径 */
       if (!this.data.round_name) {
         param.append('path', this.data.file.path.replace(this.data.file.filename, ''));
       }
-      /* todo:添加请求头 */
+      /* 添加请求头 */
       let config = { headers: { 'Content-Type': 'multipart/form-data', 'Authorization': this.$store.state.baseLayout.token } };
       $http.post(file.action, param, config).then(response => {
         response.data.filename = file.filename;
@@ -158,7 +158,7 @@ export default {
       });
     },
     /**
-     * todo：获取图片背景颜色
+     * 获取图片背景颜色
      * @param file
      */
     getBackgroundColor(file) {
@@ -176,7 +176,7 @@ export default {
       };
     },
     /**
-     * todo:上传图片前处理函数
+     * 上传图片前处理函数
      * @param file
      * @returns {Promise<*>|boolean}
      */

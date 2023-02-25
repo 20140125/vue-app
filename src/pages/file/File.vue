@@ -90,7 +90,7 @@ export default {
   },
   methods: {
     /**
-     * todo:获取文件列表
+     * 获取文件列表
      * @param basename
      * @param index
      * @param detail
@@ -111,7 +111,7 @@ export default {
       });
     },
     /**
-     * todo:获取文件内容
+     * 获取文件内容
      * @param file
      */
     async getFiles(file) {
@@ -134,7 +134,7 @@ export default {
       }
     },
     /**
-     * todo:获取静态资源
+     * 获取静态资源
      * @param fileLists
      * @param filePath
      * @param form
@@ -155,7 +155,7 @@ export default {
       this.visible = { detail: false, source: true, chmod: false, upload: false };
     },
     /**
-     * todo:添加文件
+     * 添加文件
      * @param file
      */
     async addFile(file) {
@@ -172,7 +172,7 @@ export default {
       });
     },
     /**
-     * todo:设置权限
+     * 设置权限
      * @param file
      */
     async chmodFile(file) {
@@ -180,7 +180,7 @@ export default {
       this.chmod = file;
     },
     /**
-     * todo:文件上传
+     * 文件上传
      * @param file
      */
     async uploadFile(file) {
@@ -188,7 +188,7 @@ export default {
       this.visible = { chmod: false, detail: false, source: false, upload: true };
     },
     /**
-     * todo:文件打包
+     * 文件打包
      * @param file
      */
     async composerFile(file = '') {
@@ -211,7 +211,7 @@ export default {
       });
     },
     /**
-     * todo:文件解压
+     * 文件解压
      * @param file
      */
     async unComposeFile(file) {
@@ -219,7 +219,7 @@ export default {
       await this.getFileLists();
     },
     /**
-     * todo:删除文件
+     * 删除文件
      * @param file
      */
     async deleteFile(file) {
@@ -236,7 +236,7 @@ export default {
       });
     },
     /**
-     * todo:文件重命名
+     * 文件重命名
      * @param file
      */
     async renameFile(file) {
@@ -267,7 +267,7 @@ export default {
       });
     },
     /**
-     * todo:获取选中的数据
+     * 获取选中的数据
      * @param files
      */
     async getMultipleSelection(files) {
@@ -278,7 +278,7 @@ export default {
       });
     },
     /**
-     * todo:关闭弹框
+     * 关闭弹框
      */
     closeDialog() {
       this.visible = { detail: false, source: false, chmod: false, upload: false };

@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     /**
-     * todo:生成一个随机数
+     * 生成一个随机数
      * @param min
      * @param max
      * @returns {number}
@@ -62,7 +62,7 @@ export default {
       return Math.floor(Math.random() * (max - min) + min);
     },
     /**
-     * todo:生成一个随机的颜色
+     * 生成一个随机的颜色
      * @param min
      * @param max
      * @returns {string}
@@ -74,7 +74,7 @@ export default {
       return 'rgb(' + r + ',' + g + ',' + b + ')';
     },
     /**
-     * todo:绘制图层
+     * 绘制图层
      */
     drawPic() {
       let canvas = document.getElementById('s-canvas');
@@ -91,7 +91,7 @@ export default {
       this.drawDot(ctx);
     },
     /**
-     * todo:随机生成验证码
+     * 随机生成验证码
      * @param ctx
      * @param txt
      * @param i
@@ -112,7 +112,7 @@ export default {
       ctx.translate(-x, -y);
     },
     /**
-     * todo:绘制干扰线
+     * 绘制干扰线
      * @param ctx
      */
     drawLine(ctx) {
@@ -125,7 +125,7 @@ export default {
       }
     },
     /**
-     * todo:绘制干扰点
+     * 绘制干扰点
      * @param ctx
      */
     drawDot(ctx) {

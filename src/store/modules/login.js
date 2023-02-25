@@ -4,7 +4,7 @@ import router from '@/route/index';
 
 export const mutations = {
   /**
-   * todo: 更新vuex数据
+   *  更新vuex数据
    * @param state
    * @param update
    */
@@ -16,7 +16,7 @@ export const mutations = {
 };
 export const actions = {
   /**
-   * todo:校验登录态
+   * 校验登录态
    * @param commit
    * @param state
    * @param authorized
@@ -43,7 +43,7 @@ export const actions = {
     });
   },
   /**
-   * todo:登录系统
+   * 登录系统
    * @param commit
    * @param state
    * @param payload
@@ -72,7 +72,7 @@ export const actions = {
     });
   },
   /**
-   * todo:登出系统
+   * 登出系统
    * @param commit
    * @param payload
    * @return {Promise<void>}
@@ -93,7 +93,7 @@ export const actions = {
     });
   },
   /**
-   * todo:验证码上报
+   * 验证码上报
    * @param commit
    * @param payload
    * @return {Promise<void>}
@@ -110,7 +110,7 @@ export const actions = {
     });
   },
   /**
-   * todo:发送邮件
+   * 发送邮件
    * @param commit
    * @param payload
    * @return {Promise<void>}
@@ -127,7 +127,7 @@ export const actions = {
     });
   },
   /**
-   * todo:授权登录配置
+   * 授权登录配置
    * @param commit
    * @param state
    * @param payload

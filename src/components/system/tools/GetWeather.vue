@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     /**
-     * todo:搜索匹配
+     * 搜索匹配
      * @param string
      * @param cb
      * @return {Promise<void>}
@@ -58,7 +58,7 @@ export default {
       });
     },
     /**
-     * todo:获取天气
+     * 获取天气
      * @param item
      * @return {Promise<void>}
      */

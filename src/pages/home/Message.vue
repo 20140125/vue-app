@@ -86,7 +86,7 @@ export default {
   },
   methods: {
     /**
-     * todo:发送消息
+     * 发送消息
      * @returns {boolean}
      */
     sendMessage() {
@@ -114,7 +114,7 @@ export default {
       this.$refs.message.innerHTML = '';
     },
     /**
-     * todo:字符串替换
+     * 字符串替换
      * @param content
      * @returns {*}
      */

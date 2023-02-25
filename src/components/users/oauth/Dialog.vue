@@ -72,7 +72,7 @@ export default {
   },
   created() {
     /**
-     * todo:邮箱验证码定时器
+     * 邮箱验证码定时器
      * @return {Promise<void>}
      */
     setInterval(() => {
@@ -86,7 +86,7 @@ export default {
   },
   methods: {
     /**
-     * todo:获取邮箱验证码
+     * 获取邮箱验证码
      */
     async getMailCode() {
       await this.$refs[this.reForm].validateField(['email'], async(valid) => {

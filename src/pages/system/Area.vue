@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     /**
-     * todo:获取城市列表
+     * 获取城市列表
      * @param parent_id
      */
     async getAreaLists(parent_id = 1) {
@@ -48,7 +48,7 @@ export default {
       this.loading = false;
     },
     /**
-     * todo:加载更多
+     * 加载更多
      * @param tree
      * @param treeNode
      * @param resolve
@@ -61,7 +61,7 @@ export default {
     },
 
     /**
-     * todo:搜索天气信息
+     * 搜索天气信息
      * @param search
      */
     searchAreaLists(search) {
@@ -73,7 +73,7 @@ export default {
       });
     },
     /**
-     * todo:查看天气详情
+     * 查看天气详情
      * @param form
      */
     getAreaWeather(form) {

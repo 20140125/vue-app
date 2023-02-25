@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     /**
-     * todo:页面跳转
+     * 页面跳转
      * @param item
      */
     async handleClick(item) {
@@ -51,7 +51,7 @@ export default {
       }
     },
     /**
-     * todo:登出系统
+     * 登出系统
      */
     logoutSYS() {
       this.$confirm('登出系统', { showClose: false, type: 'success' }).then(async () => {

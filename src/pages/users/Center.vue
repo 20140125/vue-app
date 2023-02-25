@@ -179,7 +179,7 @@ export default {
   },
   methods: {
     /**
-     * TODO:设置数据
+     * 设置数据
      * @param areaItem
      */
     setOptions(areaItem) {
@@ -189,7 +189,7 @@ export default {
       this.options = areaItem;
     },
     /**
-     * TODO:设置地址显示
+     * 设置地址显示
      * @param item
      * @return {*}
      */
@@ -197,14 +197,14 @@ export default {
       return (item || []).length > 0 ? item.join(',').replace(new RegExp(/,/g), ' > ') : item;
     },
     /**
-     * TODO:关闭标签
+     * 关闭标签
      * @param tag
      */
     handleClose(tag) {
       this.userCenter.tags.splice(this.userCenter.tags.indexOf(tag), 1);
     },
     /**
-     * TODO:文本框输入
+     * 文本框输入
      */
     handleInputConfirm() {
       if (this.inputValue && this.userCenter.tags.indexOf(this.inputValue) < 0) {
@@ -214,7 +214,7 @@ export default {
       this.inputValue = '';
     },
     /**
-     * TODO:展示文本框
+     * 展示文本框
      */
     showInput() {
       this.inputVisible = true;

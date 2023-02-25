@@ -100,7 +100,7 @@ export default {
   },
   methods: {
     /**
-     * todo:获取站内通知
+     * 获取站内通知
      * @param pagination
      * @return {Promise<void>}
      */
@@ -112,7 +112,7 @@ export default {
       this.pagination.total = this.$store.state.push.total;
     },
     /**
-     * TODO:检索推送
+     * 检索推送
      * @return {Promise<boolean>}
      */
     async searchPush() {
@@ -121,7 +121,7 @@ export default {
       await this.getPushLists(this.pagination);
     },
     /**
-     * todo:页面转换
+     * 页面转换
      * @param page
      */
     async currentPageChange(page) {
@@ -129,7 +129,7 @@ export default {
       await this.getPushLists(this.pagination);
     },
     /**
-     * todo:添加站内通知
+     * 添加站内通知
      * @return {Promise<void>}
      */
     async addPush() {
@@ -148,7 +148,7 @@ export default {
       this.userLists = this.$store.state.users.cacheUsers;
     },
     /**
-     * todo:执行站内通知
+     * 执行站内通知
      * @param form
      * @return {Promise<void>}
      */

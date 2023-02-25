@@ -1,10 +1,10 @@
 import request from '@/tools/request.js';
 
 /**
- * todo:POST方法
+ * POST方法
  * @param url
  * @param params
- * @return {Promise<AxiosResponse<any>>}
+ * @return {Promise<any>}
  * @private
  */
 const commonMethods = async function (url, params = {}) {

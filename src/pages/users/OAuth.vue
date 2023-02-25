@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     /**
-     * todo:用户搜索
+     * 用户搜索
      * @return {Promise<boolean>}
      */
     async searchOauth() {
@@ -60,7 +60,7 @@ export default {
       await this.getOAuthLists(this.pagination);
     },
     /**
-     * todo:获取授权用户列表
+     * 获取授权用户列表
      * @param pagination
      * @return {Promise<void>}
      */
@@ -73,7 +73,7 @@ export default {
       });
     },
     /**
-     * todo:页面转换
+     * 页面转换
      * @param page
      */
     async currentPageChange(page) {
@@ -81,7 +81,7 @@ export default {
       await this.getOAuthLists(this.pagination);
     },
     /**
-     * todo:邮箱账号绑定
+     * 邮箱账号绑定
      * @param form
      */
     bindEmail(form) {

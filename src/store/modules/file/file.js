@@ -3,7 +3,7 @@ import URLS from '@/api/urls';
 
 export const mutations = {
   /**
-   * todo: 更新vuex数据
+   * 更新vuex数据
    * @param state
    * @param update
    */
@@ -16,7 +16,7 @@ export const mutations = {
 
 export const actions = {
   /**
-   * todo:获取文件列表
+   * 获取文件列表
    * @param commit
    * @param state
    * @param payload
@@ -41,7 +41,7 @@ export const actions = {
     });
   },
   /**
-   * todo:获取文件内容
+   * 获取文件内容
    * @param dispatch
    * @param commit
    * @param state
@@ -69,7 +69,7 @@ export const actions = {
     });
   },
   /**
-   * todo：添加tabs
+   * 添加tabs
    * @param commit
    * @param state
    * @param tabs
@@ -86,7 +86,7 @@ export const actions = {
     }
   },
   /**
-   * todo：删除tabs
+   * 删除tabs
    * @param commit
    * @param state
    * @param payload

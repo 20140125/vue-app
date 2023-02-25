@@ -63,7 +63,7 @@ export default {
   },
   methods: {
     /**
-     * todo:设置接收者消息
+     * 设置接收者消息
      * @param item
      * @returns {Promise<void>}
      */
@@ -72,7 +72,7 @@ export default {
       this.$router.push({ path: `/home/message/${item.id}` });
     },
     /**
-     * todo:场次定位
+     * 场次定位
      * @param index
      */
     scrollToPosition(index) {

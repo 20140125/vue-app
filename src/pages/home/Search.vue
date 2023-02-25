@@ -130,14 +130,14 @@ export default {
   },
   methods: {
     /**
-     * todo:获取系统通知
+     * 获取系统通知
      * @returns {Promise<void>}
      */
     async getConfiguration() {
       await this.$store.dispatch('index/getConfiguration', { keywords: 'HotKeyWord', type: 'hotKeyWord' });
     },
     /**
-     * todo:删除历史搜索记录
+     * 删除历史搜索记录
      * @returns {Promise<void>}
      */
     async oldDelete() {
@@ -150,7 +150,7 @@ export default {
       });
     },
     /**
-     * todo:设置消息弹框
+     * 设置消息弹框
      * @param message
      * @param type
      * @param showLoading
@@ -173,7 +173,7 @@ export default {
       }, showLoading ? 500 : 0);
     },
     /**
-     * todo:设置搜索字段
+     * 设置搜索字段
      * @param keyword
      * @returns {Promise<boolean>}
      */
@@ -213,7 +213,7 @@ export default {
       await this.getImageLists(this.pagination);
     },
     /**
-     * todo:获取图片列表
+     * 获取图片列表
      * @param pagination
      * @returns {Promise<*>}
      */
@@ -229,7 +229,7 @@ export default {
       loading.close();
     },
     /**
-     * todo:下滑加载数据
+     * 下滑加载数据
      * @returns {Promise<void>}
      */
     async handleScroll() {

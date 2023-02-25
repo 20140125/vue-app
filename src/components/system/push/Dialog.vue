@@ -105,7 +105,7 @@ export default {
   },
   methods: {
     /**
-     * TODO:获取UUID
+     * 获取UUID
      * @param uuid
      */
     handleChange(uuid) {

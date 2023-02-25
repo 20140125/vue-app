@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     /**
-     * todo:获取插件列表
+     * 获取插件列表
      * @returns {Promise<void>}
      */
     async getPlugin() {
@@ -38,7 +38,7 @@ export default {
       this.loading = false;
     },
     /**
-     * todo:插件卸载、安装
+     * 插件卸载、安装
      * @param scope
      * @returns {Promise<void>}
      */

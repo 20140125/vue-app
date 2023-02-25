@@ -33,14 +33,14 @@ export default {
   },
   methods: {
     /**
-     * todo:页面跳转
+     * 页面跳转
      * @return {Promise<void>}
      */
     async goto(value) {
       await this.$router.push({ path: value.props.name });
     },
     /**
-     * todo:删除标签
+     * 删除标签
      * @param item
      * @return {Promise<void>}
      */

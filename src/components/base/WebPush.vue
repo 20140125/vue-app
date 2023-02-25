@@ -72,20 +72,20 @@ export default {
   },
   methods: {
     /**
-     * todo:获取推送链接
+     * 获取推送链接
      */
     getConnection() {
       const SocketService = SocketIO(this.Permission.socket, {
         transports: ['websocket'],
         autoConnect: true
       });
-      /* todo:链接系统 */
+      /* 链接系统 */
       SocketService.on('connect', () => {
         console.info(`【登录系统】${setTime(Date.parse(new Date()))}`);
-        /* todo:用户登录 */
+        /* 用户登录 */
         SocketService.emit('login', this.Permission.uuid);
       });
-      /* todo:获取站内推送信息 */
+      /* 获取站内推送信息 */
       SocketService.on('notice', (response) => {
         if (response.length > 0) {
           let $unread = 0;
@@ -98,11 +98,11 @@ export default {
           this.$store.commit('home/UPDATE_MUTATIONS', { notice: response, unread: $unread });
         }
       });
-      /* todo：获取图表信息 */
+      /* 获取图表信息 */
       SocketService.on('charts', (response) => {
         this.$store.commit('home/UPDATE_MUTATIONS', { xAxisData: response.day, seriesData: response.total });
       });
-      /* todo:站内消息推送 */
+      /* 站内消息推送 */
       SocketService.on('new_message', (message) => {
         this.pushMessage.push({ message: message, timestamp: Date.parse(new Date()) / 1000 });
         /* 推送消息到站内系统通知 */
@@ -110,17 +110,17 @@ export default {
         /* 推送消息到活动窗口 */
         this.$store.commit('index/UPDATE_MUTATIONS', { time: setTime(Date.parse(new Date()), 'ch'), message: message, username: '系统公告' });
       });
-      /* todo:链接断开 */
+      /* 链接断开 */
       SocketService.on('disconnect', (error) => {
         console.info(`【系统断开】${setTime(Date.parse(new Date()))}${JSON.stringify(error)}`);
       });
-      /* todo:链接错误 */
+      /* 链接错误 */
       SocketService.on('connect_error', (error) => {
         console.error(`【系统链接错误】${setTime(Date.parse(new Date()))}${JSON.stringify(error)}`);
       });
     },
     /**
-     * todo:获取系统通知
+     * 获取系统通知
      * @returns {Promise<void>}
      */
     async getConfiguration() {

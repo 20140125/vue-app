@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     /**
-     * todo:获取列表
+     * 获取列表
      * @param pagination
      */
     async getConfigLists(pagination) {
@@ -69,7 +69,7 @@ export default {
       this.loading = false;
     },
     /**
-     * todo:页面转换
+     * 页面转换
      * @param page
      */
     async currentPageChange(page) {
@@ -77,7 +77,7 @@ export default {
       await this.getConfigLists(this.pagination);
     },
     /**
-     * todo：新增系统配置
+     * 新增系统配置
      */
     addConfig() {
       this.syncVisible = true;
@@ -95,7 +95,7 @@ export default {
       this.reForm = 'created';
     },
     /**
-     * todo:修改系统配置
+     * 修改系统配置
      * @param form
      */
     updateConfig(form) {

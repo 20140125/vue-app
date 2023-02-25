@@ -37,7 +37,7 @@ export default {
   },
   methods: {
     /**
-     * todo:获取日志列表
+     * 获取日志列表
      * @param pagination
      * @returns {Promise<void>}
      */
@@ -49,7 +49,7 @@ export default {
       this.loading = false;
     },
     /**
-     * todo:页面转换
+     * 页面转换
      * @param page
      */
     async currentPageChange(page) {
@@ -57,7 +57,7 @@ export default {
       await this.getSystemLogLists(this.pagination);
     },
     /**
-     * todo:删除日志
+     * 删除日志
      * @param scope
      * @returns {Promise<void>}
      */

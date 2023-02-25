@@ -4,7 +4,7 @@ import router from '@/route';
 import URLS from '@/api/urls';
 
 /**
- * todo:判断系统
+ * 判断系统
  * @returns {boolean}
  */
 const isMobile = () => {
@@ -12,7 +12,7 @@ const isMobile = () => {
   return device.indexOf('Android') > -1 || device.indexOf('ios') > -1;
 };
 /**
- * todo:错误跳转
+ * 错误跳转
  * @param response
  */
 const ErrorHandler = (response) => {

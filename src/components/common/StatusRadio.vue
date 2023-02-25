@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     /**
-     * todo:状态修改
+     * 状态修改
      */
     async changeStatus() {
       this.$confirm('确认修改当前状态', {

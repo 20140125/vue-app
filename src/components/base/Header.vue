@@ -90,14 +90,14 @@ export default {
   },
   computed: {
     /**
-     * todo:站内通知
+     * 站内通知
      * @return {any}
      */
     notice() {
       return JSON.parse(JSON.stringify(this.$store.state.home.notice));
     },
     /**
-     * todo:未读消息数
+     * 未读消息数
      * @return {any}
      */
     unread() {
@@ -106,7 +106,7 @@ export default {
   },
   methods: {
     /**
-     * todo:导航栏操作
+     * 导航栏操作
      * @param index
      * @return {Promise<void>}
      */
@@ -130,13 +130,13 @@ export default {
       }
     },
     /**
-     * todo:关闭天气预告弹框
+     * 关闭天气预告弹框
      */
     closeDialog() {
       this.visible = false;
     },
     /**
-     * todo:隐藏导航栏
+     * 隐藏导航栏
      */
     hideMenu() {
       this.isCollapse = !this.isCollapse;
@@ -147,7 +147,7 @@ export default {
       this.$emit('setLayout', this.isCollapse);
     },
     /**
-     * todo:路由跳转
+     * 路由跳转
      * @param params
      * @return {Promise<void>}
      */
@@ -155,7 +155,7 @@ export default {
       await this.$store.dispatch('home/addTabs', params).then(() => this.$router.push({ path: params.value }));
     },
     /**
-     * todo：登出系统
+     * 登出系统
      * @param message
      * @return {Promise<void>}
      */
@@ -163,7 +163,7 @@ export default {
       await this.$store.dispatch('login/logoutSYS', { remember_token: this.$store.state.token }).then(() => this.$message.success(message));
     },
     /**
-     * todo:系统通知
+     * 系统通知
      * @param item
      * @return {Promise<void>}
      */
@@ -174,7 +174,7 @@ export default {
       }) : await this.clearPush(item);
     },
     /**
-     * todo:阅读通知
+     * 阅读通知
      * @param item
      * @return {Promise<void>}
      */

@@ -140,7 +140,7 @@ export default {
   },
   methods: {
     /**
-     * todo；添加配置值
+     * 添加配置值
      * @param children
      */
     addChildren(children) {
@@ -155,7 +155,7 @@ export default {
       this.localForm.children = items;
     },
     /**
-     * todo:移除配置值
+     * 移除配置值
      * @param children
      * @param index
      */

@@ -66,7 +66,7 @@ export default {
   },
   methods: {
     /**
-     * todo:markdown数据保存
+     * markdown数据保存
      * @param text
      * @param html
      */

@@ -63,7 +63,7 @@ export default {
   },
   methods: {
     /**
-     * todo:窗口切换
+     * 窗口切换
      * @param item
      * @return {Promise<void>}
      */
