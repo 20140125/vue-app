@@ -11,9 +11,9 @@
 </template>
 
 <script>
-import BaseLayout from '../../components/BaseLayout';
-import SystemLogLists from '../../components/system/log/Lists';
-import URLS from '../../api/urls';
+import BaseLayout from '@/components/BaseLayout';
+import SystemLogLists from '@/components/system/log/Lists';
+import URLS from '@/api/urls';
 
 export default {
   name: 'SystemLog',
