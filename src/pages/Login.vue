@@ -91,7 +91,10 @@ export default {
      * @return {Promise<void>}
      */
     async loginSYS(form) {
-      await this.$store.dispatch('login/loginSYS', form);
+      const response = await this.$store.dispatch('login/loginSYS', form);
+      if (response?.errorInfo) {
+        this.$message.error(response?.errorInfo?.message);
+      }
     }
   }
 };

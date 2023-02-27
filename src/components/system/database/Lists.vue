@@ -24,7 +24,7 @@
       </template>
     </el-table-column>
     <el-table-column align="center" label="创建时间" min-width="160" prop="create_time" sortable></el-table-column>
-    <el-table-column align="right" label="操作" width="300">
+    <el-table-column align="center" label="操作" width="300" fixed="right">
       <template #default="scope">
         <el-button
           v-if="scope.row.name === name"

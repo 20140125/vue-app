@@ -2,7 +2,7 @@
   <BaseLayout :loading="loading">
     <template #body>
       <el-row id="information" :gutter="24">
-        <el-col :lg="8" :xl="8">
+        <el-col :lg="9" :xl="9">
           <el-tabs type="border-card">
             <el-tab-pane label="个人简介"></el-tab-pane>
             <el-card shadow="hover">
@@ -38,7 +38,7 @@
             </el-card>
           </el-tabs>
         </el-col>
-        <el-col :lg="16" :xl="16">
+        <el-col :lg="15" :xl="15">
           <el-tabs type="border-card">
             <el-tab-pane label="信息展示"></el-tab-pane>
             <el-card shadow="hover">

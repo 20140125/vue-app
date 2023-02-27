@@ -1,7 +1,7 @@
 <template>
   <el-table :data="lists" @selection-change="$emit('getMultipleSelection', $event)">
     <el-table-column type="selection" width="60"></el-table-column>
-    <el-table-column label="文件名" width="600">
+    <el-table-column label="文件名" width="300">
       <template #default="scope">
         <i :class="iconMap[scope.row.file_type]" style="font-size: 18px; color: #409EFF"></i>
         <span

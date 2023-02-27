@@ -34,10 +34,10 @@
         </el-button>
       </template>
     </el-table-column>
-    <el-table-column align="center" label="申请时间" prop="created_at"></el-table-column>
-    <el-table-column align="center" label="通过时间" prop="updated_at"></el-table-column>
-    <el-table-column align="center" label="权限期限" prop="expires"></el-table-column>
-    <el-table-column align="right" label="操作" width="200px">
+    <el-table-column align="center" label="申请时间" prop="created_at" width="200"></el-table-column>
+    <el-table-column align="center" label="通过时间" prop="updated_at" width="200"></el-table-column>
+    <el-table-column align="center" label="权限期限" prop="expires" width="200"></el-table-column>
+    <el-table-column align="center" label="操作" width="200" fixed="right">
       <template #default="scope">
         <el-button
           v-if="scope.row.refresh && scope.row.status === 1"
