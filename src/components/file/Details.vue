@@ -86,8 +86,8 @@
 
 <script>
 import { codemirror } from 'vue-codemirror-lite';
-import SubmitButton from '../common/SubmitForm';
-import URLS from '../../api/urls';
+import SubmitButton from '@/components/common/SubmitForm';
+import URLS from '@/api/urls';
 
 /* 编辑器代码 */
 require('codemirror/mode/php/php.js');

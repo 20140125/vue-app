@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import JsonView from '../../common/JsonView';
+import JsonView from '@/components/common/JsonView';
 
 export default {
   name: 'SystemLogLists',

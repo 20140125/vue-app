@@ -39,8 +39,8 @@
 </template>
 
 <script>
-import SubmitButton from '../common/SubmitForm';
-import URLS from '../../api/urls';
+import SubmitButton from '@/components/common/SubmitForm';
+import URLS from '@/api/urls';
 
 export default {
   name: 'FileChmod',

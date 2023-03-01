@@ -70,8 +70,8 @@
 </template>
 
 <script>
-import AreaDialog from '../system/area/Dialog';
-import URLS from '../../api/urls';
+import AreaDialog from '@/components/system/area/Dialog';
+import URLS from '@/api/urls';
 
 export default {
   name: 'Header',

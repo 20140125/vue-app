@@ -42,8 +42,8 @@
 <script>
 
 import { rgbToHex } from '@/utils/func';
-import URLS from '../../api/urls';
-import $http from '../../tools/request';
+import URLS from '@/api/urls';
+import $http from '@/tools/request';
 
 export default {
   name: 'CommonUpload',

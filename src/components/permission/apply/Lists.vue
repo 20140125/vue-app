@@ -54,8 +54,8 @@
 </template>
 
 <script lang="js">
-import StatusRadio from '../../common/StatusRadio';
-import URLS from '../../../api/urls';
+import StatusRadio from '@/components/common/StatusRadio';
+import URLS from '@/api/urls';
 
 export default {
   name: 'PermissionLists',

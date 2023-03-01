@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { toggle } from '../mixins/toggle';
+import { toggle } from '@/components/mixins/toggle';
 
 export default {
   name: 'StaticSource',

@@ -14,7 +14,7 @@ export default {
   components: { Mail },
   methods: {
     /**
-     * todo:用戶登錄
+     * 用戶登錄
      * @param form
      * @return {Promise<void>}
      */
@@ -22,7 +22,7 @@ export default {
       await this.$store.dispatch('login/loginSYS', form);
     },
     /**
-     * todo:取消登录
+     * 取消登录
      */
     cancelLogin() {
       this.$emit('cancelLogin');

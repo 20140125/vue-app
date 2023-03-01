@@ -13,8 +13,8 @@
 
 <script>
 
-import $http from '../../tools/request';
-import URLS from '../../api/urls';
+import $http from '@/tools/request';
+import URLS from '@/api/urls';
 
 export default {
   name: 'MarkDown',

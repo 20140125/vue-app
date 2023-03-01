@@ -32,12 +32,12 @@
 </template>
 
 <script>
-import SubmitButton from '../common/SubmitForm';
-import Json from '../interface/Json';
-import URLS from '../../api/urls';
-import MarkDown from '../common/MarkDown';
-import { toggle } from '../mixins/toggle';
-import InterfaceLog from '../interface/Log';
+import SubmitButton from '@/components/common/SubmitForm';
+import Json from '@/components/interface/Json';
+import URLS from '@/api/urls';
+import MarkDown from '@/components/common/MarkDown';
+import { toggle } from '@/components/mixins/toggle';
+import InterfaceLog from '@/components/interface/Log';
 
 export default {
   name: 'InterfaceDetails',

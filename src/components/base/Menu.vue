@@ -5,7 +5,8 @@
         v-for="item in 5"
         :key="item"
         :style="`width: ${(item + 1) * Math.random() * 100 | 0}%`"
-        class="template" variant="text">
+        class="template"
+        :variant="'text'">
       </el-skeleton-item>
     </template>
     <template #default>

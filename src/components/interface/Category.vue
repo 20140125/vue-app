@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import URLS from '../../api/urls';
+import URLS from '@/api/urls';
 
 export default {
   name: 'CategoryLists',

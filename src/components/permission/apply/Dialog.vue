@@ -66,9 +66,9 @@
 </template>
 
 <script>
-import SubmitButton from '../../common/SubmitForm';
-import URLS from '../../../api/urls';
-import { toggle } from '../../mixins/toggle';
+import SubmitButton from '@/components/common/SubmitForm';
+import URLS from '@/api/urls';
+import { toggle } from '@/components/mixins/toggle';
 
 export default {
   name: 'PermissionDialog',

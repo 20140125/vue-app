@@ -20,8 +20,8 @@
 </template>
 
 <script>
-import CommonUpload from '../common/CommonUpload';
-import { toggle } from '../mixins/toggle';
+import CommonUpload from '@/components/common/CommonUpload';
+import { toggle } from '@/components/mixins/toggle';
 
 export default {
   name: 'FileUpload',

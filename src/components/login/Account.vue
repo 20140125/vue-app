@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import Identify from '../login/Identify';
+import Identify from '@/components/login/Identify';
 
 export default {
   name: 'Account',
