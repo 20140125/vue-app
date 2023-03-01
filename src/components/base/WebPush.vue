@@ -132,8 +132,10 @@ export default {
 
 <style lang="less">
 #webPush {
+  margin-top: 10px !important;
+
   .el-carousel__container {
-    height: 40px !important;
+    height: 60px !important;
     margin: 0 5px;
   }
 }
