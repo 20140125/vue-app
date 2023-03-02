@@ -1,7 +1,7 @@
 import axios from 'axios';
 import store from '@/store';
 import router from '@/route';
-import URLS from '@/api/urls';
+import { home, login } from '@/api/urls';
 
 /**
  * 判断系统
@@ -35,7 +35,7 @@ const ErrorHandler = (response) => {
 
 const TIMEOUT = 0;
 const instance = axios.create({
-  baseURL: URLS.baseURL,
+  baseURL: home.baseURL,
   timeout: TIMEOUT,
   headers: {
     common: {
@@ -46,7 +46,7 @@ const instance = axios.create({
 });
 // http request 拦截器
 instance.interceptors.request.use((config) => {
-  const authorizationURL = store.state.baseLayout.token ? [URLS.login.loginSystem, URLS.login.reportCode, URLS.login.sendMail] : [URLS.login.loginSystem, URLS.login.reportCode, URLS.login.oauthConfig, URLS.login.sendMail];
+  const authorizationURL = store.state.baseLayout.token ? [login.loginSystem, login.reportCode, login.sendMail] : [login.loginSystem, login.reportCode, login.oauthConfig, login.sendMail];
   if (authorizationURL.indexOf(config.url) === -1) {
     if (window.localStorage.getItem('token')) {
       config.headers.Authorization = store.state.baseLayout.token || window.localStorage.getItem('token');

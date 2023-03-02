@@ -1,5 +1,5 @@
 import { commonMethods } from '@/api/methods';
-import URLS from '@/api/urls';
+import { log } from '@/api/urls';
 
 export const mutations = {
   /**
@@ -29,7 +29,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      commonMethods(URLS.log.lists, payload).then(result => {
+      commonMethods(log.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
           systemLogLists: ((((result || {}).data || {}).item || {}).lists || {}).data || [],
           total: ((((result || {}).data || {}).item || {}).lists || {}).total || 0,
@@ -56,7 +56,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      commonMethods(URLS.log.get, payload).then(result => {
+      commonMethods(log.get, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
           systemLog: (((result || {}).data || {}).item || {}).lists || {},
           id: payload.id || 0

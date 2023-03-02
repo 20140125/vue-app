@@ -87,7 +87,7 @@
 <script>
 import { codemirror } from 'vue-codemirror-lite';
 import SubmitButton from '@/components/common/SubmitForm';
-import URLS from '@/api/urls';
+import { file } from '@/api/urls';
 
 /* 编辑器代码 */
 require('codemirror/mode/php/php.js');
@@ -121,7 +121,7 @@ export default {
       treeProps: { label: 'filename', children: 'children', isLeaf: false },
       fullscreen: false,
       filterText: '',
-      form: { model: { content: '', path: '' }, url: URLS.file.update, $refs: '' },
+      form: { model: { content: '', path: '' }, url: file.update, $refs: '' },
       /* 代码编辑器配置 */
       options: {
         /* 语言类型 */
@@ -159,7 +159,7 @@ export default {
         json: 'application/ld+json',
         sql: 'text/x-mysql'
       },
-      savePermission: URLS.file.update,
+      savePermission: file.update,
       fileAuth: 644
     };
   },

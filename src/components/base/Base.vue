@@ -33,7 +33,7 @@ import Header from '@/components/base/Header';
 import Menu from '@/components/base/Menu';
 import Content from '@/components/base/Content';
 import ToUp from '@/components/common/ToUp';
-import URLS from '@/api/urls';
+import { home } from '@/api/urls';
 import { setTime } from '@/utils/func';
 
 export default {
@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       isCollapse: false,
-      username: `${this.$store.state.baseLayout.username}【${(this.Permission || {}).local || URLS.baseURL}】${(this.Permission || {}).now_time || setTime(new Date())}`,
+      username: `${this.$store.state.baseLayout.username}【${this.Permission?.local || home.baseURL}】${this.Permission?.now_time || setTime(new Date())}`,
       layoutNums: {
         aside: 3,
         content: 21,

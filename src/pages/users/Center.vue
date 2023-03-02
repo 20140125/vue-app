@@ -142,7 +142,7 @@
 <script>
 import BaseLayout from '@/components/BaseLayout';
 import SubmitButton from '@/components/common/SubmitForm';
-import URLS from '@/api/urls';
+import { userCenter as center } from '@/api/urls';
 
 export default {
   name: 'Center',
@@ -173,7 +173,7 @@ export default {
       this.setOptions(this.cacheArea);
       this.loading = false;
       setTimeout(() => {
-        this.submitForm = { model: this.userCenter, $refs: this.$refs, url: URLS.userCenter.update };
+        this.submitForm = { model: this.userCenter, $refs: this.$refs, url: center.update };
       }, 1000);
     });
   },

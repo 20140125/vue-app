@@ -24,9 +24,9 @@
 </template>
 
 <script>
-import BaseLayout from '../../components/BaseLayout';
-import UsersLists from '../../components/users/user/Lists';
-import UsersDialog from '../../components/users/user/Dialog';
+import BaseLayout from '@/components/BaseLayout';
+import UsersLists from '@/components/users/user/Lists';
+import UsersDialog from '@/components/users/user/Dialog';
 
 export default {
   name: 'Users',
@@ -90,12 +90,11 @@ export default {
      * @return {Promise<void>}
      */
     async updatedUsers(form) {
-      this.$store.dispatch('role/getRoleLists', { page: 1, limit: 20, refresh: false }).then(() => {
-        this.form = JSON.parse(JSON.stringify(form));
-        this.reForm = 'updated';
-        this.syncVisible = true;
-        this.usersAttr = { roleLists: this.$store.state.role.roleLists };
-      });
+      await this.$store.dispatch('role/getRoleLists', { page: 1, limit: 20, refresh: false });
+      this.form = JSON.parse(JSON.stringify(form));
+      this.reForm = 'updated';
+      this.syncVisible = true;
+      this.usersAttr = { roleLists: this.$store.state.role.roleLists };
     }
   }
 };

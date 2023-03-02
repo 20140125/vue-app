@@ -1,5 +1,5 @@
 import { commonMethods } from '@/api/methods';
-import URLS from '@/api/urls';
+import { category, api } from '@/api/urls';
 import { setTree } from '@/utils/func';
 
 export const mutations = {
@@ -31,7 +31,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      commonMethods(URLS.interfaceCategory.lists, payload).then(result => {
+      commonMethods(category.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
           categoryLists: ((result.data || {}).item || {}).lists || {},
           categoryTree: setTree((((result || {}).data || {}).item || {}).lists || [], 0, 'children')
@@ -56,7 +56,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      commonMethods(URLS.interface.get, payload).then(result => {
+      commonMethods(api.get, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
           details: (((result || {}).data || {}).item || {}).lists || {},
           id: payload.id || 0,

@@ -71,7 +71,7 @@
 
 <script>
 import AreaDialog from '@/components/system/area/Dialog';
-import URLS from '@/api/urls';
+import { push } from '@/api/urls';
 
 export default {
   name: 'Header',
@@ -181,7 +181,7 @@ export default {
     async clearPush(item) {
       item.disabled = true;
       item.see = 1;
-      await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.push.update, model: item });
+      await this.$store.dispatch('UPDATE_ACTIONS', { url: push.update, model: item });
     }
   }
 };

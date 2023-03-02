@@ -1,5 +1,5 @@
 import { commonMethods } from '@/api/methods';
-import URLS from '@/api/urls';
+import { push } from '@/api/urls';
 
 export const mutations = {
   /**
@@ -29,7 +29,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      commonMethods(URLS.push.lists, payload).then(result => {
+      commonMethods(push.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
           pushLists: ((((result || {}).data || {}).item || {}).lists || {}).data || [],
           total: ((((result || {}).data || {}).item || {}).lists || {}).total || 0,

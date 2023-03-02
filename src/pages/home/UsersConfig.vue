@@ -101,7 +101,7 @@
 
 <script>
 import HomeLayout from '@/components/HomeLayout';
-import URLS from '@/api/urls';
+import { userCenter } from '@/api/urls';
 
 export default {
   name: 'UsersConfig',
@@ -225,7 +225,7 @@ export default {
         spinner: 'el-icon-loading',
         background: 'rgba(225, 225, 224, 0.8)'
       });
-      await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.userCenter.update, model: this.userSetting });
+      await this.$store.dispatch('UPDATE_ACTIONS', { url: userCenter.update, model: this.userSetting });
       await this.getUserSettings(true);
       await this.$router.push({ path: '/home/users/more' });
       loading.close();

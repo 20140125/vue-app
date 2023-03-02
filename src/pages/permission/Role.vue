@@ -29,10 +29,10 @@
 </template>
 
 <script>
-import BaseLayout from '../../components/BaseLayout';
-import RoleLists from '../../components/permission/role/Lists';
-import RoleDialog from '../../components/permission/role/Dialog';
-import URLS from '../../api/urls';
+import BaseLayout from '@/components/BaseLayout';
+import RoleLists from '@/components/permission/role/Lists';
+import RoleDialog from '@/components/permission/role/Dialog';
+import { role } from '@/api/urls';
 
 export default {
   name: 'Role',
@@ -44,7 +44,7 @@ export default {
       syncVisible: false,
       reForm: 'created',
       form: {},
-      savePermission: URLS.role.save,
+      savePermission: role.save,
       authAttr: { authLists: [], defaultChecked: [] }
     };
   },

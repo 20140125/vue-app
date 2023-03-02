@@ -42,7 +42,7 @@
 <script>
 
 import { rgbToHex } from '@/utils/func';
-import URLS from '@/api/urls';
+import { home, file } from '@/api/urls';
 import $http from '@/tools/request';
 
 export default {
@@ -95,7 +95,7 @@ export default {
     action: {
       type: String,
       default: () => {
-        return `${URLS.baseURL}${URLS.file.upload}`;
+        return `${home.baseURL}${file.upload}`;
       }
     },
     /* 自动上传 */

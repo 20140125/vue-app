@@ -39,8 +39,8 @@
 </template>
 
 <script>
-import StatusRadio from '../../common/StatusRadio';
-import urls from '../../../api/urls';
+import StatusRadio from '@/components/common/StatusRadio';
+import { oauth } from '@/api/urls';
 
 export default {
   name: 'OAuthLists',
@@ -48,7 +48,7 @@ export default {
   props: ['oAuthLists'],
   data() {
     return {
-      URL: urls.oauth.update
+      URL: oauth.update
     };
   }
 };

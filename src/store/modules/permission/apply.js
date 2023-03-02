@@ -1,5 +1,5 @@
 import { commonMethods } from '@/api/methods';
-import URLS from '@/api/urls';
+import { permission } from '@/api/urls';
 import { setTree } from '@/utils/func';
 
 export const mutations = {
@@ -30,7 +30,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      commonMethods(URLS.permission.lists, payload).then(result => {
+      commonMethods(permission.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
           permissionLists: ((((result || {}).data || {}).item || {}).lists || {}).data || [],
           total: ((((result || {}).data || {}).item || {}).lists || {}).total || 0,
@@ -57,7 +57,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      commonMethods(URLS.permission.get, payload).then(result => {
+      commonMethods(permission.get, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
           authLists: setTree(((((result || {}).data || {}).item || {}).lists || {}).authLists || []),
           user_id: ((((result || {}).data || {}).item || {}).lists || {}).user_id || 0

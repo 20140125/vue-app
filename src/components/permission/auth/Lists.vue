@@ -33,8 +33,8 @@
 </template>
 
 <script lang="js">
-import StatusRadio from '../../common/StatusRadio';
-import URLS from '../../../api/urls';
+import StatusRadio from '@/components/common/StatusRadio';
+import { auth } from '@/api/urls';
 
 export default {
   name: 'AuthLists',
@@ -47,8 +47,8 @@ export default {
   components: { StatusRadio },
   data() {
     return {
-      URL: URLS.auth.update,
-      save: URLS.auth.save
+      URL: auth.update,
+      save: auth.save
     };
   }
 };

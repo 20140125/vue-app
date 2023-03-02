@@ -26,10 +26,10 @@
 </template>
 
 <script>
-import JsonView from '../../common/JsonView';
-import URLS from '../../../api/urls';
-import SubmitButton from '../../common/SubmitForm';
-import { toggle } from '../../mixins/toggle';
+import JsonView from '@/components/common/JsonView';
+import { area } from '@/api/urls';
+import SubmitButton from '@/components/common/SubmitForm';
+import { toggle } from '@/components/mixins/toggle';
 
 export default {
   name: 'AreaDialog',
@@ -50,7 +50,7 @@ export default {
     return {
       localForm: this.form,
       submitForm: {},
-      savePermission: URLS.area.weather
+      savePermission: area.weather
     };
   },
   watch: {
@@ -58,7 +58,7 @@ export default {
       this.localForm = this.form;
       this.$nextTick(() => {
         setTimeout(() => {
-          this.submitForm = { model: this.localForm, $refs: this.$refs, url: URLS.area.weather };
+          this.submitForm = { model: this.localForm, $refs: this.$refs, url: area.weather };
         }, 1000);
       });
     }

@@ -31,7 +31,7 @@
 import BaseLayout from '@/components/BaseLayout';
 import SystemConfigLists from '@/components/system/config/Lists';
 import SystemConfigDialog from '@/components/system/config/Dialog';
-import URLS from '@/api/urls';
+import { config } from '@/api/urls';
 
 export default {
   name: 'SystemConfig',
@@ -48,7 +48,7 @@ export default {
       syncVisible: false,
       reForm: 'created',
       form: {},
-      savePermission: URLS.config.save
+      savePermission: config.save
     };
   },
   mounted() {

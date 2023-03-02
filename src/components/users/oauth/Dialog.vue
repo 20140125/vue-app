@@ -34,9 +34,9 @@
 </template>
 
 <script>
-import SubmitButton from '../../common/SubmitForm';
-import { toggle } from '../../mixins/toggle';
-import URLS from '../../../api/urls';
+import SubmitButton from '@/components/common/SubmitForm';
+import { toggle } from '@/components/mixins/toggle';
+import { oauth } from '@/api/urls';
 
 export default {
   name: 'OAuthDialog',
@@ -64,7 +64,7 @@ export default {
           this.submitForm = {
             model: { email: this.localForm.email, code: this.localForm.code, id: this.localForm.id },
             $refs: this.$refs,
-            url: URLS.oauth.update
+            url: oauth.update
           };
         }, 1000);
       });

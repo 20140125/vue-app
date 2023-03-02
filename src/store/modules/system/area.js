@@ -1,5 +1,5 @@
 import { commonMethods } from '@/api/methods';
-import URLS from '@/api/urls';
+import { area } from '@/api/urls';
 import { setTree } from '@/utils/func';
 
 export const mutations = {
@@ -30,7 +30,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      commonMethods(URLS.area.lists, payload).then(result => {
+      commonMethods(area.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', { areaLists: ((result.data || {}).item || {}).lists || [] });
         resolve(result);
       }).catch(error => {
@@ -53,7 +53,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      commonMethods(URLS.area.cache, payload).then(result => {
+      commonMethods(area.cache, payload).then(result => {
         if (payload.children) {
           commit('UPDATE_MUTATIONS', { cacheArea: setTree(((result.data || {}).item || {}).lists || [], 0, 'children', 'parent_id') || [] });
         } else {

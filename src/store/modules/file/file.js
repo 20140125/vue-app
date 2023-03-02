@@ -1,5 +1,5 @@
 import { commonMethods } from '@/api/methods';
-import URLS from '@/api/urls';
+import { file } from '@/api/urls';
 
 export const mutations = {
   /**
@@ -28,7 +28,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      commonMethods(URLS.file.lists, payload).then(result => {
+      commonMethods(file.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
           fileLists: (((result || {}).data || {}).item || {}).lists || [],
           basename: payload.basename
@@ -58,7 +58,7 @@ export const actions = {
       });
     }
     return new Promise((resolve, reject) => {
-      commonMethods(URLS.file.read, payload).then(result => {
+      commonMethods(file.read, payload).then(result => {
         payload.content = (((result || {}).data || {}).item || {}).lists || {};
         dispatch('addTabs', payload);
         resolve(result);

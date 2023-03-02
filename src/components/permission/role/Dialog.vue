@@ -32,9 +32,9 @@
 </template>
 
 <script>
-import SubmitButton from '../../common/SubmitForm';
-import URLS from '../../../api/urls';
-import { toggle } from '../../mixins/toggle';
+import SubmitButton from '@/components/common/SubmitForm';
+import { role } from '@/api/urls';
+import { toggle } from '@/components/mixins/toggle';
 
 export default {
   name: 'RoleDialog',
@@ -60,7 +60,7 @@ export default {
           this.submitForm = {
             model: this.localForm,
             $refs: this.$refs,
-            url: this.reForm === 'created' ? URLS.role.save : URLS.role.update
+            url: this.reForm === 'created' ? role.save : role.update
           };
         }, 1000);
       });

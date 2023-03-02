@@ -54,11 +54,11 @@
 </template>
 
 <script>
-import BaseLayout from '../../components/BaseLayout';
-import PushLists from '../../components/system/push/Lists';
-import PushDialog from '../../components/system/push/Dialog';
+import BaseLayout from '@/components/BaseLayout';
+import PushLists from '@/components/system/push/Lists';
+import PushDialog from '@/components/system/push/Dialog';
 import { setTime } from '@/utils/func';
-import URLS from '../../api/urls';
+import { push } from '@/api/urls';
 
 export default {
   name: 'Push',
@@ -85,7 +85,7 @@ export default {
       reForm: 'created',
       form: {},
       userLists: [],
-      savePermission: URLS.push.save
+      savePermission: push.save
     };
   },
   computed: {

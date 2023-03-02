@@ -16,9 +16,9 @@
 </template>
 
 <script>
-import BaseLayout from '../../components/BaseLayout';
-import AreaLists from '../../components/system/area/Lists';
-import AreaDialog from '../../components/system/area/Dialog';
+import BaseLayout from '@/components/BaseLayout';
+import AreaLists from '@/components/system/area/Lists';
+import AreaDialog from '@/components/system/area/Dialog';
 
 export default {
   name: 'Area',

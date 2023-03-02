@@ -55,7 +55,7 @@
 
 <script lang="js">
 import StatusRadio from '@/components/common/StatusRadio';
-import URLS from '@/api/urls';
+import { permission, home } from '@/api/urls';
 
 export default {
   name: 'PermissionLists',
@@ -63,8 +63,8 @@ export default {
   components: { StatusRadio },
   data() {
     return {
-      URL: URLS.permission.update,
-      baseURL: URLS.baseURL
+      URL: permission.update,
+      baseURL: home.baseURL
     };
   }
 };

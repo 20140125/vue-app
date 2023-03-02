@@ -35,10 +35,10 @@
 </template>
 
 <script>
-import BaseLayout from '../../components/BaseLayout';
-import AuthLists from '../../components/permission/auth/Lists';
-import AuthDialog from '../../components/permission/auth/Dialog';
-import URLS from '../../api/urls';
+import BaseLayout from '@/components/BaseLayout';
+import AuthLists from '@/components/permission/auth/Lists';
+import AuthDialog from '@/components/permission/auth/Dialog';
+import { auth } from '@/api/urls';
 
 export default {
   name: 'Auth',
@@ -49,7 +49,7 @@ export default {
       form: { name: '', href: '', pid: '', status: 1 },
       syncVisible: false,
       reForm: 'created',
-      savePermission: URLS.auth.save
+      savePermission: auth.save
     };
   },
   computed: {

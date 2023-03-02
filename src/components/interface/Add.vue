@@ -31,7 +31,7 @@
 <script>
 import { toggle } from '@/components/mixins/toggle';
 import SubmitButton from '@/components/common/SubmitForm';
-import URLS from '@/api/urls';
+import { category } from '@/api/urls';
 
 export default {
   name: 'AddCategory',
@@ -56,7 +56,7 @@ export default {
           this.submitForm = {
             model: this.localForm,
             $refs: this.$refs,
-            url: this.reForm === 'created' ? URLS.interfaceCategory.save : URLS.interfaceCategory.update
+            url: this.reForm === 'created' ? category.save : category.update
           };
         }, 1000);
       });

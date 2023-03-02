@@ -1,5 +1,5 @@
 import { commonMethods } from '@/api/methods';
-import URLS from '@/api/urls';
+import { auth } from '@/api/urls';
 import { setTree } from '@/utils/func';
 
 export const mutations = {
@@ -32,7 +32,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      commonMethods(URLS.auth.lists, payload).then(result => {
+      commonMethods(auth.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
           authTree: setTree((((result || {}).data || {}).item || {}).lists || [], 0, 'children'),
           authLists: (((result || {}).data || {}).item || {}).lists || []

@@ -40,7 +40,7 @@
 
 <script>
 import SubmitButton from '@/components/common/SubmitForm';
-import URLS from '@/api/urls';
+import { file } from '@/api/urls';
 
 export default {
   name: 'FileChmod',
@@ -69,7 +69,7 @@ export default {
     };
     return {
       visible: this.chmodVisible,
-      form: { model: { auth: '', all: [], user: [], common: [] }, url: URLS.file.chmod, $refs: this.$refs },
+      form: { model: { auth: '', all: [], user: [], common: [] }, url: file.chmod, $refs: this.$refs },
       chmodAttr: [{ 'id': 4, 'value': '读取' }, { 'id': 2, 'value': '写入' }, { 'id': 1, 'value': '执行' }],
       chmodAuth: {
         1: ['执行'],

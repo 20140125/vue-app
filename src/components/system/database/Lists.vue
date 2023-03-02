@@ -39,7 +39,7 @@
           修改
         </el-button>
         <el-button
-          v-if="Permission.auth.indexOf(URLS.backup) > -1"
+          v-if="Permission.auth.indexOf(database.backup) > -1"
           plain
           size="mini"
           type="primary"
@@ -47,7 +47,7 @@
           备份
         </el-button>
         <el-button
-          v-if="Permission.auth.indexOf(URLS.repair) > -1"
+          v-if="Permission.auth.indexOf(database.repair) > -1"
           plain
           size="mini"
           type="primary"
@@ -55,7 +55,7 @@
           修复
         </el-button>
         <el-button
-          v-if="Permission.auth.indexOf(URLS.optimize) > -1"
+          v-if="Permission.auth.indexOf(database.optimize) > -1"
           plain
           size="mini"
           type="primary"
@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import URLS from '@/api/urls';
+import { database } from '@/api/urls';
 
 export default {
   name: 'databaseLists',
@@ -76,7 +76,7 @@ export default {
   data() {
     return {
       name: '',
-      URLS: URLS.database
+      database
     };
   },
   methods: {
@@ -91,7 +91,7 @@ export default {
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
       });
-      await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.database.backup, model: { name: table.name, form: 'all' } });
+      await this.$store.dispatch('UPDATE_ACTIONS', { url: database.backup, model: { name: table.name, form: 'all' } });
       loading.close();
     },
     /**
@@ -105,7 +105,7 @@ export default {
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
       });
-      await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.database.repair, model: { name: table.name, engine: table.engine } });
+      await this.$store.dispatch('UPDATE_ACTIONS', { url: database.repair, model: { name: table.name, engine: table.engine } });
       loading.close();
     },
     /**
@@ -119,7 +119,7 @@ export default {
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
       });
-      await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.database.optimize, model: { name: table.name, engine: table.engine } });
+      await this.$store.dispatch('UPDATE_ACTIONS', { url: database.optimize, model: { name: table.name, engine: table.engine } });
       loading.close();
     },
     /**
@@ -138,7 +138,7 @@ export default {
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
       });
-      await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.database.alter, model: { name: table.name, comment: table.comment } });
+      await this.$store.dispatch('UPDATE_ACTIONS', { url: database.alter, model: { name: table.name, comment: table.comment } });
       loading.close();
       this.name = '';
     }

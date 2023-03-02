@@ -98,10 +98,10 @@
 </template>
 
 <script>
-import SubmitButton from '../../common/SubmitForm';
-import URLS from '../../../api/urls';
-import config from './index';
-import { toggle } from '../../mixins/toggle';
+import SubmitButton from '@/components/common/SubmitForm';
+import { config } from '@/api/urls';
+import { checkConfigChildren } from '@/components/system/config/index';
+import { toggle } from '@/components/mixins/toggle';
 
 export default {
   name: 'SystemConfigDialog',
@@ -120,7 +120,7 @@ export default {
           message: '请输入配置属性',
           trigger: 'blur',
           type: 'array'
-        }, { validator: config.checkConfigChildren, trigger: 'blur' }]
+        }, { validator: checkConfigChildren, trigger: 'blur' }]
       }
     };
   },
@@ -132,7 +132,7 @@ export default {
           this.submitForm = {
             model: this.localForm,
             $refs: this.$refs,
-            url: this.reForm === 'created' ? URLS.config.save : URLS.config.update
+            url: this.reForm === 'created' ? config.save : config.update
           };
         }, 1000);
       });

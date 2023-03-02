@@ -1,5 +1,5 @@
 import { commonMethods } from '@/api/methods';
-import URLS from '@/api/urls';
+import { home, timeline } from '@/api/urls';
 import { setTree } from '@/utils/func';
 
 export const state = {
@@ -34,7 +34,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      commonMethods(URLS.home.getMenu, payload).then(result => {
+      commonMethods(home.getMenu, payload).then(result => {
         commit('UPDATE_MUTATIONS', { menuLists: setTree((((result || {}).data || {}).item || {}).lists || []) });
         resolve(result);
       }).catch(error => {
@@ -56,7 +56,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      commonMethods(URLS.timeline.lists, payload).then(result => {
+      commonMethods(timeline.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', { timeline: ((((result || {}).data || {}).item || {}).lists || {}).data || [] });
         resolve(result);
       }).catch(error => {

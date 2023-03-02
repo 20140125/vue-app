@@ -1,5 +1,5 @@
 import { commonMethods } from '@/api/methods';
-import URLS from '@/api/urls';
+import { database } from '@/api/urls';
 
 export const mutations = {
   /**
@@ -29,7 +29,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      commonMethods(URLS.database.lists, payload).then(result => {
+      commonMethods(database.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', { databaseLists: ((result.data || {}).item || {}).lists || [] });
         resolve(result);
       }).catch(error => {

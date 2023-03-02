@@ -13,7 +13,7 @@
 <script>
 import BaseLayout from '@/components/BaseLayout';
 import SystemLogLists from '@/components/system/log/Lists';
-import URLS from '@/api/urls';
+import { log } from '@/api/urls';
 
 export default {
   name: 'SystemLog',
@@ -67,7 +67,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async () => {
-        await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.log.delete, model: { id: scope.id } });
+        await this.$store.dispatch('UPDATE_ACTIONS', { url: log.delete, model: { id: scope.id } });
         this.pagination.refresh = true;
         await this.getSystemLogLists(this.pagination);
       }).catch(() => {

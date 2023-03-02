@@ -23,9 +23,9 @@
 </template>
 
 <script>
-import BaseLayout from '../../components/BaseLayout';
-import OAuthLists from '../../components/users/oauth/Lists';
-import OAuthDialog from '../../components/users/oauth/Dialog';
+import BaseLayout from '@/components/BaseLayout';
+import OAuthLists from '@/components/users/oauth/Lists';
+import OAuthDialog from '@/components/users/oauth/Dialog';
 
 export default {
   name: 'OAuth',

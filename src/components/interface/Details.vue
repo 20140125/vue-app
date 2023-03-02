@@ -34,7 +34,7 @@
 <script>
 import SubmitButton from '@/components/common/SubmitForm';
 import Json from '@/components/interface/Json';
-import URLS from '@/api/urls';
+import { api } from '@/api/urls';
 import MarkDown from '@/components/common/MarkDown';
 import { toggle } from '@/components/mixins/toggle';
 import InterfaceLog from '@/components/interface/Log';
@@ -58,7 +58,7 @@ export default {
           this.submitForm = {
             model: this.localForm,
             $refs: this.$refs.json.$refs,
-            url: this.reForm === 'created' ? URLS.interface.save : URLS.interface.update
+            url: this.reForm === 'created' ? api.save : api.update
           };
         }, 1000);
       }
@@ -74,7 +74,7 @@ export default {
       this.localForm.markdown = text;
       this.localForm.html = html;
       this.$store.dispatch('UPDATE_ACTIONS', {
-        url: this.reForm === 'created' ? URLS.interface.save : URLS.interface.update,
+        url: this.reForm === 'created' ? api.save : api.update,
         model: this.localForm
       }).then(() => {
         this.$emit('getInterfaceCategory', true);

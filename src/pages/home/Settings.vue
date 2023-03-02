@@ -39,14 +39,14 @@ export default {
   },
   methods: {
     /**
-     * todo:获取配置
+     * 获取配置
      * @param item
      */
     getSetting(item) {
       this.closeLoading(item);
     },
     /**
-     * todo:关闭弹框
+     * 关闭弹框
      * @param item
      */
     closeLoading(item = '') {

@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import BaseLayout from '../components/BaseLayout';
+import BaseLayout from '@/components/BaseLayout';
 import { removeTabs } from '@/utils/func';
 
 export default {

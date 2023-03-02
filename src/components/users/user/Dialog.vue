@@ -60,10 +60,10 @@
 </template>
 
 <script>
-import SubmitButton from '../../common/SubmitForm';
-import CommonUpload from '../../common/CommonUpload';
-import { toggle } from '../../mixins/toggle';
-import urls from '../../../api/urls';
+import SubmitButton from '@/components/common/SubmitForm';
+import CommonUpload from '@/components/common/CommonUpload';
+import { toggle } from '@/components/mixins/toggle';
+import { users } from '@/api/urls';
 
 export default {
   name: 'UsersDialog',
@@ -92,7 +92,7 @@ export default {
           this.submitForm = {
             model: this.localForm,
             $refs: this.$refs,
-            url: this.reForm === 'created' ? urls.users.save : urls.users.update
+            url: users.update
           };
         }, 1000);
       });
@@ -104,7 +104,7 @@ export default {
      * @param response
      */
     uploadSuccess(response) {
-      this.localForm.avatar_url = (((response || {}).item || {}).lists || {}).src || '';
+      this.localForm.avatar_url = response?.item?.lists?.src || '';
     }
   }
 };

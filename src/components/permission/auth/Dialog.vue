@@ -46,9 +46,9 @@
 </template>
 
 <script>
-import SubmitButton from '../../common/SubmitForm';
-import URLS from '../../../api/urls';
-import { toggle } from '../../mixins/toggle';
+import SubmitButton from '@/components/common/SubmitForm';
+import { auth } from '@/api/urls';
+import { toggle } from '@/components/mixins/toggle';
 
 export default {
   name: 'AuthDialog',
@@ -88,7 +88,7 @@ export default {
           this.submitForm = {
             model: this.localForm,
             $refs: this.$refs,
-            url: this.reForm === 'created' ? URLS.auth.save : URLS.auth.update
+            url: this.reForm === 'created' ? auth.save : auth.update
           };
         }, 1000);
       });

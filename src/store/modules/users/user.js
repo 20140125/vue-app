@@ -1,5 +1,5 @@
 import { commonMethods } from '@/api/methods';
-import URLS from '@/api/urls';
+import { users, userCenter } from '@/api/urls';
 
 export const state = {
   userCenter: {}
@@ -33,7 +33,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      commonMethods(URLS.users.lists, payload).then((result) => {
+      commonMethods(users.lists, payload).then((result) => {
         commit('UPDATE_MUTATIONS', {
           usersLists: ((((result || {}).data || {}).item || {}).lists || {}).data || [],
           total: ((((result || {}).data || {}).item || {}).lists || {}).total || 0,
@@ -59,7 +59,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      commonMethods(URLS.userCenter.get, {}).then(result => {
+      commonMethods(userCenter.get, {}).then(result => {
         commit('UPDATE_MUTATIONS', { userCenter: (((result || {}).data || {}).item || {}).lists || {} });
         resolve(result);
       }).catch(error => {
@@ -82,7 +82,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      commonMethods(URLS.users.cache, payload).then(result => {
+      commonMethods(users.cache, payload).then(result => {
         commit('UPDATE_MUTATIONS', { cacheUsers: (((result || {}).data || {}).item || {}).lists || [] });
         resolve(result);
       }).catch(error => {

@@ -25,9 +25,9 @@
 </template>
 
 <script>
-import Account from '../components/login/Account';
-import Mail from '../components/login/Mail';
-import OAuth from '../components/login/Oauth';
+import Account from '@/components/login/Account';
+import Mail from '@/components/login/Mail';
+import OAuth from '@/components/login/Oauth';
 
 export default {
   name: 'Login',

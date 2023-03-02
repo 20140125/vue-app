@@ -1,5 +1,5 @@
 import { commonMethods } from '@/api/methods';
-import URLS from '@/api/urls';
+import { login } from '@/api/urls';
 import router from '@/route/index';
 
 export const mutations = {
@@ -28,7 +28,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      commonMethods(URLS.login.checkAuthorized, authorized).then(result => {
+      commonMethods(login.checkAuthorized, authorized).then(result => {
         commit('UPDATE_MUTATIONS', {
           userInfo: (((result || {}).data || {}).item || {}).lists || {},
           isAuthorized: true
@@ -51,7 +51,7 @@ export const actions = {
    */
   async loginSYS({ commit, state }, payload) {
     return new Promise((resolve, reject) => {
-      commonMethods(URLS.login.loginSystem, payload).then(result => {
+      commonMethods(login.loginSystem, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
           userInfo: (((result || {}).data || {}).item || {}).lists || {},
           isAuthorized: true
@@ -79,7 +79,7 @@ export const actions = {
    */
   async logoutSYS({ commit }, payload) {
     return new Promise((resolve, reject) => {
-      commonMethods(URLS.login.logoutSystem, payload).then(result => {
+      commonMethods(login.logoutSystem, payload).then(result => {
         commit('UPDATE_MUTATIONS', { userInfo: {}, isAuthorized: false });
         commit('UPDATE_MUTATIONS', { baseLayout: { token: '', username: 'tourist' } }, { root: true });
         window.localStorage.removeItem('token');
@@ -100,7 +100,7 @@ export const actions = {
    */
   async reportCode({ commit }, payload) {
     return new Promise((resolve, reject) => {
-     commonMethods(URLS.login.reportCode, payload).then(result => {
+     commonMethods(login.reportCode, payload).then(result => {
         commit('UPDATE_MUTATIONS', { verifyCode: ((((result || {}).data || {}).item || {}).lists || {}).key || payload.verify_code });
         resolve(result);
       }).catch(error => {
@@ -117,7 +117,7 @@ export const actions = {
    */
   async sendMail({ commit }, payload) {
     return new Promise((resolve, reject) => {
-      commonMethods(URLS.login.sendMail, payload).then(result => {
+      commonMethods(login.sendMail, payload).then(result => {
         commit('UPDATE_MUTATIONS', { mailLogin: true });
         resolve(result);
       }).catch(error => {
@@ -139,7 +139,7 @@ export const actions = {
       return false;
     }
     return new Promise((resolve, reject) => {
-      commonMethods(URLS.login.oauthConfig, payload).then(result => {
+      commonMethods(login.oauthConfig, payload).then(result => {
         commit('UPDATE_MUTATIONS', { oauthConfig: (((result || {}).data || {}).item || {}).lists || [] });
         resolve(result);
       }).catch(error => {

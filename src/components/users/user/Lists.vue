@@ -33,8 +33,8 @@
 </template>
 
 <script lang="js">
-import StatusRadio from '../../common/StatusRadio';
-import Urls from '../../../api/urls';
+import StatusRadio from '@/components/common/StatusRadio';
+import { users } from '@/api/urls';
 
 export default {
   name: 'UsersLists',
@@ -42,7 +42,7 @@ export default {
   props: ['usersLists'],
   data() {
     return {
-      URL: Urls.users.update
+      URL: users.update
     };
   }
 };

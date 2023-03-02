@@ -44,11 +44,11 @@
 </template>
 
 <script>
-import BaseLayout from '../../components/BaseLayout';
-import CategoryLists from '../../components/interface/Category';
-import InterfaceDetails from '../../components/interface/Details';
-import AddCategory from '../../components/interface/Add';
-import URLS from '../../api/urls';
+import BaseLayout from '@/components/BaseLayout';
+import CategoryLists from '@/components/interface/Category';
+import InterfaceDetails from '@/components/interface/Details';
+import AddCategory from '@/components/interface/Add';
+import { api } from '@/api/urls';
 
 export default {
   name: 'Interface',
@@ -69,7 +69,7 @@ export default {
         ],
         response_string: [], remark: '接口调用必须添加header头Authorization以便验证用户的合法性', apiLog: []
       },
-      savePermission: URLS.interface.save
+      savePermission: api.save
     };
   },
   computed: {

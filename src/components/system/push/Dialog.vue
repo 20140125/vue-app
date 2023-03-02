@@ -63,10 +63,10 @@
 </template>
 
 <script>
-import SubmitButton from '../../common/SubmitForm';
-import URLS from '../../../api/urls';
+import SubmitButton from '@/components/common/SubmitForm';
+import { push } from '@/api/urls';
 import { setTime } from '@/utils/func';
-import { toggle } from '../../mixins/toggle';
+import { toggle } from '@/components/mixins/toggle';
 
 export default {
   name: 'PushDialog',
@@ -94,7 +94,7 @@ export default {
           this.submitForm = {
             model: this.localForm,
             $refs: this.$refs,
-            url: this.reForm === 'created' ? URLS.push.save : URLS.push.update
+            url: this.reForm === 'created' ? push.save : push.update
           };
         }, 1000);
       });

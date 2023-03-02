@@ -67,7 +67,7 @@
 
 <script>
 import SubmitButton from '@/components/common/SubmitForm';
-import URLS from '@/api/urls';
+import { permission } from '@/api/urls';
 import { toggle } from '@/components/mixins/toggle';
 
 export default {
@@ -117,7 +117,7 @@ export default {
           this.submitForm = {
             model: this.localForm,
             $refs: this.$refs,
-            url: this.reForm === 'created' ? URLS.permission.save : URLS.permission.update
+            url: this.reForm === 'created' ? permission.save : permission.update
           };
           this.localForm.user_id = this.$store.state.login.userInfo.id;
           await this.$parent.$parent.$parent.getUserAuth(this.localForm.user_id);

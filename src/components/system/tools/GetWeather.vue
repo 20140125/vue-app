@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import JsonView from '../../common/JsonView';
-import URLS from '../../../api/urls';
+import JsonView from '@/components/common/JsonView';
+import { tools } from '@/api/urls';
 
 export default {
   name: 'GetWeather',
@@ -65,7 +65,7 @@ export default {
     async getWeather(item) {
       this.cityName = item.name;
       await this.$store.dispatch('UPDATE_ACTIONS', {
-        url: URLS.tools.getWeather,
+        url: tools.getWeather,
         model: { city_name: this.cityName }
       }).then((response) => {
         let result = (((response || {}).data || {}).item || {}).lists || {};

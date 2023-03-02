@@ -1,5 +1,5 @@
 import { commonMethods } from '@/api/methods';
-import URLS from '@/api/urls';
+import { image } from '@/api/urls';
 
 export const state = {
   imageLists: {
@@ -78,7 +78,7 @@ export const actions = {
    */
   getImageLists({ commit, state }, payload) {
     return new Promise((resolve, reject) => {
-      commonMethods(payload.value === 'index' ? URLS.image.list : URLS.image.hot, payload).then((result) => {
+      commonMethods(payload.value === 'index' ? image.list : image.hot, payload).then((result) => {
         switch (payload.type) {
           case 'index':
             commit('UPDATE_MUTATIONS', {
@@ -136,7 +136,7 @@ export const actions = {
    */
   getConfiguration({ commit, state }, payload) {
     return new Promise((resolve, reject) => {
-      commonMethods(URLS.image.config, payload).then((result) => {
+      commonMethods(image.config, payload).then((result) => {
         switch (payload.type) {
           case 'notice':
             commit('UPDATE_MUTATIONS', {

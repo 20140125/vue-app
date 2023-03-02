@@ -90,8 +90,8 @@ export default {
             searchKeys: this.pagination.name
           },
           index: {
-            lists: this.$store.state.index.imageLists.index
-            , total: 0
+            lists: this.$store.state.index.imageLists.index,
+            total: 0
           }
         }
       });

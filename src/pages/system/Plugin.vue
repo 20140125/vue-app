@@ -7,9 +7,9 @@
 </template>
 
 <script>
-import BaseLayout from '../../components/BaseLayout';
-import PluginLists from '../../components/system/plugin/Lists';
-import URLS from '../../api/urls';
+import BaseLayout from '@/components/BaseLayout';
+import PluginLists from '@/components/system/plugin/Lists';
+import { config } from '@/api/urls';
 export default {
   name: 'Plugin',
   components: { PluginLists, BaseLayout },
@@ -43,7 +43,7 @@ export default {
      * @returns {Promise<void>}
      */
     async updatePlugin(scope) {
-      await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.config.plugin, model: { status: scope.status === 1 ? 2 : 1, id: scope.id, pid: scope.pid } });
+      await this.$store.dispatch('UPDATE_ACTIONS', { url: config.plugin, model: { status: scope.status === 1 ? 2 : 1, id: scope.id, pid: scope.pid } });
       this.loading = true;
       await this.getPlugin();
     }

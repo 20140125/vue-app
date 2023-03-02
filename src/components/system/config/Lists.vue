@@ -41,8 +41,8 @@
 </template>
 
 <script lang="js">
-import StatusRadio from '../../common/StatusRadio';
-import URLS from '../../../api/urls';
+import StatusRadio from '@/components/common/StatusRadio';
+import { config } from '@/api/urls';
 
 export default {
   name: 'SystemConfigLists',
@@ -50,7 +50,7 @@ export default {
   props: ['configLists'],
   data() {
     return {
-      URL: URLS.config.update
+      URL: config.update
     };
   }
 };

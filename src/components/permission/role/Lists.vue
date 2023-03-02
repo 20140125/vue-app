@@ -30,7 +30,7 @@
 
 <script lang="js">
 import StatusRadio from '@/components/common/StatusRadio';
-import URLS from '@/api/urls';
+import { role } from '@/api/urls';
 
 export default {
   name: 'RoleLists',
@@ -38,7 +38,7 @@ export default {
   props: ['roleLists'],
   data() {
     return {
-      URL: URLS.role.update
+      URL: role.update
     };
   }
 };

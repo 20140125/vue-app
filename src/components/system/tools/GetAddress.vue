@@ -16,8 +16,8 @@
 </template>
 
 <script lang="js">
-import AMap from '../../system/tools/AMap';
-import URLS from '../../../api/urls';
+import AMap from '@/components/system/tools/AMap';
+import { tools } from '@/api/urls';
 
 export default {
   name: 'GetAddress',
@@ -36,7 +36,7 @@ export default {
   methods: {
     async getAddress() {
       await this.$store.dispatch('UPDATE_ACTIONS', {
-        url: URLS.tools.getAddress,
+        url: tools.getAddress,
         model: { ip_address: this.ip_address }
       }).then((response) => {
         let result = (((response || {}).data || {}).item || {}).lists || {

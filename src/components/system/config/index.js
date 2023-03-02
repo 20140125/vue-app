@@ -4,7 +4,7 @@
  * @param value
  * @param callback
  */
-const checkConfigChildren = (rule, value, callback) => {
+export const checkConfigChildren = (rule, value, callback) => {
   try {
     let err = 0;
     value.forEach(item => {
@@ -19,8 +19,4 @@ const checkConfigChildren = (rule, value, callback) => {
   } catch (e) {
     callback(new Error('配置属性错误'));
   }
-};
-
-export default {
-  checkConfigChildren
 };

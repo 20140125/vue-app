@@ -34,11 +34,10 @@
 </template>
 
 <script>
-import BaseLayout from '../../components/BaseLayout';
-import PermissionLists from '../../components/permission/apply/Lists';
-import PermissionDialog from '../../components/permission/apply/Dialog';
-import URLS from '../../api/urls';
-
+import BaseLayout from '@/components/BaseLayout';
+import PermissionLists from '@/components/permission/apply/Lists';
+import PermissionDialog from '@/components/permission/apply/Dialog';
+import { permission as apply } from '@/api/urls';
 export default {
   name: 'Apply',
   components: { PermissionDialog, PermissionLists, BaseLayout },
@@ -50,7 +49,7 @@ export default {
       reForm: 'created',
       form: {},
       permissionAttr: { userLists: [], authList: [], checkedKeys: [] },
-      savePermission: URLS.permission.save
+      savePermission: apply.save
     };
   },
   computed: {
@@ -131,7 +130,7 @@ export default {
      * @return {Promise<void>}
      */
     async permissionUpdate(form) {
-      await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.permission.update, model: { id: form.id, status: form.status } });
+      await this.$store.dispatch('UPDATE_ACTIONS', { url: apply.update, model: { id: form.id, status: form.status } });
       await this.getPermissionApply({ page: 1, limit: 15, show_page: true, refresh: true });
     }
   }

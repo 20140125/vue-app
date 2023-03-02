@@ -14,7 +14,7 @@
 <script>
 
 import $http from '@/tools/request';
-import URLS from '@/api/urls';
+import { home, file } from '@/api/urls';
 
 export default {
   name: 'MarkDown',
@@ -40,7 +40,7 @@ export default {
   data() {
     return {
       model: this.markdown,
-      action: URLS.baseURL + URLS.file.upload
+      action: `${home.baseURL}${file.upload}`
     };
   },
   methods: {

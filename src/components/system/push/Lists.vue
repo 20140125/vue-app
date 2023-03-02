@@ -52,7 +52,7 @@
 
 <script lang="js">
 
-import urls from '../../../api/urls';
+import { push } from '@/api/urls';
 
 export default {
   name: 'PushLists',
@@ -60,7 +60,7 @@ export default {
   props: ['pushLists'],
   data() {
     return {
-      URL: urls.push.update,
+      URL: push.update,
       typeAttr: { 'failed': 'danger', 'successfully': 'success', 'offline': 'warning' }
     };
   }

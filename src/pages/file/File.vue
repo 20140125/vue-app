@@ -54,13 +54,13 @@
 </template>
 
 <script>
-import FileLists from '../../components/file/Lists';
-import FileDetails from '../../components/file/Details';
-import BaseLayout from '../../components/BaseLayout';
-import URLS from '../../api/urls';
-import StaticSource from '../../components/file/StaticSource';
-import FileChmod from '../../components/file/chmod';
-import FileUpload from '../../components/file/Upload';
+import FileLists from '@/components/file/Lists';
+import FileDetails from '@/components/file/Details';
+import BaseLayout from '@/components/BaseLayout';
+import { file as fileURL } from '@/api/urls';
+import StaticSource from '@/components/file/StaticSource';
+import FileChmod from '@/components/file/chmod';
+import FileUpload from '@/components/file/Upload';
 
 export default {
   name: 'File',
@@ -79,7 +79,7 @@ export default {
       chmod: {},
       loading: true,
       fileAttr: { multipleSelection: [] },
-      fileURL: URLS.file,
+      fileURL,
       breadcrumb: [{ path: '/', filename: 'longer' }]
     };
   },
@@ -143,7 +143,7 @@ export default {
       const source = [];
       fileLists.forEach(file => {
         source.push({
-          url: this.$store.state.login.userInfo.local + '/storage' + file.path.substr(file.path.indexOf('public') + 6, file.path.length - file.path.indexOf('public')),
+          url: `${this.$store.state.login.userInfo.local}'/storage'${file.path.substr(file.path.indexOf('public') + 6, file.path.length - file.path.indexOf('public'))}`,
           title: file.filename
         });
       });
@@ -164,7 +164,7 @@ export default {
           this.$message.warning('File name cannot be empty');
           return false;
         }
-        this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.file.save, model: { path: file.path + value } }).then(() => {
+        this.$store.dispatch('UPDATE_ACTIONS', { url: fileURL.save, model: { path: file.path + value } }).then(() => {
           this.getFileLists();
         });
       }).catch(() => {
@@ -198,7 +198,7 @@ export default {
           return false;
         }
         this.$store.dispatch('UPDATE_ACTIONS', {
-          url: URLS.file.zip, model: {
+          url: fileURL.zip, model: {
             resource: value.indexOf('.') >= 0 ? value.split('.')[0] : value,
             docLists: file ? [file.path] : this.fileAttr.multipleSelection,
             path: file ? file.path.replace(file.filename, '') : this.fileAttr.path
@@ -215,7 +215,7 @@ export default {
      * @param file
      */
     async unComposeFile(file) {
-      await this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.file.unzip, model: { resource: file.filename.split('.')[0], path: file.path } });
+      await this.$store.dispatch('UPDATE_ACTIONS', { url: fileURL.unzip, model: { resource: file.filename.split('.')[0], path: file.path } });
       await this.getFileLists();
     },
     /**
@@ -228,7 +228,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$store.dispatch('UPDATE_ACTIONS', { url: URLS.file.delete, model: { path: file.path } }).then(() => {
+        this.$store.dispatch('UPDATE_ACTIONS', { url: fileURL.delete, model: { path: file.path } }).then(() => {
           this.getFileLists();
         });
       }).catch(() => {
@@ -254,7 +254,7 @@ export default {
           type: 'warning'
         }).then(() => {
           this.$store.dispatch('UPDATE_ACTIONS', {
-            url: URLS.file.rename,
+            url: fileURL.rename,
             model: { path: file.path + value }
           }).then(() => {
             this.getFileLists();

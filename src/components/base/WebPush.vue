@@ -55,7 +55,7 @@ export default {
   computed: {
     pushMessage() {
       const data = this.$store.state.index.configuration.notice;
-      const lists = this.showWeather ? [{ message: JSON.stringify((this.Permission.weather || {}).casts || ''), timestamp: Date.parse(new Date()) / 1000 }] : [];
+      const lists = this.showWeather ? [{ message: JSON.stringify(this.Permission.weather?.casts || ''), timestamp: Date.parse(new Date()) / 1000 }] : [];
       data.forEach((item, index) => {
         lists.push({ message: item.message || item, timestamp: Date.parse(new Date()) / 1000 + index});
       });

@@ -54,15 +54,15 @@
 </template>
 
 <script>
-import URLS from '@/api/urls';
+import { category, api } from '@/api/urls';
 
 export default {
   name: 'CategoryLists',
   props: ['categoryTree'],
   data() {
     return {
-      get: URLS.interface.get,
-      interfaceCategory: URLS.interfaceCategory
+      get: api.get,
+      interfaceCategory: category
     };
   }
 };
