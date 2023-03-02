@@ -81,9 +81,9 @@ export default {
      * 设置验证码
      * @return {Promise<void>}
      */
-    async refreshCode() {
+    async refreshCode(form) {
       this.accountAttr.verifyCode = (Math.random() * 1000000 | 0).toString();
-      await this.$store.dispatch('login/reportCode', { verify_code: this.accountAttr.verifyCode });
+      await this.$store.dispatch('login/reportCode', { verify_code: this.accountAttr.verifyCode, email: form.email });
     },
     /**
      * 用戶登錄

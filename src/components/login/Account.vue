@@ -67,7 +67,7 @@ export default {
         }
       });
       if (accountLoginError === 0) {
-        this.$emit('refreshCode');
+        this.$emit('refreshCode', this.form);
       }
     },
     /**
