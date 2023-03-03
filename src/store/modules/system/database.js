@@ -30,10 +30,10 @@ export const actions = {
     }
     return new Promise((resolve, reject) => {
       commonMethods(database.lists, payload).then(result => {
-        commit('UPDATE_MUTATIONS', { databaseLists: ((result.data || {}).item || {}).lists || [] });
+        commit('UPDATE_MUTATIONS', { databaseLists: result.data?.item?.lists || [] });
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error.data?.item || {} }, { root: true });
         reject(error);
       });
     });

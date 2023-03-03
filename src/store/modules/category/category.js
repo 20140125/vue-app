@@ -33,12 +33,12 @@ export const actions = {
     return new Promise((resolve, reject) => {
       commonMethods(category.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
-          categoryLists: ((result.data || {}).item || {}).lists || {},
-          categoryTree: setTree((((result || {}).data || {}).item || {}).lists || [], 0, 'children')
+          categoryLists: result.data?.item?.lists || {},
+          categoryTree: setTree(result?.data?.item?.lists || [], 0, 'children')
         });
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error.data?.item || {} }, { root: true });
         reject(error);
       });
     });
@@ -58,13 +58,13 @@ export const actions = {
     return new Promise((resolve, reject) => {
       commonMethods(api.get, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
-          details: (((result || {}).data || {}).item || {}).lists || {},
+          details: result?.data?.item?.lists || {},
           id: payload.id || 0,
           source: payload.source || ''
         });
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error.data?.item || {} }, { root: true });
         reject(error);
       });
     });

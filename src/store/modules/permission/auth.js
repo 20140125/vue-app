@@ -34,12 +34,12 @@ export const actions = {
     return new Promise((resolve, reject) => {
       commonMethods(auth.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
-          authTree: setTree((((result || {}).data || {}).item || {}).lists || [], 0, 'children'),
-          authLists: (((result || {}).data || {}).item || {}).lists || []
+          authTree: setTree(result?.data?.item?.lists || [], 0, 'children'),
+          authLists: result?.data?.item?.lists || []
         });
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error.data?.item || {} }, { root: true });
         reject(error);
       });
     });

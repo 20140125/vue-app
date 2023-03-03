@@ -32,13 +32,13 @@ export const actions = {
     return new Promise((resolve, reject) => {
       commonMethods(permission.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
-          permissionLists: ((((result || {}).data || {}).item || {}).lists || {}).data || [],
-          total: ((((result || {}).data || {}).item || {}).lists || {}).total || 0,
+          permissionLists: result?.data?.item?.lists?.data || [],
+          total: result?.data?.item?.lists?.total || 0,
           page: payload.page || 1
         });
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: error }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error.data?.item || {} }, { root: true });
         reject(error);
       });
     });
@@ -59,12 +59,12 @@ export const actions = {
     return new Promise((resolve, reject) => {
       commonMethods(permission.get, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
-          authLists: setTree(((((result || {}).data || {}).item || {}).lists || {}).authLists || []),
-          user_id: ((((result || {}).data || {}).item || {}).lists || {}).user_id || 0
+          authLists: setTree(result?.data?.item?.lists?.authLists || []),
+          user_id: result?.data?.item?.lists?.user_id || 0
         });
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: error }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error.data?.item || {} }, { root: true });
         reject(error);
       });
     });

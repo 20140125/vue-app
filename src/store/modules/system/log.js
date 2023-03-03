@@ -31,39 +31,13 @@ export const actions = {
     return new Promise((resolve, reject) => {
       commonMethods(log.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
-          systemLogLists: ((((result || {}).data || {}).item || {}).lists || {}).data || [],
-          total: ((((result || {}).data || {}).item || {}).lists || {}).total || 0,
+          systemLogLists: result?.data?.item?.lists?.data || [],
+          total: result?.data?.item?.lists?.total || 0,
           page: payload.page || 1
         });
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
-        reject(error);
-      });
-    });
-  },
-  /**
-   * 获取日志详细信息
-   * @param commit
-   * @param state
-   * @param payload
-   * @returns {Promise<unknown>}
-   */
-  async getSystemLog({ commit, state }, payload) {
-    /* 如果页码没有变，直接读取vuex里面的数据 */
-    if (state.id === payload.id) {
-      commit('UPDATE_MUTATIONS', { systemLog: state.systemLog });
-      return false;
-    }
-    return new Promise((resolve, reject) => {
-      commonMethods(log.get, payload).then(result => {
-        commit('UPDATE_MUTATIONS', {
-          systemLog: (((result || {}).data || {}).item || {}).lists || {},
-          id: payload.id || 0
-        });
-        resolve(result);
-      }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error.data?.item || {} }, { root: true });
         reject(error);
       });
     });

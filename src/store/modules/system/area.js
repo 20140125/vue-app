@@ -31,10 +31,10 @@ export const actions = {
     }
     return new Promise((resolve, reject) => {
       commonMethods(area.lists, payload).then(result => {
-        commit('UPDATE_MUTATIONS', { areaLists: ((result.data || {}).item || {}).lists || [] });
+        commit('UPDATE_MUTATIONS', { areaLists: result.data?.item?.lists || [] });
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error.data?.item || {} }, { root: true });
         reject(error);
       });
     });
@@ -55,13 +55,13 @@ export const actions = {
     return new Promise((resolve, reject) => {
       commonMethods(area.cache, payload).then(result => {
         if (payload.children) {
-          commit('UPDATE_MUTATIONS', { cacheArea: setTree(((result.data || {}).item || {}).lists || [], 0, 'children', 'parent_id') || [] });
+          commit('UPDATE_MUTATIONS', { cacheArea: setTree(result.data?.item?.lists || [], 0, 'children', 'parent_id') || [] });
         } else {
-          commit('UPDATE_MUTATIONS', { cacheArea2: ((result.data || {}).item || {}).lists || [] });
+          commit('UPDATE_MUTATIONS', { cacheArea2: result.data?.item?.lists || [] });
         }
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error.data?.item || {} }, { root: true });
         reject(error);
       });
     });

@@ -35,13 +35,13 @@ export const actions = {
     return new Promise((resolve, reject) => {
       commonMethods(users.lists, payload).then((result) => {
         commit('UPDATE_MUTATIONS', {
-          usersLists: ((((result || {}).data || {}).item || {}).lists || {}).data || [],
-          total: ((((result || {}).data || {}).item || {}).lists || {}).total || 0,
+          usersLists: result?.data?.item?.lists?.data || [],
+          total: result?.data?.item?.lists?.total || 0,
           page: payload.page || 1
         });
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error.data?.item || {} }, { root: true });
         reject(error);
       });
     });
@@ -60,10 +60,10 @@ export const actions = {
     }
     return new Promise((resolve, reject) => {
       commonMethods(userCenter.get, {}).then(result => {
-        commit('UPDATE_MUTATIONS', { userCenter: (((result || {}).data || {}).item || {}).lists || {} });
+        commit('UPDATE_MUTATIONS', { userCenter: result?.data?.item?.lists || {} });
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error.data?.item || {} }, { root: true });
         reject(error);
       });
     });
@@ -83,10 +83,10 @@ export const actions = {
     }
     return new Promise((resolve, reject) => {
       commonMethods(users.cache, payload).then(result => {
-        commit('UPDATE_MUTATIONS', { cacheUsers: (((result || {}).data || {}).item || {}).lists || [] });
+        commit('UPDATE_MUTATIONS', { cacheUsers: result?.data?.item?.lists || [] });
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error.data?.item || {} }, { root: true });
         reject(error);
       });
     });

@@ -10,13 +10,19 @@
         <el-header style="text-align: center;font-size: 20px;font-weight: 800" v-html="header"></el-header>
         <el-tabs v-model="tabPane" style="margin: 0 5px" type="border-card" @tab-click="changeTabs">
           <el-tab-pane label="账号密码登录" name="password">
-            <Account :account-attr="accountAttr" @loginSYS="loginSYS" @refreshCode="refreshCode"></Account>
+            <keep-alive>
+              <Account :account-attr="accountAttr" @loginSYS="loginSYS" @refreshCode="refreshCode"></Account>
+            </keep-alive>
           </el-tab-pane>
           <el-tab-pane label="邮箱验证码登录/注册" name="email">
-            <Mail @loginSYS="loginSYS"></Mail>
+            <keep-alive>
+              <Mail @loginSYS="loginSYS"></Mail>
+            </keep-alive>
           </el-tab-pane>
           <el-tab-pane label="账户授权登录/注册" name="oauth" style="text-align: center">
-            <OAuth :oauth-login="oauthLogin"></OAuth>
+            <keep-alive>
+              <OAuth :oauth-login="oauthLogin"></OAuth>
+            </keep-alive>
           </el-tab-pane>
         </el-tabs>
       </el-col>
@@ -60,13 +66,13 @@ export default {
       if (this.innerWidth < 768) {
         this.accountAttr.dialogWidth = '100%';
       } else if (this.innerWidth >= 768 && this.innerWidth < 992) {
-        this.accountAttr.dialogWidth = '83.3333%';
+        this.accountAttr.dialogWidth = '83.33333%';
       } else if (this.innerWidth >= 992 && this.innerWidth < 1200) {
-        this.accountAttr.dialogWidth = '65.3333%';
+        this.accountAttr.dialogWidth = '65.33333%';
       } else if (this.innerWidth >= 1200 && this.innerWidth < 1920) {
-        this.accountAttr.dialogWidth = '49.3333%';
+        this.accountAttr.dialogWidth = '49.33333%';
       } else if (this.innerWidth >= 1920) {
-        this.accountAttr.dialogWidth = '32.3333%';
+        this.accountAttr.dialogWidth = '32.33333%';
       }
     },
     /**
@@ -81,9 +87,9 @@ export default {
      * 设置验证码
      * @return {Promise<void>}
      */
-    async refreshCode(form) {
+    async refreshCode(form = {}) {
       this.accountAttr.verifyCode = (Math.random() * 1000000 | 0).toString();
-      await this.$store.dispatch('login/reportCode', { verify_code: this.accountAttr.verifyCode, email: form.email });
+      await this.$store.dispatch('login/reportCode', { verify_code: this.accountAttr.verifyCode, email: form.email || '' });
     },
     /**
      * 用戶登錄

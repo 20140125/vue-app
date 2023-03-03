@@ -31,13 +31,13 @@ export const actions = {
     return new Promise((resolve, reject) => {
       commonMethods(config.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
-          configLists: ((((result || {}).data || {}).item || {}).lists || {}).data || [],
-          total: ((((result || {}).data || {}).item || {}).lists || {}).total || 0,
+          configLists: result?.data?.item?.lists?.data || [],
+          total: result?.data?.item?.lists?.total || 0,
           page: payload.page || 1
         });
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error.data?.item || {} }, { root: true });
         reject(error);
       });
     });
@@ -57,10 +57,10 @@ export const actions = {
     }
     return new Promise((resolve, reject) => {
       commonMethods(login.oauthConfig, payload).then(result => {
-        commit('UPDATE_MUTATIONS', { systemConfig: (((result || {}).data || {}).item || {}).lists || {} });
+        commit('UPDATE_MUTATIONS', { systemConfig: result?.data?.item?.lists || {} });
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error.data?.item || {} }, { root: true });
         reject(error);
       });
     });

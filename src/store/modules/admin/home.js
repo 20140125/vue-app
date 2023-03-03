@@ -35,10 +35,10 @@ export const actions = {
     }
     return new Promise((resolve, reject) => {
       commonMethods(home.getMenu, payload).then(result => {
-        commit('UPDATE_MUTATIONS', { menuLists: setTree((((result || {}).data || {}).item || {}).lists || []) });
+        commit('UPDATE_MUTATIONS', { menuLists: setTree(result?.data?.item?.lists || []) });
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error.data?.item || {} }, { root: true });
         reject(error);
       });
     });
@@ -57,10 +57,10 @@ export const actions = {
     }
     return new Promise((resolve, reject) => {
       commonMethods(timeline.lists, payload).then(result => {
-        commit('UPDATE_MUTATIONS', { timeline: ((((result || {}).data || {}).item || {}).lists || {}).data || [] });
+        commit('UPDATE_MUTATIONS', { timeline: result?.data?.item?.lists?.data || [] });
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error.data?.item || {} }, { root: true });
         reject(error);
       });
     });

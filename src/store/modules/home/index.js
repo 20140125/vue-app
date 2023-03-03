@@ -84,8 +84,8 @@ export const actions = {
             commit('UPDATE_MUTATIONS', {
               imageLists: {
                 index: {
-                  lists: ((((result || {}).data || {}).item || {}).lists || {}).data || [],
-                  total: ((((result || {}).data || {}).item || {}).lists || {}).total || 0
+                  lists: result?.data?.item?.lists?.data || [],
+                  total: result?.data?.item?.lists?.total || 0
                 },
                 search: {
                   lists: state.imageLists.search.lists,
@@ -100,8 +100,8 @@ export const actions = {
               imageLists: {
                 index: { lists: state.imageLists.index.lists, total: state.imageLists.index.total },
                 search: {
-                  lists: ((((result || {}).data || {}).item || {}).lists || {}).data || [],
-                  total: ((((result || {}).data || {}).item || {}).lists || {}).total || 0,
+                  lists: result?.data?.item?.lists?.data || [],
+                  total: result?.data?.item?.lists?.total || 0,
                   searchKeys: payload.name
                 }
               }
@@ -122,7 +122,7 @@ export const actions = {
         }
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error.data?.item || {} }, { root: true });
         reject(error);
       });
     });
@@ -141,7 +141,7 @@ export const actions = {
           case 'notice':
             commit('UPDATE_MUTATIONS', {
               configuration: {
-                notice: state.configuration.notice.length > 0 ? state.configuration.notice : (((result || {}).data || {}).item || {}).lists || [],
+                notice: state.configuration.notice.length > 0 ? state.configuration.notice : result?.data?.item?.lists || [],
                 hotKeyWord: state.configuration.hotKeyWord,
                 tags: state.configuration.tags
               }
@@ -151,7 +151,7 @@ export const actions = {
             commit('UPDATE_MUTATIONS', {
               configuration: {
                 notice: state.configuration.notice,
-                hotKeyWord: state.configuration.hotKeyWord.length > 0 ? state.configuration.hotKeyWord : (((result || {}).data || {}).item || {}).lists || [],
+                hotKeyWord: state.configuration.hotKeyWord.length > 0 ? state.configuration.hotKeyWord : result?.data?.item?.lists || [],
                 tags: state.configuration.tags
               }
             });
@@ -161,7 +161,7 @@ export const actions = {
               configuration: {
                 notice: state.configuration.notice,
                 hotKeyWord: state.configuration.hotKeyWord,
-                tags:  state.configuration.tags.length > 0 ? state.configuration.tags : (((result || {}).data || {}).item || {}).lists || []
+                tags:  state.configuration.tags.length > 0 ? state.configuration.tags : result?.data?.item?.lists || []
               }
             });
             break;
@@ -177,7 +177,7 @@ export const actions = {
         }
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error.data?.item || {} }, { root: true });
         reject(error);
       });
     });

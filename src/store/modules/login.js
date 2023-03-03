@@ -30,14 +30,14 @@ export const actions = {
     return new Promise((resolve, reject) => {
       commonMethods(login.checkAuthorized, authorized).then(result => {
         commit('UPDATE_MUTATIONS', {
-          userInfo: (((result || {}).data || {}).item || {}).lists || {},
+          userInfo: result?.data?.item?.lists || {},
           isAuthorized: true
         });
         window.localStorage.setItem('RTX', state.userInfo.username || 'tourist');
         resolve(result);
       }).catch(error => {
         window.localStorage.removeItem('token');
-        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error?.data?.item || {} }, { root: true });
         reject(error);
       });
     });
@@ -53,7 +53,7 @@ export const actions = {
     return new Promise((resolve, reject) => {
       commonMethods(login.loginSystem, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
-          userInfo: (((result || {}).data || {}).item || {}).lists || {},
+          userInfo: result?.data?.item?.lists || {},
           isAuthorized: true
         });
         if (Object.keys(state.userInfo).length > 0) {
@@ -66,7 +66,7 @@ export const actions = {
         }
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error?.data?.item || {} }, { root: true });
         reject(error);
       });
     });
@@ -87,7 +87,7 @@ export const actions = {
         router.push({ path: '/admin/login' });
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error?.data?.item || {} }, { root: true });
         reject(error);
       });
     });
@@ -101,10 +101,10 @@ export const actions = {
   async reportCode({ commit }, payload) {
     return new Promise((resolve, reject) => {
      commonMethods(login.reportCode, payload).then(result => {
-        commit('UPDATE_MUTATIONS', { verifyCode: ((((result || {}).data || {}).item || {}).lists || {}).key || payload.verify_code });
+        commit('UPDATE_MUTATIONS', { verifyCode: result?.data?.item?.lists?.key || payload.verify_code });
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error?.data?.item || {} }, { root: true });
         reject(error);
       });
     });
@@ -121,7 +121,7 @@ export const actions = {
         commit('UPDATE_MUTATIONS', { mailLogin: true });
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error?.data?.item || {} }, { root: true });
         reject(error);
       });
     });
@@ -140,10 +140,10 @@ export const actions = {
     }
     return new Promise((resolve, reject) => {
       commonMethods(login.oauthConfig, payload).then(result => {
-        commit('UPDATE_MUTATIONS', { oauthConfig: (((result || {}).data || {}).item || {}).lists || [] });
+        commit('UPDATE_MUTATIONS', { oauthConfig: result?.data?.item?.lists || [] });
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error?.data?.item || {} }, { root: true });
         reject(error);
       });
     });

@@ -31,13 +31,13 @@ export const actions = {
     return new Promise((resolve, reject) => {
       commonMethods(push.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
-          pushLists: ((((result || {}).data || {}).item || {}).lists || {}).data || [],
-          total: ((((result || {}).data || {}).item || {}).lists || {}).total || 0,
+          pushLists: result?.data?.item?.lists?.data || [],
+          total: result?.data?.item?.lists?.total || 0,
           page: payload.page || 1
         });
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error.data?.item || {} }, { root: true });
         reject(error);
       });
     });

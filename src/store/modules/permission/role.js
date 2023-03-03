@@ -31,13 +31,13 @@ export const actions = {
     return new Promise((resolve, reject) => {
       commonMethods(role.lists, payload).then(result => {
         commit('UPDATE_MUTATIONS', {
-          roleLists: ((((result || {}).data || {}).item || {}).lists || {}).data || [],
-          total: ((((result || {}).data || {}).item || {}).lists || {}).total || 0,
+          roleLists: result?.data?.item?.lists?.data || [],
+          total: result?.data?.item?.lists?.total || 0,
           page: payload.page || 1
         });
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: error }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error.data?.item || {} }, { root: true });
         reject(error);
       });
     });
@@ -57,10 +57,10 @@ export const actions = {
     }
     return new Promise((resolve, reject) => {
       commonMethods(role.auth, payload).then(result => {
-        commit('UPDATE_MUTATIONS', { authLists: (((result || {}).data || {}).item || {}).lists || [] });
+        commit('UPDATE_MUTATIONS', { authLists: result?.data?.item?.lists || [] });
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error.data?.item || {} }, { root: true });
         reject(error);
       });
     });

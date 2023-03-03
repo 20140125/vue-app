@@ -13,7 +13,7 @@ export default {
       commonMethods(payload.url, payload.model).then(result => {
         resolve(result);
       }).catch(error => {
-        commit('UPDATE_MUTATIONS', { error: (error.data || {}).item || {} }, { root: true });
+        commit('UPDATE_MUTATIONS', { error: error?.data?.item || {} }, { root: true });
         reject(error);
       });
     });
