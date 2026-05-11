@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
-    "@kangc/v-md-editor": "^2.3.6",
+    "@kangc/v-md-editor": "^2.3.18",
     "@typescript-eslint/eslint-plugin": "^4.29.3",
     "axios": "^0.21.1",
     "clipboard": "^2.0.8",
